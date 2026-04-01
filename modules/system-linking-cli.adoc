@@ -4,6 +4,10 @@
 
 = Linking sites on local systems using the Skupper CLI
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 Using the Skupper command-line interface (CLI) allows you to create links between sites.
 The link direction is not significant, and is typically determined by ease of connectivity. For example, if east is behind a firewall, linking from east to west is the easiest option.
 

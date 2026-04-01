@@ -4,6 +4,10 @@
 
 = Skupper security
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 Skupper securely connects your services with TLS authentication and encryption.
 See how Skupper enables you to deploy your application securely across Kubernetes clusters.
 

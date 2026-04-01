@@ -4,6 +4,10 @@
 
 == Creating a site bundle using the CLI on local systems
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 Sometimes, you might want to create all the configuration for a site and apply it automatically to a remote host.
 To support this, Skupper allows you create a `.tar.gz` file with all the required files and an `install.sh` script to start the remote site.
 

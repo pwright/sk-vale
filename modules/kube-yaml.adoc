@@ -4,6 +4,10 @@
 
 = Overview of using YAML CLI on Kubernetes
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 You can use YAML on Kubernetes after installing the Skupper controller to
 
 * <<system-yaml-site-configuration,Create sites>>

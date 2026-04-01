@@ -1,9 +1,18 @@
 :doctype: book
 
 [id="overview-index"]
+:_mod-docs-content-type: ASSEMBLY
+
+[role="_abstract"]
+Overview of Skupper concepts, features, and site-management workflows.
+
 [id="skupper-overview"]
 
 = Skupper overview
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Hybrid clouds enable organizations to combine on-premises, private cloud, and public cloud resources.
 While such a solution provides many benefits, it also presents a unique challenge: enabling these resources to communicate with each other.
@@ -13,6 +22,10 @@ Skupper provides a solution to this challenge with an Application Network that s
 [id="application-networks"]
 
 == Application Networks
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Skupper solves multi-cluster communication challenges through something called a Virtual Application Network or just application network.
 To understand the value of Skupper, it is helpful to first understand what an application network is.
@@ -32,6 +45,10 @@ They use *Layer 7 application routers* to route communication between *Layer 7 a
 [id="layer-7-application-routers"]
 
 == Layer 7 application routers
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Layer 7 application routers form the backbone of an application network in the same way that conventional network routers form the backbone of a VPN.
 However, instead of routing IP packets between network endpoints, Layer 7 application routers route messages between application endpoints (called Layer 7 application services).
@@ -54,6 +71,10 @@ Application networks provide multiple routing patterns, so communications can be
 
 == Skupper
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 Skupper is an open source tool for creating application networks in Kubernetes or Linux.
 By using Skupper, you can create a distributed application consisting of microservices running in different sites.
 
@@ -69,9 +90,18 @@ Once a Skupper network is formed across Kubernetes namespaces, any of the servic
 When a service is exposed, Skupper creates proxy endpoints to make that service available on each namespace in the Skupper network.
 
 [id="overview-security"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of Skupper security capabilities and deployment considerations.
+
 [id="skupper-security"]
 
 = Skupper security
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Skupper securely connects your services with TLS authentication and encryption.
 See how Skupper enables you to deploy your application securely across Kubernetes clusters.
@@ -98,6 +128,10 @@ This means that the Skupper network is isolated from external access, preventing
 [id="overview-connectivity"]
 
 = Skupper connectivity
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Skupper represents a new approach to connecting services across multiple Kubernetes clusters.
 See how Skupper can give you the flexibility to deploy your services where you need them.
@@ -142,9 +176,18 @@ Build large, robust networks of connected clusters.
 image::many-clusters.svg[many-clusters]
 
 [id="overview-routing"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of Skupper routing patterns and traffic behavior.
+
 [id="skupper-routing"]
 
 = Skupper routing
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Skupper uses layer 7 addressing and routing to connect services.
 See how the power of application-layer addressing can bring new capabilities to your applications.
@@ -177,6 +220,10 @@ Skupper uses redundant network paths and smart routing to provide highly availab
 
 = Skupper load balancing and failover
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 Skupper enables load balancing and failover across servers located across the application network.
 Specifically, Skupper balances *active TCP connections* across workloads deployed in distinct sites.
 If a workload at one site becomes unavailable, traffic is automatically rerouted to available sites.
@@ -208,9 +255,18 @@ Link cost is configured for all services between two sites.
 It is currently not possible to set different costs for distinct services.
 
 [id="kube-cli-index"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of Skupper CLI workflows on Kubernetes.
+
 [id="kube-cli"]
 
 = Overview of Skupper CLI on Kubernetes
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 You can use the `skupper` CLI on Kubernetes after installing the Skupper controller to configure sites, links and services.
 
@@ -221,9 +277,18 @@ The Skupper CLI is designed to generate and consume standard resources, ensuring
 * <<system-yaml-service-exposure,Expose and consume services>>
 
 [id="kube-cli-site-configuration"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of creating and managing Skupper sites on Kubernetes with the CLI.
+
 [id="kube-creating-site-cli"]
 
 = Creating a site on Kubernetes using the Skupper CLI
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Using the skupper command-line interface (CLI) allows you to create and manage sites from the context of the current namespace.
 
@@ -232,6 +297,10 @@ A typical workflow is to create a site, link sites together, and expose services
 [id="kube-checking-cli"]
 
 == Checking the Skupper CLI
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.
 
@@ -249,6 +318,11 @@ cli                     2.1.1
 [id="kube-creating-simple-site-cli"]
 
 == Creating a simple site using the CLI on Kubernetes
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use the CLI to create a basic Skupper site on Kubernetes.
 
 *Prerequisites*
 
@@ -309,6 +383,11 @@ You can check the status of the site at any time using `skupper site status`.
 
 == Deleting a site using the CLI on Kubernetes
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use the CLI to remove an existing Skupper site from Kubernetes.
+
 *Prerequisites*
 
 * The `skupper` CLI is installed.
@@ -330,9 +409,18 @@ skupper site delete
 ----
 
 [id="kube-cli-site-linking"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of linking Skupper sites on Kubernetes with the CLI.
+
 [id="kube-linking-cli"]
 
 = Linking sites on Kubernetes using the Skupper CLI
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Using the Skupper command-line interface (CLI) allows you to create links between sites.
 The link direction is not significant, and is typically determined by ease of connectivity. For example, if east is behind a firewall, linking from east to west is the easiest option.
@@ -342,6 +430,10 @@ Once sites are linked, services can be exposed and consumed across the applicati
 [id="kube-token-cli"]
 
 == Linking sites using a token
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 A token provides a secure method to link sites.
 By default, a token can only be used once and must be used within 15 minutes to link sites.
@@ -432,6 +524,10 @@ There are many options to consider when linking sites using the CLI, see https:/
 
 == Linking sites using a `link` resource
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site.
 
 *Prerequisites*
@@ -489,9 +585,18 @@ You can now expose services on the application network.
 There are many options to consider when linking sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 
 [id="kube-cli-service-exposure"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of exposing services on the Skupper application network with the CLI.
+
 [id="kube-exposing-services-cli"]
 
 = Exposing services on the application network using the CLI
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
 A _routing key_ is a string that matches one or more connectors with one or more listeners.
@@ -501,6 +606,11 @@ This section assumes you have created and linked at least two sites.
 
 [id="kube-creating-connector-cli"]
 // Creating a connector on Kubernetes using the CLI
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use the CLI to create a connector on Kubernetes.
 
 == Creating a connector using the CLI
 
@@ -558,6 +668,11 @@ If you need to expose a service from another namespace, you must use YAML as des
 [id="kube-creating-listener-cli"]
 // Creating a listener on Kubernetes using the CLI
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use the CLI to create a listener on Kubernetes.
+
 == Creating a listener using the CLI
 
 A listener binds a local connection endpoint to connectors in remote sites.
@@ -603,9 +718,18 @@ If you want to use a custom routing key, set the `--routing-key` to your custom 
 There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 
 [id="kube-yaml-index"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of Skupper YAML workflows on Kubernetes.
+
 [id="kube-yaml"]
 
 = Overview of using YAML CLI on Kubernetes
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 You can use YAML on Kubernetes after installing the Skupper controller to
 
@@ -614,9 +738,18 @@ You can use YAML on Kubernetes after installing the Skupper controller to
 * <<system-yaml-service-exposure,Expose and consume services>>
 
 [id="kube-yaml-site-configuration"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of creating and managing Skupper sites on Kubernetes with YAML.
+
 [id="kube-creating-site-yaml"]
 
 = Creating a site on Kubernetes using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Using YAML allows you to create and manage sites from the context of the current namespace.
 
@@ -625,6 +758,10 @@ A typical workflow is to create a site, link sites together, and expose services
 [id="kube-creating-simple-site-yaml"]
 
 == Creating a simple site on Kubernetes using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 You can use YAML to create and manage Skupper sites.
 
@@ -676,11 +813,25 @@ You can now link this site to another site to create an application network.
 There are many options to consider when creating sites using YAML, see https://skupperproject.github.io/refdog/resources/index.html[YAML Reference], including _frequently used_ options.
 
 [id="kube-yaml-site-linking"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of linking Skupper sites on Kubernetes with YAML.
+
 
 [id="kube-yaml-service-exposure"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of exposing services on the Skupper application network with YAML.
+
 [id="kube-exposing-services-yaml"]
 
 = Exposing services on the application network using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
 A _routing key_ is a string that matches one or more connectors with one or more listeners.
@@ -690,6 +841,11 @@ This section assumes you have created and linked at least two sites.
 
 [id="kube-creating-connector-yaml"]
 // Creating a connector on Kubernetes using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use YAML to create a connector on Kubernetes.
 
 == Creating a connector using YAML
 
@@ -757,6 +913,11 @@ There are many options to consider when creating connectors using YAML, see http
 [id="kube-creating-listener-yaml"]
 // Creating a listener on Kubernetes using YAML
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use YAML to create a listener on Kubernetes.
+
 == Creating a listener using YAML
 
 A listener binds a local connection endpoint to connectors in remote sites.
@@ -817,6 +978,10 @@ There are many options to consider when creating listeners using YAML, see https
 [id="kube-creating-attachedconnector-yaml"]
 
 == Creating a connector for a different namespace using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 A connector binds a local workload to listeners in remote sites.
 
@@ -903,18 +1068,37 @@ If you want to use a custom routing key, set the `--routing-key` to your custom 
 There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/resources/connector.html[Connector resource].
 
 [id="system-cli-index"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of Skupper CLI workflows on local systems.
+
 [id="system-cli"]
 
 = Overview of Skupper CLI on local systems
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use the Skupper CLI on local systems to configure sites, links, and services.
 
 * <<system-yaml-site-configuration,Create sites>>
 * <<system-yaml-site-linking,Link sites>> (requires that one site has link access enabled)
 * <<system-yaml-service-exposure,Expose and consume services>>
 
 [id="system-cli-site-configuration"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of creating and managing Skupper sites on local systems with the CLI.
+
 [id="system-creating-site-cli"]
 
 = Creating a site on a local system using the Skupper CLI
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Using the skupper command-line interface (CLI) allows you to create and manage Skupper sites from the context of the current user.
 
@@ -927,6 +1111,10 @@ If you require more than one site, specify a unique namespace when using  `skupp
 [id="system-checking-cli"]
 
 == Checking the Skupper CLI and environment
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.
 
@@ -960,6 +1148,11 @@ loginctl enable-linger <username>
 [id="system-creating-simple-site-cli"]
 
 == Creating a simple site using the CLI on local systems
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use the CLI to create a basic Skupper site on a local system.
 
 *Prerequisites*
 
@@ -1019,6 +1212,11 @@ skupper site create docker-site -p docker -n docker-ns
 
 == Deleting a site using the CLI on local systems
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use the CLI to remove an existing Skupper site from a local system.
+
 *Prerequisites*
 
 * The `skupper` CLI is installed.
@@ -1043,6 +1241,10 @@ skupper system uninstall
 [id="system-creating-site-bundle"]
 
 == Creating a site bundle using the CLI on local systems
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Sometimes, you might want to create all the configuration for a site and apply it automatically to a remote host.
 To support this, Skupper allows you create a `.tar.gz` file with all the required files and an `install.sh` script to start the remote site.
@@ -1119,9 +1321,18 @@ install.sh
 The site is now running, you can verify with `skupper site status` if the CLI is installed at that location.
 
 [id="system-cli-site-linking"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of linking Skupper sites on local systems with the CLI.
+
 [id="system-linking-cli"]
 
 = Linking sites on local systems using the Skupper CLI
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Using the Skupper command-line interface (CLI) allows you to create links between sites.
 The link direction is not significant, and is typically determined by ease of connectivity. For example, if east is behind a firewall, linking from east to west is the easiest option.
@@ -1136,6 +1347,10 @@ However, you can redeem tokens on a local system, and you can create and use 'li
 [id="system-token-cli"]
 
 == Linking to Kubernetes sites using a token
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 A token provides a secure method to link sites.
 By default, a token can only be used once and must be used within 15 minutes to link sites.
@@ -1226,6 +1441,10 @@ There are many options to consider when linking sites using the CLI, see https:/
 
 == Linking sites using a `link` resource
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site.
 
 *Prerequisites*
@@ -1284,9 +1503,18 @@ You can now expose services on the application network.
 There are many options to consider when linking sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 
 [id="system-cli-service-exposure"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of exposing services on the Skupper application network with the CLI on local systems.
+
 [id="system-exposing-services-cli"]
 
 = Exposing services on the application network using the CLI
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
 A _routing key_ is a string that matches one or more connectors with one or more listeners.
@@ -1295,6 +1523,10 @@ For example, if you create a connector with the routing key `backend`, you need 
 This section assumes you have created and linked at least two sites.
 
 == Creating a connector using the CLI
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.
@@ -1352,6 +1584,10 @@ There are many options to consider when creating connectors using the CLI, see h
 
 == Creating a listener using the CLI
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.
 
@@ -1404,18 +1640,37 @@ If you want to use a custom routing key, set the `--routing-key` to your custom 
 There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 
 [id="system-yaml-index"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of Skupper YAML workflows on local systems.
+
 [id="system-yaml"]
 
 = Overview of using YAML on local systems
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use YAML on local systems to configure Skupper sites, links, and services.
 
 * <<system-yaml-site-configuration,Create sites>>
 * <<system-yaml-site-linking,Link sites>> (requires that one site has link access enabled)
 * <<system-yaml-service-exposure,Expose and consume services>>
 
 [id="system-yaml-site-configuration"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of creating and managing Skupper sites on local systems with YAML.
+
 [id="system-yaml-site-configuration"]
 
 = Creating a site on local systems using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Using YAML allows you to create and manage sites on Docker, Podman and Linux.
 
@@ -1426,6 +1681,10 @@ If you require more than one site, specify a unique namespace when using  `skupp
 [id="system-creating-simple-site-yaml"]
 
 == Creating a simple site on local systems using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 You can use YAML to create and manage Skupper sites.
 
@@ -1476,9 +1735,18 @@ You can now link this site to another site to create an application network.
 There are many options to consider when creating sites using YAML, see https://skupperproject.github.io/refdog/resources/index.html[YAML Reference], including _frequently used_ options.
 
 [id="system-yaml-site-linking"]
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of linking Skupper sites on local systems with YAML.
+
 [id="system-yaml-site-linking"]
 
 = Linking sites on local systems using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 Using a `link` resource YAML file allows you to create links between sites.
 The link direction is not significant, and is typically determined by ease of connectivity. For example, if east is behind a firewall, linking from east to west is the easiest option.
@@ -1491,6 +1759,10 @@ Typically, it is easier to configure a site, links and services in a set of file
 [id="system-link-yaml"]
 
 == Linking sites using a `link` resource
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site.
 
@@ -1567,6 +1839,10 @@ You can now expose services on the application network.
 
 = Exposing services on the application network using YAML
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
 A _routing key_ is a string that matches one or more connectors with one or more listeners.
 For example, if you create a connector with the routing key `backend`, you need to create a listener with the routing key `backend` to consume that service.
@@ -1574,6 +1850,10 @@ For example, if you create a connector with the routing key `backend`, you need 
 This section assumes you have created and linked at least two sites.
 
 == Creating a connector using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.
@@ -1637,6 +1917,10 @@ If you want to use a custom routing key, set the `--routing-key` to your custom 
 There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 
 == Creating a listener using YAML
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.

@@ -1,3 +1,8 @@
 [id="system-cli-site-linking"]
 = system-cli-site-linking
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of linking Skupper sites on local systems with the CLI.
+

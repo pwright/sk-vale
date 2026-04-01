@@ -4,6 +4,10 @@
 
 == Application Networks
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 Skupper solves multi-cluster communication challenges through something called a Virtual Application Network or just application network.
 To understand the value of Skupper, it is helpful to first understand what an application network is.
 

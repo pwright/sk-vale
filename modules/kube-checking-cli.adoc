@@ -4,6 +4,10 @@
 
 == Checking the Skupper CLI
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.
 
 . Follow the instructions for https://skupper.io/releases/index.html[Installing Skupper].

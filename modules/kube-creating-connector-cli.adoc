@@ -3,6 +3,11 @@
 
 // Creating a connector on Kubernetes using the CLI
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Use the CLI to create a connector on Kubernetes.
+
 == Creating a connector using the CLI
 
 A connector binds a local workload to listeners in remote sites.

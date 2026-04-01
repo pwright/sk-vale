@@ -4,6 +4,10 @@
 
 == Linking sites using a token
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+
 A token provides a secure method to link sites.
 By default, a token can only be used once and must be used within 15 minutes to link sites.
 This procedure describes how to issue a token from one site and redeem that token on another site to create a link.
