@@ -3,11 +3,6 @@
 
 // Creating a listener on Kubernetes using YAML
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-Use YAML to create a listener on Kubernetes.
-
 == Creating a listener using YAML
 
 A listener binds a local connection endpoint to connectors in remote sites.

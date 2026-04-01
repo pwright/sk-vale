@@ -4,10 +4,6 @@
 
 = Creating a site on local systems using YAML
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-
 Using YAML allows you to create and manage sites on Docker, Podman and Linux.
 
 A typical workflow is to create a site, link sites together, and expose services to the application network.

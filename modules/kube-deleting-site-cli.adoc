@@ -4,11 +4,6 @@
 
 == Deleting a site using the CLI on Kubernetes
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-Use the CLI to remove an existing Skupper site from Kubernetes.
-
 *Prerequisites*
 
 * The `skupper` CLI is installed.

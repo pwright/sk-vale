@@ -4,10 +4,6 @@
 
 == Creating a connector for a different namespace using YAML
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-
 A connector binds a local workload to listeners in remote sites.
 
 If you create a site in one namespace and need to expose a service in a different namespace, use this procedure to create an _attached connector_ in the other namespace and an _AttachedConnectorBinding_ in the site namespace.

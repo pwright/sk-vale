@@ -3,11 +3,6 @@
 
 // Creating a listener on Kubernetes using the CLI
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-Use the CLI to create a listener on Kubernetes.
-
 == Creating a listener using the CLI
 
 A listener binds a local connection endpoint to connectors in remote sites.

@@ -4,10 +4,6 @@
 
 == Linking sites using a `link` resource
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-
 An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site.
 
 *Prerequisites*

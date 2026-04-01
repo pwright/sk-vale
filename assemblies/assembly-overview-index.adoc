@@ -1,11 +1,6 @@
 [id="overview-index"]
 = overview-index
 
-:_mod-docs-content-type: ASSEMBLY
-
-[role="_abstract"]
-Overview of Skupper concepts, features, and site-management workflows.
-
 include::../modules/skupper-overview.adoc[leveloffset=+1]
 include::../modules/application-networks.adoc[leveloffset=+1]
 include::../modules/layer-7-application-routers.adoc[leveloffset=+1]

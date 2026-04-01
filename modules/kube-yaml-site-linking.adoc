@@ -1,9 +1,4 @@
 [id="kube-yaml-site-linking"]
 = kube-yaml-site-linking
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-Overview of linking Skupper sites on Kubernetes with YAML.
-
 

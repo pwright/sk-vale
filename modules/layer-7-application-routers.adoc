@@ -4,10 +4,6 @@
 
 == Layer 7 application routers
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-
 Layer 7 application routers form the backbone of an application network in the same way that conventional network routers form the backbone of a VPN.
 However, instead of routing IP packets between network endpoints, Layer 7 application routers route messages between application endpoints (called Layer 7 application services).
 

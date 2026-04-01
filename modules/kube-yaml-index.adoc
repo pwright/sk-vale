@@ -1,8 +1,3 @@
 [id="kube-yaml-index"]
 = kube-yaml-index
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-Overview of Skupper YAML workflows on Kubernetes.
-

@@ -4,11 +4,6 @@
 
 = Overview of using YAML on local systems
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-Use YAML on local systems to configure Skupper sites, links, and services.
-
 * <<system-yaml-site-configuration,Create sites>>
 * <<system-yaml-site-linking,Link sites>> (requires that one site has link access enabled)
 * <<system-yaml-service-exposure,Expose and consume services>>

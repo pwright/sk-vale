@@ -1,8 +1,3 @@
 [id="overview-security"]
 = overview-security
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-Overview of Skupper security capabilities and deployment considerations.
-

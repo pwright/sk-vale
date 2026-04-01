@@ -4,10 +4,6 @@
 
 == Creating a simple site on Kubernetes using YAML
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-
 You can use YAML to create and manage Skupper sites.
 
 *Prerequisites*

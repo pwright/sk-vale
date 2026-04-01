@@ -4,10 +4,6 @@
 
 = Exposing services on the application network using YAML
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-
 After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
 A _routing key_ is a string that matches one or more connectors with one or more listeners.
 For example, if you create a connector with the routing key `backend`, you need to create a listener with the routing key `backend` to consume that service.
@@ -15,10 +11,6 @@ For example, if you create a connector with the routing key `backend`, you need 
 This section assumes you have created and linked at least two sites.
 
 == Creating a connector using YAML
-
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
 
 A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.
@@ -82,10 +74,6 @@ If you want to use a custom routing key, set the `--routing-key` to your custom 
 There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 
 == Creating a listener using YAML
-
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
 
 A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.

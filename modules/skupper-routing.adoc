@@ -4,10 +4,6 @@
 
 = Skupper routing
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-
 Skupper uses layer 7 addressing and routing to connect services.
 See how the power of application-layer addressing can bring new capabilities to your applications.
 

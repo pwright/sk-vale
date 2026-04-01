@@ -1,8 +1,3 @@
 [id="overview-routing"]
 = overview-routing
 
-:_mod-docs-content-type: REFERENCE
-
-[role="_abstract"]
-Overview of Skupper routing patterns and traffic behavior.
-
