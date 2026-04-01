@@ -1,0 +1,35 @@
+[id="system-checking-cli"]
+= system-checking-cli
+
+
+== Checking the Skupper CLI and environment
+
+Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.
+
+. Follow the instructions for https://skupper.io/releases/index.html[Installing Skupper].
+. Verify the installation.
++
+[,bash]
+----
+skupper version
+
+COMPONENT               VERSION
+cli                     2.1.1
+----
+
+. For podman sites:
++
+Make sure the Podman socket is available. To enable it:
++
+[,bash]
+----
+systemctl --user enable --now podman.socket
+----
++
+Enable lingering to ensure the site persists over logouts:
++
+[,bash]
+----
+loginctl enable-linger <username>
+----
+

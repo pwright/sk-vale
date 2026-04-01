@@ -1,0 +1,3 @@
+[id="kube-cli-site-configuration"]
+= kube-cli-site-configuration
+

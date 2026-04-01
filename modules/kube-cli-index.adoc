@@ -1,0 +1,3 @@
+[id="kube-cli-index"]
+= kube-cli-index
+

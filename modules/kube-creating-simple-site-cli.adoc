@@ -1,0 +1,61 @@
+[id="kube-creating-simple-site-cli"]
+= kube-creating-simple-site-cli
+
+
+== Creating a simple site using the CLI on Kubernetes
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+* The Skupper controller is running on the Kubernetes cluster you are running or you are running on a platform.
+
+*Procedure*
+
+. Check that the `SKUPPER_PLATFORM` environment is unset or set to `kubernetes`.
+ ** `kubernetes` - default
+ ** `podman`
+ ** `docker`
+ ** `linux`
+. Create a site on Kubernetes:
++
+[,bash]
+----
+skupper site create <site-name> --namespace <namespace>
+----
++
+Specifying the namespace is not required if the context is set to the namespace where you want to create the site.
+For example:
++
+[,bash]
+----
+skupper site create my-site
+
+Waiting for status...
+Site "my-site" is ready.
+----
++
+There are many options to consider when creating sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+For example
+
+* `--enable-link-access`
++
+If enabled, this option allows you create tokens and link _to_ this site.
+By default, this option is disabled but you can change the setting later `skupper site update --enable-link-access`.
+
+* `--timeout <time>`
++
+You can add the timeout option to specify the maximum time for the CLI wait for the site status to report `ready`.
++
+----
+skupper site create my-site --timeout 2m
+----
++
+The timeout option does not stop the site from being created, but if the site is not ready, the following is output:
++
+----
+Site "my-site" is not yet ready: Pending
+----
++
+You can check the status of the site at any time using `skupper site status`.
+

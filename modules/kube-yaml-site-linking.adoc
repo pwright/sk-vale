@@ -1,0 +1,4 @@
+[id="kube-yaml-site-linking"]
+= kube-yaml-site-linking
+
+

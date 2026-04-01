@@ -1,0 +1,49 @@
+[id="kube-creating-listener-cli"]
+= kube-creating-listener-cli
+
+// Creating a listener on Kubernetes using the CLI
+
+== Creating a listener using the CLI
+
+A listener binds a local connection endpoint to connectors in remote sites.
+Listeners and connectors are matched using routing keys.
+
+For more information about listeners. see https://skupperproject.github.io/refdog/concepts/listener.html[Listener concept].
+
+*Procedure*
+
+. Identify a connector that you want to use.
+Note the routing key of that connector.
+. Create a listener:
++
+[,bash]
+----
+skupper listener create <name> <port> [--routing-key <name>]
+----
++
+For example:
+
+ $ skupper listener create backend 8080
+ Waiting for create to complete...
+ Listener "backend" is ready
+
+. Check the listener status:
++
+[,bash]
+----
+skupper listener status
+----
++
+For example:
+
+ $ skupper listener status
+ NAME    STATUS  ROUTING-KEY     HOST    PORT    MATCHING-CONNECTOR      MESSAGE
+ backend Ready   backend         backend 8080    true                    OK
++
+*📌 NOTE*
+There must be a `MATCHING-CONNECTOR` for the service to operate.
+By default, the routing key name is the listener name.
+If you want to use a custom routing key, set the `--routing-key` to your custom name.
+
+There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+

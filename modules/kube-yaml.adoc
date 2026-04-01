@@ -1,0 +1,12 @@
+[id="kube-yaml"]
+= kube-yaml
+
+
+= Overview of using YAML CLI on Kubernetes
+
+You can use YAML on Kubernetes after installing the Skupper controller to
+
+* <<system-yaml-site-configuration,Create sites>>
+* <<system-yaml-site-linking,Link sites>> (requires that one site has link access enabled)
+* <<system-yaml-service-exposure,Expose and consume services>>
+

@@ -1,0 +1,3 @@
+[id="kube-cli-site-linking"]
+= kube-cli-site-linking
+

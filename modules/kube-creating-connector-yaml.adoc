@@ -1,0 +1,68 @@
+[id="kube-creating-connector-yaml"]
+= kube-creating-connector-yaml
+
+// Creating a connector on Kubernetes using YAML
+
+== Creating a connector using YAML
+
+A connector binds a local workload to listeners in remote sites.
+Listeners and connectors are matched using routing keys.
+
+There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/resources/connector.html[Connector resource].
+
+*Procedure*
+
+. Create a workload that you want to expose on the network, for example:
++
+[,bash]
+----
+kubectl create deployment backend --image quay.io/skupper/hello-world-backend --replicas 3
+----
+
+. Create a connector resource YAML file:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Connector
+metadata:
+  name: backend
+  namespace: east
+spec:
+  routingKey: backend
+  selector: app=backend
+  port: 8080
+----
++
+This creates a connector in the `east` site and exposes the `backend` deployment on the network on port 8080.
+You can create a listener on a different site using the matching routing key `backend` to address this service.
++
+To create the connector resource:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the connector status:
++
+[,bash]
+----
+kubectl get connector
+----
++
+For example:
++
+----
+NAME    STATUS  ROUTING-KEY     SELECTOR        HOST    PORT    HAS MATCHING LISTENER    MESSAGE
+backend Pending backend         app=backend             8080    false   No matching listeners
+----
++
+*📌 NOTE*
+By default, the routing key name is set to the name of the connector.
+If you want to use a custom routing key, set the `--routing-key` to your custom name.
+
+There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+

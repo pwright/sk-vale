@@ -1,0 +1,60 @@
+[id="system-creating-simple-site-cli"]
+= system-creating-simple-site-cli
+
+
+== Creating a simple site using the CLI on local systems
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+
+*Procedure*
+
+. Set the `SKUPPER_PLATFORM` for type of site you want to install:
+ ** `podman`
+ ** `docker`
+ ** `linux`
+. Install the controller for Podman and Docker sites:
++
+[,bash]
+----
+skupper system install
+----
++
+This runs a container to support site, link and service operations.
+This feature is not available on Linux local system sites (systemd).
+
+. Create a site:
++
+[,bash]
+----
+skupper site create <site-name>
+----
++
+For example:
++
+[,bash]
+----
+skupper site create my-site
+
+Waiting for status...
+Site "my-site" is ready.
+----
++
+While the site is created, the site is not running at this point.
+To run the site:
++
+[,bash]
+----
+skupper system start
+----
+
+By default, all sites are created with the namespace `default`.
+On non-Kubernetes sites, you can create multiple sites per-user by specifying a _namespace_, for example you can create multiple sites with different platforms as follows:
+
+[,bash]
+----
+skupper site create systemd-site -p linux -n linux-ns
+skupper site create docker-site -p docker -n docker-ns
+----
+

@@ -1,0 +1,10 @@
+[id="kube-creating-site-yaml"]
+= kube-creating-site-yaml
+
+
+= Creating a site on Kubernetes using YAML
+
+Using YAML allows you to create and manage sites from the context of the current namespace.
+
+A typical workflow is to create a site, link sites together, and expose services to the application network.
+

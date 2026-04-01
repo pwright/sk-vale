@@ -1,0 +1,10 @@
+[id="system-cli"]
+= system-cli
+
+
+= Overview of Skupper CLI on local systems
+
+* <<system-yaml-site-configuration,Create sites>>
+* <<system-yaml-site-linking,Link sites>> (requires that one site has link access enabled)
+* <<system-yaml-service-exposure,Expose and consume services>>
+

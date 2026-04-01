@@ -1,0 +1,16 @@
+[id="system-linking-cli"]
+= system-linking-cli
+
+
+= Linking sites on local systems using the Skupper CLI
+
+Using the Skupper command-line interface (CLI) allows you to create links between sites.
+The link direction is not significant, and is typically determined by ease of connectivity. For example, if east is behind a firewall, linking from east to west is the easiest option.
+
+Once sites are linked, services can be exposed and consumed across the application network without the need to open ports or manage inter-site connectivity.
+
+A _local system_ includes Docker, Podman or Linux system.
+
+In this release, the CLI does not support issuing tokens for local systems.
+However, you can redeem tokens on a local system, and you can create and use 'link' resources.
+

@@ -1,0 +1,3 @@
+[id="kube-yaml-index"]
+= kube-yaml-index
+

@@ -1,0 +1,1692 @@
+:doctype: book
+
+[id="overview-index"]
+[id="skupper-overview"]
+
+= Skupper overview
+
+Hybrid clouds enable organizations to combine on-premises, private cloud, and public cloud resources.
+While such a solution provides many benefits, it also presents a unique challenge: enabling these resources to communicate with each other.
+
+Skupper provides a solution to this challenge with an Application Network that simply and securely connects applications running in different network locations.
+
+[id="application-networks"]
+
+== Application Networks
+
+Skupper solves multi-cluster communication challenges through something called a Virtual Application Network or just application network.
+To understand the value of Skupper, it is helpful to first understand what an application network is.
+
+An application network connects the applications and services in your hybrid cloud into a virtual network so that they can communicate with each other as if they were all running in the same site.
+In this diagram, an application network connects three services, each of which is running in a different cloud:
+
+image::overview-clouds.png[overview-clouds]
+
+In essence, the application network connects the services in a distributed application with a microservice architecture.
+
+image::overview-application.png[overview-application]
+
+Application networks are able to provide connectivity across the hybrid cloud because they operate at Layer 7 (the application layer).
+They use *Layer 7 application routers* to route communication between *Layer 7 application services*.
+
+[id="layer-7-application-routers"]
+
+== Layer 7 application routers
+
+Layer 7 application routers form the backbone of an application network in the same way that conventional network routers form the backbone of a VPN.
+However, instead of routing IP packets between network endpoints, Layer 7 application routers route messages between application endpoints (called Layer 7 application services).
+
+*Layer 7 application services*
+
+A Layer 7 application service represents an endpoint, or destination in the application network.
+When an application sends a communication to an service, the Layer 7 application routers distribute the communication to any other application in the application network that has the same service.
+
+For example, in this diagram, *Service B* sends a message with an application service to its local application router.
+*Service A* and *Service C* are subscribed to the same service, so the application router routes copies of the message through the application network until they arrive at each destination.
+
+image::overview-routers.png[overview-routers]
+
+In the diagram, `skupper-router` is a container or systemd process that acts as a software router for service communication.
+
+Application networks provide multiple routing patterns, so communications can be distributed in anycast (balanced or closest) or multicast patterns.
+
+[id="skupper"]
+
+== Skupper
+
+Skupper is an open source tool for creating application networks in Kubernetes or Linux.
+By using Skupper, you can create a distributed application consisting of microservices running in different sites.
+
+This diagram illustrates a Skupper network that connects three services running in three different sites:
+
+image::overview-clusters.png[overview-clusters]
+
+In a Skupper network, each namespace contains a Skupper instance.
+When these Skupper instances connect, they continually share information about the services that each instance exposes.
+This means that each Skupper instance is always aware of every service that has been exposed to the Skupper network, regardless of the namespace in which each service resides.
+
+Once a Skupper network is formed across Kubernetes namespaces, any of the services in those namespaces can be exposed (through annotation) to the Skupper network.
+When a service is exposed, Skupper creates proxy endpoints to make that service available on each namespace in the Skupper network.
+
+[id="overview-security"]
+[id="skupper-security"]
+
+= Skupper security
+
+Skupper securely connects your services with TLS authentication and encryption.
+See how Skupper enables you to deploy your application securely across Kubernetes clusters.
+
+*Security challenges in the cloud*
+
+Moving an application to the cloud raises security risks.
+Either your services must be exposed to the public internet, or you must adopt complex layer 3 network controls like VPNs, firewall rules, and access policies.
+
+Increasing the challenge, layer 3 network controls do not extend easily to multiple clusters.
+These network controls must be duplicated for each cluster.
+
+*Built-in network isolation*
+
+Skupper provides default, built-in security that scales across clusters and clouds.
+In a Skupper network, the connections between Skupper routers are secured with mutual TLS using a private, dedicated certificate authority (CA).
+Each router is uniquely identified by its own certificate.
+
+image::clusters-tls.svg[clusters-tls]
+
+This means that the Skupper network is isolated from external access, preventing security risks such as lateral attacks, malware infestations, and data exfiltration.
+
+[id="overview-connectivity"]
+[id="overview-connectivity"]
+
+= Skupper connectivity
+
+Skupper represents a new approach to connecting services across multiple Kubernetes clusters.
+See how Skupper can give you the flexibility to deploy your services where you need them.
+
+*One cluster*
+
+Kubernetes *services* provide a virtual network address for each element of your distributed application.
+Service "A" can contact service "B", "B" can contact "C", and so on.
+
+image::one-cluster.svg[one-cluster]
+
+But if you want to deploy your application across multiple clusters, your options are limited.
+You have to either expose your services to the public internet or set up a VPN.
+
+Skupper offers a third way.
+It connects clusters to a secure layer 7 network.
+It uses that network to forward local service traffic to remote clusters.
+
+*Secure hybrid cloud communication*
+
+Deploy your application across public and private clusters.
+
+image::two-clusters.svg[two-clusters]
+
+You can host your database on a private cluster and retain full connectivity with services running on the public cloud.
+All communication is secured by mutual TLS authentication and encryption.
+
+*Edge-to-edge connectivity*
+
+Distribute application services across geographic regions.
+
+image::five-clusters.svg[five-clusters]
+
+You can connect multiple retail sites to a central office.
+Once connected, each edge location can contact any other edge.
+You can add and remove sites on demand.
+
+*Scale up and out*
+
+Build large, robust networks of connected clusters.
+
+image::many-clusters.svg[many-clusters]
+
+[id="overview-routing"]
+[id="skupper-routing"]
+
+= Skupper routing
+
+Skupper uses layer 7 addressing and routing to connect services.
+See how the power of application-layer addressing can bring new capabilities to your applications.
+
+*Multi-cluster services*
+
+Deploy a single logical service across multiple clusters.
+
+Skupper can route requests to instances of a single service running on multiple clusters.
+If a provider or data center fails, the service instances running at unaffected sites can scale to meet the need and maintain availability.
+
+*Dynamic load balancing*
+
+Balance requests across clusters according to service capacity.
+
+The Skupper network has cross-cluster visibility.
+It can see which services are already loaded and which have spare capacity, and it directs requests accordingly.
+
+You can assign a cost to each inter-cluster connection.
+This enables you to configure a preference for one resource over another.
+If demand is normal, you can keep all traffic on your private cloud.
+If demand peaks, you can dynamically spill over to public cloud resources.
+
+*Reliable networks*
+
+Skupper uses redundant network paths and smart routing to provide highly available connectivity at scale.
+
+[id="overview-load-balancing"]
+[id="overview-load-balancing"]
+
+= Skupper load balancing and failover
+
+Skupper enables load balancing and failover across servers located across the application network.
+Specifically, Skupper balances *active TCP connections* across workloads deployed in distinct sites.
+If a workload at one site becomes unavailable, traffic is automatically rerouted to available sites.
+For example, if you deploy the same backend code on two sites and expose the backend on the application network, concurrent requests from a third site to the backend service are processed by both sites.
+
+In an application network, the routing algorithm attempts to use the path with the lowest total *cost* from client to target server.
+
+*Understanding link cost*
+
+Link cost is a configurable value when creating links between sites.
+In the earlier example, the link cost from the client to each server is the same by default (1).
+However, if one server is more powerful and has better latency, it processes TCP requests more quickly, resulting in more traffic being directed to that server.
+Skupper determines the perceived cost with the context of knowing the configured cost and the current number of open TCP connections and  directs traffic to the server with the lowest cost.
+
+* Local workloads have a link cost of 0.
+* If connecting to a workload requires traversing two or more links, the total of all link costs constitutes the link cost.
+
+*📌 NOTE*
+Traffic load is based on the number of concurrent TCP connections, so 'round robin' behavior should not be expected.
+
+*Using Skupper load balancing to achieve failover*
+
+You can configure the network so that a specific location handles all traffic until failure.
+After failure at that location, all traffic is handled by a different location.
+To achieve this behavior, you set the cost from the client to the backup server high, for example 9999,  as described in \{cost-link}.
+
+*📌 NOTE*
+Link cost is configured for all services between two sites.
+It is currently not possible to set different costs for distinct services.
+
+[id="kube-cli-index"]
+[id="kube-cli"]
+
+= Overview of Skupper CLI on Kubernetes
+
+You can use the `skupper` CLI on Kubernetes after installing the Skupper controller to configure sites, links and services.
+
+The Skupper CLI is designed to generate and consume standard resources, ensuring that a sites, links and services configured using the CLI are identical to those configured directly through YAML.
+
+* <<system-yaml-site-configuration,Create sites>>
+* <<system-yaml-site-linking,Link sites>> (requires that one site has link access enabled)
+* <<system-yaml-service-exposure,Expose and consume services>>
+
+[id="kube-cli-site-configuration"]
+[id="kube-creating-site-cli"]
+
+= Creating a site on Kubernetes using the Skupper CLI
+
+Using the skupper command-line interface (CLI) allows you to create and manage sites from the context of the current namespace.
+
+A typical workflow is to create a site, link sites together, and expose services to the application network.
+
+[id="kube-checking-cli"]
+
+== Checking the Skupper CLI
+
+Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.
+
+. Follow the instructions for https://skupper.io/releases/index.html[Installing Skupper].
+. Verify the installation.
++
+[,bash]
+----
+skupper version
+
+COMPONENT               VERSION
+cli                     2.1.1
+----
+
+[id="kube-creating-simple-site-cli"]
+
+== Creating a simple site using the CLI on Kubernetes
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+* The Skupper controller is running on the Kubernetes cluster you are running or you are running on a platform.
+
+*Procedure*
+
+. Check that the `SKUPPER_PLATFORM` environment is unset or set to `kubernetes`.
+ ** `kubernetes` - default
+ ** `podman`
+ ** `docker`
+ ** `linux`
+. Create a site on Kubernetes:
++
+[,bash]
+----
+skupper site create <site-name> --namespace <namespace>
+----
++
+Specifying the namespace is not required if the context is set to the namespace where you want to create the site.
+For example:
++
+[,bash]
+----
+skupper site create my-site
+
+Waiting for status...
+Site "my-site" is ready.
+----
++
+There are many options to consider when creating sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+For example
+
+* `--enable-link-access`
++
+If enabled, this option allows you create tokens and link _to_ this site.
+By default, this option is disabled but you can change the setting later `skupper site update --enable-link-access`.
+
+* `--timeout <time>`
++
+You can add the timeout option to specify the maximum time for the CLI wait for the site status to report `ready`.
++
+----
+skupper site create my-site --timeout 2m
+----
++
+The timeout option does not stop the site from being created, but if the site is not ready, the following is output:
++
+----
+Site "my-site" is not yet ready: Pending
+----
++
+You can check the status of the site at any time using `skupper site status`.
+
+[id="kube-deleting-site-cli"]
+
+== Deleting a site using the CLI on Kubernetes
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+
+*Procedure*
+
+. Change context to the namespace where the site was created, for example:
++
+[,bash]
+----
+kubectl config set-context --current --namespace west
+----
+
+. Enter the following command to delete a site:
++
+[,bash]
+----
+skupper site delete
+----
+
+[id="kube-cli-site-linking"]
+[id="kube-linking-cli"]
+
+= Linking sites on Kubernetes using the Skupper CLI
+
+Using the Skupper command-line interface (CLI) allows you to create links between sites.
+The link direction is not significant, and is typically determined by ease of connectivity. For example, if east is behind a firewall, linking from east to west is the easiest option.
+
+Once sites are linked, services can be exposed and consumed across the application network without the need to open ports or manage inter-site connectivity.
+
+[id="kube-token-cli"]
+
+== Linking sites using a token
+
+A token provides a secure method to link sites.
+By default, a token can only be used once and must be used within 15 minutes to link sites.
+This procedure describes how to issue a token from one site and redeem that token on another site to create a link.
+
+*Prerequisites*
+
+* Two sites
+* At least one site with `enable-link-access` enabled.
+
+To link sites, you create a token on one site and redeem that token on the other site to create the link.
+
+*Procedure*
+
+. On the site where you want to issue the token, make sure link access is enabled:
++
+[,bash]
+----
+skupper site update --enable-link-access
+----
+
+. Create a token:
++
+[,bash]
+----
+skupper token issue <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
++
+This file contains a key and the location of the site that created it.
++
+*📌 NOTE*
+Access to this file provides access to the application network.
+Protect it appropriately.
+A token can be restricted by any combination of:
+
+ ** Time - prevents token reuse after a specified period.
++
+For example, to allow a token to be used for 1 hour after it is issued:
++
+----
+skupper token issue build/west.yaml --expiration-window 60m
+----
+
+ ** Usage - prevents creating multiple links from a single token.
++
+For example, to allow a token to be used 3 times:
++
+----
+skupper token issue output/west.yaml --redemptions-allowed 3
+----
+
++
+All inter-site traffic is protected by mutual TLS using a private, dedicated certificate authority (CA).
+A token is not a certificate, but is securely exchanged for a certificate during the linking process.
+
+. Redeem the token on a different site to create a link:
++
+[,bash]
+----
+skupper token redeem <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the status of the link:
++
+[,bash]
+----
+skupper link status
+----
++
+You might need to issue the command multiple times before the link is ready:
+
+ $ skupper link status
+ NAME                                            STATUS  COST    MESSAGE
+ west-12f75bc8-5dda-4256-88f8-9df48150281a       Pending 1       Not Operational
+ $ skupper link status
+ NAME                                            STATUS  COST    MESSAGE
+ west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK
++
+You can now expose services on the application network.
+
+There are many options to consider when linking sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+[id="kube-link-cli"]
+
+== Linking sites using a `link` resource
+
+An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site.
+
+*Prerequisites*
+
+* Two sites
+* At least one site with `enable-link-access` enabled.
+
+To link sites, you create a `link` resource YAML file on one site and apply that resource on the other site to create the link.
+
+*Procedure*
+
+. On the site where you want to create a link , make sure link access is enabled:
++
+[,bash]
+----
+skupper site update --enable-link-access
+----
+
+. Create a `link` resource YAML file:
++
+[,bash]
+----
+skupper link generate > <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Apply the `link` resource YAML file on a different site to create a link:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the status of the link:
++
+[,bash]
+----
+skupper link status
+----
++
+You might need to issue the command multiple times before the link is ready:
+
+ $ skupper link status
+ NAME                                            STATUS  COST    MESSAGE
+ west-12f75bc8-5dda-4256-88f8-9df48150281a       Pending 1       Not Operational
+ $ skupper link status
+ NAME                                            STATUS  COST    MESSAGE
+ west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK
++
+You can now expose services on the application network.
+
+There are many options to consider when linking sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+[id="kube-cli-service-exposure"]
+[id="kube-exposing-services-cli"]
+
+= Exposing services on the application network using the CLI
+
+After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
+A _routing key_ is a string that matches one or more connectors with one or more listeners.
+For example, if you create a connector with the routing key `backend`, you need to create a listener with the routing key `backend` to consume that service.
+
+This section assumes you have created and linked at least two sites.
+
+[id="kube-creating-connector-cli"]
+// Creating a connector on Kubernetes using the CLI
+
+== Creating a connector using the CLI
+
+A connector binds a local workload to listeners in remote sites.
+Listeners and connectors are matched using routing keys.
+
+For more information about connectors, see https://skupperproject.github.io/refdog/concepts/connector.html[Connector concept].
+
+*Procedure*
+
+. Create a workload that you want to expose on the network, for example:
++
+[,bash]
+----
+kubectl create deployment backend --image quay.io/skupper/hello-world-backend --replicas 3
+----
+
+. Create a connector:
++
+[,bash]
+----
+skupper connector create <name> <port> [--routing-key <name>]
+----
++
+For example:
++
+[,bash]
+----
+skupper connector create backend 8080 --workload deployment/backend
+----
+
+. Check the connector status:
++
+[,bash]
+----
+skupper connector status
+----
++
+For example:
+
+ $ skupper connector status
+ NAME    STATUS  ROUTING-KEY     SELECTOR        HOST    PORT    HAS MATCHING LISTENER    MESSAGE
+ backend Pending backend         app=backend             8080    false   No matching listeners
++
+*📌 NOTE*
+By default, the routing key name is set to the name of the connector.
+If you want to use a custom routing key, set the `--routing-key` to your custom name.
+
+There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+*Additional information*
+
+If you need to expose a service from another namespace, you must use YAML as described in link:../kube-yaml/service-exposure.html#kube-creating-attachedconnector-yaml[Creating a connector for a different namespace using YAML].
+
+[id="kube-creating-listener-cli"]
+// Creating a listener on Kubernetes using the CLI
+
+== Creating a listener using the CLI
+
+A listener binds a local connection endpoint to connectors in remote sites.
+Listeners and connectors are matched using routing keys.
+
+For more information about listeners. see https://skupperproject.github.io/refdog/concepts/listener.html[Listener concept].
+
+*Procedure*
+
+. Identify a connector that you want to use.
+Note the routing key of that connector.
+. Create a listener:
++
+[,bash]
+----
+skupper listener create <name> <port> [--routing-key <name>]
+----
++
+For example:
+
+ $ skupper listener create backend 8080
+ Waiting for create to complete...
+ Listener "backend" is ready
+
+. Check the listener status:
++
+[,bash]
+----
+skupper listener status
+----
++
+For example:
+
+ $ skupper listener status
+ NAME    STATUS  ROUTING-KEY     HOST    PORT    MATCHING-CONNECTOR      MESSAGE
+ backend Ready   backend         backend 8080    true                    OK
++
+*📌 NOTE*
+There must be a `MATCHING-CONNECTOR` for the service to operate.
+By default, the routing key name is the listener name.
+If you want to use a custom routing key, set the `--routing-key` to your custom name.
+
+There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+[id="kube-yaml-index"]
+[id="kube-yaml"]
+
+= Overview of using YAML CLI on Kubernetes
+
+You can use YAML on Kubernetes after installing the Skupper controller to
+
+* <<system-yaml-site-configuration,Create sites>>
+* <<system-yaml-site-linking,Link sites>> (requires that one site has link access enabled)
+* <<system-yaml-service-exposure,Expose and consume services>>
+
+[id="kube-yaml-site-configuration"]
+[id="kube-creating-site-yaml"]
+
+= Creating a site on Kubernetes using YAML
+
+Using YAML allows you to create and manage sites from the context of the current namespace.
+
+A typical workflow is to create a site, link sites together, and expose services to the application network.
+
+[id="kube-creating-simple-site-yaml"]
+
+== Creating a simple site on Kubernetes using YAML
+
+You can use YAML to create and manage Skupper sites.
+
+*Prerequisites*
+
+* The Skupper controller is running on the Kubernetes cluster you are running or you are running on a platform.
+
+Procedure
+
+. Create a site CR YAML file named `my-site.yaml`, for example:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Site
+metadata:
+  name: my-site
+  namespace: west
+----
++
+This YAML creates a site named `my-site` in the `west` namespace.
+Specifying the namespace is not required if the context is set to the namespace where you want to create the site.
+
+. Create the site:
++
+[,bash]
+----
+kubectl apply -f my-site.yaml
+----
+
+. Check the status of the site:
++
+[,bash]
+----
+kubectl get site
+----
++
+You might need to issue the command multiple times before the site is ready:
+
+ $ kubectl get site
+ NAME   STATUS    SITES IN NETWORK   MESSAGE
+ west   Pending                      containers with unready status: [router kube-adaptor]
+ $ kubectl get site
+ NAME   STATUS   SITES IN NETWORK   MESSAGE
+ west   Ready    1                  OK
++
+You can now link this site to another site to create an application network.
+
+There are many options to consider when creating sites using YAML, see https://skupperproject.github.io/refdog/resources/index.html[YAML Reference], including _frequently used_ options.
+
+[id="kube-yaml-site-linking"]
+
+[id="kube-yaml-service-exposure"]
+[id="kube-exposing-services-yaml"]
+
+= Exposing services on the application network using YAML
+
+After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
+A _routing key_ is a string that matches one or more connectors with one or more listeners.
+For example, if you create a connector with the routing key `backend`, you need to create a listener with the routing key `backend` to consume that service.
+
+This section assumes you have created and linked at least two sites.
+
+[id="kube-creating-connector-yaml"]
+// Creating a connector on Kubernetes using YAML
+
+== Creating a connector using YAML
+
+A connector binds a local workload to listeners in remote sites.
+Listeners and connectors are matched using routing keys.
+
+There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/resources/connector.html[Connector resource].
+
+*Procedure*
+
+. Create a workload that you want to expose on the network, for example:
++
+[,bash]
+----
+kubectl create deployment backend --image quay.io/skupper/hello-world-backend --replicas 3
+----
+
+. Create a connector resource YAML file:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Connector
+metadata:
+  name: backend
+  namespace: east
+spec:
+  routingKey: backend
+  selector: app=backend
+  port: 8080
+----
++
+This creates a connector in the `east` site and exposes the `backend` deployment on the network on port 8080.
+You can create a listener on a different site using the matching routing key `backend` to address this service.
++
+To create the connector resource:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the connector status:
++
+[,bash]
+----
+kubectl get connector
+----
++
+For example:
++
+----
+NAME    STATUS  ROUTING-KEY     SELECTOR        HOST    PORT    HAS MATCHING LISTENER    MESSAGE
+backend Pending backend         app=backend             8080    false   No matching listeners
+----
++
+*📌 NOTE*
+By default, the routing key name is set to the name of the connector.
+If you want to use a custom routing key, set the `--routing-key` to your custom name.
+
+There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+[id="kube-creating-listener-yaml"]
+// Creating a listener on Kubernetes using YAML
+
+== Creating a listener using YAML
+
+A listener binds a local connection endpoint to connectors in remote sites.
+Listeners and connectors are matched using routing keys.
+
+For more information about listeners. see https://skupperproject.github.io/refdog/concepts/listener.html[Listener concept].
+
+*Procedure*
+
+. Identify a connector that you want to use.
+Note the routing key of that connector.
+. Create a listener resource YAML file:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Listener
+metadata:
+  name: backend
+  namespace: west
+spec:
+  routingKey: backend
+  host: east-backend
+  port: 8080
+----
++
+This creates a listener in the `west` site and matches with the connector that uses the routing key `backend`.
+It also creates a service named  `east-backend` exposed on port 8080 in the current namespace.
++
+To create the connector resource:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the listener status:
++
+[,bash]
+----
+kubectl get listener
+----
++
+For example:
++
+----
+NAME      ROUTING KEY   PORT   HOST           STATUS   HAS MATCHING CONNECTOR   MESSAGE
+backend   backend       8080   east-backend   Ready    true                     OK
+----
++
+*📌 NOTE*
+There must be a `MATCHING-CONNECTOR` for the service to operate.
+
+There are many options to consider when creating listeners using YAML, see https://skupperproject.github.io/refdog/resources/listener.html[Listener resource].
+
+[id="kube-creating-attachedconnector-yaml"]
+
+== Creating a connector for a different namespace using YAML
+
+A connector binds a local workload to listeners in remote sites.
+
+If you create a site in one namespace and need to expose a service in a different namespace, use this procedure to create an _attached connector_ in the other namespace and an _AttachedConnectorBinding_ in the site namespace.
+
+* An attached connector is a connector in a peer namespace, that is, not the site namespace.
+* The AttachedConnectorBinding is a binding to an attached connector in a peer namespace and is created in the site namespace.
+
+*Procedure*
+
+. Create a workload that you want to expose on the network in a non-site namespace, for example:
++
+[,bash]
+----
+kubectl create deployment backend --image quay.io/skupper/hello-world-backend --replicas 3
+----
+
+. Create an AttachedConnector resource YAML file in the same namespace:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: AttachedConnector
+metadata:
+  name: backend
+  namespace: attached
+spec:
+  siteNamespace: skupper
+  selector: app=backend
+  port: 8080
+----
++
+To create the AttachedConnector resource:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Create an AttachedConnectorBinding resource YAML file in the site namespace:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: AttachedConnector
+metadata:
+  name: backend
+  namespace: attached
+spec:
+  siteNamespace: skupper
+  selector: app=backend
+  port: 8080
+----
++
+To create the AttachedConnectorBinding resource:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the AttachedConnectorBinding status from the context of the site namespace:
++
+[,bash]
+----
+kubectl get AttachedConnectorBinding
+----
++
+For example:
++
+----
+NAME      ROUTING KEY   CONNECTOR NAMESPACE   STATUS   HAS MATCHING LISTENER
+backend   backend       attached              Ready    true
+----
++
+*📌 NOTE*
+By default, the routing key name is set to the name of the connector.
+If you want to use a custom routing key, set the `--routing-key` to your custom name.
+
+There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/resources/connector.html[Connector resource].
+
+[id="system-cli-index"]
+[id="system-cli"]
+
+= Overview of Skupper CLI on local systems
+
+* <<system-yaml-site-configuration,Create sites>>
+* <<system-yaml-site-linking,Link sites>> (requires that one site has link access enabled)
+* <<system-yaml-service-exposure,Expose and consume services>>
+
+[id="system-cli-site-configuration"]
+[id="system-creating-site-cli"]
+
+= Creating a site on a local system using the Skupper CLI
+
+Using the skupper command-line interface (CLI) allows you to create and manage Skupper sites from the context of the current user.
+
+A typical workflow is to create a site, link sites together, and expose services to the application network.
+
+A _local system_ includes Docker, Podman or Linux system.
+
+If you require more than one site, specify a unique namespace when using  `skupper`, for example `+skupper --namespace second-site ...+`.
+
+[id="system-checking-cli"]
+
+== Checking the Skupper CLI and environment
+
+Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.
+
+. Follow the instructions for https://skupper.io/releases/index.html[Installing Skupper].
+. Verify the installation.
++
+[,bash]
+----
+skupper version
+
+COMPONENT               VERSION
+cli                     2.1.1
+----
+
+. For podman sites:
++
+Make sure the Podman socket is available. To enable it:
++
+[,bash]
+----
+systemctl --user enable --now podman.socket
+----
++
+Enable lingering to ensure the site persists over logouts:
++
+[,bash]
+----
+loginctl enable-linger <username>
+----
+
+[id="system-creating-simple-site-cli"]
+
+== Creating a simple site using the CLI on local systems
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+
+*Procedure*
+
+. Set the `SKUPPER_PLATFORM` for type of site you want to install:
+ ** `podman`
+ ** `docker`
+ ** `linux`
+. Install the controller for Podman and Docker sites:
++
+[,bash]
+----
+skupper system install
+----
++
+This runs a container to support site, link and service operations.
+This feature is not available on Linux local system sites (systemd).
+
+. Create a site:
++
+[,bash]
+----
+skupper site create <site-name>
+----
++
+For example:
++
+[,bash]
+----
+skupper site create my-site
+
+Waiting for status...
+Site "my-site" is ready.
+----
++
+While the site is created, the site is not running at this point.
+To run the site:
++
+[,bash]
+----
+skupper system start
+----
+
+By default, all sites are created with the namespace `default`.
+On non-Kubernetes sites, you can create multiple sites per-user by specifying a _namespace_, for example you can create multiple sites with different platforms as follows:
+
+[,bash]
+----
+skupper site create systemd-site -p linux -n linux-ns
+skupper site create docker-site -p docker -n docker-ns
+----
+
+[id="system-deleting-site-cli"]
+
+== Deleting a site using the CLI on local systems
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+
+*Procedure*
+
+. Enter the following command to delete a site:
++
+[,bash]
+----
+skupper site delete <sitename>
+skupper system stop
+----
+
+. You can also uninstall the controller after deleting all existing sites:
++
+[,bash]
+----
+skupper system uninstall
+----
+
+[id="system-creating-site-bundle"]
+
+== Creating a site bundle using the CLI on local systems
+
+Sometimes, you might want to create all the configuration for a site and apply it automatically to a remote host.
+To support this, Skupper allows you create a `.tar.gz` file with all the required files and an `install.sh` script to start the remote site.
+
+*Prerequisites*
+
+* The `skupper` CLI is installed. The CLI is not required on the remote site.
+
+*Procedure*
+
+. Set the `SKUPPER_PLATFORM` for type of site you want to install:
+ ** `podman`
+ ** `docker`
+ ** `linux`
+. Install the controller for Podman and Docker sites:
++
+[,bash]
+----
+skupper system install
+----
++
+This runs a container to support site, link and service operations.
+This feature is not available on Linux local system sites (systemd).
+
+. Create a site:
++
+[,bash]
+----
+skupper site create <site-name>
+----
++
+For example:
++
+[,bash]
+----
+skupper site create remote-site
+
+Waiting for status...
+Site "remote-site" is ready.
+----
++
+While the site is created, the site is not running and that is not a requirement for this usecase.
+
+. Create the bundle:
++
+[,bash]
+----
+ skupper system generate-bundle remote-site
+----
++
+The output shows the location of the generated `.tar.gz` file, for example:
++
+----
+Site "remote-site" has been created (as a distributable bundle)
+Installation bundle available at: /home/user/.local/share/skupper/bundles/remote-site.tar.gz
+Default namespace: default
+Default platform: podman
+----
+
+. Transfer the bundle file to the remote location and uncompress the file in an appropriate location:
++
+[,bash]
+----
+tar -xzvf remote-site.tar.gz
+----
+
+. Start the site:
++
+[,bash]
+----
+install.sh
+----
++
+The site is now running, you can verify with `skupper site status` if the CLI is installed at that location.
+
+[id="system-cli-site-linking"]
+[id="system-linking-cli"]
+
+= Linking sites on local systems using the Skupper CLI
+
+Using the Skupper command-line interface (CLI) allows you to create links between sites.
+The link direction is not significant, and is typically determined by ease of connectivity. For example, if east is behind a firewall, linking from east to west is the easiest option.
+
+Once sites are linked, services can be exposed and consumed across the application network without the need to open ports or manage inter-site connectivity.
+
+A _local system_ includes Docker, Podman or Linux system.
+
+In this release, the CLI does not support issuing tokens for local systems.
+However, you can redeem tokens on a local system, and you can create and use 'link' resources.
+
+[id="system-token-cli"]
+
+== Linking to Kubernetes sites using a token
+
+A token provides a secure method to link sites.
+By default, a token can only be used once and must be used within 15 minutes to link sites.
+This procedure describes how to issue a token from a Kubernetes site and redeem that token on a local system site to create a link.
+
+*Prerequisites*
+
+* A local system site and a Kubernetes site.
+* A Kubernetes site with `enable-link-access` enabled.
+
+To link sites, you create a token on the Kubernetes site and redeem that token on the local system site to create the link.
+
+*Procedure*
+
+. On the Kubernetes site where you want to issue the token, make sure link access is enabled:
++
+[,bash]
+----
+skupper site update --enable-link-access
+----
+
+. Create a token:
++
+[,bash]
+----
+skupper token issue <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
++
+This file contains a key and the location of the site that created it.
++
+*📌 NOTE*
+Access to this file provides access to the application network.
+Protect it appropriately.
+A token can be restricted by any combination of:
+
+ ** Time - prevents token reuse after a specified period.
++
+For example, to allow a token to be used for 1 hour after it is issued:
++
+----
+skupper token issue build/west.yaml --expiration-window 60m
+----
+
+ ** Usage - prevents creating multiple links from a single token.
++
+For example, to allow a token to be used 3 times:
++
+----
+skupper token issue output/west.yaml --redemptions-allowed 3
+----
+
++
+All inter-site traffic is protected by mutual TLS using a private, dedicated certificate authority (CA).
+A token is not a certificate, but is securely exchanged for a certificate during the linking process.
+
+. Redeem the token on a local system site to create a link:
++
+[,bash]
+----
+skupper token redeem <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the status of the link:
++
+[,bash]
+----
+skupper link status
+----
++
+You might need to issue the command multiple times before the link is ready:
+
+ $ skupper link status
+ NAME                                            STATUS  COST    MESSAGE
+ west-12f75bc8-5dda-4256-88f8-9df48150281a       Pending 1       Not Operational
+ $ skupper link status
+ NAME                                            STATUS  COST    MESSAGE
+ west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK
++
+You can now expose services on the application network.
+
+There are many options to consider when linking sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+[id="kube-link-cli2"]
+
+== Linking sites using a `link` resource
+
+An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site.
+
+*Prerequisites*
+
+* Two sites
+* At least one site with `enable-link-access` enabled.
+
+To link sites, you create a `link` resource YAML file on one site and apply that resource on the other site to create the link.
+
+*Procedure*
+
+. On the site where you want to create a link , make sure link access is enabled:
++
+[,bash]
+----
+skupper site update --enable-link-access
+skupper site reload
+----
+
+. Create a `link` resource YAML file:
++
+[,bash]
+----
+skupper link generate > <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Apply the `link` resource YAML file on a different site to create a link:
++
+[,bash]
+----
+skupper system apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the status of the link:
++
+[,bash]
+----
+skupper link status
+----
++
+You might need to issue the command multiple times before the link is ready:
+
+ $ skupper link status
+ NAME                                            STATUS  COST    MESSAGE
+ west                                            Pending 1       Not Operational
+ $ skupper link status
+ NAME                                            STATUS  COST    MESSAGE
+ west                                            Ready   1       OK
++
+You can now expose services on the application network.
+
+There are many options to consider when linking sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+[id="system-cli-service-exposure"]
+[id="system-exposing-services-cli"]
+
+= Exposing services on the application network using the CLI
+
+After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
+A _routing key_ is a string that matches one or more connectors with one or more listeners.
+For example, if you create a connector with the routing key `backend`, you need to create a listener with the routing key `backend` to consume that service.
+
+This section assumes you have created and linked at least two sites.
+
+== Creating a connector using the CLI
+
+A connector binds a local workload to listeners in remote sites.
+Listeners and connectors are matched using routing keys.
+
+For more information about connectors see https://skupperproject.github.io/refdog/concepts/connector.html[Connector concept]
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+* The `SKUPPER_PLATFORM` environment variable is set to one of * `podman`,`docker` or `linux`.
+
+*Procedure*
+
+. Create a server that you want to expose on the network.
+For example, run a HTTP server on port 8080.
+. Create a connector:
++
+[,bash]
+----
+skupper connector create <name> <port> [--routing-key <name>]
+----
++
+For example:
++
+[,bash]
+----
+skupper connector create my-server 8080 --host localhost
+----
+
+. Check the connector status:
++
+[,bash]
+----
+skupper connector status
+----
++
+For example:
+
+ $ skupper connector status
+ NAME		STATUS	ROUTING-KEY	HOST		PORT
+ my-server	Ok	my-server	localhost	8081
++
+*📌 NOTE*
+By default, the routing key name is set to the name of the connector.
+If you want to use a custom routing key, set the `--routing-key` to your custom name.
++
+Apply the configuration using:
++
+[,bash]
+----
+skupper system reload
+----
+
+There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+== Creating a listener using the CLI
+
+A listener binds a local connection endpoint to connectors in remote sites.
+Listeners and connectors are matched using routing keys.
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+* The `SKUPPER_PLATFORM` environment variable is set to one of * `podman`,`docker` or `linux`.
+
+*Procedure*
+
+. Identify a connector that you want to use.
+Note the routing key of that connector.
+. Create a listener:
++
+[,bash]
+----
+skupper connector create <name> <port> [--routing-key <name>]
+----
++
+For example:
+
+ $ skupper listener create my-server 8080
+ File written to /home/user/.local/share/skupper/namespaces/default/input/resources/Listener-backend.yaml
++
+Apply the configuration using:
++
+[,bash]
+----
+skupper system reload
+----
+
+. Check the listener status:
++
+[,bash]
+----
+skupper listener status
+----
++
+For example:
+
+ $ skupper listener status
+ NAME		STATUS	ROUTING-KEY	HOST		PORT
+ my-server	Ok	my-server	localhost	8081
++
+*📌 NOTE*
+There must be a matching connector for the service to operate.
+By default, the routing key name is the listener name.
+If you want to use a custom routing key, set the `--routing-key` to your custom name.
+
+There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+[id="system-yaml-index"]
+[id="system-yaml"]
+
+= Overview of using YAML on local systems
+
+* <<system-yaml-site-configuration,Create sites>>
+* <<system-yaml-site-linking,Link sites>> (requires that one site has link access enabled)
+* <<system-yaml-service-exposure,Expose and consume services>>
+
+[id="system-yaml-site-configuration"]
+[id="system-yaml-site-configuration"]
+
+= Creating a site on local systems using YAML
+
+Using YAML allows you to create and manage sites on Docker, Podman and Linux.
+
+A typical workflow is to create a site, link sites together, and expose services to the application network.
+
+If you require more than one site, specify a unique namespace when using  `skupper`, for example `+skupper --namespace second-site ...+`.
+
+[id="system-creating-simple-site-yaml"]
+
+== Creating a simple site on local systems using YAML
+
+You can use YAML to create and manage Skupper sites.
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+
+*Procedure*
+
+. Create a site CR YAML file named `my-site.yaml` in an empty directory, for example, `local`:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Site
+metadata:
+  name: my-site
+----
++
+This YAML creates a site named `my-site` in the `default` namespace.
+
+. Create the site:
++
+[,bash]
+----
+skupper system setup --path ./local
+----
++
+Skupper attempts to process any files in the `local` directory.
+Typically, you create all resources you require for a site before running `skupper system setup`.
+
+. Check the status of the site:
++
+[,bash]
+----
+skupper site status
+----
++
+You might need to issue the command multiple times before the site is ready:
++
+----
+NAME    STATUS  MESSAGE
+default Ready   OK
+----
++
+You can now link this site to another site to create an application network.
+
+There are many options to consider when creating sites using YAML, see https://skupperproject.github.io/refdog/resources/index.html[YAML Reference], including _frequently used_ options.
+
+[id="system-yaml-site-linking"]
+[id="system-yaml-site-linking"]
+
+= Linking sites on local systems using YAML
+
+Using a `link` resource YAML file allows you to create links between sites.
+The link direction is not significant, and is typically determined by ease of connectivity. For example, if east is behind a firewall, linking from east to west is the easiest option.
+
+Once sites are linked, services can be exposed and consumed across the application network without the need to open ports or manage inter-site connectivity.
+
+The procedures below describe linking an existing site.
+Typically, it is easier to configure a site, links and services in a set of files and then create a configured site by placing all the YAML files in a directory, for example `local` and then using the following command to
+
+[id="system-link-yaml"]
+
+== Linking sites using a `link` resource
+
+An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site.
+
+*Prerequisites*
+
+* A local system site
+* A Kubernetes site with `enable-link-access` enabled.
+
+To link sites, you create a `link` resource YAML file on one site and apply that resource on the other site to create the link.
+
+*Procedure*
+
+. On the site where you want to create a link , make sure link access is enabled:
++
+[,bash]
+----
+skupper site update --enable-link-access
+----
+
+. Create a `link` resource YAML file:
++
+[,bash]
+----
+skupper link generate > <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Apply the `link` resource YAML file on a local system site to create a link:
++
+[,bash]
+----
+mv <filename> ~/.local/share/skupper/namespaces/default/input/resources/
+skupper system setup --force
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
++
+The path shown is specific to the `default` namespace.
+If you are configuring a different namespace, use that name instead.
++
+The site is recreated and you see some of the internal resources that are not affected, for example:
++
+----
+Sources will be consumed from namespace "default"
+2025/03/09 22:43:14 WARN certificate will not be overwritten path=~/.local/share/skupper/namespaces/default/runtime/issuers/skupper-local-ca/tls.crt
+2025/03/09 22:43:14 WARN certificate will not be overwritten path=~/.local/share/skupper/namespaces/default/runtime/issuers/skupper-local-ca/tls.key
+2025/03/09 22:43:14 WARN certificate will not be overwritten path=~/.local/share/skupper/namespaces/default/runtime/issuers/skupper-local-ca/ca.crt
+2025/03/09 22:43:14 WARN certificate will not be overwritten path=~/.local/share/skupper/namespaces/default/runtime/issuers/skupper-site-ca/tls.crt
+2025/03/09 22:43:14 WARN certificate will not be overwritten path=~/.local/share/skupper/namespaces/default/runtime/issuers/skupper-site-ca/tls.key
+2025/03/09 22:43:14 WARN certificate will not be overwritten path=~/.local/share/skupper/namespaces/default/runtime/issuers/skupper-site-ca/ca.crt
+2025/03/09 22:43:15 WARN certificate will not be overwritten path=~/.local/share/skupper/namespaces/default/runtime/issuers/skupper-service-ca/tls.crt
+2025/03/09 22:43:15 WARN certificate will not be overwritten path=~/.local/share/skupper/namespaces/default/runtime/issuers/skupper-service-ca/tls.key
+2025/03/09 22:43:15 WARN certificate will not be overwritten path=~/.local/share/skupper/namespaces/default/runtime/issuers/skupper-service-ca/ca.crt
+----
+
+. Check the status of the link:
++
+[,bash]
+----
+skupper link status
+----
++
+The output shows the link name:
+
+ $ skupper link status
+ NAME            STATUS
+ link-west       Ok
++
+You can now expose services on the application network.
+
+[id="system-yaml-service-exposure"]
+[id="system-yaml-service-exposure"]
+
+= Exposing services on the application network using YAML
+
+After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
+A _routing key_ is a string that matches one or more connectors with one or more listeners.
+For example, if you create a connector with the routing key `backend`, you need to create a listener with the routing key `backend` to consume that service.
+
+This section assumes you have created and linked at least two sites.
+
+== Creating a connector using YAML
+
+A connector binds a local workload to listeners in remote sites.
+Listeners and connectors are matched using routing keys.
+
+For more information about connectors see https://skupperproject.github.io/refdog/concepts/connector.html[Connector concept]
+
+*Procedure*
+
+. Create a workload that you want to expose on the network, for example:
++
+[,bash]
+----
+kubectl create deployment backend --image quay.io/skupper/hello-world-backend --replicas 3
+----
+
+. Create a connector resource YAML file:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Connector
+metadata:
+  name: backend
+  namespace: east
+spec:
+  routingKey: backend
+  selector: app=backend
+  port: 8080
+----
++
+This creates a connector in the `east` site and exposes the `backend` deployment on the network on port 8080.
+You can create a listener on a different site using the matching routing key `backend` to address this service.
++
+To create the connector resource:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the connector status:
++
+[,bash]
+----
+kubectl get connector
+----
++
+For example:
++
+----
+NAME    STATUS  ROUTING-KEY     SELECTOR        HOST    PORT    HAS MATCHING LISTENER    MESSAGE
+backend Pending backend         app=backend             8080    false   No matching listeners
+----
++
+*📌 NOTE*
+By default, the routing key name is set to the name of the connector.
+If you want to use a custom routing key, set the `--routing-key` to your custom name.
+
+There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
+
+== Creating a listener using YAML
+
+A listener binds a local connection endpoint to connectors in remote sites.
+Listeners and connectors are matched using routing keys.
+
+*Procedure*
+
+. Identify a connector that you want to use.
+Note the routing key of that connector.
+. Create a listener resource YAML file:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Listener
+metadata:
+  name: backend
+  namespace: west
+spec:
+  routingKey: backend
+  host: east-backend
+  port: 8080
+----
++
+This creates a listener in the `west` site and matches with the connector that uses the routing key `backend`.
+It also creates a service named  `east-backend` exposed on port 8080 in the current namespace.
++
+To create the connector resource:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the listener status:
++
+[,bash]
+----
+kubectl get listener
+----
++
+For example:
++
+----
+NAME      ROUTING KEY   PORT   HOST           STATUS   HAS MATCHING CONNECTOR   MESSAGE
+backend   backend       8080   east-backend   Ready    true                     OK
+----
++
+*📌 NOTE*
+There must be a `MATCHING-CONNECTOR` for the service to operate.
+
+There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.

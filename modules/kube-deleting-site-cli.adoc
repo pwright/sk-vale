@@ -1,0 +1,26 @@
+[id="kube-deleting-site-cli"]
+= kube-deleting-site-cli
+
+
+== Deleting a site using the CLI on Kubernetes
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+
+*Procedure*
+
+. Change context to the namespace where the site was created, for example:
++
+[,bash]
+----
+kubectl config set-context --current --namespace west
+----
+
+. Enter the following command to delete a site:
++
+[,bash]
+----
+skupper site delete
+----
+

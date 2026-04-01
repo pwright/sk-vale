@@ -1,0 +1,27 @@
+[id="system-deleting-site-cli"]
+= system-deleting-site-cli
+
+
+== Deleting a site using the CLI on local systems
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+
+*Procedure*
+
+. Enter the following command to delete a site:
++
+[,bash]
+----
+skupper site delete <sitename>
+skupper system stop
+----
+
+. You can also uninstall the controller after deleting all existing sites:
++
+[,bash]
+----
+skupper system uninstall
+----
+

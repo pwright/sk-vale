@@ -1,0 +1,3 @@
+[id="kube-yaml-site-configuration"]
+= kube-yaml-site-configuration
+

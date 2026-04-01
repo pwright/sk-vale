@@ -1,0 +1,62 @@
+[id="kube-creating-listener-yaml"]
+= kube-creating-listener-yaml
+
+// Creating a listener on Kubernetes using YAML
+
+== Creating a listener using YAML
+
+A listener binds a local connection endpoint to connectors in remote sites.
+Listeners and connectors are matched using routing keys.
+
+For more information about listeners. see https://skupperproject.github.io/refdog/concepts/listener.html[Listener concept].
+
+*Procedure*
+
+. Identify a connector that you want to use.
+Note the routing key of that connector.
+. Create a listener resource YAML file:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Listener
+metadata:
+  name: backend
+  namespace: west
+spec:
+  routingKey: backend
+  host: east-backend
+  port: 8080
+----
++
+This creates a listener in the `west` site and matches with the connector that uses the routing key `backend`.
+It also creates a service named  `east-backend` exposed on port 8080 in the current namespace.
++
+To create the connector resource:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the listener status:
++
+[,bash]
+----
+kubectl get listener
+----
++
+For example:
++
+----
+NAME      ROUTING KEY   PORT   HOST           STATUS   HAS MATCHING CONNECTOR   MESSAGE
+backend   backend       8080   east-backend   Ready    true                     OK
+----
++
+*📌 NOTE*
+There must be a `MATCHING-CONNECTOR` for the service to operate.
+
+There are many options to consider when creating listeners using YAML, see https://skupperproject.github.io/refdog/resources/listener.html[Listener resource].
+
