@@ -1,8 +1,10 @@
 [id="kube-link-cli2"]
-= kube-link-cli2
+= Linking sites using a `link` resource
 
 
-== Linking sites using a `link` resource
+:_mod-docs-content-type: PROCEDURE
+
+[role="_abstract"]
 
 An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site.
 
@@ -13,7 +15,7 @@ An alternative approach to linking sites using tokens is to create a `link` reso
 
 To link sites, you create a `link` resource YAML file on one site and apply that resource on the other site to create the link.
 
-*Procedure*
+.Procedure
 
 . On the site where you want to create a link , make sure link access is enabled:
 +
@@ -50,6 +52,8 @@ skupper link status
 +
 You might need to issue the command multiple times before the link is ready:
 
++
+----
  $ skupper link status
  NAME                                            STATUS  COST    MESSAGE
  west                                            Pending 1       Not Operational
@@ -57,7 +61,12 @@ You might need to issue the command multiple times before the link is ready:
  NAME                                            STATUS  COST    MESSAGE
  west                                            Ready   1       OK
 +
+.Results
+----
+
 You can now expose services on the application network.
+
+.Next steps
 
 There are many options to consider when linking sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 

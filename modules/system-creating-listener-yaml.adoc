@@ -1,17 +1,13 @@
-[id="kube-creating-listener-yaml"]
+[id="system-creating-listener-yaml"]
 = Creating a listener using YAML
 
 
 :_mod-docs-content-type: PROCEDURE
 
 [role="_abstract"]
-Use YAML to create a listener on Kubernetes.
-
 
 A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.
-
-For more information about listeners. see https://skupperproject.github.io/refdog/concepts/listener.html[Listener concept].
 
 .Procedure
 
@@ -63,5 +59,4 @@ There must be a `MATCHING-CONNECTOR` for the service to operate.
 
 .Next steps
 
-There are many options to consider when creating listeners using YAML, see https://skupperproject.github.io/refdog/resources/listener.html[Listener resource].
-
+There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.

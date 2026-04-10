@@ -1,8 +1,10 @@
 [id="kube-creating-attachedconnector-yaml"]
-= kube-creating-attachedconnector-yaml
+= Creating a connector for a different namespace using YAML
 
 
-== Creating a connector for a different namespace using YAML
+:_mod-docs-content-type: PROCEDURE
+
+[role="_abstract"]
 
 A connector binds a local workload to listeners in remote sites.
 
@@ -11,7 +13,7 @@ If you create a site in one namespace and need to expose a service in a differen
 * An attached connector is a connector in a peer namespace, that is, not the site namespace.
 * The AttachedConnectorBinding is a binding to an attached connector in a peer namespace and is created in the site namespace.
 
-*Procedure*
+.Procedure
 
 . Create a workload that you want to expose on the network in a non-site namespace, for example:
 +
@@ -85,6 +87,8 @@ backend   backend       attached              Ready    true
 *📌 NOTE*
 By default, the routing key name is set to the name of the connector.
 If you want to use a custom routing key, set the `--routing-key` to your custom name.
+
+.Next steps
 
 There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/resources/connector.html[Connector resource].
 

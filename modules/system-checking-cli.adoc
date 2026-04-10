@@ -1,10 +1,13 @@
 [id="system-checking-cli"]
-= system-checking-cli
+= Checking the Skupper CLI and environment
 
 
-== Checking the Skupper CLI and environment
+:_mod-docs-content-type: PROCEDURE
+
+[role="_abstract"]
 
 Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.
+.Procedure
 
 . Follow the instructions for https://skupper.io/releases/index.html[Installing Skupper].
 . Verify the installation.

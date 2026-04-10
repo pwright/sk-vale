@@ -1,3 +1,8 @@
 [id="system-cli-service-exposure"]
 = system-cli-service-exposure
 
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Overview of exposing services on the Skupper application network with the CLI on local systems.
+

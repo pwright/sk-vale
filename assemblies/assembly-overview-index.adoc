@@ -1,6 +1,11 @@
 [id="overview-index"]
 = overview-index
 
+:_mod-docs-content-type: ASSEMBLY
+
+[role="_abstract"]
+Overview of Skupper concepts, features, and site-management workflows.
+
 include::../modules/skupper-overview.adoc[leveloffset=+1]
 include::../modules/application-networks.adoc[leveloffset=+1]
 include::../modules/layer-7-application-routers.adoc[leveloffset=+1]
@@ -53,6 +58,8 @@ include::../modules/system-token-cli.adoc[leveloffset=+1]
 include::../modules/kube-link-cli2.adoc[leveloffset=+1]
 include::../modules/system-cli-service-exposure.adoc[leveloffset=+1]
 include::../modules/system-exposing-services-cli.adoc[leveloffset=+1]
+include::../modules/system-creating-connector-cli.adoc[leveloffset=+1]
+include::../modules/system-creating-listener-cli.adoc[leveloffset=+1]
 include::../modules/system-yaml-index.adoc[leveloffset=+1]
 include::../modules/system-yaml.adoc[leveloffset=+1]
 include::../modules/system-yaml-site-configuration.adoc[leveloffset=+1]
@@ -63,3 +70,5 @@ include::../modules/system-yaml-site-linking.adoc[leveloffset=+1]
 include::../modules/system-link-yaml.adoc[leveloffset=+1]
 include::../modules/system-yaml-service-exposure.adoc[leveloffset=+1]
 include::../modules/system-yaml-service-exposure.adoc[leveloffset=+1]
+include::../modules/system-creating-connector-yaml.adoc[leveloffset=+1]
+include::../modules/system-creating-listener-yaml.adoc[leveloffset=+1]

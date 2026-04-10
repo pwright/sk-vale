@@ -1,8 +1,10 @@
 [id="system-creating-site-bundle"]
-= system-creating-site-bundle
+= Creating a site bundle using the CLI on local systems
 
 
-== Creating a site bundle using the CLI on local systems
+:_mod-docs-content-type: PROCEDURE
+
+[role="_abstract"]
 
 Sometimes, you might want to create all the configuration for a site and apply it automatically to a remote host.
 To support this, Skupper allows you create a `.tar.gz` file with all the required files and an `install.sh` script to start the remote site.
@@ -11,7 +13,7 @@ To support this, Skupper allows you create a `.tar.gz` file with all the require
 
 * The `skupper` CLI is installed. The CLI is not required on the remote site.
 
-*Procedure*
+.Procedure
 
 . Set the `SKUPPER_PLATFORM` for type of site you want to install:
  ** `podman`

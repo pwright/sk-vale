@@ -1,14 +1,17 @@
 [id="system-deleting-site-cli"]
-= system-deleting-site-cli
+= Deleting a site using the CLI on local systems
 
 
-== Deleting a site using the CLI on local systems
+:_mod-docs-content-type: PROCEDURE
+
+[role="_abstract"]
+Use the CLI to remove an existing Skupper site from a local system.
 
 *Prerequisites*
 
 * The `skupper` CLI is installed.
 
-*Procedure*
+.Procedure
 
 . Enter the following command to delete a site:
 +

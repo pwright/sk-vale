@@ -1,8 +1,10 @@
 [id="system-token-cli"]
-= system-token-cli
+= Linking to Kubernetes sites using a token
 
 
-== Linking to Kubernetes sites using a token
+:_mod-docs-content-type: PROCEDURE
+
+[role="_abstract"]
 
 A token provides a secure method to link sites.
 By default, a token can only be used once and must be used within 15 minutes to link sites.
@@ -15,7 +17,7 @@ This procedure describes how to issue a token from a Kubernetes site and redeem 
 
 To link sites, you create a token on the Kubernetes site and redeem that token on the local system site to create the link.
 
-*Procedure*
+.Procedure
 
 . On the Kubernetes site where you want to issue the token, make sure link access is enabled:
 +
@@ -78,6 +80,8 @@ skupper link status
 +
 You might need to issue the command multiple times before the link is ready:
 
++
+----
  $ skupper link status
  NAME                                            STATUS  COST    MESSAGE
  west-12f75bc8-5dda-4256-88f8-9df48150281a       Pending 1       Not Operational
@@ -85,7 +89,12 @@ You might need to issue the command multiple times before the link is ready:
  NAME                                            STATUS  COST    MESSAGE
  west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK
 +
+.Results
+----
+
 You can now expose services on the application network.
+
+.Next steps
 
 There are many options to consider when linking sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 
