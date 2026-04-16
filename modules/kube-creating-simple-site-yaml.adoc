@@ -1,8 +1,8 @@
 [id="kube-creating-simple-site-yaml"]
-= kube-creating-simple-site-yaml
+:_mod-docs-content-type: PROCEDURE
+= Creating a simple site on Kubernetes using YAML
 
-
-== Creating a simple site on Kubernetes using YAML
+[role="_abstract"]
 
 You can use YAML to create and manage Skupper sites.
 
@@ -10,7 +10,7 @@ You can use YAML to create and manage Skupper sites.
 
 * The Skupper controller is running on the Kubernetes cluster you are running or you are running on a platform.
 
-Procedure
+.Procedure
 
 . Create a site CR YAML file named `my-site.yaml`, for example:
 +
@@ -42,6 +42,8 @@ kubectl get site
 +
 You might need to issue the command multiple times before the site is ready:
 
++
+----
  $ kubectl get site
  NAME   STATUS    SITES IN NETWORK   MESSAGE
  west   Pending                      containers with unready status: [router kube-adaptor]
@@ -49,7 +51,12 @@ You might need to issue the command multiple times before the site is ready:
  NAME   STATUS   SITES IN NETWORK   MESSAGE
  west   Ready    1                  OK
 +
+.Results
+----
+
 You can now link this site to another site to create an application network.
+
+.Next steps
 
 There are many options to consider when creating sites using YAML, see https://skupperproject.github.io/refdog/resources/index.html[YAML Reference], including _frequently used_ options.
 

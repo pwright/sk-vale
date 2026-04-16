@@ -1,11 +1,12 @@
 [id="kube-checking-cli"]
-= kube-checking-cli
+:_mod-docs-content-type: PROCEDURE
+= Checking the Skupper CLI
 
-
-== Checking the Skupper CLI
+[role="_abstract"]
 
 Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.
 
+.Procedure
 . Follow the instructions for https://skupper.io/releases/index.html[Installing Skupper].
 . Verify the installation.
 +

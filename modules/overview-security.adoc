@@ -1,3 +1,7 @@
 [id="overview-security"]
+:_mod-docs-content-type: REFERENCE
 = overview-security
+
+[role="_abstract"]
+Overview of Skupper security capabilities and deployment considerations.
 

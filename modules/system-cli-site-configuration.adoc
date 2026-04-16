@@ -1,3 +1,7 @@
 [id="system-cli-site-configuration"]
+:_mod-docs-content-type: REFERENCE
 = system-cli-site-configuration
+
+[role="_abstract"]
+Overview of creating and managing Skupper sites on local systems with the CLI.
 

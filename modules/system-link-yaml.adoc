@@ -1,8 +1,8 @@
 [id="system-link-yaml"]
-= system-link-yaml
+:_mod-docs-content-type: PROCEDURE
+= Linking sites using a `link` resource
 
-
-== Linking sites using a `link` resource
+[role="_abstract"]
 
 An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site.
 
@@ -13,7 +13,7 @@ An alternative approach to linking sites using tokens is to create a `link` reso
 
 To link sites, you create a `link` resource YAML file on one site and apply that resource on the other site to create the link.
 
-*Procedure*
+.Procedure
 
 . On the site where you want to create a link , make sure link access is enabled:
 +
@@ -68,9 +68,14 @@ skupper link status
 +
 The output shows the link name:
 
++
+----
  $ skupper link status
  NAME            STATUS
  link-west       Ok
 +
+.Results
+----
+
 You can now expose services on the application network.
 

@@ -1,8 +1,11 @@
 [id="kube-cli"]
 = kube-cli
 
-
 = Overview of Skupper CLI on Kubernetes
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
 
 You can use the `skupper` CLI on Kubernetes after installing the Skupper controller to configure sites, links and services.
 

@@ -1,8 +1,11 @@
 [id="kube-creating-site-yaml"]
 = kube-creating-site-yaml
 
-
 = Creating a site on Kubernetes using YAML
+
+:_mod-docs-content-type: ASSEMBLY
+
+[role="_abstract"]
 
 Using YAML allows you to create and manage sites from the context of the current namespace.
 

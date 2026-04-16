@@ -40,6 +40,31 @@ class ModuleFactory:
     def __init__(self, ctx: NebelContext):
         self.ctx = ctx
 
+    @staticmethod
+    def _split_leading_attributes(lines):
+        """Lift leading AsciiDoc document attributes ahead of the title line."""
+        idx = 0
+
+        while idx < len(lines) and not lines[idx].strip():
+            idx += 1
+
+        attributes = []
+        while idx < len(lines):
+            stripped = lines[idx].strip()
+            if stripped.startswith(':') and ':' in stripped[1:]:
+                attributes.append(lines[idx])
+                idx += 1
+                continue
+            break
+
+        if not attributes:
+            return [], lines
+
+        while idx < len(lines) and not lines[idx].strip():
+            idx += 1
+
+        return attributes, lines[idx:]
+
     def name_of_file(self, mid, is_assembly=False):
         core = mid.replace('{context}', '').rstrip('_-').replace('_', '-')
         if is_assembly:
@@ -53,10 +78,12 @@ class ModuleFactory:
         fname = self.name_of_file(mid, is_assembly)
         path = os.path.join(dirp, fname)
         eprint(f"Writing {'assembly' if is_assembly else 'module'}: {path}")
+        leading_attributes, body_lines = self._split_leading_attributes(lines)
         with open(path, 'w') as f:
             f.write(f"[id=\"{mid}\"]\n")
+            f.writelines(leading_attributes)
             f.write(f"= {title}\n\n")
-            f.writelines(lines)
+            f.writelines(body_lines)
         return path
 
 class SplitTask:

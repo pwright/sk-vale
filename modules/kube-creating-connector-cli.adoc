@@ -1,16 +1,17 @@
 [id="kube-creating-connector-cli"]
-= kube-creating-connector-cli
+:_mod-docs-content-type: PROCEDURE
+= Creating a connector using the CLI
 
-// Creating a connector on Kubernetes using the CLI
+[role="_abstract"]
+Use the CLI to create a connector on Kubernetes.
 
-== Creating a connector using the CLI
 
 A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.
 
 For more information about connectors, see https://skupperproject.github.io/refdog/concepts/connector.html[Connector concept].
 
-*Procedure*
+.Procedure
 
 . Create a workload that you want to expose on the network, for example:
 +
@@ -42,6 +43,8 @@ skupper connector status
 +
 For example:
 
++
+----
  $ skupper connector status
  NAME    STATUS  ROUTING-KEY     SELECTOR        HOST    PORT    HAS MATCHING LISTENER    MESSAGE
  backend Pending backend         app=backend             8080    false   No matching listeners
@@ -49,10 +52,12 @@ For example:
 *📌 NOTE*
 By default, the routing key name is set to the name of the connector.
 If you want to use a custom routing key, set the `--routing-key` to your custom name.
+----
+
+.Next steps
 
 There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 
-*Additional information*
 
 If you need to expose a service from another namespace, you must use YAML as described in link:../kube-yaml/service-exposure.html#kube-creating-attachedconnector-yaml[Creating a connector for a different namespace using YAML].
 

@@ -1,15 +1,16 @@
 [id="kube-creating-simple-site-cli"]
-= kube-creating-simple-site-cli
+:_mod-docs-content-type: PROCEDURE
+= Creating a simple site using the CLI on Kubernetes
 
-
-== Creating a simple site using the CLI on Kubernetes
+[role="_abstract"]
+Use the CLI to create a basic Skupper site on Kubernetes.
 
 *Prerequisites*
 
 * The `skupper` CLI is installed.
 * The Skupper controller is running on the Kubernetes cluster you are running or you are running on a platform.
 
-*Procedure*
+.Procedure
 
 . Check that the `SKUPPER_PLATFORM` environment is unset or set to `kubernetes`.
  ** `kubernetes` - default
@@ -34,6 +35,8 @@ Waiting for status...
 Site "my-site" is ready.
 ----
 +
+.Next steps
+
 There are many options to consider when creating sites using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.
 
 For example

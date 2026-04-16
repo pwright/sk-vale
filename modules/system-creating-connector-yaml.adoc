@@ -1,16 +1,13 @@
-[id="kube-creating-connector-yaml"]
+[id="system-creating-connector-yaml"]
 :_mod-docs-content-type: PROCEDURE
 = Creating a connector using YAML
 
 [role="_abstract"]
-Use YAML to create a connector on Kubernetes.
-
 
 A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.
 
-
-There are many options to consider when creating connectors using YAML, see https://skupperproject.github.io/refdog/resources/connector.html[Connector resource].
+For more information about connectors see https://skupperproject.github.io/refdog/concepts/connector.html[Connector concept]
 
 .Procedure
 

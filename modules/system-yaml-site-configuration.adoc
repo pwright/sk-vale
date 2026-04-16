@@ -1,8 +1,11 @@
 [id="system-yaml-site-configuration"]
 = system-yaml-site-configuration
 
-
 = Creating a site on local systems using YAML
+
+:_mod-docs-content-type: ASSEMBLY
+
+[role="_abstract"]
 
 Using YAML allows you to create and manage sites on Docker, Podman and Linux.
 

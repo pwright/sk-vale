@@ -1,3 +1,7 @@
 [id="system-cli-index"]
+:_mod-docs-content-type: REFERENCE
 = system-cli-index
+
+[role="_abstract"]
+Overview of Skupper CLI workflows on local systems.
 

@@ -1,8 +1,11 @@
 [id="kube-exposing-services-cli"]
 = kube-exposing-services-cli
 
-
 = Exposing services on the application network using the CLI
+
+:_mod-docs-content-type: ASSEMBLY
+
+[role="_abstract"]
 
 After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.
 A _routing key_ is a string that matches one or more connectors with one or more listeners.

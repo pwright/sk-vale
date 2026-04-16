@@ -1,3 +1,7 @@
 [id="system-yaml-index"]
+:_mod-docs-content-type: REFERENCE
 = system-yaml-index
+
+[role="_abstract"]
+Overview of Skupper YAML workflows on local systems.
 

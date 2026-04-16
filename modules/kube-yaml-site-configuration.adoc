@@ -1,3 +1,7 @@
 [id="kube-yaml-site-configuration"]
+:_mod-docs-content-type: REFERENCE
 = kube-yaml-site-configuration
+
+[role="_abstract"]
+Overview of creating and managing Skupper sites on Kubernetes with YAML.
 

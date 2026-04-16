@@ -1,8 +1,11 @@
 [id="skupper-overview"]
 = skupper-overview
 
-
 = Skupper overview
+
+:_mod-docs-content-type: ASSEMBLY
+
+[role="_abstract"]
 
 Hybrid clouds enable organizations to combine on-premises, private cloud, and public cloud resources.
 While such a solution provides many benefits, it also presents a unique challenge: enabling these resources to communicate with each other.

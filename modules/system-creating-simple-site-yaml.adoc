@@ -1,8 +1,8 @@
 [id="system-creating-simple-site-yaml"]
-= system-creating-simple-site-yaml
+:_mod-docs-content-type: PROCEDURE
+= Creating a simple site on local systems using YAML
 
-
-== Creating a simple site on local systems using YAML
+[role="_abstract"]
 
 You can use YAML to create and manage Skupper sites.
 
@@ -10,7 +10,7 @@ You can use YAML to create and manage Skupper sites.
 
 * The `skupper` CLI is installed.
 
-*Procedure*
+.Procedure
 
 . Create a site CR YAML file named `my-site.yaml` in an empty directory, for example, `local`:
 +
@@ -48,7 +48,11 @@ NAME    STATUS  MESSAGE
 default Ready   OK
 ----
 +
+.Results
+
 You can now link this site to another site to create an application network.
+
+.Next steps
 
 There are many options to consider when creating sites using YAML, see https://skupperproject.github.io/refdog/resources/index.html[YAML Reference], including _frequently used_ options.
 

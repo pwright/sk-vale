@@ -1,14 +1,15 @@
 [id="kube-deleting-site-cli"]
-= kube-deleting-site-cli
+:_mod-docs-content-type: PROCEDURE
+= Deleting a site using the CLI on Kubernetes
 
-
-== Deleting a site using the CLI on Kubernetes
+[role="_abstract"]
+Use the CLI to remove an existing Skupper site from Kubernetes.
 
 *Prerequisites*
 
 * The `skupper` CLI is installed.
 
-*Procedure*
+.Procedure
 
 . Change context to the namespace where the site was created, for example:
 +

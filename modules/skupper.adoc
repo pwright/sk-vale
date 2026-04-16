@@ -1,8 +1,8 @@
 [id="skupper"]
-= skupper
+:_mod-docs-content-type: REFERENCE
+= Skupper
 
-
-== Skupper
+[role="_abstract"]
 
 Skupper is an open source tool for creating application networks in Kubernetes or Linux.
 By using Skupper, you can create a distributed application consisting of microservices running in different sites.

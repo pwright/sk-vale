@@ -1,14 +1,15 @@
 [id="system-creating-simple-site-cli"]
-= system-creating-simple-site-cli
+:_mod-docs-content-type: PROCEDURE
+= Creating a simple site using the CLI on local systems
 
-
-== Creating a simple site using the CLI on local systems
+[role="_abstract"]
+Use the CLI to create a basic Skupper site on a local system.
 
 *Prerequisites*
 
 * The `skupper` CLI is installed.
 
-*Procedure*
+.Procedure
 
 . Set the `SKUPPER_PLATFORM` for type of site you want to install:
  ** `podman`
@@ -49,6 +50,7 @@ To run the site:
 skupper system start
 ----
 
+.Next steps
 By default, all sites are created with the namespace `default`.
 On non-Kubernetes sites, you can create multiple sites per-user by specifying a _namespace_, for example you can create multiple sites with different platforms as follows:
 

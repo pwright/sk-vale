@@ -1,78 +1,77 @@
 # Splitting AsciiDoc Files with `leben.py`
 
-Have you ever written a huge, monolithic AsciiDoc file and wished you could automatically split it into smaller, more manageable parts? The `leben.py` script is designed to do just that, without requiring any special AsciiDoc annotations. It's built to simplify your workflow by automatically converting a single, flat AsciiDoc file into an assembly file and a set of module files.
+`leben.py` splits a flat AsciiDoc file into one assembly file and a set of module files.
 
----
+It is useful when you start with a single `.adoc` document and want repo-style output under `assemblies/` and `modules/`.
 
-## What `leben.py` Does
+## What `leben.py` looks for
 
-The script works by analyzing the structure of your document, specifically by looking for unique IDs and headings. It identifies the first top-level section as the **assembly** and every subsequent section as a **module**.
+The script scans for AsciiDoc IDs in either of these forms:
 
-Here's a breakdown of its behavior:
+- `[[some-id]]`
+- `[id="some-id"]`
 
-. **Identifies the Assembly**: It finds the first ID in your file (either `[[id]]` or `[id="..."]`) and uses it to name the main assembly file. The heading that follows is used as the assembly's title.
+The first ID it finds becomes the assembly ID. Every later ID is treated as the start of a module.
 
-. **Extracts the Assembly Body**: It saves the content that appears after the assembly's title and before the first module. This content becomes the introductory text for your new assembly.
+For the assembly title, `leben.py` prefers the level-1 heading immediately after the first ID. For each module title, it prefers the next heading after that module ID. If the expected heading is missing, the script falls back to using the ID as the title.
 
-. **Creates Modules**: For every subsequent section, it creates a separate AsciiDoc module file. The module's ID becomes its filename, and its title is extracted from the heading.
+## What the script writes
 
-. **Assembles the Final Document**: The new assembly file is created, containing the introductory body and `include::` directives that link to all the new module files.
+Running the script creates:
 
----
+- `assemblies/assembly-<id>.adoc`
+- `modules/<id>.adoc`
 
-## How to Use the Script
+The assembly file contains:
 
-To use `leben.py`, you simply run it from your command line and provide the path to your AsciiDoc file, a glob pattern, or an entire directory.
+- the root ID,
+- any assembly-level body text between the assembly heading and the first module ID,
+- `include::` directives for each generated module.
 
-### Command Syntax
+Each module file contains:
 
-Bash
+- the module ID,
+- any leading AsciiDoc document attributes from that section, such as `:_mod-docs-content-type:`,
+- the generated title line,
+- the remaining body content for that module.
 
+If a section begins with document attributes, `leben.py` lifts those attributes so the generated output follows this pattern:
+
+```adoc
+[id="example-id"]
+:_mod-docs-content-type: PROCEDURE
+= Example Title
 ```
-leben.py <file.adoc|glob|directory>
+
+## Command syntax
+
+```bash
+python3 leben.py <file.adoc|glob|directory>
 ```
 
-### Examples
+Examples:
 
-- **Single File**: To process a single file, such as `my-big-doc.adoc`:
-	Bash
-	```
-	leben.py my-big-doc.adoc
-	```
-- **Using a Glob Pattern**: To process all AsciiDoc files in the current directory:
-	Bash
-	```
-	leben.py *.adoc
-	```
-- **Processing a Directory**: To process all AsciiDoc files within a specific directory:
-	Bash
-	```
-	leben.py my_docs/
-	```
+```bash
+python3 leben.py my-big-doc.adoc
+python3 leben.py '*.adoc'
+python3 leben.py my_docs/
+```
 
----
+## Input expectations
 
-## Output Structure
+`leben.py` works best when the source follows a simple pattern:
 
-The script automatically creates two new directories in the location where you run the command:
+- the document starts with an ID for the assembly,
+- that ID is followed by a level-1 heading,
+- each module starts with its own ID,
+- each module ID is followed by a section heading.
 
-- `assemblies/`: This directory holds the main assembly files. Assembly filenames are prefixed with `assembly-`.
-- `modules/`: This directory contains all the individual module files.
+The script is tolerant of missing headings, but the output is better when the structure is explicit.
 
-### Example Output
+## Practical notes
 
-If you run `leben.py` on a file named `my-big-doc.adoc` with an ID of `[[my-assembly]]`, the script will create the following files:
-
-- `assemblies/assembly-my-assembly.adoc`
-- `modules/module-one.adoc`
-- `modules/another-module.adoc`
-
-And so on, for each section in your original file.
-
----
-
-## Important Considerations for Writers
-
-- **ID and Heading Structure**: The script relies on a consistent ID and heading structure. Ensure your main document has a top-level ID and a level-1 heading. Subsequent sections should have IDs and headings of level 2 or higher.
-- **The First ID is Key**: The script only uses the first ID it finds to name the assembly. All other IDs are treated as modules.
-- **Assembly Body**: The script preserves all content before the first module's ID, which is then placed in your new assembly file. If you have any content you want to keep at the beginning of your main document, make sure it's placed there.
+- The first ID in the file determines the assembly filename.
+- All later IDs are treated as module boundaries.
+- Content before the first module ID stays in the generated assembly.
+- The script writes output into `assemblies/` and `modules/` relative to the current working directory.
+- If you run it on a directory, it processes every `.adoc` file in that directory.
