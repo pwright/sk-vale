@@ -1,7 +1,6 @@
 [id="kube-cli-site-configuration"]
-= kube-cli-site-configuration
-
 :_mod-docs-content-type: REFERENCE
+= kube-cli-site-configuration
 
 [role="_abstract"]
 Overview of creating and managing Skupper sites on Kubernetes with the CLI.

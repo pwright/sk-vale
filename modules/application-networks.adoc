@@ -1,8 +1,6 @@
 [id="application-networks"]
-= Application Networks
-
-
 :_mod-docs-content-type: REFERENCE
+= Application Networks
 
 [role="_abstract"]
 

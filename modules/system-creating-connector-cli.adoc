@@ -1,8 +1,6 @@
 [id="system-creating-connector-cli"]
-= Creating a connector using the CLI
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a connector using the CLI
 
 [role="_abstract"]
 

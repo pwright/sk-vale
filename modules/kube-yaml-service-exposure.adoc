@@ -1,7 +1,6 @@
 [id="kube-yaml-service-exposure"]
-= kube-yaml-service-exposure
-
 :_mod-docs-content-type: REFERENCE
+= kube-yaml-service-exposure
 
 [role="_abstract"]
 Overview of exposing services on the Skupper application network with YAML.

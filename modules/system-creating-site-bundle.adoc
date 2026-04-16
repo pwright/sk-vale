@@ -1,8 +1,6 @@
 [id="system-creating-site-bundle"]
-= Creating a site bundle using the CLI on local systems
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a site bundle using the CLI on local systems
 
 [role="_abstract"]
 

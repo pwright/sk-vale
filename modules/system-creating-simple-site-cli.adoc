@@ -1,8 +1,6 @@
 [id="system-creating-simple-site-cli"]
-= Creating a simple site using the CLI on local systems
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a simple site using the CLI on local systems
 
 [role="_abstract"]
 Use the CLI to create a basic Skupper site on a local system.

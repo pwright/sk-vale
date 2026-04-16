@@ -1,8 +1,6 @@
 [id="kube-creating-listener-yaml"]
-= Creating a listener using YAML
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a listener using YAML
 
 [role="_abstract"]
 Use YAML to create a listener on Kubernetes.

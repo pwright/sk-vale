@@ -1,8 +1,6 @@
 [id="kube-creating-simple-site-cli"]
-= Creating a simple site using the CLI on Kubernetes
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a simple site using the CLI on Kubernetes
 
 [role="_abstract"]
 Use the CLI to create a basic Skupper site on Kubernetes.

@@ -1,7 +1,6 @@
 [id="kube-cli-service-exposure"]
-= kube-cli-service-exposure
-
 :_mod-docs-content-type: REFERENCE
+= kube-cli-service-exposure
 
 [role="_abstract"]
 Overview of exposing services on the Skupper application network with the CLI.

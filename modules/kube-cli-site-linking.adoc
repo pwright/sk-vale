@@ -1,7 +1,6 @@
 [id="kube-cli-site-linking"]
-= kube-cli-site-linking
-
 :_mod-docs-content-type: REFERENCE
+= kube-cli-site-linking
 
 [role="_abstract"]
 Overview of linking Skupper sites on Kubernetes with the CLI.

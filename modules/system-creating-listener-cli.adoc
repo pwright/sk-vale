@@ -1,8 +1,6 @@
 [id="system-creating-listener-cli"]
-= Creating a listener using the CLI
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a listener using the CLI
 
 [role="_abstract"]
 

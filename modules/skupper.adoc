@@ -1,8 +1,6 @@
 [id="skupper"]
-= Skupper
-
-
 :_mod-docs-content-type: REFERENCE
+= Skupper
 
 [role="_abstract"]
 

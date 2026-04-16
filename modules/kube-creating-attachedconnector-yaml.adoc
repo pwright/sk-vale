@@ -1,8 +1,6 @@
 [id="kube-creating-attachedconnector-yaml"]
-= Creating a connector for a different namespace using YAML
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a connector for a different namespace using YAML
 
 [role="_abstract"]
 

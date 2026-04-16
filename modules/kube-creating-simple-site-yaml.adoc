@@ -1,8 +1,6 @@
 [id="kube-creating-simple-site-yaml"]
-= Creating a simple site on Kubernetes using YAML
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a simple site on Kubernetes using YAML
 
 [role="_abstract"]
 

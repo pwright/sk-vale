@@ -1,8 +1,6 @@
 [id="layer-7-application-routers"]
-= Layer 7 application routers
-
-
 :_mod-docs-content-type: REFERENCE
+= Layer 7 application routers
 
 [role="_abstract"]
 

@@ -1,8 +1,6 @@
 [id="system-creating-connector-yaml"]
-= Creating a connector using YAML
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a connector using YAML
 
 [role="_abstract"]
 

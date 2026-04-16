@@ -1,8 +1,6 @@
 [id="system-creating-simple-site-yaml"]
-= Creating a simple site on local systems using YAML
-
-
 :_mod-docs-content-type: PROCEDURE
+= Creating a simple site on local systems using YAML
 
 [role="_abstract"]
 

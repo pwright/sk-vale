@@ -1,8 +1,6 @@
 [id="kube-token-cli"]
-= Linking sites using a token
-
-
 :_mod-docs-content-type: PROCEDURE
+= Linking sites using a token
 
 [role="_abstract"]
 

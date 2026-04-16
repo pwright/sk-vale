@@ -1,7 +1,6 @@
 [id="kube-cli-index"]
-= kube-cli-index
-
 :_mod-docs-content-type: REFERENCE
+= kube-cli-index
 
 [role="_abstract"]
 Overview of Skupper CLI workflows on Kubernetes.

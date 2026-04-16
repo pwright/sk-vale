@@ -1,8 +1,6 @@
 [id="kube-link-cli"]
-= Linking sites using a `link` resource
-
-
 :_mod-docs-content-type: PROCEDURE
+= Linking sites using a `link` resource
 
 [role="_abstract"]
 

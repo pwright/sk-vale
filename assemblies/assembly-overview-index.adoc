@@ -1,7 +1,6 @@
 [id="overview-index"]
-= overview-index
-
 :_mod-docs-content-type: ASSEMBLY
+= overview-index
 
 [role="_abstract"]
 Overview of Skupper concepts, features, and site-management workflows.

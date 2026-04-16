@@ -1,8 +1,6 @@
 [id="system-token-cli"]
-= Linking to Kubernetes sites using a token
-
-
 :_mod-docs-content-type: PROCEDURE
+= Linking to Kubernetes sites using a token
 
 [role="_abstract"]
 

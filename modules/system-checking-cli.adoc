@@ -1,8 +1,6 @@
 [id="system-checking-cli"]
-= Checking the Skupper CLI and environment
-
-
 :_mod-docs-content-type: PROCEDURE
+= Checking the Skupper CLI and environment
 
 [role="_abstract"]
 
