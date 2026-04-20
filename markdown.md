@@ -187,3 +187,5 @@ Use this loop:
 - Use `**Procedure**` in Markdown for task sections; the prep step converts it to `.Procedure`.
 - Keep explicit anchors such as `<a id="..."></a>` when you need stable IDs.
 - If Vale fails because the converted structure is poor, first try to improve the Markdown structure before changing the scripts.
+- Do not remove existing comments in markdown.
+
