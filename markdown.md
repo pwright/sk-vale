@@ -26,6 +26,7 @@ The Markdown source should use lightweight comment markers instead of raw AsciiD
 ```md
 <!--ASSEMBLY-->
 <!--PROCEDURE-->
+<!--CONCEPT-->
 <!--REFERENCE-->
 ```
 
@@ -57,7 +58,7 @@ Installing the skupper command-line interface (CLI) provides a simple method to 
 
 When Markdown is prepared for conversion, the script:
 
-- Converts `<!--ASSEMBLY-->`, `<!--PROCEDURE-->`, and `<!--REFERENCE-->` into `:_mod-docs-content-type: ...`
+- Converts `<!--ASSEMBLY-->`, `<!--PROCEDURE-->`, `<!--CONCEPT-->`, and `<!--REFERENCE-->` into `:_mod-docs-content-type: ...`
 - Inserts `[role="_abstract"]` before the first suitable short plain-text paragraph in the section
 - Converts `**Procedure**` to `.Procedure` for procedure sections
 - Warns if a marked section does not contain a suitable short plain-text paragraph for the abstract
@@ -188,4 +189,3 @@ Use this loop:
 - Keep explicit anchors such as `<a id="..."></a>` when you need stable IDs.
 - If Vale fails because the converted structure is poor, first try to improve the Markdown structure before changing the scripts.
 - Do not remove existing comments in markdown.
-
