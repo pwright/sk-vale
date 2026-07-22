@@ -52,6 +52,9 @@ def extract_md_links(index_file):
         if link_path.startswith("./"):
             link_path = link_path[2:]
 
+        if link_path.startswith("refdog/"):
+            return
+
         md_path = link_path.replace(".html", ".md")
 
         if md_path not in seen:

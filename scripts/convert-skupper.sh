@@ -113,7 +113,7 @@ python3 leben.py merged.adoc
 echo "Step 5/5: Running Vale..."
 cd "$REPO_ROOT"
 vale_exit=0
-vale assemblies/ modules/ 2>&1 | tee "$REPO_ROOT/vale-report.txt" || vale_exit=${PIPESTATUS[0]}
+vale --output=JSON assemblies/ modules/ 2>&1 | tee "$REPO_ROOT/vale-report.json" || vale_exit=${PIPESTATUS[0]}
 
 if [[ $vale_exit -eq 0 ]]; then
     echo "Vale: all checks passed."
@@ -130,12 +130,12 @@ if [[ "$DO_COMMIT" == "true" ]]; then
     WORKTREE_DIR="${WORKTREE_DIR/#\~/$HOME}"
 
     if [[ -n "$WORKTREE_DIR" && "$WORKTREE_DIR" != "$REPO_ROOT" ]]; then
-        cp -a merged.md merged.adoc assemblies/ modules/ vale-report.txt "$WORKTREE_DIR/"
+        cp -a merged.md merged.adoc assemblies/ modules/ vale-report.json "$WORKTREE_DIR/"
         cd "$WORKTREE_DIR"
-        git add merged.md merged.adoc assemblies/ modules/ vale-report.txt
+        git add merged.md merged.adoc assemblies/ modules/ vale-report.json
     else
         git checkout -B "$SKUPPER_BRANCH"
-        git add merged.md merged.adoc assemblies/ modules/ vale-report.txt
+        git add merged.md merged.adoc assemblies/ modules/ vale-report.json
     fi
 
     git commit -m "Update skupper-docs vale results

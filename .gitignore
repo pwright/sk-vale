@@ -5,4 +5,4 @@ assemblies/
 modules/
 merged.md
 merged.adoc
-vale-report.txt
+vale-report.json
