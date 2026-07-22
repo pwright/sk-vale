@@ -126,10 +126,10 @@ if [[ "$DO_COMMIT" == "true" ]]; then
     if [[ -n "$WORKTREE_DIR" && "$WORKTREE_DIR" != "$REPO_ROOT" ]]; then
         cp -a assemblies/ modules/ vale-report.json "$WORKTREE_DIR/"
         cd "$WORKTREE_DIR"
-        git add assemblies/ modules/ vale-report.json
+        git add -f assemblies/ modules/ vale-report.json
     else
         git checkout -B "$APICURIO_BRANCH"
-        git add assemblies/ modules/ vale-report.json
+        git add -f assemblies/ modules/ vale-report.json
     fi
 
     git commit -m "Update apicurio-registry vale results

@@ -132,10 +132,10 @@ if [[ "$DO_COMMIT" == "true" ]]; then
     if [[ -n "$WORKTREE_DIR" && "$WORKTREE_DIR" != "$REPO_ROOT" ]]; then
         cp -a merged.md merged.adoc assemblies/ modules/ vale-report.json "$WORKTREE_DIR/"
         cd "$WORKTREE_DIR"
-        git add merged.md merged.adoc assemblies/ modules/ vale-report.json
+        git add -f merged.md merged.adoc assemblies/ modules/ vale-report.json
     else
         git checkout -B "$SKUPPER_BRANCH"
-        git add merged.md merged.adoc assemblies/ modules/ vale-report.json
+        git add -f merged.md merged.adoc assemblies/ modules/ vale-report.json
     fi
 
     git commit -m "Update skupper-docs vale results
