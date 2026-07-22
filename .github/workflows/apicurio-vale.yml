@@ -1,0 +1,43 @@
+name: Apicurio Registry Vale Lint
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '42 3 * * 2'
+
+permissions:
+  contents: write
+
+jobs:
+  apicurio-vale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out sk-vale
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Vale
+        run: |
+          VALE_VERSION=3.9.5
+          wget -qO- "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
+            | tar xz -C /usr/local/bin vale
+
+      - name: Clone apicurio-registry
+        run: git clone --depth 1 https://github.com/apicurio/apicurio-registry.git
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Run conversion and linting
+        id: lint
+        continue-on-error: true
+        run: bash scripts/convert-apicurio.sh --input-dir apicurio-registry --commit
+
+      - name: Push apicurio branch
+        run: git push origin apicurio --force
