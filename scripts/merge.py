@@ -86,7 +86,7 @@ def rewrite_anchors(content, anchor_map):
 
     return ANCHOR_PATTERN.sub(replace_anchor, content)
 
-def fix_internal_links(content, base_dir, md_file, fragment_targets, local_anchor_map):
+def fix_internal_links(content, base_dir, md_file, fragment_targets, local_anchor_map, file_anchor_map=None):
     """Fixes internal links so they work within a single merged Markdown file."""
     file_dir = os.path.dirname(md_file)  # Get directory of the file containing links
 
@@ -113,6 +113,8 @@ def fix_internal_links(content, base_dir, md_file, fragment_targets, local_ancho
             relative_path = os.path.relpath(full_path, base_dir)
             if fragment:
                 return f"#{fragment_targets.get((relative_path, fragment), fragment)}"
+            if file_anchor_map and relative_path in file_anchor_map:
+                return f"#{file_anchor_map[relative_path]}"
             return generate_unique_anchor(relative_path)  # Use full relative path
 
         return link  # Return unchanged if file not found
@@ -403,6 +405,7 @@ def merge_markdown(index_file, output_file):
     )
 
     fragment_targets = {}
+    file_anchor_map = {}
     for document in documents:
         anchor_map = {}
         for anchor in document["explicit_anchors"]:
@@ -412,7 +415,12 @@ def merge_markdown(index_file, output_file):
             anchor_map[anchor] = rewritten_anchor
             fragment_targets[(document["relative_path"], anchor)] = rewritten_anchor
         document["anchor_map"] = anchor_map
-        document["insert_page_anchor"] = document["page_anchor"] not in document["explicit_anchors"]
+        if document["explicit_anchors"]:
+            first_anchor = document["explicit_anchors"][0]
+            file_anchor_map[document["relative_path"]] = anchor_map.get(first_anchor, first_anchor)
+            document["insert_page_anchor"] = False
+        else:
+            document["insert_page_anchor"] = document["page_anchor"] not in document["explicit_anchors"]
 
     merged_content = []
 
@@ -423,6 +431,7 @@ def merge_markdown(index_file, output_file):
             document["md_file"],
             fragment_targets,
             document["anchor_map"],
+            file_anchor_map,
         )
         content = rewrite_anchors(content, document["anchor_map"])
         content = prepare_markdown_for_kramdoc(content, document["relative_path"])
