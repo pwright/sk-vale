@@ -120,7 +120,7 @@ if [[ "$DO_COMMIT" == "true" ]]; then
     echo "Committing to '$APICURIO_BRANCH' branch..."
     cd "$REPO_ROOT"
 
-    WORKTREE_DIR="$(git worktree list | grep "\[$APICURIO_BRANCH\]" | awk '{print $1}')"
+    WORKTREE_DIR="$(git worktree list | grep "\[$APICURIO_BRANCH\]" | awk '{print $1}' || true)"
     WORKTREE_DIR="${WORKTREE_DIR/#\~/$HOME}"
 
     if [[ -n "$WORKTREE_DIR" && "$WORKTREE_DIR" != "$REPO_ROOT" ]]; then
