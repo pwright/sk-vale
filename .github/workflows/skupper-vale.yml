@@ -21,7 +21,9 @@ jobs:
           python-version: '3.x'
 
       - name: Install kramdoc
-        run: gem install kramdown-asciidoc
+        run: |
+          gem install --user-install kramdown-asciidoc
+          echo "$(ruby -e 'puts Gem.user_dir')/bin" >> "$GITHUB_PATH"
 
       - name: Install Vale
         run: |
