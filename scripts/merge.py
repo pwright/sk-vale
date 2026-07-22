@@ -5,7 +5,7 @@ import sys
 from collections import Counter
 from urllib.parse import urldefrag
 
-DEFAULT_INPUT = "upstreams/skupper-docs/input/index.html.in"
+DEFAULT_INPUT = "upstreams/skupper-docs/input/index.md"
 DEFAULT_OUTPUT = "upstreams/merged.md"
 
 # Regex patterns for detecting links
@@ -33,27 +33,36 @@ def warn(message):
     print(f"WARNING: {message}", file=sys.stderr)
 
 def extract_md_links(index_file):
-    """Extracts markdown file paths from an index.html file, converting local .html links to .md equivalents."""
+    """Extracts markdown file paths from an index file, converting local .html links to .md equivalents.
+
+    Supports both HTML <a href> links and Markdown [text](url) links.
+    """
     md_links = []
+    seen = set()
 
     with open(index_file, "r", encoding="utf-8") as f:
         content = f.read()
 
-    for _, link_path in HTML_HREF_PATTERN.findall(content):
+    def collect_link(link_path):
         link_path = link_path.strip()
 
-        # Ignore external links (absolute URLs)
         if link_path.startswith("http") or link_path.startswith("/"):
-            continue
+            return
 
-        # Normalize relative paths (e.g., ./kube-cli/index.html → kube-cli/index.md)
         if link_path.startswith("./"):
-            link_path = link_path[2:]  # Remove leading "./"
+            link_path = link_path[2:]
 
-        md_path = link_path.replace(".html", ".md")  # Convert .html to .md
+        md_path = link_path.replace(".html", ".md")
 
-        # Append the converted .md path
-        md_links.append(md_path)
+        if md_path not in seen:
+            seen.add(md_path)
+            md_links.append(md_path)
+
+    for _, link_path in HTML_HREF_PATTERN.findall(content):
+        collect_link(link_path)
+
+    for _, link_path in INLINE_LINK_PATTERN.findall(content):
+        collect_link(link_path)
 
     return md_links
 

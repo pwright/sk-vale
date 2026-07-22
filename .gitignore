@@ -1,1 +1,8 @@
 output/
+skupper-docs/
+apicurio-registry/
+assemblies/
+modules/
+merged.md
+merged.adoc
+vale-report.txt

@@ -16,7 +16,8 @@ The primary use of this repo is plain AsciiDoc. The Markdown conversion path exi
 - `assemblies/` contains assembly files.
 - `modules/` contains reusable topic files.
 - `output/` contains generated build output, including a generated `index.adoc` tree (md path only)
-- `scripts/` contains helper scripts for merging and generating content.
+- `scripts/` contains helper scripts for merging, converting, and generating content.
+- `.github/workflows/` contains the GitHub Action for automated skupper-docs linting.
 - `.vale/` and `.vale.ini` configure Vale.
 
 ## Primary workflow: plain AsciiDoc
@@ -62,16 +63,92 @@ The Markdown path exists to:
 Key scripts:
 
 - `scripts/merge.py` prepares Markdown and normalizes generated AsciiDoc.
-- `scripts/build_index.py` converts a Markdown tree referenced by `index.html.in` into `output/assemblies/`, `output/modules/`, `output/images/`, and `output/index.adoc`.
+- `scripts/build_index.py` converts a Markdown tree referenced by an index file (`index.md` or `index.html.in`) into `output/assemblies/`, `output/modules/`, `output/images/`, and `output/index.adoc`.
+- `scripts/convert-skupper.sh` runs the full skupper-docs pipeline (see below).
 - `leben.py` splits converted flat AsciiDoc into assembly/module files.
 
 Typical generated-site command:
 
 ```bash
-python3 scripts/build_index.py ../docs-vale/input/index.html.in -o output --clean
+python3 scripts/build_index.py ../docs-vale/input/index.md -o output --clean
 ```
 
 For this workflow, treat generated files as build artifacts rather than hand-edited source.
+
+## Skupper-docs linting workflow
+
+This workflow converts Markdown from [skupperproject/skupper-docs](https://github.com/skupperproject/skupper-docs) to AsciiDoc and runs Vale linting.
+
+By default, the script clones skupper-docs `main` from GitHub. Use `--input-dir` to point at a local directory instead. Use `--commit` to commit results to the `skupper` branch (without it, the script only runs the pipeline and prints Vale output).
+
+### Run locally
+
+Clone skupper-docs from GitHub and lint:
+
+```bash
+bash scripts/convert-skupper.sh
+```
+
+Use a local directory as input:
+
+```bash
+bash scripts/convert-skupper.sh --input-dir ../skupper-docs/input
+```
+
+Clone from GitHub, lint, and commit to the `skupper` branch:
+
+```bash
+bash scripts/convert-skupper.sh --commit
+```
+
+Prerequisites: `python3`, `kramdoc` (`gem install kramdown-asciidoc`), and `vale`.
+
+### Pipeline steps
+
+1. Merge all Markdown referenced by `index.md` into `merged.md`
+2. Convert to AsciiDoc with `kramdoc --format=GFM`
+3. Normalize AsciiDoc IDs
+4. Split into `assemblies/` and `modules/` with `leben.py`
+5. Run `vale assemblies/ modules/`
+
+### Automated linting
+
+A GitHub Action (`.github/workflows/skupper-vale.yml`) runs the pipeline weekly, on push to `main`, and on manual dispatch. Results are force-pushed to the `skupper` branch.
+
+### The skupper branch contains
+
+- `merged.md` -- merged Markdown from all skupper-docs index entries
+- `merged.adoc` -- kramdoc-converted AsciiDoc
+- `assemblies/` -- split assembly files
+- `modules/` -- split module files
+
+## Apicurio-registry linting workflow
+
+This workflow runs Vale linting on AsciiDoc from [apicurio/apicurio-registry](https://github.com/apicurio/apicurio-registry). The source is already AsciiDoc (Antora structure), so no Markdown conversion is needed -- `leben.py` splits the flat files into `assemblies/` and `modules/`, then Vale lints them.
+
+By default, the script clones apicurio-registry `main` from GitHub. Use `--input-dir` to point at a local checkout instead. Use `--commit` to commit results to the `apicurio` branch (without it, the script only prints Vale output).
+
+### Run locally
+
+Clone apicurio-registry from GitHub and lint:
+
+```bash
+bash scripts/convert-apicurio.sh
+```
+
+Use a local checkout as input:
+
+```bash
+bash scripts/convert-apicurio.sh --input-dir ../apicurio-registry
+```
+
+Clone from GitHub, lint, and commit to the `apicurio` branch:
+
+```bash
+bash scripts/convert-apicurio.sh --commit
+```
+
+Prerequisites: `python3` and `vale`.
 
 ## Supporting docs
 
