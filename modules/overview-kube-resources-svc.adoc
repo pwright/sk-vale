@@ -1,0 +1,12 @@
+[id="kube-resources-svc"]
+:_mod-docs-content-type: REFERENCE
+= Services
+
+[role="_abstract"]
+
+In addition to the services that are exposed on the application network, the following services are created:
+
+* *skupper-router-local*
+The service controller uses this service to connect to and configure the router.
+* *skupper-router*
+Other sites use this service to access the router over the inter-router or edge ports, although there may be other resources involved, for example, an ingress.

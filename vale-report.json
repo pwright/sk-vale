@@ -1,0 +1,1787 @@
+{
+  "assemblies/console-assembly-console.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        5,
+        32
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "link:/api/[API documentation",
+      "Line": 9
+    }
+  ],
+  "assemblies/console-assembly-observer-config.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        17
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= observer-config",
+      "Line": 2
+    }
+  ],
+  "assemblies/install-assembly-kube-installing-controller.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        77,
+        109
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "\u003c\u003cinstalling-cli,install the CLI\u003e",
+      "Line": 7
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        3,
+        59
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:kube-creating-site-cli[Creating a site using the CLI",
+      "Line": 18
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        3,
+        57
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:kube-creating-site-yaml[Creating a site using YAML",
+      "Line": 19
+    }
+  ],
+  "assemblies/overview-assembly-overview-load-balancing.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        3,
+        61
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:kube-creating-multikeylistener-yaml[multi-key listener",
+      "Line": 16
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        45,
+        125
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:kube-creating-multikeylistener-yaml[Creating a multi-key listener using YAML",
+      "Line": 25
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        32,
+        90
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:kube-creating-multikeylistener-yaml[multi-key listener",
+      "Line": 34
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        3,
+        60
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:kube-link-cost-cli[Specifying link cost using the CLI",
+      "Line": 61
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        3,
+        58
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:kube-link-cost-yaml[Specifying link cost using YAML",
+      "Line": 62
+    }
+  ],
+  "modules/console-console-advanced.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        54,
+        107
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:configuration.adoc[Network Observer Configuration",
+      "Line": 17
+    }
+  ],
+  "modules/console-console-uninstall.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.TaskContents",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '.Procedure' block title is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    }
+  ],
+  "modules/console-console-upgrade.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.TaskContents",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '.Procedure' block title is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    }
+  ],
+  "modules/console-observer-advanced.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Advanced Options",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Name Overrides",
+      "Line": 5
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        26
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Skip Management Labels",
+      "Line": 21
+    }
+  ],
+  "modules/console-observer-authentication.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        16
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Authentication",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        24
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Basic Authentication",
+      "Line": 14
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        19
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== OpenShift OAuth",
+      "Line": 35
+    }
+  ],
+  "modules/console-observer-external-access.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        17
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= External access",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        11
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Ingress",
+      "Line": 5
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        21
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Route (OpenShift)",
+      "Line": 71
+    }
+  ],
+  "modules/console-observer-images.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Container Images",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        26
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Network Observer Image",
+      "Line": 5
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        20
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Prometheus Image",
+      "Line": 26
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        21
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== NGINX Proxy Image",
+      "Line": 47
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        31
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== OpenShift OAuth Proxy Image",
+      "Line": 75
+    }
+  ],
+  "modules/console-observer-labels.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        24
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Labels and Annotations",
+      "Line": 2
+    }
+  ],
+  "modules/console-observer-metrics.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Metrics Endpoint",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        19
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Metrics Service",
+      "Line": 21
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        20
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Scraping Metrics",
+      "Line": 41
+    }
+  ],
+  "modules/console-observer-persistence.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Data Persistence",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        23
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Persistence Options",
+      "Line": 7
+    }
+  ],
+  "modules/console-observer-prometheus.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        26
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Prometheus Configuration",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        22
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Configuration File",
+      "Line": 7
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        22
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Command-Line Flags",
+      "Line": 28
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        28
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Extra Volumes and Mounts",
+      "Line": 55
+    }
+  ],
+  "modules/console-observer-resources.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        21
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Container Resources",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        30
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Network Observer Container",
+      "Line": 7
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        24
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Prometheus Container",
+      "Line": 33
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        19
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Proxy Container",
+      "Line": 59
+    }
+  ],
+  "modules/console-observer-router.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        19
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Router Connection",
+      "Line": 2
+    }
+  ],
+  "modules/console-observer-security.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        10
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Security",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        24
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Pod Security Context",
+      "Line": 5
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        31
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Container Security Contexts",
+      "Line": 16
+    }
+  ],
+  "modules/console-observer-service.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        9
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Service",
+      "Line": 2
+    }
+  ],
+  "modules/console-observer-tls.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= TLS Certificates",
+      "Line": 2
+    }
+  ],
+  "modules/console-observer-tuning.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        25
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Network Observer Tuning",
+      "Line": 2
+    }
+  ],
+  "modules/console-observer-validation.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        32
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Validation and Troubleshooting",
+      "Line": 2
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        19
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Verify Services",
+      "Line": 5
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        25
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Test Metrics Endpoint",
+      "Line": 23
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        23
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Check Observer Logs",
+      "Line": 42
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        35
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Verify Prometheus Configuration",
+      "Line": 59
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        32
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== PersistentVolumeClaim Issues",
+      "Line": 70
+    }
+  ],
+  "modules/install-installing-cli.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        31
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "To download the latest release:",
+      "Line": 13
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 16
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        42
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "curl https://skupper.io/v2/install.sh | sh",
+      "Line": 17
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 18
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        112
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "To download a specific version, download from https://github.com/skupperproject/skupper/releases[Releases] page.",
+      "Line": 20
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        55
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "On local systems, you can install the controller using:",
+      "Line": 22
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 25
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        50
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "skupper system install -p  [podman, docker, linux]",
+      "Line": 26
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 27
+    }
+  ],
+  "modules/install-kube-installing-controller-helm.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        65
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "Run the following command to install a cluster-scoped controller:",
+      "Line": 16
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 18
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        89
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "helm install skupper oci://quay.io/skupper/helm/skupper --version {{skupper_cli_version}}",
+      "Line": 19
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 20
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        81
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "To install a namespace-scoped controller, add the `--set scope=namespace` option.",
+      "Line": 22
+    }
+  ],
+  "modules/install-kube-installing-controller-yaml.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        65
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "Install a cluster-scoped controller using the following commands:",
+      "Line": 15
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 18
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        127
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "kubectl apply -f https://github.com/skupperproject/skupper/releases/download/{{skupper_cli_version}}/skupper-cluster-scope.yaml",
+      "Line": 19
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 20
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        67
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "Install a namespace-scoped controller using the following commands:",
+      "Line": 22
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 25
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        129
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "kubectl apply -f https://github.com/skupperproject/skupper/releases/download/{{skupper_cli_version}}/skupper-namespace-scope.yaml",
+      "Line": 26
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "----",
+      "Line": 27
+    }
+  ],
+  "modules/install-skupper-upgrading-local-controller.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        34
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Upgrading the Skupper controller",
+      "Line": 3
+    }
+  ],
+  "modules/install-skupper-upgrading-sites.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        1
+      ],
+      "Check": "AsciiDocDITA.TaskContents",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '.Procedure' block title is missing.",
+      "Severity": "warning",
+      "Match": "",
+      "Line": 1
+    }
+  ],
+  "modules/kube-cli-kube-creating-connector-cli.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        191
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.",
+      "Line": 61
+    }
+  ],
+  "modules/kube-cli-kube-creating-listener-cli.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        191
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "There are many options to consider when creating connectors using the CLI, see https://skupperproject.github.io/refdog/commands/index.html[CLI Reference], including _frequently used_ options.",
+      "Line": 65
+    }
+  ],
+  "modules/kube-cli-kube-link-cli.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        135
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "There are many options to consider when linking sites using the CLI, see [CLI Reference][cli-ref], including _frequently used_ options.",
+      "Line": 88
+    }
+  ],
+  "modules/kube-cli-kube-link-cost-cli.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        24
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "*Additional information*",
+      "Line": 80
+    }
+  ],
+  "modules/kube-cli-kube-proxy-cli.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        99
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "All inter-site traffic is protected by mutual TLS and routed through the HTTP CONNECT proxy tunnel.",
+      "Line": 112
+    }
+  ],
+  "modules/kube-cli-kube-token-cli.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        135
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "There are many options to consider when linking sites using the CLI, see [CLI Reference][cli-ref], including _frequently used_ options.",
+      "Line": 109
+    }
+  ],
+  "modules/troubleshooting-debug-dump.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        82
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "You may notice resources that contain labels prefixed with `internal.skupper.io/`.",
+      "Line": 53
+    }
+  ]
+}

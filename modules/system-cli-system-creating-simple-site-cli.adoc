@@ -1,0 +1,81 @@
+[id="system-creating-simple-site-cli"]
+:_mod-docs-content-type: PROCEDURE
+= Creating a simple site using the CLI on local systems
+
+[role="_abstract"]
+
+Use the Skupper CLI to create a site on a local system.
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+
+By default, all sites are created with the namespace `default`.
+On non-Kubernetes sites, you can create multiple sites per-user by specifying a _namespace_, for example:
+
+[,bash]
+----
+skupper site create systemd-site -p linux -n linux-ns
+skupper site create docker-site -p docker -n docker-ns
+----
+
+.Procedure
+
+. Set the `SKUPPER_PLATFORM` for type of site you want to install:
+ ** `podman`
+ ** `docker`
+ ** `linux`
+. Install the controller for Podman and Docker sites:
++
+[,bash]
+----
+skupper system install
+----
++
+This runs a container to support site, link and service operations.
+This feature is not available on Linux local system sites (systemd).
++
+*Optional:* Enable the Dynamic System Controller to automatically process YAML resources and commands:
++
+[,bash]
+----
+export SKUPPER_SYSTEM_RELOAD_TYPE=auto
+skupper system install
+----
++
+Alternatively, you can enable this feature with:
++
+[,bash]
+----
+skupper system install --reload-type auto
+----
++
+With this feature enabled, you can create sites, links, connectors and listeners without needing a system reload to apply your configuration.
++
+NOTE: When the dynamic system controller is enabled, the `skupper system start`, `skupper system reload`, and `skupper system stop` commands are not needed as configuration changes are automatically applied.
+
+. Create a site:
++
+[,bash]
+----
+skupper site create <site-name>
+----
++
+For example:
++
+[,bash]
+----
+skupper site create my-site
+
+Waiting for status...
+Site "my-site" is ready.
+----
++
+While the site is created, the site is not running at this point.
+To run the site:
++
+[,bash]
+----
+skupper system start
+----
+

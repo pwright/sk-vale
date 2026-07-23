@@ -1,0 +1,107 @@
+[id="observer-external-access"]
+= External access
+
+
+=== Ingress
+
+|===
+| Path | Type | Default | Description
+
+| `ingress.enabled`
+| bool
+| `false`
+| Enable Kubernetes Ingress resource
+
+| `ingress.className`
+| string
+| `""`
+| IngressClass name (e.g., `nginx`, `traefik`)
+
+| `ingress.annotations`
+| map
+| `{}`
+| Annotations for Ingress resource
+
+| `ingress.hosts`
+| array
+| `[]`
+| Host configurations
+
+| `ingress.hosts[].host`
+| string
+| -
+| Hostname
+
+| `ingress.hosts[].paths`
+| array
+| -
+| Path configurations
+
+| `ingress.hosts[].paths[].path`
+| string
+| -
+| URL path
+
+| `ingress.hosts[].paths[].pathType`
+| string
+| -
+| `Prefix`, `Exact`, or `ImplementationSpecific`
+
+| `ingress.tls`
+| array
+| `[]`
+| TLS configurations
+
+| `ingress.tls[].secretName`
+| string
+| -
+| TLS certificate Secret name
+
+| `ingress.tls[].hosts`
+| array
+| -
+| Hostnames for this certificate
+|===
+
+*Notes:*
+
+* Backend always uses HTTPS (re-encryption required)
+* Controller must support TLS backend
+
+=== Route (OpenShift)
+
+|===
+| Path | Type | Default | Description
+
+| `route.enabled`
+| bool
+| `false`
+| Enable OpenShift Route resource
+
+| `route.host`
+| string
+| `""`
+| Explicit hostname
+
+| `route.subdomain`
+| string
+| `""`
+| Subdomain for automatic FQDN
+
+| `route.annotations`
+| map
+| `{}`
+| Route annotations
+
+| `route.labels`
+| map
+| `{}`
+| Route labels
+|===
+
+*Notes:*
+
+* Automatically uses `reencrypt` TLS termination
+* Use `host` OR `subdomain`, not both
+* OpenShift only
+

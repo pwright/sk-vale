@@ -1,0 +1,23 @@
+[id="migrating-sites"]
+:_mod-docs-content-type: REFERENCE
+= Creating sites
+
+[role="_abstract"]
+
+Creating sites using CLI:
+
+[,v1]
+----
+contextA> skupper init
+----
+
+[,v2]
+----
+contextA> skupper site create
+----
+
+The site does not accept links by default.
+Use `--enable-link-access` to allow other sites link to the new site.
+
+On Podman, the site definition is created in `~/.local/share/skupper` and you must enter `skupper system setup` to complete site creation.
+

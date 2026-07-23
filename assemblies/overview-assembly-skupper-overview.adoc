@@ -1,0 +1,16 @@
+[id="skupper-overview"]
+:_mod-docs-content-type: ASSEMBLY
+= Skupper overview
+
+[role="_abstract"]
+
+Skupper connects distributed applications across sites by creating an application network.
+
+Hybrid clouds enable organizations to combine on-premises, private cloud, and public cloud resources.
+While such a solution provides many benefits, it also presents a unique challenge: enabling these resources to communicate with each other.
+
+Skupper provides a solution to this challenge with an Application Network that simply and securely connects applications running in different network locations.
+
+include::../modules/overview-application-networks.adoc[leveloffset=+1]
+include::../modules/overview-skupper-routers.adoc[leveloffset=+1]
+include::../modules/overview-skupper.adoc[leveloffset=+1]

@@ -1,0 +1,18 @@
+[id="console-advanced"]
+:_mod-docs-content-type: CONCEPT
+= Advanced Configuration
+
+[role="_abstract"]
+
+The Network Observer Helm chart includes advanced configuration options for Prometheus monitoring, data persistence, metrics collection, authentication strategies, and resource management.
+
+*Key features:*
+
+* *Custom Prometheus configuration* -- Supply your own `prometheus.yml` and process flags
+* *Persistent storage* -- Store Prometheus time-series data in a PersistentVolumeClaim
+* *Dedicated metrics endpoint* -- Separate Service on port 9000 for cluster monitoring tools
+* *External access* -- Kubernetes Ingress or OpenShift Route support
+* *Resource limits* -- Fine-grained control over CPU and memory
+
+For complete configuration details and examples, see xref:configuration.adoc[Network Observer Configuration].
+

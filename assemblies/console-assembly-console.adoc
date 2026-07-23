@@ -1,0 +1,17 @@
+[id="console"]
+:_mod-docs-content-type: ASSEMBLY
+= Using the Skupper network console
+
+[role="_abstract"]
+
+The Network console provides data and visualizations of the traffic flow between sites using the Network Observer component which also deploys an API endpoint.
+
+See link:/api/[API documentation] for the OpenAPI documentation.
+
+include::../modules/console-console-quickstart.adoc[leveloffset=+1]
+include::../modules/console-console-advanced.adoc[leveloffset=+1]
+include::../modules/console-console-config-examples.adoc[leveloffset=+2]
+include::../modules/console-console-validation.adoc[leveloffset=+2]
+include::../modules/console-console-upgrade.adoc[leveloffset=+2]
+include::../modules/console-console-uninstall.adoc[leveloffset=+2]
+include::../modules/console-console-exploring.adoc[leveloffset=+1]

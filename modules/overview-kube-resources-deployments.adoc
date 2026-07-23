@@ -1,0 +1,10 @@
+[id="kube-resources-deployments"]
+:_mod-docs-content-type: REFERENCE
+= Deployments
+
+[role="_abstract"]
+
+The Skupper controller deploys the *skupper-controller*, which provides the control plane for the application network.
+
+Each Skupper site on Kubernetes deploys a *skupper-router*, which provides the data plane for the application network.
+

@@ -1,0 +1,42 @@
+[id="kube-ha-yaml"]
+:_mod-docs-content-type: PROCEDURE
+= Creating a high availability site using YAML
+
+[role="_abstract"]
+
+Use the `ha` option to create a highly available site on Kubernetes.
+
+High availability mode is intended to maintain service continuity during router restarts or pod rescheduling, but it does not provide failover if network connectivity between sites is lost.
+High availability mode deploys two router pods with anti-affinity rules to ensure service continuity during node failures.
+
+*Prerequisites*
+
+* The Skupper controller is running on the Kubernetes cluster you are running
+
+.Procedure
+
+. Create a site CR YAML file named `ha-site.yaml`, for example:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Site
+metadata:
+  name: ha-site
+  namespace: west
+spec:
+  ha: true
+  linkAccess: default  # Optional: configure external access
+----
++
+This YAML creates a high availability site named `ha-site` in the `west` namespace.
++
+See <<kube-site-resources-yaml,Setting site resources>> for more information about sizing the site.
+
+. Apply the YAML to create the site:
++
+[,bash]
+----
+kubectl apply -f ha-site.yaml
+----
+

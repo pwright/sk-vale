@@ -1,0 +1,104 @@
+[id="console-quickstart"]
+:_mod-docs-content-type: CONCEPT
+= Getting started with Skupper network console
+
+[role="_abstract"]
+
+Install the Network Observer on a Kubernetes cluster.
+
+* Helm 3.8 or later
+* kubectl access to target Kubernetes cluster
+* A Skupper site
+
+*Site Selection Criteria*
+
+. Determine which site in your network is best to enable the Network console using the following criteria:
+ ** Does the application network cross a firewall? For example, if you want the console to be available only inside the firewall, you need to locate the Network console on a site inside the firewall.
+ ** Is there a site that processes more traffic than other sites? For example, if you have a frontend component that calls a set of services from other sites, it might make sense to locate the Network console on that site to minimize data traffic.
+ ** Is there a site with more or cheaper resources that you want to use? For example, if you have two sites, A and B, and resources are more expensive on site A, you might want to locate the Network console on site B.
+. Change context to a site namespace.
+. Install with defaults:
++
+[,bash]
+----
+helm install skupper-network-observer \
+  oci://quay.io/skupper/helm/network-observer \
+  --version {{skupper_cli_version}}
+----
+
+. Access via port-forward:
++
+[,bash]
+----
+kubectl port-forward svc/skupper-network-observer 8443:443
+# Visit https://localhost:8443
+----
+
+. Retrieve the generated password:
++
+[,bash]
+----
+kubectl get secret skupper-network-observer-users \
+  -o jsonpath='{.data.password}' | base64 -d
+echo
+----
+
+*Custom Installation*
+
+Install with custom values file:
+
+[,bash]
+----
+helm install skupper-network-observer \
+  oci://quay.io/skupper/helm/network-observer \
+  --version {{skupper_cli_version}} \
+  -f my-values.yaml
+----
+
+Example values file for external access via Ingress:
+
+[,yaml]
+----
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: observer.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+auth:
+  strategy: basic
+  basic:
+    create: true
+----
+
+*OpenShift Route*
+
+For OpenShift environments, expose using a Route:
+
+[,bash]
+----
+oc create route passthrough skupper-console --service=skupper-network-observer --port=https
+----
+
+Or use Helm values:
+
+[,yaml]
+----
+route:
+  enabled: true
+  subdomain: network-observer
+
+auth:
+  strategy: openshift
+  openshift:
+    createCookieSecret: true
+    serviceAccount:
+      create: true
+
+tls:
+  openshiftIssued: true
+----
+

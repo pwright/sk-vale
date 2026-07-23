@@ -1,0 +1,109 @@
+[id="console-config-examples"]
+:_mod-docs-content-type: REFERENCE
+= Configuration Examples
+
+[role="_abstract"]
+
+Reference examples for common configuration scenarios.
+
+*Persistent Storage*
+
+[,yaml]
+----
+prometheus:
+  persistence:
+    enabled: true
+    storageClass: fast-ssd
+    size: 20Gi
+  extraArgs:
+    - --storage.tsdb.retention.time=30d
+    - --storage.tsdb.retention.size=18GB
+----
+
+*Custom Prometheus Configuration*
+
+[,yaml]
+----
+prometheus:
+  config: |
+    global:
+      scrape_interval: 30s
+      evaluation_interval: 30s
+    scrape_configs:
+      - job_name: 'network-observer'
+        static_configs:
+          - targets: ['localhost:8080']
+      - job_name: 'my-app'
+        static_configs:
+          - targets: ['my-app-metrics:9090']
+  extraArgs:
+    - --storage.tsdb.retention.time=15d
+----
+
+*External Access via Ingress*
+
+[,yaml]
+----
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  hosts:
+    - host: observer.company.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: observer-tls-cert
+      hosts:
+        - observer.company.com
+
+auth:
+  strategy: basic
+  basic:
+    create: true
+
+tls:
+  skupperIssued: true
+----
+
+*Resource Limits*
+
+[,yaml]
+----
+containerResources:
+  networkObserver:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  prometheus:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+  proxy:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+----
+
+*Observer Tuning*
+
+[,yaml]
+----
+extraArgs:
+  - -flow-record-ttl=1h
+  - -vanflow-logging-profile=minimal
+  - -cors-allow-all  # Development only
+----
+

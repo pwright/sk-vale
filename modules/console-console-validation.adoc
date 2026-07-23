@@ -1,0 +1,61 @@
+[id="console-validation"]
+:_mod-docs-content-type: REFERENCE
+= Validation and Troubleshooting
+
+[role="_abstract"]
+
+Verify the Network Observer installation and diagnose common issues.
+
+*Verify Installation*
+
+[,bash]
+----
+# Check Helm release
+helm list
+
+# Check release status
+helm status skupper-network-observer
+
+# Get applied values
+helm get values skupper-network-observer
+----
+
+*Verify Resources*
+
+[,bash]
+----
+# Check Pods
+kubectl get pods -l app.kubernetes.io/name=network-observer
+
+# Check Services
+kubectl get svc -l app.kubernetes.io/name=network-observer
+
+# Check Ingress (if enabled)
+kubectl get ingress skupper-network-observer
+
+# Check PVC (if persistence enabled)
+kubectl get pvc skupper-network-observer-prometheus
+----
+
+*Test Metrics Endpoint*
+
+[,bash]
+----
+kubectl run -it --rm curl --image=curlimages/curl --restart=Never -- \
+  curl -sS http://skupper-network-observer-metrics:9000/metrics | head -20
+----
+
+*Check Logs*
+
+[,bash]
+----
+# All containers
+kubectl logs deployment/skupper-network-observer --all-containers
+
+# Network Observer container
+kubectl logs deployment/skupper-network-observer -c network-observer
+
+# Prometheus container
+kubectl logs deployment/skupper-network-observer -c prometheus
+----
+

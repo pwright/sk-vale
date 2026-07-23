@@ -1,0 +1,13 @@
+[id="kube-creating-site-yaml"]
+:_mod-docs-content-type: ASSEMBLY
+= Creating a site on Kubernetes using YAML
+
+[role="_abstract"]
+
+Using YAML allows you to create and manage sites from the context of the current namespace.
+
+A typical workflow is to create a site, link sites together, and expose services to the application network.
+
+include::../modules/kube-yaml-kube-creating-simple-site-yaml.adoc[leveloffset=+1]
+include::../modules/kube-yaml-kube-ha-yaml.adoc[leveloffset=+1]
+include::../modules/kube-yaml-kube-site-resources-yaml.adoc[leveloffset=+1]

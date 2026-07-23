@@ -1,0 +1,25 @@
+[id="migrating-services"]
+:_mod-docs-content-type: REFERENCE
+= Exposing services
+
+[role="_abstract"]
+
+These examples show how service-exposure commands changed between Skupper v1 and Skupper v2.
+
+[,v1]
+----
+contextA> skupper expose deployment/backend --port 8080
+----
+
+[,v2]
+----
+contextA> skupper connector create backend 8080
+contextB> skupper listener create backend 8080
+----
+
+The new _routing-key_ option gives you more control over how services are defined, for example to expose the service as `backend2` in contextB:
+
+[,v2]
+----
+contextB> skupper listener create backend2 8080 --routing-key backend
+----

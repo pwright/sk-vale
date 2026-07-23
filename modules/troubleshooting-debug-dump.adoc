@@ -1,0 +1,57 @@
+[id="debug-dump"]
+:_mod-docs-content-type: PROCEDURE
+= Creating a Skupper debug tar file
+
+[role="_abstract"]
+
+Create a debug tar file containing diagnostic information about a Skupper site to troubleshoot issues or share with support.
+
+The `skupper debug dump` command creates a compressed tarball (`.tar.gz`) containing logs, configurations, and resource status from a site. The output file is named using the pattern `<filename>-<namespace>-<datetime>.tar.gz`. If no filename is provided, it defaults to `skupper-dump`.
+
+This procedure applies to both Kubernetes and local system sites.
+
+.Procedure
+
+. Create the debug tar file for a site:
++
+[,bash]
+----
+skupper debug dump
+----
++
+Or specify a custom filename:
++
+[,bash]
+----
+skupper debug dump mysite-debug
+----
++
+The command creates a file such as `skupper-dump-default-20250526-143022.tar.gz`.
+
+. Extract the tar file to examine its contents:
++
+[,bash]
+----
+mkdir skupper-dump
+tar -xzf skupper-dump-default-20250526-143022.tar.gz -C skupper-dump
+cd skupper-dump
+----
+
+. Check the Skupper and platform versions:
+ ** `/versions/kubernetes.yaml` - Kubernetes version (on Kubernetes platforms)
+ ** `/versions/skupper.yaml` - Versions of Skupper components
+. Check the site configuration and ingress:
+ ** `/site-namespace/resources/Site-<name>.yaml` - Site specification and status
+ ** `/site-namespace/resources/RouterAccess-<name>.yaml` - Ingress and access type configured for the site
+. Check linking and service configuration:
+ ** `/site-namespace/resources/Link-<name>.yaml` - Link status between sites
+ ** `/site-namespace/resources/Accessgrant-<name>.yaml` - Access grants for tokens
+ ** `/site-namespace/resources/AccessTokens-<name>.yaml` - Token usage information
+ ** `/site-namespace/resources/Connector-<name>.yaml` - Connector configuration and status
+ ** `/site-namespace/resources/Listener-<name>.yaml` - Listener configuration and status
+
+You may notice resources that contain labels prefixed with `internal.skupper.io/`.
+
+*📌 NOTE*
+Labels prefixed with `internal.skupper.io/` are *internal-only*. They are subject to change without notice in future versions of Skupper. Do not modify, delete, or build automation that depends on the state or existence of these labels.
+

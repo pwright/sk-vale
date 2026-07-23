@@ -1,0 +1,109 @@
+[id="checking-sites"]
+:_mod-docs-content-type: PROCEDURE
+= Checking sites
+
+[role="_abstract"]
+
+Check site, connector, listener, and link status to confirm that the application network is operating correctly.
+
+Using the `skupper` command-line interface (CLI) provides a simple method to get started with troubleshooting Skupper.
+
+.Procedure
+
+. Check the controller on Kubernetes.
+On Kubernetes the controller must be installed before you attempt to create an application network.
+. Check the site status for a cluster:
++
+[,bash]
+----
+skupper site status
+
+NAME    STATUS  MESSAGE
+west    Ready   OK
+----
++
+The output shows:
+
+ ** Sites exist in the specified namespace on Kubernetes.
+ ** On other platforms, the status shows all sites for the user.
+
++
+On Kubernetes, you can also check the resource, for example:
++
+[,bash]
+----
+kubectl get site -o yaml
+
+apiVersion: v1
+items:
+- apiVersion: skupper.io/v2alpha1
+  kind: Site
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"skupper.io/v2alpha1","kind":"Site","metadata":{"annotations":{},"name":"west","namespace":"default"}}
+    creationTimestamp: "2025-02-24T09:33:51Z"
+    generation: 1
+    name: west
+    namespace: default
+    resourceVersion: "701"
+    uid: d6bc9342-6f7e-4f9a-a643-053a6a0e2335
+  status:
+    conditions:
+    - lastTransitionTime: "2025-02-24T09:33:51Z"
+      message: OK
+      observedGeneration: 1
+      reason: Ready
+      status: "True"
+      type: Configured
+    - lastTransitionTime: "2025-02-24T09:34:21Z"
+      message: OK
+      observedGeneration: 1
+      reason: Ready
+      status: "True"
+      type: Ready
+    - lastTransitionTime: "2025-02-24T09:34:21Z"
+      message: OK
+      observedGeneration: 1
+      reason: Ready
+      status: "True"
+      type: Running
+    controller:
+      name: skupper-controller
+      namespace: default
+      version: 2.1.1-rc1
+    defaultIssuer: skupper-site-ca
+    message: OK
+    network:
+    - id: d6bc9342-6f7e-4f9a-a643-053a6a0e2335
+      name: west
+      namespace: default
+      platform: kubernetes
+      version: 2.1.1-rc1
+    sitesInNetwork: 1
+    status: Ready
+kind: List
+metadata:
+  resourceVersion: ""
+----
++
+If this command fails, check the controller.
+
+. Check connectors and listeners:
++
+[,bash]
+----
+skupper connector status
+
+NAME    STATUS  ROUTING-KEY     SELECTOR        HOST    PORT    HAS MATCHING LISTENERMESSAGE
+backend Ready   backend         app=backend             8080    true                 OK
+----
++
+The output shows:
+
+ ** There is one connector, named `backend`.
+ ** The connector uses the `backend` routing key and port `9090`.
+
++
+This result shows that you can create a listener using the `backend` routing key and port `9090` on a different site to access the `backend` service.
+

@@ -1,0 +1,32 @@
+[id="console-upgrade"]
+:_mod-docs-content-type: PROCEDURE
+= Upgrade and Rollback
+
+[role="_abstract"]
+
+Upgrade the Network Observer or roll back to a previous version.
+
+*Upgrade Release*
+
+[,bash]
+----
+helm upgrade skupper-network-observer \
+  oci://quay.io/skupper/helm/network-observer \
+  --version {{skupper_cli_version}} \
+  -f my-values.yaml
+----
+
+*Check Upgrade History*
+
+[,bash]
+----
+helm history skupper-network-observer
+----
+
+*Rollback to Previous Version*
+
+[,bash]
+----
+helm rollback skupper-network-observer
+----
+

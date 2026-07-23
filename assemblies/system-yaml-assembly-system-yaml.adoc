@@ -1,0 +1,11 @@
+[id="system-yaml"]
+:_mod-docs-content-type: REFERENCE
+= Overview of using YAML on local systems
+
+[role="_abstract"]
+
+Use YAML on local systems to create sites, link them to other sites, and expose or consume services.
+
+* xref:system-yaml-site-configuration[Create sites]
+* xref:system-yaml-site-linking[Link sites] (requires that one site has link access enabled)
+* xref:system-yaml-service-exposure[Expose and consume services]

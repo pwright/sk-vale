@@ -1,0 +1,18 @@
+[id="console-exploring"]
+:_mod-docs-content-type: REFERENCE
+= Exploring the Network console
+
+[role="_abstract"]
+
+The Network console provides an overview of the following:
+
+* Topology
+* Services
+* Sites
+* Components
+* Processes
+
+For example, consider the following service:
+
+image:../images/console.png[adservice in london and berlin,100%]
+// ![services](../images/console.png)

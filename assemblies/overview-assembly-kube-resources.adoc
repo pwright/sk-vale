@@ -1,0 +1,14 @@
+[id="kube-resources"]
+:_mod-docs-content-type: REFERENCE
+= Skupper resources on Kubernetes
+
+[role="_abstract"]
+
+The following sections describe the various Skupper resources on Kubernetes, for example, service accounts
+
+include::../modules/overview-kube-resources-crds.adoc[leveloffset=+1]
+include::../modules/overview-kube-resources-sa.adoc[leveloffset=+1]
+include::../modules/overview-kube-resources-deployments.adoc[leveloffset=+1]
+include::../modules/overview-kube-resources-cm.adoc[leveloffset=+1]
+include::../modules/overview-kube-resources-secrets.adoc[leveloffset=+1]
+include::../modules/overview-kube-resources-svc.adoc[leveloffset=+1]

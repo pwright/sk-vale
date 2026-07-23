@@ -1,0 +1,22 @@
+[id="console-uninstall"]
+:_mod-docs-content-type: PROCEDURE
+= Uninstallation
+
+[role="_abstract"]
+
+Remove the Network Observer and associated resources.
+
+*Uninstall Release*
+
+[,bash]
+----
+helm uninstall skupper-network-observer
+----
+
+NOTE: PVCs are NOT deleted automatically. To remove persistent storage:
+
+[,bash]
+----
+kubectl delete pvc skupper-network-observer-prometheus
+----
+

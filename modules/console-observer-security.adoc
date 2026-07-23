@@ -1,0 +1,33 @@
+[id="observer-security"]
+= Security
+
+
+=== Pod Security Context
+
+|===
+| Path | Type | Default | Description
+
+| `podSecurityContext.seccompProfile.type`
+| string
+| `RuntimeDefault`
+| Seccomp profile
+|===
+
+=== Container Security Contexts
+
+Available for: `securityContext`, `prometheus.securityContext`, `nginx.securityContext`, `openshiftOauthProxy.securityContext`
+
+|===
+| Path | Type | Default | Description
+
+| `.allowPrivilegeEscalation`
+| bool
+| `false`
+| Allow privilege escalation
+
+| `.capabilities.drop`
+| array
+| `["ALL"]`
+| Capabilities to drop
+|===
+
