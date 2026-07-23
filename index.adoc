@@ -1,0 +1,18 @@
+:doctype: book
+:toc: left
+:toclevels: 3
+:sectnums:
+
+[id="generated-index"]
+= Documentation
+
+include::assemblies/kube-yaml-assembly-kube-yaml.adoc[leveloffset=+1]
+include::assemblies/kube-yaml-assembly-kube-creating-site-yaml.adoc[leveloffset=+1]
+include::assemblies/kube-yaml-assembly-kube-yaml-site-linking.adoc[leveloffset=+1]
+include::assemblies/kube-yaml-assembly-kube-exposing-services-yaml.adoc[leveloffset=+1]
+include::assemblies/system-yaml-assembly-system-yaml.adoc[leveloffset=+1]
+include::assemblies/system-yaml-assembly-system-yaml-site-configuration.adoc[leveloffset=+1]
+include::assemblies/system-yaml-assembly-system-yaml-site-linking.adoc[leveloffset=+1]
+include::assemblies/system-yaml-assembly-system-yaml-service-exposure.adoc[leveloffset=+1]
+include::assemblies/console-assembly-console.adoc[leveloffset=+1]
+include::assemblies/troubleshooting-assembly-troubleshooting.adoc[leveloffset=+1]

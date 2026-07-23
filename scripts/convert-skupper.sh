@@ -78,58 +78,31 @@ fi
 
 # --- Clean previous output ---
 echo "Cleaning previous output..."
-rm -rf "$REPO_ROOT/assemblies" "$REPO_ROOT/modules"
-mkdir -p "$REPO_ROOT/assemblies" "$REPO_ROOT/modules"
-rm -f "$REPO_ROOT/merged.md" "$REPO_ROOT/merged.adoc"
+rm -rf "$REPO_ROOT/assemblies" "$REPO_ROOT/modules" "$REPO_ROOT/images"
+rm -f "$REPO_ROOT/index.adoc" "$REPO_ROOT/merged.md" "$REPO_ROOT/merged.adoc"
+mkdir -p "$REPO_ROOT/output"
 
 # --- Sync vale styles ---
 echo "Syncing Vale styles..."
 cd "$REPO_ROOT"
 vale sync
 
-# --- Step 1: Merge Markdown ---
-echo "Step 1/6: Merging Markdown..."
-python3 "$SCRIPT_DIR/merge.py" "$SOURCE_DIR/index.md" \
-    -o "$REPO_ROOT/merged.md" \
-    --report-metrics "$REPO_ROOT/metrics-merge.json"
+# --- Build site using build_index.py ---
+echo "Step 1/2: Building assemblies and modules from Markdown..."
+python3 "$SCRIPT_DIR/build_index.py" "$SOURCE_DIR/index.md" --output "$REPO_ROOT"
 
-if [[ ! -s "$REPO_ROOT/merged.md" ]]; then
-    echo "ERROR: merged.md is empty -- no links extracted from index.md"
+if [[ ! -d "$REPO_ROOT/assemblies" ]] || [[ ! -d "$REPO_ROOT/modules" ]]; then
+    echo "ERROR: build_index.py failed to create assemblies/ and modules/"
     exit 1
 fi
 
-# --- Step 2: Convert to AsciiDoc ---
-echo "Step 2/6: Converting to AsciiDoc with kramdoc..."
-kramdoc --format=GFM -o "$REPO_ROOT/merged.adoc" "$REPO_ROOT/merged.md"
+echo "Generated index.adoc with $(ls -1 "$REPO_ROOT/assemblies"/*.adoc 2>/dev/null | wc -l) assemblies and $(ls -1 "$REPO_ROOT/modules"/*.adoc 2>/dev/null | wc -l) modules"
 
-# --- Step 2b: Count AsciiDoc headings ---
-echo "Step 2b/6: Counting AsciiDoc headings..."
-python3 "$SCRIPT_DIR/count_headings.py" "$REPO_ROOT/merged.adoc" \
-    -o "$REPO_ROOT/metrics-kramdoc.json"
-
-# --- Step 3: Normalize AsciiDoc IDs ---
-echo "Step 3/6: Normalizing AsciiDoc IDs..."
-python3 "$SCRIPT_DIR/merge.py" --normalize-adoc-ids "$REPO_ROOT/merged.adoc"
-
-# --- Step 4: Split into assemblies and modules ---
-echo "Step 4/6: Splitting into assemblies and modules..."
-cd "$REPO_ROOT"
-python3 leben.py merged.adoc --report-metrics "$REPO_ROOT/metrics-split.json"
-
-# --- Step 5: Generate completeness report ---
-echo "Step 5/6: Generating completeness report..."
-mkdir -p "$REPO_ROOT/output"
-python3 "$SCRIPT_DIR/report_completeness.py" \
-    --merge "$REPO_ROOT/metrics-merge.json" \
-    --kramdoc "$REPO_ROOT/metrics-kramdoc.json" \
-    --split "$REPO_ROOT/metrics-split.json" \
-    -o "$REPO_ROOT/output/completeness-report.json"
-
-# --- Step 6: Run Vale ---
-echo "Step 6/6: Running Vale..."
+# --- Step 2: Run Vale ---
+echo "Step 2/2: Running Vale..."
 cd "$REPO_ROOT"
 vale_exit=0
-vale --output=JSON assemblies/ modules/ 2>&1 | tee "$REPO_ROOT/vale-report.json output/completeness-report.json" || vale_exit=${PIPESTATUS[0]}
+vale --output=JSON assemblies/ modules/ 2>&1 | tee "$REPO_ROOT/vale-report.json" || vale_exit=${PIPESTATUS[0]}
 
 if [[ $vale_exit -eq 0 ]]; then
     echo "Vale: all checks passed."
@@ -146,12 +119,12 @@ if [[ "$DO_COMMIT" == "true" ]]; then
     WORKTREE_DIR="${WORKTREE_DIR/#\~/$HOME}"
 
     if [[ -n "$WORKTREE_DIR" && "$WORKTREE_DIR" != "$REPO_ROOT" ]]; then
-        cp -a merged.md merged.adoc assemblies/ modules/ vale-report.json output/ "$WORKTREE_DIR/"
+        cp -a index.adoc assemblies/ modules/ images/ vale-report.json "$WORKTREE_DIR/"
         cd "$WORKTREE_DIR"
-        git add -f merged.md merged.adoc assemblies/ modules/ vale-report.json output/completeness-report.json
+        git add -f index.adoc assemblies/ modules/ images/ vale-report.json
     else
         git checkout -B "$SKUPPER_BRANCH"
-        git add -f merged.md merged.adoc assemblies/ modules/ vale-report.json output/completeness-report.json
+        git add -f index.adoc assemblies/ modules/ images/ vale-report.json
     fi
 
     git commit -m "Update skupper-docs vale results

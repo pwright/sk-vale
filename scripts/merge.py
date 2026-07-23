@@ -28,11 +28,25 @@ ADOC_ID_HEADING_GAP_PATTERN = re.compile(
     r'(^[ \t]*\[id="[^"]+"\][ \t]*)\n(?:[ \t]*\n)+([ \t]*=+\s+)',
     re.MULTILINE,
 )
+YAML_FRONTMATTER_PATTERN = re.compile(r"^---\s*\n.*?\n---\s*\n", re.DOTALL | re.MULTILINE)
 MAX_ABSTRACT_CHARS = 260
 
 def warn(message):
     """Prints a warning to stderr."""
     print(f"WARNING: {message}", file=sys.stderr)
+
+def strip_yaml_frontmatter(content):
+    """Removes YAML frontmatter from the beginning of Markdown content.
+
+    YAML frontmatter is delimited by --- at the start and end, like:
+    ---
+    title: My Page
+    author: Someone
+    ---
+
+    This function removes the entire frontmatter block if present.
+    """
+    return YAML_FRONTMATTER_PATTERN.sub("", content, count=1)
 
 def count_headings_in_content(content):
     """Count headings by level in markdown content, excluding code blocks."""
@@ -432,6 +446,9 @@ def merge_markdown(index_file, output_file, metrics_file=None):
 
         with open(full_path, "r", encoding="utf-8") as f:
             content = f.read()
+
+        # Strip YAML frontmatter if present
+        content = strip_yaml_frontmatter(content)
 
         relative_path = os.path.relpath(full_path, base_dir)
         page_anchor = generate_unique_anchor(relative_path)[1:]

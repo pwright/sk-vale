@@ -156,9 +156,12 @@ class SplitTask:
             mid = m.group(1) or m.group(2)
             idx += 1
             title = mid
+            heading_level = 2  # Default to H2 if no heading found
+
             if idx < len(lines):
                 mh = self.heading_pattern.match(lines[idx])
                 if mh and len(mh.group(1)) > 1:
+                    heading_level = len(mh.group(1))  # Capture heading level: 2, 3, 4, etc.
                     title = mh.group(2)
                     idx += 1
             module_body = []
@@ -167,11 +170,17 @@ class SplitTask:
                 idx += 1
             module_path = self.fact.write(mid, title, module_body, is_assembly=False, split_task=self)
             rel = os.path.relpath(module_path, self.ctx.ASSEMBLIES_DIR)
-            includes.append(f"include::{rel}[leveloffset=+1]\n")
+            includes.append((rel, heading_level))  # Store tuple: (path, level)
             self.total_sections += 1
 
+        # Generate include directives with calculated leveloffset
+        include_directives = []
+        for rel, heading_level in includes:
+            leveloffset = heading_level - 1  # H2→+1, H3→+2, H4→+3
+            include_directives.append(f"include::{rel}[leveloffset=+{leveloffset}]\n")
+
         # Write assembly
-        assembly_lines = assembly_body + [''] + includes
+        assembly_lines = assembly_body + [''] + include_directives
         self.fact.write(root_mid, root_title, assembly_lines, is_assembly=True, split_task=self)
         self.total_sections += 1
 
