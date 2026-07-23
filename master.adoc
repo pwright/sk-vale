@@ -1,0 +1,4 @@
+= Using Skupper
+
+
+include::./assemblies/assembly-kube-yaml.adoc[leveloffset=+1]

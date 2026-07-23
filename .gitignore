@@ -6,3 +6,4 @@ modules/
 merged.md
 merged.adoc
 vale-report.json
+*.html
