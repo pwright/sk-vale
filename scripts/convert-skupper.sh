@@ -88,8 +88,10 @@ cd "$REPO_ROOT"
 vale sync
 
 # --- Step 1: Merge Markdown ---
-echo "Step 1/5: Merging Markdown..."
-python3 "$SCRIPT_DIR/merge.py" "$SOURCE_DIR/index.md" -o "$REPO_ROOT/merged.md"
+echo "Step 1/6: Merging Markdown..."
+python3 "$SCRIPT_DIR/merge.py" "$SOURCE_DIR/index.md" \
+    -o "$REPO_ROOT/merged.md" \
+    --report-metrics "$REPO_ROOT/metrics-merge.json"
 
 if [[ ! -s "$REPO_ROOT/merged.md" ]]; then
     echo "ERROR: merged.md is empty -- no links extracted from index.md"
@@ -97,23 +99,37 @@ if [[ ! -s "$REPO_ROOT/merged.md" ]]; then
 fi
 
 # --- Step 2: Convert to AsciiDoc ---
-echo "Step 2/5: Converting to AsciiDoc with kramdoc..."
+echo "Step 2/6: Converting to AsciiDoc with kramdoc..."
 kramdoc --format=GFM -o "$REPO_ROOT/merged.adoc" "$REPO_ROOT/merged.md"
 
+# --- Step 2b: Count AsciiDoc headings ---
+echo "Step 2b/6: Counting AsciiDoc headings..."
+python3 "$SCRIPT_DIR/count_headings.py" "$REPO_ROOT/merged.adoc" \
+    -o "$REPO_ROOT/metrics-kramdoc.json"
+
 # --- Step 3: Normalize AsciiDoc IDs ---
-echo "Step 3/5: Normalizing AsciiDoc IDs..."
+echo "Step 3/6: Normalizing AsciiDoc IDs..."
 python3 "$SCRIPT_DIR/merge.py" --normalize-adoc-ids "$REPO_ROOT/merged.adoc"
 
 # --- Step 4: Split into assemblies and modules ---
-echo "Step 4/5: Splitting into assemblies and modules..."
+echo "Step 4/6: Splitting into assemblies and modules..."
 cd "$REPO_ROOT"
-python3 leben.py merged.adoc
+python3 leben.py merged.adoc --report-metrics "$REPO_ROOT/metrics-split.json"
 
-# --- Step 5: Run Vale ---
-echo "Step 5/5: Running Vale..."
+# --- Step 5: Generate completeness report ---
+echo "Step 5/6: Generating completeness report..."
+mkdir -p "$REPO_ROOT/output"
+python3 "$SCRIPT_DIR/report_completeness.py" \
+    --merge "$REPO_ROOT/metrics-merge.json" \
+    --kramdoc "$REPO_ROOT/metrics-kramdoc.json" \
+    --split "$REPO_ROOT/metrics-split.json" \
+    -o "$REPO_ROOT/output/completeness-report.json"
+
+# --- Step 6: Run Vale ---
+echo "Step 6/6: Running Vale..."
 cd "$REPO_ROOT"
 vale_exit=0
-vale --output=JSON assemblies/ modules/ 2>&1 | tee "$REPO_ROOT/vale-report.json" || vale_exit=${PIPESTATUS[0]}
+vale --output=JSON assemblies/ modules/ 2>&1 | tee "$REPO_ROOT/vale-report.json output/completeness-report.json" || vale_exit=${PIPESTATUS[0]}
 
 if [[ $vale_exit -eq 0 ]]; then
     echo "Vale: all checks passed."
@@ -130,12 +146,12 @@ if [[ "$DO_COMMIT" == "true" ]]; then
     WORKTREE_DIR="${WORKTREE_DIR/#\~/$HOME}"
 
     if [[ -n "$WORKTREE_DIR" && "$WORKTREE_DIR" != "$REPO_ROOT" ]]; then
-        cp -a merged.md merged.adoc assemblies/ modules/ vale-report.json "$WORKTREE_DIR/"
+        cp -a merged.md merged.adoc assemblies/ modules/ vale-report.json output/ "$WORKTREE_DIR/"
         cd "$WORKTREE_DIR"
-        git add -f merged.md merged.adoc assemblies/ modules/ vale-report.json
+        git add -f merged.md merged.adoc assemblies/ modules/ vale-report.json output/completeness-report.json
     else
         git checkout -B "$SKUPPER_BRANCH"
-        git add -f merged.md merged.adoc assemblies/ modules/ vale-report.json
+        git add -f merged.md merged.adoc assemblies/ modules/ vale-report.json output/completeness-report.json
     fi
 
     git commit -m "Update skupper-docs vale results

@@ -2,8 +2,10 @@ import os
 import re
 import argparse
 import sys
+import json
 from collections import Counter
 from urllib.parse import urldefrag
+from datetime import datetime, timezone
 
 DEFAULT_INPUT = "upstreams/skupper-docs/input/index.md"
 DEFAULT_OUTPUT = "upstreams/merged.md"
@@ -13,7 +15,7 @@ HTML_HREF_PATTERN = re.compile(r"""<a\s+[^>]*href=(['"])(.*?)\1""", re.IGNORECAS
 INLINE_LINK_PATTERN = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 DEFINITION_LINK_PATTERN = re.compile(r"^\[([^\]]+)\]:\s*(.*)$", re.MULTILINE)
 ANCHOR_PATTERN = re.compile(r"<a id=['\"]([^'\"]+)['\"]></a>")
-SECTION_HEADING_PATTERN = re.compile(r"^(#{1,6})\s+(.*)$")
+SECTION_HEADING_PATTERN = re.compile(r"^(#{1,6})\s+(.*)$", re.MULTILINE)
 CONTENT_TYPE_MARKER_PATTERN = re.compile(r"^\s*<!--\s*(ASSEMBLY|PROCEDURE|CONCEPT|REFERENCE)\s*-->\s*$")
 ORDERED_LIST_PATTERN = re.compile(r"^\s{0,3}\d+\.\s+")
 FENCE_PATTERN = re.compile(r"^\s*```")
@@ -31,6 +33,48 @@ MAX_ABSTRACT_CHARS = 260
 def warn(message):
     """Prints a warning to stderr."""
     print(f"WARNING: {message}", file=sys.stderr)
+
+def count_headings_in_content(content):
+    """Count headings by level in markdown content, excluding code blocks."""
+    heading_counts = {f'h{i}': 0 for i in range(1, 7)}
+    headings_list = []
+
+    # Remove code blocks to avoid counting headings in code
+    in_code_block = False
+    lines = content.split('\n')
+    line_mapping = {}  # Maps filtered line index to original line number
+    filtered_lines = []
+
+    original_line_num = 1
+    for line in lines:
+        if line.strip().startswith('```'):
+            in_code_block = not in_code_block
+            original_line_num += 1
+            continue
+        if not in_code_block:
+            line_mapping[len(filtered_lines)] = original_line_num
+            filtered_lines.append(line)
+        original_line_num += 1
+
+    filtered_content = '\n'.join(filtered_lines)
+
+    # Count headings using existing pattern and track details
+    for match in SECTION_HEADING_PATTERN.finditer(filtered_content):
+        level = len(match.group(1))
+        text = match.group(2).strip()
+        heading_counts[f'h{level}'] += 1
+
+        # Calculate line number
+        lines_before_match = filtered_content[:match.start()].count('\n')
+        original_line = line_mapping.get(lines_before_match, lines_before_match + 1)
+
+        headings_list.append({
+            'level': level,
+            'text': text,
+            'line': original_line
+        })
+
+    return heading_counts, headings_list
 
 def extract_md_links(index_file):
     """Extracts markdown file paths from an index file, converting local .html links to .md equivalents.
@@ -367,20 +411,23 @@ def convert_adoc_ids(input_file, output_file):
 
     print(f"Normalized AsciiDoc IDs saved to: {output_file}")
 
-def merge_markdown(index_file, output_file):
+def merge_markdown(index_file, output_file, metrics_file=None):
     """Merges markdown files into a single file while fixing internal links."""
     base_dir = os.path.dirname(index_file)
     md_links = extract_md_links(index_file)
 
     # Ensure output directory exists
     output_dir = os.path.dirname(output_file)
-    os.makedirs(output_dir, exist_ok=True)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
 
     documents = []
+    missing_files = []
 
     for md_file in md_links:
         full_path = os.path.join(base_dir, md_file)
         if not os.path.exists(full_path):
+            missing_files.append(md_file)
             continue
 
         with open(full_path, "r", encoding="utf-8") as f:
@@ -442,9 +489,39 @@ def merge_markdown(index_file, output_file):
         merged_content.append(content.strip())
 
     with open(output_file, "w", encoding="utf-8") as out_f:
-        out_f.write("\n\n".join(merged_content) + "\n")
+        final_content = "\n\n".join(merged_content) + "\n"
+        out_f.write(final_content)
 
     print(f"Merged markdown saved to: {output_file}")
+
+    # Generate metrics if requested
+    if metrics_file:
+        heading_counts, headings_list = count_headings_in_content(final_content)
+
+        metrics = {
+            "stage": "merge",
+            "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+            "input": {
+                "index_file": index_file,
+                "files_discovered": len(md_links),
+                "files_found": len(documents),
+                "files_missing": len(missing_files)
+            },
+            "output": {
+                "merged_file": output_file,
+                "headings": heading_counts,
+                "total_headings": sum(heading_counts.values()),
+                "total_lines": len(final_content.splitlines()),
+                "heading_details": headings_list
+            },
+            "missing_files": missing_files,
+            "processed_files": [doc["md_file"] for doc in documents]
+        }
+
+        with open(metrics_file, "w", encoding="utf-8") as f:
+            json.dump(metrics, f, indent=2)
+
+        print(f"Metrics written to: {metrics_file}", file=sys.stderr)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Merge nested markdown files into a single file while fixing internal links.")
@@ -460,7 +537,12 @@ if __name__ == "__main__":
         action="store_true",
         help="Convert Markdown content-type markers into raw AsciiDoc metadata before kramdoc",
     )
-    
+    parser.add_argument(
+        "--report-metrics",
+        metavar="FILE",
+        help="Output JSON metrics about the merge process",
+    )
+
     args = parser.parse_args()
     if args.normalize_adoc_ids:
         output_file = args.output or args.index_file
@@ -470,4 +552,4 @@ if __name__ == "__main__":
         prepare_markdown_file(args.index_file, output_file)
     else:
         output_file = args.output or DEFAULT_OUTPUT
-        merge_markdown(args.index_file, output_file)
+        merge_markdown(args.index_file, output_file, metrics_file=args.report_metrics)

@@ -22,6 +22,8 @@ import re
 import sys
 import glob
 import argparse
+import json
+from datetime import datetime, timezone
 
 
 def eprint(*args, **kwargs):
@@ -71,7 +73,7 @@ class ModuleFactory:
             return f"{self.ctx.ASSEMBLY_PREFIX}{core}.adoc"
         return f"{core}.adoc"
 
-    def write(self, mid, title, lines, is_assembly=False):
+    def write(self, mid, title, lines, is_assembly=False, split_task=None):
         """Write an assembly or module file, logging path to stderr."""
         dirp = self.ctx.ASSEMBLIES_DIR if is_assembly else self.ctx.MODULES_DIR
         os.makedirs(dirp, exist_ok=True)
@@ -84,6 +86,14 @@ class ModuleFactory:
             f.writelines(leading_attributes)
             f.write(f"= {title}\n\n")
             f.writelines(body_lines)
+
+        # Track metrics if split_task provided
+        if split_task:
+            if is_assembly:
+                split_task.assemblies_written.append(fname)
+            else:
+                split_task.modules_written.append(fname)
+
         return path
 
 class SplitTask:
@@ -93,9 +103,16 @@ class SplitTask:
         # Match [[id]] OR [id="..."]
         self.id_pattern = re.compile(r'^\s*(?:\[\[([^\]]+)\]\]|\[id="([^"\]]+)"\])')
         self.heading_pattern = re.compile(r'^(=+)\s+(.*)')
+        # Metrics tracking
+        self.assemblies_written = []
+        self.modules_written = []
+        self.input_files = []
+        self.total_sections = 0
 
     def process_file(self, filepath):
         """Split a single .adoc file into one assembly and its modules."""
+        self.input_files.append(filepath)
+
         with open(filepath) as fh:
             lines = fh.readlines()
         if not lines:
@@ -148,15 +165,17 @@ class SplitTask:
             while idx < len(lines) and not self.id_pattern.match(lines[idx]):
                 module_body.append(lines[idx])
                 idx += 1
-            module_path = self.fact.write(mid, title, module_body, is_assembly=False)
+            module_path = self.fact.write(mid, title, module_body, is_assembly=False, split_task=self)
             rel = os.path.relpath(module_path, self.ctx.ASSEMBLIES_DIR)
             includes.append(f"include::{rel}[leveloffset=+1]\n")
+            self.total_sections += 1
 
         # Write assembly
         assembly_lines = assembly_body + [''] + includes
-        self.fact.write(root_mid, root_title, assembly_lines, is_assembly=True)
+        self.fact.write(root_mid, root_title, assembly_lines, is_assembly=True, split_task=self)
+        self.total_sections += 1
 
-    def adoc_split(self, infile):
+    def adoc_split(self, infile, metrics_file=None):
         # Determine list of files: single, glob, or directory
         if os.path.isdir(infile):
             filepaths = [os.path.join(infile, fn) for fn in os.listdir(infile) if fn.endswith('.adoc')]
@@ -171,6 +190,32 @@ class SplitTask:
             eprint(f"Processing file: {fp}")
             self.process_file(fp)
 
+        # Write metrics if requested
+        if metrics_file:
+            self.write_metrics(metrics_file)
+
+    def write_metrics(self, metrics_file):
+        """Write processing metrics to JSON file."""
+        metrics = {
+            "stage": "split",
+            "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+            "input": {
+                "source_files": self.input_files,
+                "sections_found": self.total_sections
+            },
+            "output": {
+                "assemblies_created": len(self.assemblies_written),
+                "modules_created": len(self.modules_written),
+                "assemblies": sorted(self.assemblies_written),
+                "modules": sorted(self.modules_written)
+            }
+        }
+
+        with open(metrics_file, "w", encoding="utf-8") as f:
+            json.dump(metrics, f, indent=2)
+
+        eprint(f"Metrics written to: {metrics_file}")
+
 
 def main():
     p = argparse.ArgumentParser(
@@ -178,8 +223,13 @@ def main():
         description='Split AsciiDoc without annotations'
     )
     p.add_argument('FROM_FILE', help='Input .adoc, glob, or directory')
+    p.add_argument(
+        '--report-metrics',
+        metavar='FILE',
+        help='Output JSON metrics about the split process'
+    )
     args = p.parse_args()
-    SplitTask().adoc_split(args.FROM_FILE)
+    SplitTask().adoc_split(args.FROM_FILE, metrics_file=args.report_metrics)
 
 if __name__ == '__main__':
     main()
