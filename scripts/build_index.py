@@ -81,11 +81,15 @@ def rewrite_assembly_includes(content, renamed_modules):
     return ASSEMBLY_INCLUDE_PATTERN.sub(replace_include, content)
 
 
-def copy_and_rewrite_images(content, source_dir, images_out, image_registry):
+def copy_and_rewrite_images(content, source_dir, images_out, image_registry, copy_images=False):
     def replace_image(match):
         macro, target, attrs = match.groups()
 
         if target.startswith(("http://", "https://", "/", "{")):
+            return match.group(0)
+
+        if not copy_images:
+            # Don't copy images, just return original reference
             return match.group(0)
 
         source_path = (source_dir / target).resolve()
@@ -139,7 +143,7 @@ def rewrite_internal_html_links(content, source_html_path, page_ids, fragment_id
     return HTML_LINK_PATTERN.sub(replace_link, content)
 
 
-def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_script, image_registry, page_ids, fragment_ids):
+def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_script, image_registry, page_ids, fragment_ids, copy_images=False):
     assemblies_out = output_dir / "assemblies"
     modules_out = output_dir / "modules"
     images_out = output_dir / "images"
@@ -168,7 +172,7 @@ def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_s
             if destination.exists():
                 raise RuntimeError(f"{md_file}: duplicate module output path {destination}")
             content = module_file.read_text(encoding="utf-8")
-            content = copy_and_rewrite_images(content, md_file.parent, images_out, image_registry)
+            content = copy_and_rewrite_images(content, md_file.parent, images_out, image_registry, copy_images)
             content = rewrite_internal_html_links(content, source_html_path, page_ids, fragment_ids)
             destination.write_text(content, encoding="utf-8")
             renamed_modules[module_file.name] = renamed_name
@@ -181,7 +185,7 @@ def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_s
 
         content = assembly_file.read_text(encoding="utf-8")
         content = rewrite_assembly_includes(content, renamed_modules)
-        content = copy_and_rewrite_images(content, md_file.parent, images_out, image_registry)
+        content = copy_and_rewrite_images(content, md_file.parent, images_out, image_registry, copy_images)
         content = rewrite_internal_html_links(content, source_html_path, page_ids, fragment_ids)
         assembly_destination.write_text(content, encoding="utf-8")
 
@@ -211,7 +215,7 @@ def write_root_index(index_file, output_dir, assembly_paths):
     return root_index
 
 
-def build_site(index_file, output_dir, clean=False):
+def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images=False):
     index_file = Path(index_file).resolve()
     output_dir = Path(output_dir).resolve()
 
@@ -230,7 +234,8 @@ def build_site(index_file, output_dir, clean=False):
     repo_root = Path(__file__).resolve().parent.parent
     leben_script = repo_root / "leben.py"
 
-    source_root = index_file.parent
+    # Use provided source_dir or default to index_file.parent
+    source_root = Path(source_dir).resolve() if source_dir else index_file.parent
     assembly_paths = []
     image_registry = {}
     md_files = []
@@ -261,6 +266,7 @@ def build_site(index_file, output_dir, clean=False):
                 image_registry,
                 page_ids,
                 fragment_ids,
+                copy_images,
             )
         )
 
@@ -299,9 +305,19 @@ def main():
         action="store_true",
         help="Remove the output directory before rebuilding",
     )
+    parser.add_argument(
+        "--source-dir",
+        metavar="DIR",
+        help="Source directory containing .md files (defaults to index file's parent directory)",
+    )
+    parser.add_argument(
+        "--copy-images",
+        action="store_true",
+        help="Copy images from source to output/images/ directory (default: false)",
+    )
     args = parser.parse_args()
 
-    root_index = build_site(args.index_file, args.output, clean=args.clean)
+    root_index = build_site(args.index_file, args.output, clean=args.clean, source_dir=args.source_dir, copy_images=args.copy_images)
     print(f"Generated root index: {root_index}")
 
 

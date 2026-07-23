@@ -17,10 +17,12 @@ Usage: $(basename "$0") [OPTIONS]
 Convert skupper-docs Markdown to AsciiDoc and run Vale linting.
 
 Options:
-  --input-dir <path>  Directory containing index.md (e.g. ../skupper-docs/input)
+  --input-dir <path>  Directory containing .md files (e.g. ../skupper-docs/doc-input)
                       Without this flag, skupper-docs is cloned from GitHub.
   --commit            Commit results to the '$SKUPPER_BRANCH' branch.
   -h, --help          Show this help message.
+
+Note: This script uses skupper.md in the repo root to define which files to convert.
 EOF
     exit 0
 }
@@ -58,8 +60,8 @@ fi
 
 # --- Acquire source ---
 if [[ -n "$INPUT_DIR" ]]; then
-    if [[ ! -f "$INPUT_DIR/index.md" ]]; then
-        echo "ERROR: $INPUT_DIR/index.md not found"
+    if [[ ! -d "$INPUT_DIR" ]]; then
+        echo "ERROR: $INPUT_DIR directory not found"
         exit 1
     fi
     SOURCE_DIR="$(cd "$INPUT_DIR" && pwd)"
@@ -68,9 +70,9 @@ else
     CLEANUP_DIR="$(mktemp -d)"
     echo "Cloning skupper-docs..."
     git clone --depth 1 "$SKUPPER_REPO" "$CLEANUP_DIR/skupper-docs"
-    SOURCE_DIR="$CLEANUP_DIR/skupper-docs/input"
-    if [[ ! -f "$SOURCE_DIR/index.md" ]]; then
-        echo "ERROR: $SOURCE_DIR/index.md not found in cloned repo"
+    SOURCE_DIR="$CLEANUP_DIR/skupper-docs/doc-input"
+    if [[ ! -d "$SOURCE_DIR" ]]; then
+        echo "ERROR: $SOURCE_DIR directory not found in cloned repo"
         exit 1
     fi
     echo "Using cloned input: $SOURCE_DIR"
@@ -78,7 +80,7 @@ fi
 
 # --- Clean previous output ---
 echo "Cleaning previous output..."
-rm -rf "$REPO_ROOT/assemblies" "$REPO_ROOT/modules" "$REPO_ROOT/images"
+rm -rf "$REPO_ROOT/assemblies" "$REPO_ROOT/modules"
 rm -f "$REPO_ROOT/index.adoc" "$REPO_ROOT/merged.md" "$REPO_ROOT/merged.adoc"
 mkdir -p "$REPO_ROOT/output"
 
@@ -89,7 +91,7 @@ vale sync
 
 # --- Build site using build_index.py ---
 echo "Step 1/2: Building assemblies and modules from Markdown..."
-python3 "$SCRIPT_DIR/build_index.py" "$SOURCE_DIR/index.md" --output "$REPO_ROOT"
+python3 "$SCRIPT_DIR/build_index.py" "$REPO_ROOT/skupper.md" --output "$REPO_ROOT" --source-dir "$SOURCE_DIR"
 
 if [[ ! -d "$REPO_ROOT/assemblies" ]] || [[ ! -d "$REPO_ROOT/modules" ]]; then
     echo "ERROR: build_index.py failed to create assemblies/ and modules/"
@@ -119,12 +121,12 @@ if [[ "$DO_COMMIT" == "true" ]]; then
     WORKTREE_DIR="${WORKTREE_DIR/#\~/$HOME}"
 
     if [[ -n "$WORKTREE_DIR" && "$WORKTREE_DIR" != "$REPO_ROOT" ]]; then
-        cp -a index.adoc assemblies/ modules/ images/ vale-report.json "$WORKTREE_DIR/"
+        cp -a index.adoc assemblies/ modules/ vale-report.json "$WORKTREE_DIR/"
         cd "$WORKTREE_DIR"
-        git add -f index.adoc assemblies/ modules/ images/ vale-report.json
+        git add -f index.adoc assemblies/ modules/ vale-report.json
     else
         git checkout -B "$SKUPPER_BRANCH"
-        git add -f index.adoc assemblies/ modules/ images/ vale-report.json
+        git add -f index.adoc assemblies/ modules/ vale-report.json
     fi
 
     git commit -m "Update skupper-docs vale results
