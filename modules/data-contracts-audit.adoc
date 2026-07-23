@@ -1,0 +1,40 @@
+[id="data-contracts-audit_{context}"]
+= Audit log
+
+
+[role="_abstract"]
+The contract audit log records all contract operations for compliance and debugging.
+
+=== Audited operations
+
+* Metadata updates (owner, classification, status changes)
+* Ruleset configuration (create, update, delete)
+* Status transitions (DRAFT → STABLE → DEPRECATED)
+* Contract submission and re-projection
+
+=== Querying the audit log
+
+[source,bash]
+----
+curl http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/audit
+----
+
+.Response
+[source,json]
+----
+[
+  {
+    "action": "STATUS_TRANSITION",
+    "detail": "Status changed from DRAFT to STABLE",
+    "userId": "admin",
+    "createdOn": "2026-05-19T10:30:00Z"
+  },
+  {
+    "action": "RULESET_CONFIGURED",
+    "detail": "Contract ruleset updated",
+    "userId": "admin",
+    "createdOn": "2026-05-19T10:25:00Z"
+  }
+]
+----
+

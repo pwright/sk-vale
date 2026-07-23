@@ -1,0 +1,147 @@
+[id="resolving-configuration-issues_{context}"]
+= Resolving configuration issues
+
+
+[role="_abstract"]
+If you encounter configuration issues during migration, use the following guidance to diagnose and resolve common problems.
+
+v3 fails to start with "Storage not configured"::
++
+--
+*Symptoms:*
+
+* Registry pod or container fails to start.
+* Logs show: `Storage kind not configured`.
+
+*Cause:* Missing `APICURIO_STORAGE_KIND` property.
+
+*Solution:*
+
+[source,properties]
+----
+# For SQL storage
+APICURIO_STORAGE_KIND=sql
+APICURIO_STORAGE_SQL_KIND=postgresql
+
+# For KafkaSQL storage
+APICURIO_STORAGE_KIND=kafkasql
+----
+--
+
+v3 authentication fails with "User is not authenticated"::
++
+--
+*Symptoms:*
+
+* All API requests return 401 Unauthorized.
+* Valid access tokens are rejected.
+
+*Cause:* Incorrect OAuth2/OIDC configuration, typically a missing realm path.
+
+*Solution:*
+
+Verify that `QUARKUS_OIDC_AUTH_SERVER_URL` includes the full realm path:
+
+[source,properties]
+----
+# Wrong (v2 style)
+QUARKUS_OIDC_AUTH_SERVER_URL=https://keycloak:8443
+
+# Correct (v3 requires realm path)
+QUARKUS_OIDC_AUTH_SERVER_URL=https://keycloak:8443/realms/registry
+----
+
+Verify that Keycloak is accessible from the registry container:
+
+[source,bash]
+----
+curl -k https://keycloak:8443/realms/registry/.well-known/openid-configuration
+----
+--
+
+Database connection fails::
++
+--
+*Symptoms:*
+
+* Registry fails to start.
+* Logs show JDBC connection errors.
+
+*Cause:* Using old `REGISTRY_DATASOURCE_*` or `QUARKUS_DATASOURCE_*` properties.
+
+*Solution:*
+
+Update to v3 datasource properties:
+
+[source,properties]
+----
+# Remove these v2 properties
+# REGISTRY_DATASOURCE_URL=...
+# REGISTRY_DATASOURCE_USERNAME=...
+
+# Use v3 properties
+APICURIO_DATASOURCE_URL=jdbc:postgresql://postgres:5432/registry_v3
+APICURIO_DATASOURCE_USERNAME=apicurio
+APICURIO_DATASOURCE_PASSWORD=password123
+----
+--
+
+CORS errors in browser when accessing UI::
++
+--
+*Symptoms:*
+
+* UI loads but API calls fail.
+* Browser console shows CORS errors.
+
+*Cause:* CORS property name changed in v3.
+
+*Solution:*
+
+[source,properties]
+----
+# Wrong (v2 property name)
+CORS_ALLOWED_ORIGINS=*
+
+# Correct (v3 property name)
+QUARKUS_HTTP_CORS_ORIGINS=*
+----
+--
+
+Role-based authorization does not work::
++
+--
+*Symptoms:*
+
+* Users can access the registry but cannot perform admin operations.
+* No 403 Forbidden errors, but operations fail silently.
+
+*Cause:* Role configuration properties not updated to the v3 namespace.
+
+*Solution:*
+
+[source,properties]
+----
+# Update all role properties
+APICURIO_AUTH_ROLE-BASED-AUTHORIZATION=true
+APICURIO_AUTH_ROLES_ADMIN=sr-admin
+APICURIO_AUTH_ROLES_DEVELOPER=sr-developer
+APICURIO_AUTH_ROLES_READONLY=sr-readonly
+----
+
+Verify that the user has correct roles in Keycloak and the token includes expected roles:
+
+[source,bash]
+----
+# Decode JWT token to check roles
+echo $ACCESS_TOKEN | cut -d. -f2 | base64 -d | jq .realm_access.roles
+----
+--
+
+[role="_additional-resources"]
+.Additional resources
+* xref:migrating-registry-configuration_{context}[]
+
+
+// con-ui-architecture-changes
+:_mod-docs-content-type: CONCEPT

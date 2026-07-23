@@ -1,0 +1,62 @@
+[id="mcp-server-troubleshooting_{context}"]
+= MCP server troubleshooting
+
+
+[role="_abstract"]
+Use the following information to diagnose common issues with the {registry} MCP server.
+
+.Enabling detailed logging
+
+By default, the MCP server does not write logs to a file. To enable file logging for troubleshooting, add logging properties to the Claude Desktop MCP configuration.
+
+For the Docker image, add the following to the `args` array before the image name:
+
+[source,json]
+----
+"-e", "QUARKUS_LOG_FILE_ENABLE=true",
+"-e", "QUARKUS_LOG_FILE_PATH=/mnt/log/mcp-server.log",
+"-v", "<path-to-log-dir>:/mnt/log",
+----
+
+For the JAR, add the following before the `-jar` argument:
+
+[source,json]
+----
+"-Dquarkus.log.file.enable=true",
+"-Dquarkus.log.file.path=<path-to-log-dir>/mcp-server.log",
+----
+
+Replace `<path-to-log-dir>` with the directory where you want to store the log file.
+
+.Common issues
+
+[cols="3,4",options="header"]
+|===
+|Issue
+|Resolution
+
+|Claude Desktop does not show the {registry} MCP server tools.
+|Verify that the MCP configuration file is valid JSON. Restart Claude Desktop completely by selecting *File* > *Exit* and reopening the application.
+
+|The MCP server cannot connect to {registry}.
+|Verify that {registry} is running and accessible at the configured URL. Check the `REGISTRY_URL` environment variable. If you use Docker or Podman, ensure that the URL is reachable from the container.
+
+|The paging limit error occurs when listing objects.
+|{registry} contains more objects than the configured paging limit. Increase the `apicurio.mcp.paging.limit` property, or set `apicurio.mcp.paging.limit-error` to `false` to allow partial results.
+
+|Authentication fails with OAuth2 credentials.
+|Verify that the token endpoint URL, client ID, and client secret are correct. Ensure that the OAuth2 client is configured for the client credentials grant type.
+
+|A configuration property update is rejected.
+|Safe mode restricts which configuration properties you can update. Set `apicurio.mcp.safe-mode` to `false` to allow all updates, or use the {registry} REST API directly.
+
+|Claude Desktop does not reflect changes to the MCP server code.
+|After you rebuild the MCP server, restart Claude Desktop completely by selecting *File* > *Exit* and reopening the application.
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-mcp-tool-features.adoc[MCP tool definition features]
+* xref:getting-started/assembly-a2a-features.adoc[A2A agent features]
+* xref:getting-started/assembly-agent-registry-quickstart.adoc[Agent registry quick start]
+* link:https://modelcontextprotocol.io/introduction[Introduction to MCP]

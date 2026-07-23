@@ -1,0 +1,44 @@
+[id="configuring-events-kafkasql_{context}"]
+= Configuring events with KafkaSQL storage
+
+
+[role="_abstract"]
+When using KafkaSQL storage, events are published directly to a Kafka topic with no additional infrastructure required. The events topic is created automatically when {registry} starts.
+
+.Prerequisites
+
+* {registry} is deployed with KafkaSQL storage.
+
+.Procedure
+
+. Optionally configure the events topic name by setting the following environment variable:
++
+[source]
+----
+APICURIO_EVENTS_KAFKA_TOPIC=registry-events
+----
++
+The default topic name is `registry-events`.
+
+. Optionally configure topic properties such as replication factor:
++
+[source]
+----
+APICURIO_EVENTS_KAFKA_TOPIC_REPLICATION_FACTOR=3
+----
+
+. Consume events from the configured topic:
++
+[source,bash]
+----
+kafka-console-consumer --bootstrap-server <kafka-host>:9092 \
+  --topic registry-events --from-beginning
+----
+
+The events topic is configured with the following defaults:
+
+* *Partitions*: 1 (single partition for total ordering guarantee)
+* *Cleanup policy*: `delete`
+* *Retention*: Infinite (`-1`)
+
+

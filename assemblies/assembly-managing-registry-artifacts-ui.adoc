@@ -1,0 +1,31 @@
+[id="managing-registry-artifacts-ui_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Managing {registry} content using the web console
+
+[role="_abstract"]
+You can manage schema and API artifacts stored in {registry} by using the {registry} web console.
+
+* xref:configuring-registry-ui_{context}[]
+* xref:browsing-artifacts-using-console_{context}[]
+* xref:adding-artifacts-using-console_{context}[]
+* xref:deleting-artifacts-using-console_{context}[]
+* xref:configuring-rules-using-console_{context}[]
+* xref:changing-artifact-owner-using-console_{context}[]
+* xref:configuring-settings-using-console_{context}[]
+* xref:exporting-importing-using-web-console_{context}[]
+
+
+
+
+include::../modules/configuring-registry-ui.adoc[leveloffset=+1]
+include::../modules/browsing-artifacts-using-console.adoc[leveloffset=+1]
+include::../modules/adding-artifacts-using-console.adoc[leveloffset=+1]
+include::../modules/deleting-artifacts-using-console.adoc[leveloffset=+1]
+include::../modules/enabling-deletion-using-console.adoc[leveloffset=+2]
+include::../modules/deleting-group-using-console.adoc[leveloffset=+2]
+include::../modules/deleting-artifact-using-console.adoc[leveloffset=+2]
+include::../modules/deleting-artifact-version-using-console.adoc[leveloffset=+2]
+include::../modules/configuring-rules-using-console.adoc[leveloffset=+1]
+include::../modules/changing-artifact-owner-using-console.adoc[leveloffset=+1]
+include::../modules/configuring-settings-using-console.adoc[leveloffset=+1]
+include::../modules/exporting-importing-using-web-console.adoc[leveloffset=+1]

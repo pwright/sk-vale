@@ -1,0 +1,60 @@
+[id="multitenancy-deployment-patterns_{context}"]
+:_mod-docs-content-type: REFERENCE
+= multitenancy-deployment-patterns_{context}
+
+== Deployment patterns
+
+[role="_abstract"]
+You can deploy multiple {registry} instances using three primary patterns.
+
+Pattern A: Single namespace, multiple tenants::
+All tenant registry instances reside in the same {kubernetes-namespace}. The operator creates uniquely named
+resources for each CR.
++
+----
+Namespace: apicurio-registries
+├── Operator Pod
+├── ApicurioRegistry3: tenant-alpha
+│   ├── tenant-alpha-app-deployment
+│   ├── tenant-alpha-ui-deployment
+│   └── ...
+└── ApicurioRegistry3: tenant-beta
+    ├── tenant-beta-app-deployment
+    ├── tenant-beta-ui-deployment
+    └── ...
+----
++
+This pattern is best for a small number of tenants managed by a single platform team.
+
+Pattern B: Namespace per tenant (recommended)::
+Each tenant gets its own {kubernetes-namespace}. A single operator instance watches all namespaces.
++
+----
+Cluster
+├── apicurio-system namespace
+│   └── Operator Pod (watches all namespaces)
+├── tenant-alpha namespace
+│   └── ApicurioRegistry3: registry
+└── tenant-beta namespace
+    └── ApicurioRegistry3: registry
+----
++
+This pattern provides stronger isolation using {kubernetes} RBAC, ResourceQuotas, and NetworkPolicies at the
+{kubernetes-namespace} level. It is the recommended approach for most production environments.
+
+Pattern C: Operator per namespace::
+Each {kubernetes-namespace} has its own operator instance. The instance is restricted to watching only that {kubernetes-namespace} by using the `APICURIO_OPERATOR_WATCHED_NAMESPACES` environment variable.
++
+----
+Cluster
+├── tenant-alpha namespace
+│   ├── Operator Pod (APICURIO_OPERATOR_WATCHED_NAMESPACES="tenant-alpha")
+│   └── ApicurioRegistry3: registry
+└── tenant-beta namespace
+    ├── Operator Pod (APICURIO_OPERATOR_WATCHED_NAMESPACES="tenant-beta")
+    └── ApicurioRegistry3: registry
+----
++
+This pattern provides maximum isolation and is suitable when tenants manage their own operator lifecycle.
+
+// proc-multitenancy-namespace-per-tenant

@@ -1,0 +1,64 @@
+[id="ha-monitoring_{context}"]
+= Monitoring high availability deployments
+
+
+{registry} exposes Prometheus metrics for monitoring application health and performance.
+
+=== Enabling metrics
+
+Metrics are enabled by default. Access the metrics endpoint at `/metrics` on the management port (default 9000).
+
+=== Key metrics to monitor
+
+Monitor these metrics for HA deployments:
+
+* *REST API metrics:*
+** `http_server_requests_seconds` - Request latency
+** `http_server_active_requests` - Concurrent requests
+** `http_server_requests_total` - Total request count
+
+* *Storage metrics:*
+** `apicurio_storage_operation_seconds` - Storage operation latency
+** `apicurio_storage_concurrent_operations` - Concurrent storage operations
+** `apicurio_storage_operation_total` - Total storage operations
+
+* *Health check metrics:*
+** Readiness probe: `/health/ready` (on management port 9000)
+** Liveness probe: `/health/live` (on management port 9000)
+
+* *JVM metrics:*
+** `jvm_memory_used_bytes` - Memory usage
+** `jvm_gc_pause_seconds` - Garbage collection pauses
+
+=== Configuring ServiceMonitor for Prometheus Operator
+
+If using the Prometheus Operator, create a ServiceMonitor to scrape metrics:
+
+[source,yaml]
+----
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: apicurio-registry-metrics
+  labels:
+    app: apicurio-registry
+spec:
+  selector:
+    matchLabels:
+      app: apicurio-registry
+  endpoints:
+    - port: management
+      path: /metrics
+      interval: 30s
+----
+
+=== Alerting recommendations
+
+Configure alerts for:
+
+* Pod restarts or crash loops
+* High error rates (5xx responses)
+* Storage operation timeouts
+* Database connection pool exhaustion
+* Kafka consumer lag (for KafkaSQL storage)
+

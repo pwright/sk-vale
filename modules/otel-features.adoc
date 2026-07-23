@@ -1,0 +1,26 @@
+[id="otel-features_{context}"]
+= OpenTelemetry features in {registry}
+
+
+[role="_abstract"]
+When OpenTelemetry is enabled, {registry} provides several observability features that are fully compatible with your existing monitoring setup.
+
+* *Distributed tracing*: All REST API requests are automatically traced with spans containing request details, path parameters, and Apicurio-specific attributes such as `groupId`, `artifactId`, and `version`.
+
+* *Storage layer tracing*: All storage operations create child spans. You can trace the complete request flow from REST API to database.
+
+* *Kafka tracing*: When using KafkaSQL storage, Kafka operations are automatically traced with context propagation.
+
+* *Custom metrics*: OpenTelemetry metrics for artifact operations, schema validations, and search requests are exported alongside existing Prometheus metrics.
+
+* *Log correlation*: When JSON logging is enabled, trace context is automatically injected into log entries for correlation.
+
+Existing monitoring endpoints continue to function:
+
+* The Prometheus metrics endpoint is available at `/metrics` on the management port (default 9000).
+* Health check endpoints (`/health/ready`, `/health/live`) are served on the management port (default 9000).
+* All existing Micrometer-based metrics continue to function.
+
+
+// ref-otel-performance
+:_mod-docs-content-type: REFERENCE

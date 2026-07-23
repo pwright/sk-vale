@@ -1,0 +1,29 @@
+[id="a2a-registry-built-in-skills_{context}"]
+= {registry} built-in A2A skills
+
+
+[role="_abstract"]
+{registry} operates as an A2A agent with the following built-in skills.
+
+[cols="1,2"]
+|===
+|Skill ID |Description
+
+|`schema-validation`
+|Validate schemas against format specifications (Avro, JSON Schema, Protobuf, OpenAPI, AsyncAPI, GraphQL, Thrift, WSDL, XSD)
+
+|`schema-search`
+|Search for schemas and APIs in the registry by name, labels, or content
+
+|`artifact-management`
+|Create, update, and manage schema artifacts with full versioning
+
+|`compatibility-check`
+|Check schema compatibility between versions by using configurable rules
+
+|`agent-discovery`
+|Discover and manage A2A agent cards stored in the registry
+|===
+
+// con-a2a-llm-lifecycle-management
+:_mod-docs-content-type: CONCEPT

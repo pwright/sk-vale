@@ -1,0 +1,9 @@
+[id="migrating-registry-configuration_{context}"]
+= Configuration property changes
+
+
+[role="_abstract"]
+Configuration keys in {registry} 3.x adopt a unified `apicurio.` namespace and reorganize authentication, eventing, UI, and storage settings. The following tables map v2 properties to their v3 equivalents.
+
+IMPORTANT: Configuration property changes are extensive in 3.x. Review all sections carefully and test in a staging environment before you migrate production deployments.
+

@@ -1,0 +1,37 @@
+[id="registry-security-anon-read_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} anonymous read-only access
+
+[role="_abstract"]
+In addition to the two main types of authorization (role-based and owner-based authorization), {registry}
+supports an anonymous read-only access option.
+
+To allow anonymous users, such as REST API calls with no authentication credentials, to make read-only
+calls to the REST API, set the following options to `true`:
+
+.Configuration for anonymous read-only access
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+|`QUARKUS_OIDC_TENANT_ENABLED`
+|`quarkus.oidc.tenant-enabled`
+|Boolean
+|`false`
+|`APICURIO_AUTH_ANONYMOUS_READ_ACCESS_ENABLED`
+|`apicurio.auth.anonymous-read-access.enabled`
+|Boolean
+|`false`
+|===
+
+
+[role="_additional-resources"]
+.Additional resources
+* xref:configuring-liveness-readiness-probes_{context}[]
+* https://quarkus.io/guides/security-openid-connect-web-authentication[Quarkus Open ID Connect documentation]
+
+
+
+// con-registry-cors-configuration

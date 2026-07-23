@@ -1,0 +1,33 @@
+[id="secured-kafka-security-protocols_{context}"]
+:_mod-docs-content-type: REFERENCE
+= secured-kafka-security-protocols_{context}
+
+== Kafka security protocol reference
+
+[role="_abstract"]
+{registry} uses the `apicurio.kafka.common.security.protocol` property (environment variable `APICURIO_KAFKA_COMMON_SECURITY_PROTOCOL`) to determine how to connect to the Kafka cluster.
+
+When you use the operator, the operator sets the security protocol automatically based on your TLS and authentication configuration.
+When you configure security manually by using environment variables, you must set the security protocol explicitly.
+
+.Kafka security protocol values
+[%header,cols="3,7"]
+|===
+|Protocol
+|Description
+
+|`PLAINTEXT`
+|No encryption and no authentication. Use for unsecured Kafka clusters only.
+
+|`SSL`
+|TLS encryption without SASL authentication. The operator sets this protocol when you configure TLS only.
+
+|`SASL_PLAINTEXT`
+|SASL authentication without TLS encryption. The operator sets this protocol when you configure OAUTHBEARER authentication without TLS.
+
+|`SASL_SSL`
+|TLS encryption with SASL authentication. The operator sets this protocol when you configure both TLS and OAUTHBEARER authentication. You must set this protocol manually when you use SCRAM-SHA-512 authentication.
+|===
+
+
+// proc-secured-kafka-topic-config

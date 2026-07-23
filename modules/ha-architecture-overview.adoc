@@ -1,0 +1,19 @@
+[id="ha-architecture-overview_{context}"]
+= High availability architecture overview
+
+
+A highly available {registry} deployment consists of the following components:
+
+* *Application (backend) pods* - Multiple stateless replicas that process REST API requests. These pods can
+scale horizontally and are distributed across cluster nodes for fault tolerance.
+
+* *UI pods* - Multiple stateless replicas serving the web console (static files). Typically fewer replicas are
+needed compared to the backend.
+
+* *Storage layer* - The stateful component requiring HA configuration. Strategy depends on whether you use SQL
+database or KafkaSQL storage.
+
+The application and UI components are stateless and can be scaled horizontally. High availability is achieved
+by running multiple replicas distributed across failure domains (availability zones) and implementing a highly
+available storage layer.
+

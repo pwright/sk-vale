@@ -1,0 +1,65 @@
+[id="deploying-registry-operator_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= deploying-registry-operator_{context}
+
+= Deploying {registry} using the Operator
+
+[role="_abstract"]
+Deploy and configure {registry} instances by using the {operator} on
+{kubernetes}:
+
+* xref:operator-overview_{context}[]
+* xref:deploying-registry-inmemory_{context}[]
+* xref:deploying-registry-postgresql_{context}[]
+* xref:deploying-registry-mysql_{context}[]
+* xref:deploying-registry-kafkasql_{context}[]
+* xref:configuring-kafkasql-tls_{context}[]
+* xref:configuring-kafkasql-sasl_{context}[]
+* xref:deploying-registry-kubernetesops_{context}[]
+* xref:configuring-registry-authentication_{context}[]
+* xref:configuring-basic-auth-credentials_{context}[]
+* xref:configuring-tls-oidc_{context}[]
+* xref:configuring-ingress-hostname_{context}[]
+* xref:disabling-operator-ingress_{context}[]
+* xref:configuring-networkpolicy_{context}[]
+* xref:enabling-resource-deletion_{context}[]
+* xref:enabling-version-mutability_{context}[]
+* xref:disabling-ui-component_{context}[]
+* xref:configuring-ui-env-vars_{context}[]
+* xref:configuring-replicas_{context}[]
+* xref:configuring-poddisruptionbudget_{context}[]
+* xref:configuring-env-vars_{context}[]
+* xref:using-podtemplatespec_{context}[]
+* xref:configuring-app-tls_{context}[]
+
+**Prerequisites**
+
+* {installing-the-registry-openshift}
+
+//INCLUDES
+
+// con-operator-overview
+include::../modules/operator-overview.adoc[leveloffset=+1]
+include::../modules/operator-storage-options.adoc[leveloffset=+1]
+include::../modules/deploying-registry-inmemory.adoc[leveloffset=+1]
+include::../modules/deploying-registry-postgresql.adoc[leveloffset=+1]
+include::../modules/deploying-registry-mysql.adoc[leveloffset=+1]
+include::../modules/deploying-registry-kafkasql.adoc[leveloffset=+1]
+include::../modules/configuring-kafkasql-tls.adoc[leveloffset=+1]
+include::../modules/configuring-kafkasql-sasl.adoc[leveloffset=+1]
+include::../modules/deploying-registry-kubernetesops.adoc[leveloffset=+1]
+include::../modules/configuring-registry-authentication.adoc[leveloffset=+1]
+include::../modules/configuring-basic-auth-credentials.adoc[leveloffset=+1]
+include::../modules/configuring-tls-oidc.adoc[leveloffset=+1]
+include::../modules/configuring-ingress-hostname.adoc[leveloffset=+1]
+include::../modules/disabling-operator-ingress.adoc[leveloffset=+1]
+include::../modules/configuring-networkpolicy.adoc[leveloffset=+1]
+include::../modules/enabling-resource-deletion.adoc[leveloffset=+1]
+include::../modules/enabling-version-mutability.adoc[leveloffset=+1]
+include::../modules/disabling-ui-component.adoc[leveloffset=+1]
+include::../modules/configuring-ui-env-vars.adoc[leveloffset=+1]
+include::../modules/configuring-replicas.adoc[leveloffset=+1]
+include::../modules/configuring-poddisruptionbudget.adoc[leveloffset=+1]
+include::../modules/configuring-env-vars.adoc[leveloffset=+1]
+include::../modules/using-podtemplatespec.adoc[leveloffset=+1]
+include::../modules/configuring-app-tls.adoc[leveloffset=+1]

@@ -1,0 +1,24 @@
+[id="disabling-operator-ingress_{context}"]
+:_mod-docs-content-type: REFERENCE
+= disabling-operator-ingress_{context}
+
+== Disabling operator-managed Ingress
+
+[role="_abstract"]
+To manage Ingress resources manually, disable the operator-managed Ingress.
+
+[source,yaml]
+----
+spec:
+  app:
+    ingress:
+      enabled: false
+  ui:
+    ingress:
+      enabled: false
+----
+
+NOTE: When Ingress is disabled, you must create your own Ingress or Route resources to expose the {registry}
+services.
+
+// ref-configuring-networkpolicy

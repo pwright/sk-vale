@@ -1,0 +1,27 @@
+[id="registry-rule-reference_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= registry-rule-reference_{context}
+
+= {registry} content rule reference
+
+[role="_abstract"]
+{registry} supports content rules that govern how artifacts evolve. The following sections describe the available rule types, their maturity level for each artifact type, and the order of precedence when both artifact-specific and global rules are configured.
+
+* xref:registry-rule-types_{context}[]
+* xref:registry-rule-maturity-matrix_{context}[]
+* xref:registry-rule-precedence_{context}[]
+
+[role="_additional-resources"]
+.Additional resources
+* link:{attachmentsdir}/registry-rest-api.htm[Apicurio Registry REST API documentation]
+
+//INCLUDES
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_registry-reference.adoc
+
+// ref-registry-rule-types
+include::../modules/registry-rule-types.adoc[leveloffset=+1]
+include::../modules/registry-rule-maturity-matrix.adoc[leveloffset=+1]
+include::../modules/registry-rule-precedence.adoc[leveloffset=+1]

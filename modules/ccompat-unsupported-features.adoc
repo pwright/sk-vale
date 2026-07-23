@@ -1,0 +1,63 @@
+[id="ccompat-unsupported-features_{context}"]
+= Unsupported features
+
+
+[role="_abstract"]
+{registry} does not support the following Confluent Schema Registry features. Applications that rely on these features must use alternative approaches.
+
+.Unsupported features
+[%header,cols="2,2,3"]
+|===
+|Feature
+|Behavior
+|Alternative
+
+|*Schema Linking / Exporters*
+|`GET /exporters` returns an empty list. All other exporter operations return an error.
+|Use {registry} native import/export functions or external replication tools.
+
+|*KEKs (Key Encryption Keys)*
+|Endpoints not present (404 error).
+|Implement encryption at the application layer or use external key management.
+
+|*DEKs (Data Encryption Keys)*
+|Endpoints not present (404 error).
+|Implement encryption at the application layer or use external key management.
+
+|*Cluster Metadata API*
+|Endpoints `/v1/metadata/id` and `/v1/metadata/config` not present.
+|Use {registry} system API for registry information.
+
+|*Data Contracts - Rules Enforcement*
+|The ccompat API accepts `metadata` and `ruleSet` fields in requests but does not enforce or store them. The API does not execute schema rules.
+|Use {registry} native Data Contracts feature (`apicurio.contracts.enabled=true`) for contract metadata and rulesets. See xref:getting-started/assembly-data-contracts.adoc[Data Contracts].
+|===
+
+**Schema Linking / Exporters**
+
+Confluent Schema Linking uses schema exporters to replicate schemas between Schema Registry clusters. This is an enterprise feature that requires cluster-to-cluster replication infrastructure.
+
+{registry} provides alternative approaches for schema replication:
+
+* *Import/Export API*: Use the {registry} admin API to export all registry content to a ZIP file and import it into another instance.
+* *Kafka-based storage*: Use Kafka storage to store schemas in a Kafka topic that you can replicate by using the native replication features of Kafka.
+* *GitOps workflows*: Store schemas in Git and use CI/CD pipelines to synchronize across environments.
+
+**Data Contracts**
+
+Confluent Data Contracts provide the following governance features:
+
+* *Metadata*: Key-value pairs attached to schemas (owner, email, tags)
+* *RuleSets*: Validation and transformation rules that use Common Expression Language (CEL) or JSONata
+
+{registry} accepts these fields in ccompat API requests for client compatibility but does not process or store them through the ccompat layer. Instead, {registry} provides its own native Data Contracts feature with more capabilities:
+
+* *Contract Metadata*: Standardized metadata (status, owner, domain, classification, stage) managed through the `contract/metadata` REST API
+* *Contract Rulesets*: Domain and migration rules at both artifact and version level, managed through the `contract/ruleset` REST API
+* *Content Rules*: Validity, compatibility, and integrity rule configuration
+* *Groups*: Artifact organization by group for governance
+
+See xref:getting-started/assembly-data-contracts.adoc[Data Contracts] for full documentation about the native data contracts feature.
+
+:_mod-docs-content-type: REFERENCE
+

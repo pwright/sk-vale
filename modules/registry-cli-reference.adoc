@@ -1,0 +1,95 @@
+[id="registry-cli-reference_{context}"]
+= CLI reference
+
+
+[role="_abstract"]
+The following tables describe CLI global options and exit codes.
+
+.Global options
+The following options are available for most CLI commands:
+
+[cols="2,3", options="header"]
+|===
+| Option
+| Description
+
+| `--verbose`, `-v`
+| Enable verbose output for debugging.
+
+| `--help`, `-h`
+| Display help information for the command.
+
+| `--output-type`, `-o`
+| Set the output format. Valid values are `table` (default) and `json`.
+|===
+
+.Exit codes
+The CLI uses the following exit codes:
+
+[cols="1,3", options="header"]
+|===
+| Code
+| Description
+
+| 0
+| Successful execution.
+
+| 1
+| Application error.
+
+| 2
+| Input validation error.
+
+| 3
+| {registry} server error.
+|===
+
+.Command summary
+The following commands are currently available:
+
+[cols="2,3", options="header"]
+|===
+| Command
+| Description
+
+| `acr context`
+| List all configured contexts.
+
+| `acr context create`
+| Create a new context.
+
+| `acr context delete`
+| Delete a context.
+
+| `acr group`
+| List all groups.
+
+| `acr group create`
+| Create a new group.
+
+| `acr group get`
+| Get group details.
+
+| `acr group update`
+| Update a group.
+
+| `acr group delete`
+| Delete a group.
+
+| `acr install`
+| Install the CLI for the current user.
+
+| `acr update`
+| Update the CLI to a newer version.
+
+| `acr version`
+| Display CLI version information.
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* {managing-registry-artifacts-api}
+* {rest-client}
+ifndef::service-registry-downstream[]
+* For the latest CLI documentation, see the link:https://github.com/Apicurio/apicurio-registry/tree/main/cli[CLI README] on GitHub.
+endif::[]

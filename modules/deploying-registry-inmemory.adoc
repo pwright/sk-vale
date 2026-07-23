@@ -1,0 +1,50 @@
+[id="deploying-registry-inmemory_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= deploying-registry-inmemory_{context}
+
+== Deploying {registry} with default configuration (embedded H2 database)
+
+[role="_abstract"]
+You can deploy a basic {registry} instance by using the default storage configuration (SQL with an embedded H2 database). You do not need to specify a storage type in the CR. When omitted, {registry} defaults to an embedded H2 database. This configuration is suitable for development and testing environments only.
+
+.Prerequisites
+* You must have cluster administrator access to an {kubernetes} cluster.
+* You must have already installed the {operator}. See {installing-the-registry-openshift}.
+
+.Procedure
+
+. In the {kubernetes} web console, log in using an account with cluster administrator privileges.
+
+. Change to the {kubernetes-namespace} in which the {operator} is installed. For example, from the
+*Project* drop-down, select `my-project`.
+
+. Click *Installed Operators* > *{registry}* > *ApicurioRegistry3* > *Create ApicurioRegistry3*.
+
+. Paste in the following custom resource definition:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry
+spec:
+  app:
+    ingress:
+      host: registry.example.com
+  ui:
+    ingress:
+      host: registry-ui.example.com
+----
++
+NOTE: Replace the `host` values with appropriate hostnames for your environment. Currently, {operator} only creates simple HTTP Ingresses. To enable TLS, you must create your own Ingress or Route resources with TLS configuration.
+
+. Click *Create* and wait for the {registry} deployment to be created.
+
+. Click *Networking* > *Ingresses* (or *Routes*) to access the route for the {registry} web console.
+
+.Verification
+
+* Access the {registry} web console using the configured hostname and verify that the UI loads successfully.
+
+// proc-deploying-registry-postgresql

@@ -1,0 +1,54 @@
+[id="configuring-registry-cli-contexts_{context}"]
+= Configuring {registry} CLI contexts
+
+
+[role="_abstract"]
+An {registry} CLI context stores the registry URL and identifies the instance that the CLI commands target. You can create many contexts and switch between them as needed, similar to how you use contexts in {kubernetes}.
+
+.Procedure
+. Create a new context for your {registry} instance:
++
+[source,bash,subs="+quotes"]
+----
+$ acr context create _CONTEXT_NAME_ _REGISTRY_URL_
+----
++
+For example:
++
+[source,bash]
+----
+$ acr context create dev http://localhost:8080
+----
++
+The CLI automatically switches to the newly created context.
+. List all configured contexts:
++
+[source,bash]
+----
+$ acr context
+----
++
+.Example output
+[source]
+----
+Current context is 'default'.
+ID        Registry URL
+--------  ---------------------
+default*  http://localhost:8080
+----
++
+The asterisk (*) indicates the current active context.
+. Optional: Create additional contexts without switching to them:
++
+[source,bash]
+----
+$ acr context create prod http://registry.example.com --no-switch-current
+----
+. Delete a context that you no longer need:
++
+[source,bash,subs="+quotes"]
+----
+$ acr context delete _CONTEXT_NAME_
+----
+
+

@@ -1,0 +1,35 @@
+[id="registry-cors-understanding_{context}"]
+:_mod-docs-content-type: CONCEPT
+= registry-cors-understanding_{context}
+
+== Understanding CORS
+
+[role="_abstract"]
+Browsers enforce a same-origin policy that prevents a web page served from one origin (for example, `https://my-app.example.com`) from making HTTP requests to a different origin (for example, `https://registry.example.com`).
+CORS is the mechanism by which a server explicitly allows cross-origin requests by including specific HTTP response headers such as `Access-Control-Allow-Origin`.
+
+Consider a typical scenario where your browser application runs at `https://my-app.example.com` and {registry} runs at `https://registry.example.com`.
+When your JavaScript code calls the {registry} REST API:
+
+[source,javascript]
+----
+fetch("https://registry.example.com/apis/registry/v3/groups")
+----
+
+The browser first sends a preflight `OPTIONS` request to {registry}, asking whether {registry} allows the cross-origin request.
+{registry} must respond with the correct headers for the browser to allow the request:
+
+* `Access-Control-Allow-Origin` matching your application's origin
+* `Access-Control-Allow-Methods` listing the HTTP methods you use
+* `Access-Control-Allow-Headers` listing any custom headers your request includes
+
+If {registry} does not respond with these headers, the browser blocks the request and you see an error similar to this example:
+
+----
+Access to fetch at 'https://registry.example.com/apis/registry/v3/groups'
+from origin 'https://my-app.example.com' has been blocked by CORS policy:
+No 'Access-Control-Allow-Origin' header is present on the requested resource.
+----
+
+
+// ref-registry-cors-defaults

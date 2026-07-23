@@ -1,0 +1,53 @@
+[id="using-podtemplatespec_{context}"]
+:_mod-docs-content-type: REFERENCE
+= using-podtemplatespec_{context}
+
+== PodTemplateSpec advanced customization
+
+[role="_abstract"]
+For advanced pod configuration, you can provide a custom PodTemplateSpec.
+
+[source,yaml]
+----
+spec:
+  app:
+    podTemplateSpec:
+      metadata:
+        labels:
+          custom-label: custom-value
+        annotations:
+          custom-annotation: custom-value
+      spec:
+        containers:
+          - name: apicurio-registry-app
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "500m"
+              limits:
+                memory: "1Gi"
+                cpu: "1000m"
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - apicurio-registry
+                  topologyKey: kubernetes.io/hostname
+----
+
+To customize the component container (for example, to set resource requests/limits), you must specify the container name as follows:
+
+* `apicurio-registry-app` for the {registry-app}.
+* `apicurio-registry-ui` for the {registry-ui}.
+
+You can also add additional containers to the pod if needed.
+
+IMPORTANT: *Order of evaluation:* The operator first extends the provided PodTemplateSpec with default values and then applies additional configuration based on other fields in the `ApicurioRegistry3` CR. Therefore, other configuration fields might override settings in the PodTemplateSpec.
+
+// ref-configuring-app-tls

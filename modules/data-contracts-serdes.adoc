@@ -1,0 +1,47 @@
+[id="data-contracts-serdes_{context}"]
+= Kafka SerDes integration
+
+
+[role="_abstract"]
+Contract rules can be enforced during normal Kafka serialization and deserialization using the Apicurio Registry SerDes libraries. Rules are executed transparently — no code changes are required beyond configuration.
+
+=== Configuration
+
+Enable contract rule enforcement by setting these properties on your Kafka producer or consumer:
+
+.SerDes contract rule properties
+[cols="3,1,3", options="header"]
+|===
+|Property |Default |Description
+
+|`apicurio.registry.contract-rules.enabled`
+|`false`
+|Enable contract rule execution during serialize/deserialize
+
+|`apicurio.registry.contract-rules.fail-on-error`
+|`true`
+|When `true`, rule violations throw a `RuntimeException`. When `false`, violations are logged but serialization proceeds (for DLQ routing by the application)
+|===
+
+=== How it works
+
+* *Producer (serializer):* After schema resolution and before serialization, the serializer calls the server-side rule execution endpoint with mode `WRITE`. If any CONDITION rule with `onFailure=ERROR` fails, serialization is rejected.
+* *Consumer (deserializer):* After deserialization, the deserializer calls the rule execution endpoint with mode `READ`. This enables read-side validation rules.
+* *DLQ pattern:* Set `fail-on-error=false` to allow serialization to proceed even when rules fail. Your application can inspect the violations and route the message to a dead letter queue.
+
+=== Example: Producer with contract rules
+
+[source,java]
+----
+Properties props = new Properties();
+props.put(SerdeConfig.REGISTRY_URL, "http://localhost:8080/apis/registry/v3");
+props.put(SerdeConfig.EXPLICIT_ARTIFACT_GROUP_ID, "my-group");
+props.put(SerdeConfig.ARTIFACT_RESOLVER_STRATEGY, TopicRecordIdStrategy.class.getName());
+props.put(SerdeConfig.CONTRACT_RULES_ENABLED, "true");
+props.put(SerdeConfig.CONTRACT_RULES_FAIL_ON_ERROR, "true");
+props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, AvroKafkaSerializer.class.getName());
+// ... other Kafka producer properties
+
+KafkaProducer<String, GenericRecord> producer = new KafkaProducer<>(props);
+----
+

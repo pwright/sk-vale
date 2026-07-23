@@ -1,0 +1,36 @@
+[id="secured-kafka-troubleshooting_{context}"]
+:_mod-docs-content-type: REFERENCE
+= secured-kafka-troubleshooting_{context}
+
+== Troubleshooting secured Kafka connections
+
+[role="_abstract"]
+You might encounter errors when you configure {registry} to connect to a secured Kafka instance.
+
+.Common secured Kafka connection errors and fixes
+[%header,cols="4,3,5"]
+|===
+|Error
+|Cause
+|Fix
+
+|`java.lang.IllegalArgumentException: Could not find a 'KafkaClient' entry in the JAAS configuration. System property 'java.security.auth.login.config' is not set`
+|SASL authentication requires a valid login context, but the `sasl.jaas.config` property is not set correctly.
+|Set the `APICURIO_KAFKA_COMMON_SASL_JAAS_CONFIG` environment variable by using a `secretKeyRef` that points to a Secret containing the one-line JAAS login module definition.
+
+|`java.io.IOException: /etc/kafka/secrets/jaas.conf (No such file or directory)`
+|A previous configuration attempted to mount a physical `jaas.conf` file that no longer exists. Cached `JAVA_TOOL_OPTIONS` or invalid volume mounts can persist after changes.
+|Remove any `JAVA_TOOL_OPTIONS` environment variable or volume mount that references `jaas.conf` from the custom resource. Use the `APICURIO_KAFKA_COMMON_SASL_JAAS_CONFIG` environment variable instead of file mounts.
+
+|`Admission Webhook Warning: unknown field "spec.app.storage.kafkasql.auth.usernameSecretRef"`
+|The structured `auth` section of the custom resource does not support SCRAM-SHA-512 fields like `usernameSecretRef`. These fields are not part of the `ApicurioRegistry3` CRD.
+|Use environment variables (`APICURIO_KAFKA_COMMON_SASL_MECHANISM` and `APICURIO_KAFKA_COMMON_SASL_JAAS_CONFIG`) in the `spec.app.env` section instead of the structured `auth` section for SCRAM-SHA-512 authentication.
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* xref:deploying-registry-kafkasql_{context}[]
+ifdef::apicurio-registry[]
+* https://strimzi.io/docs/overview/latest/[{kafka-streams} documentation]
+endif::[]
+* {registry-config-reference}

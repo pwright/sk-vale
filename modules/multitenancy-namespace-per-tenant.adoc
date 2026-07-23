@@ -1,0 +1,131 @@
+[id="multitenancy-namespace-per-tenant_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= multitenancy-namespace-per-tenant_{context}
+
+== Deploying with namespace-per-tenant isolation
+
+[role="_abstract"]
+Deploy {registry} using the namespace-per-tenant pattern (Pattern B) to provide strong isolation between tenants.
+
+.Prerequisites
+* Cluster administrator access to {kubernetes-with-article} cluster is configured.
+* The {operator} is installed. See {installing-the-registry-openshift}.
+* Storage infrastructure (PostgreSQL or Kafka) is available for each tenant.
+
+.Procedure
+
+. Install the operator in a dedicated {kubernetes-namespace}. By default, it watches all namespaces:
++
+[source,bash,subs="attributes"]
+----
+{kubernetes-client} create namespace apicurio-system
+{kubernetes-client} apply -f operator/install/install.yaml -n apicurio-system
+----
+
+. Verify that the operator is running:
++
+[source,bash,subs="attributes"]
+----
+{kubernetes-client} get pods -n apicurio-system
+----
+
+. Create tenant namespaces:
++
+[source,bash,subs="attributes"]
+----
+{kubernetes-client} create namespace tenant-alpha
+{kubernetes-client} create namespace tenant-beta
+----
+
+. Create a database credentials Secret for each tenant:
++
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-credentials
+  namespace: tenant-alpha
+type: Opaque
+stringData:
+  password: tenant-alpha-db-password
+----
+
+. Deploy an `ApicurioRegistry3` CR for each tenant. For example, Tenant Alpha with PostgreSQL storage:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: registry
+  namespace: tenant-alpha
+spec:
+  app:
+    storage:
+      type: postgresql
+      sql:
+        dataSource:
+          url: jdbc:postgresql://postgres-alpha.tenant-alpha.svc:5432/apicurio
+          username: apicurio
+          password:
+            name: db-credentials
+            key: password
+    ingress:
+      host: tenant-alpha-registry.apps.cluster.example
+  ui:
+    ingress:
+      host: tenant-alpha-ui.apps.cluster.example
+----
++
+And Tenant Beta with KafkaSQL storage:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: registry
+  namespace: tenant-beta
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: "kafka-beta.tenant-beta.svc:9092"
+    ingress:
+      host: tenant-beta-registry.apps.cluster.example
+  ui:
+    ingress:
+      host: tenant-beta-ui.apps.cluster.example
+----
+
+. Apply the custom resources:
++
+[source,bash,subs="attributes"]
+----
+{kubernetes-client} apply -f tenant-alpha-registry.yaml
+{kubernetes-client} apply -f tenant-beta-registry.yaml
+----
+
+.Verification
+
+* Check the status of all registry instances across the cluster:
++
+[source,bash,subs="attributes"]
+----
+{kubernetes-client} get apicurioregistries3 --all-namespaces
+----
+
+* Verify that pods are running in each tenant {kubernetes-namespace}:
++
+[source,bash,subs="attributes"]
+----
+{kubernetes-client} get pods -n tenant-alpha
+{kubernetes-client} get pods -n tenant-beta
+----
+
+* Access each tenant's {registry} web console using the configured hostnames and verify that the UI loads
+  successfully.
+
+// ref-multitenancy-storage-isolation

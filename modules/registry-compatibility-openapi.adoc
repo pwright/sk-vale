@@ -1,0 +1,63 @@
+[id="registry-compatibility-openapi_{context}"]
+= OpenAPI compatibility
+
+
+[role="_abstract"]
+{registry} checks OpenAPI specification compatibility by comparing operations and schemas between versions.
+The following table describes common changes and whether they maintain or break backward compatibility.
+
+.OpenAPI compatibility changes
+[%header,cols="3,1,5"]
+|===
+|Change type
+|Backward compatible?
+|Reason
+
+|Add a new path or endpoint
+|Yes
+|Existing clients are not affected by new endpoints that they do not call.
+
+|Add a new optional query parameter
+|Yes
+|Existing clients can continue making requests without the new parameter.
+
+|Add a new optional response header
+|Yes
+|Existing clients can ignore the new header in responses.
+
+|Relax request body schema constraints
+|Yes
+|Existing requests that the old schema validated remain valid when you relax the constraints.
+
+|Add a new response status code
+|Yes*
+|Existing clients that follow HTTP conventions ignore unknown status codes. However, some clients might not handle unexpected codes correctly. Test client behavior before relying on this change.
+
+|Remove a path or endpoint
+|No
+|Existing clients that depend on the removed endpoint receive errors.
+
+|Remove an operation from a path
+|No
+|Existing clients that use the removed HTTP method (for example, `GET` or `POST`) receive errors.
+
+|Add a new required request parameter
+|No
+|Existing client requests that do not include the new parameter are rejected.
+
+|Tighten request body schema constraints
+|No
+|Existing client requests that the old schema validated might be rejected under the new schema.
+
+|Change a response body schema incompatibly
+|No
+|Existing clients that parse the response according to the old schema might fail.
+
+|Remove a response status code
+|No
+|Existing clients that handle the removed status code might not handle the replacement correctly.
+|===
+
+
+// ref-registry-compatibility-xsd
+:_mod-docs-content-type: REFERENCE

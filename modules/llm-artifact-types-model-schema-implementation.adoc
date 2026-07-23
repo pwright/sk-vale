@@ -1,0 +1,126 @@
+[id="llm-artifact-types-model-schema-implementation_{context}"]
+= MODEL_SCHEMA implementation details
+
+
+[role="_abstract"]
+The MODEL_SCHEMA artifact type implementation resides in `schema-util/util-provider/src/main/java/io/apicurio/registry/types/provider/ModelSchemaArtifactTypeUtilProvider.java`, with validators, extractors, and compatibility checkers in `schema-util/common/`.
+
+.Schema structure
+
+.MODEL_SCHEMA schema interface (Model Card Toolkit-aligned)
+[source,typescript]
+----
+interface ModelSchema {
+    $schema?: string;                           // Schema URL for identification
+    modelId: string;                            // Required: unique model identifier
+    provider?: string;                          // Provider name (OpenAI, Anthropic, etc.)
+    version?: string;                           // Model version
+    input?: Record<string, unknown>;            // Input schema (JSON Schema format)
+    output?: Record<string, unknown>;           // Output schema (JSON Schema format)
+    metadata?: Record<string, unknown>;         // Custom metadata (capabilities, etc.)
+    definitions?: Record<string, unknown>;      // Reusable schema definitions
+
+    // Model Card Toolkit-aligned sections
+    modelDetails?: ModelDetails;                // Comprehensive model metadata
+    modelParameters?: ModelParameters;          // Architecture and data info
+    quantitativeAnalysis?: QuantitativeAnalysis; // Performance metrics
+    considerations?: Considerations;            // Ethics, limitations, users
+
+    // MLflow compatibility
+    signature?: MLflowSignature;                // MLflow model signature
+}
+
+interface ModelDetails {
+    name?: string;
+    overview?: string;
+    owners?: Array<{name: string; contact?: string}>;
+    version?: {name: string; date?: string};
+    licenses?: Array<{identifier?: string; custom_text?: string}>;
+    references?: Array<{reference: string}>;
+    citations?: Array<{style?: string; citation: string}>;
+    regulatoryRequirements?: string[];
+}
+
+interface Considerations {
+    users?: string[];
+    useCases?: string[];
+    limitations?: string[];
+    tradeoffs?: string[];
+    ethicalConsiderations?: Array<{name: string; mitigationStrategy?: string}>;
+    fairnessConsiderations?: Array<{name: string; mitigationStrategy?: string}>;
+}
+----
+
+.Content detection
+
+The `acceptsContent()` function detects MODEL_SCHEMA content by checking the following criteria:
+
+* Content type is `application/json` or `application/x-yaml`.
+* Schema identifier: the `$schema` field contains `model-schema`.
+* Required fields: `modelId` and at least one of `input` or `output` are present.
+
+.Validation rules
+
+The `validate()` function checks the following rules:
+
+* `modelId` must be a non-empty string.
+* At least one of `input` or `output` must be defined.
+* `input` and `output` must be objects (JSON Schema format).
+* `metadata` must be an object if provided.
+
+.Compatibility rules
+
+.MODEL_SCHEMA backward compatibility
+[%header,cols="3,1,3"]
+|===
+|Change type
+|Allowed
+|Reason
+
+|Add optional input property
+|Yes
+|Existing consumers can ignore new fields
+
+|Add required input property
+|No
+|Existing consumers do not provide new required fields
+
+|Remove input property
+|No
+|Consumers might still send removed properties
+
+|Change input property type
+|No
+|Existing data might become invalid
+
+|Add output property
+|Yes
+|Consumers can ignore new fields in response
+
+|Remove output property
+|No
+|Consumers might depend on removed properties
+
+|Change output property type
+|No
+|Consumer parsing might break
+
+|Remove input schema entirely
+|No
+|Contract changes fundamentally
+
+|Remove output schema entirely
+|No
+|Contract changes fundamentally
+|===
+
+.Canonicalization
+
+The canonicalization process converts MODEL_SCHEMA content to JSON format with the following characteristics:
+
+* Recursively sorted object keys
+* Consistent indentation (2 spaces)
+* No trailing whitespace
+
+// ref-llm-artifact-types-prompt-rendering-service
+:_mod-docs-content-type: REFERENCE

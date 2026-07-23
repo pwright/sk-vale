@@ -1,0 +1,30 @@
+[id="registry-kafka-topic-names_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-kafka-topic-names_{context}
+
+== Kafka topic name configuration
+
+[role="_abstract"]
+The default Kafka topic name that {registry} uses to store data is `kafkasql-journal`. This topic is created automatically by {registry}. You can override this behavior or the default topic name by setting the appropriate environment variable or Java system property.
+
+.Kafka topic name configuration
+[%header,cols="3,3,2"]
+|===
+|Environment variable
+|Java system property
+|Default value
+| `APICURIO_KAFKASQL_TOPIC`
+| `apicurio.kafkasql.topic`
+| `kafkasql-journal`
+| `APICURIO_KAFKASQL_TOPIC_AUTO-CREATE`
+| `apicurio.kafkasql.topic.auto-create`
+| `true`
+|===
+
+
+
+// Metadata created by nebel
+//
+// ParentAssemblies: assemblies/getting-started/as_installing-the-registry.adoc
+
+// proc-configuring-kafka-oauth

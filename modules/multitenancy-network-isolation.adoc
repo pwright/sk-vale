@@ -1,0 +1,65 @@
+[id="multitenancy-network-isolation_{context}"]
+:_mod-docs-content-type: REFERENCE
+= multitenancy-network-isolation_{context}
+
+== Network isolation options
+
+[role="_abstract"]
+The operator creates NetworkPolicy resources for each instance by default.
+
+For additional security when using the namespace-per-tenant pattern, apply a default-deny policy in each
+tenant {kubernetes-namespace}:
+
+[source,yaml]
+----
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: tenant-alpha
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+----
+
+Then selectively allow traffic for the registry pods:
+
+[source,yaml]
+----
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-registry-ingress
+  namespace: tenant-alpha
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: apicurio-registry
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+----
+
+To limit the operator to watching only certain namespaces, set the `APICURIO_OPERATOR_WATCHED_NAMESPACES`
+environment variable on the operator Deployment:
+
+[source,yaml]
+----
+env:
+  - name: APICURIO_OPERATOR_WATCHED_NAMESPACES
+    value: "tenant-alpha,tenant-beta"
+----
+
+When this variable is empty or unset, the operator watches all namespaces. When installed by using OLM, this is
+automatically derived from the `olm.targetNamespaces` annotation.
+
+// con-multitenancy-lightweight-group-isolation

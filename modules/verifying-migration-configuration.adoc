@@ -1,0 +1,38 @@
+[id="verifying-migration-configuration_{context}"]
+= Verifying migration configuration
+
+
+[role="_abstract"]
+You can verify your v3 configuration by following this checklist to ensure that all properties are correctly updated before you switch production traffic.
+
+.Procedure
+
+. Inventory all configuration files, including deployment manifests, `application.properties`, and environment variables.
+. Create a mapping spreadsheet that documents v2 properties and their v3 equivalents.
+. Update configuration for v3 deployment:
+  * Storage: Change the database name or topic name.
+  * Authentication: Update to the full realm URL format.
+  * Properties: Apply the `apicurio.*` namespace.
+. Deploy v3 to a staging environment with updated configuration.
+. Monitor startup logs for configuration errors or warnings.
+. Test all functionality:
+  * Storage connectivity.
+  * Authentication and authorization.
+  * API operations (create, read, update, delete).
+  * UI access.
+. Document any custom or undocumented properties for future reference.
+
+.Verification
+
+* Verify that {registry} 3.x starts without configuration errors.
+* Verify that all API endpoints respond correctly.
+* Verify that authentication and authorization work as expected.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:migrating-registry-configuration_{context}[]
+* xref:resolving-configuration-issues_{context}[]
+
+
+// ref-resolving-configuration-issues
+:_mod-docs-content-type: REFERENCE

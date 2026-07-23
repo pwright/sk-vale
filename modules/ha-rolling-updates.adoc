@@ -1,0 +1,83 @@
+[id="ha-rolling-updates_{context}"]
+= Performing rolling updates
+
+
+When updating {registry} to a new version, use rolling updates to minimize downtime.
+
+=== Rolling update strategy
+
+The operator performs rolling updates automatically when you update the `ApicurioRegistry3` CR. The default
+strategy ensures:
+
+* Pods are updated one at a time
+* Each new pod must pass readiness checks before the next pod is updated
+* PodDisruptionBudget prevents too many pods being unavailable
+
+=== Updating {registry} version
+
+{registry} and {operator} are versioned together. To update {registry} to a new version, update {operator}, which will automatically update the application.
+
+For production environments, we strongly recommend using Operator Lifecycle Manager (OLM) with manual install plan confirmation enabled. This prevents automatic updates from occurring immediately when a new version becomes available, giving you time to review release notes and prepare for the update.
+
+If you need to update the application without updating {operator} (*not recommended* except as a workaround for critical issues), you can override the application image in your pod template:
+
+[source,yaml,subs="+attributes"]
+----
+spec:
+  app:
+    podTemplateSpec:
+      spec:
+        containers:
+          - name: apicurio-registry-app
+            image: quay.io/apicurio/apicurio-registry:{registry-release}
+----
+
+=== Safe update practices
+
+Follow these practices for safe updates:
+
+* *Test in non-production first* - Validate the new version in a test environment
+* *Monitor during rollout* - Watch metrics and logs during the update
+* *Maintain minimum replicas* - Keep at least 2 replicas to ensure availability during updates
+* *Review release notes* - Check for breaking changes or migration steps
+
+IMPORTANT: For patch releases (e.g., 3.1.0 to 3.1.1), rolling updates typically complete without issues. For major or minor version updates, always review the migration guide.
+
+=== Upgrading to the management interface (port 9000)
+
+Starting with {registry} 3.x, health check and metrics endpoints are served on a dedicated management port (9000) instead of the main application port (8080). This is a *breaking change* that requires updates to your deployment configuration when upgrading from earlier versions.
+
+The following items must be updated:
+
+* *Kubernetes liveness and readiness probes* - Update probe definitions to target port `9000` instead of port `8080`. The endpoint paths (`/health/ready` and `/health/live`) remain the same.
++
+[source,yaml]
+----
+# Before (old configuration)
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 8080
+
+# After (new configuration)
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 9000
+
+# After (with TLS enabled)
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 9000
+    scheme: HTTPS
+----
+
+* *Prometheus scrape targets* - Update your Prometheus configuration or `ServiceMonitor` resources to scrape metrics from port `9000` at path `/metrics`.
+
+* *Network policies* - If you use Kubernetes `NetworkPolicy` resources, ensure that ingress traffic on port `9000` is allowed from your monitoring infrastructure and the kubelet (for health probes).
+
+* *TLS considerations* - The management interface inherits the default TLS configuration from the Quarkus TLS registry. When TLS is enabled, the management interface on port `9000` also serves HTTPS, and health probes must use `scheme: HTTPS`. The {operator} handles this automatically.
+
+* *{operator} managed deployments* - If you are using the {operator}, it will automatically configure the correct probe ports. No manual changes are required for operator-managed deployments.
+

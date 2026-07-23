@@ -1,0 +1,10 @@
+[id="registry-rules-apply_{context}"]
+= When rules are applied
+
+Rules are applied only when content is added to {registry}. This includes the following REST operations:
+
+* Adding an artifact
+* Adding an artifact version
+
+If a rule is violated, {registry} returns an HTTP error. The response body includes the violated rule and a message showing what went wrong.
+

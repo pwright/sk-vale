@@ -1,0 +1,54 @@
+[id="configuring-kafka-oauth_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= configuring-kafka-oauth_{context}
+
+== Configuring OAuth authentication for Kafka storage
+
+[role="_abstract"]
+When using Kafka-based storage in {kafka-streams}, {registry} supports accessing a Kafka cluster that requires OAuth authentication.
+
+ifdef::apicurio-registry[]
+If you are using the {operator}, you can configure OAuth directly in the `ApicurioRegistry3` CR using the `spec.app.storage.kafkasql.auth` section. See the operator documentation for details on configuring KafkaSQL with OAuth authentication.
+endif::[]
+
+Alternatively, you can configure OAuth by setting environment variables in your {registry} deployment. When you set these environment variables, the Kafka producer and consumer applications in {registry} use this configuration to authenticate to the Kafka cluster over OAuth.
+
+
+.Prerequisites
+* Kafka-based storage of {registry} data in {kafka-streams} is configured. See xref:setting-up-kafka-streams-storage_{context}[].
+
+.Procedure
+
+* Set the following environment variables in your {registry} deployment (or in the `spec.app.env` section of the `ApicurioRegistry3` CR):
++
+[%header,cols="2,2,2"]
+|===
+|Environment variable
+|Description
+|Default value
+| `APICURIO_KAFKASQL_SECURITY_SASL_ENABLED`
+| Enables SASL OAuth authentication for {registry} storage in Kafka. You must set this variable to `true` for the other variables to have effect.
+| `false`
+| `APICURIO_KAFKASQL_SECURITY_SASL_CLIENT-ID`
+| The client ID used to authenticate to Kafka.
+| `-`
+| `APICURIO_KAFKASQL_SECURITY_SASL_CLIENT-SECRET`
+| The client secret used to authenticate to Kafka.
+| `-`
+| `APICURIO_KAFKASQL_SECURITY_SASL_TOKEN-ENDPOINT`
+| The URL of the OAuth identity server.
+| `\http://localhost:8090`
+|===
+
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-configuring-the-registry.adoc[]
+
+
+
+// Metadata created by nebel
+//
+// ParentAssemblies: assemblies/getting-started/as_installing-the-registry.adoc
+
+// proc-installing-postgresql-operatorhub

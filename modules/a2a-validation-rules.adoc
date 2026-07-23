@@ -1,0 +1,33 @@
+[id="a2a-validation-rules_{context}"]
+= Agent Card validation rules
+
+
+[role="_abstract"]
+Agent Cards have three validation levels that control how much validation occurs when you create or update an Agent Card.
+
+[cols="1,3"]
+|===
+|Level |Description
+
+|`NONE`
+|No validation.
+
+|`SYNTAX_ONLY`
+|Validates that the content is syntactically valid JSON and is a JSON object.
+
+|`FULL`
+a|Complete schema validation including:
+
+* Required `name` field (non-empty string)
+* `description` and `version` fields
+* `supportedInterfaces` array, where each interface has `url`, `protocolBinding`, and `protocolVersion`
+* `provider` object with `organization` and `url`
+* `skills` array, where each skill has `id` and `name`
+* `capabilities` object with boolean values
+* `defaultInputModes` and `defaultOutputModes` arrays
+* Authentication and security scheme validation
+* Valid JSON structure
+|===
+
+// ref-a2a-compatibility-checking
+:_mod-docs-content-type: REFERENCE

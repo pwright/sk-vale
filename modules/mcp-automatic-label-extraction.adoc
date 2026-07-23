@@ -1,0 +1,23 @@
+[id="mcp-automatic-label-extraction_{context}"]
+= Automatic label extraction
+
+
+[role="_abstract"]
+When you store MCP tool definitions, {registry} automatically extracts structured elements for search.
+
+[cols="2,3"]
+|===
+|Element pattern |Source
+
+|`mcp_tool:parameter:<name>`
+|Each parameter name from inputSchema.properties
+|===
+
+You can use the extracted labels for efficient parameter-based discovery by using the {registry} search.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-a2a-features.adoc[A2A Protocol Features]
+* xref:getting-started/assembly-llm-artifact-types-implementation.adoc[LLM Artifact Types]
+* link:https://modelcontextprotocol.io/specification/2025-11-25/server/tools[MCP Tools Specification]
+* xref:getting-started/assembly-configuring-the-registry.adoc[Registry Configuration]

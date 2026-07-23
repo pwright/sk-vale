@@ -1,0 +1,104 @@
+[id="deploying-registry-ui_{context}"]
+= Deploying the {registry} user interface
+
+
+[role="_abstract"]
+You can deploy the {registry} 3.x user interface by choosing a deployment topology, deploying the UI container, and optionally enabling Designer functionality.
+
+.Prerequisites
+
+* You deployed {registry} 3.x (the backend API container).
+* You have access to your container orchestration platform (Docker Compose, Kubernetes, or OpenShift).
+
+.Procedure
+
+. Choose a deployment topology.
++
+--
+*Option 1: Separate subdomains*
+
+Deploy the UI and API to separate subdomains:
+
+[source,yaml,subs="+attributes"]
+----
+# UI accessible at: https://registry-ui.example.com
+apicurio-registry-ui:
+  image: apicurio/apicurio-registry-ui:{registry-release}
+  ports:
+    - "443:8443"
+  environment:
+    - REGISTRY_API_URL=https://registry-api.example.com/apis/registry/v3
+
+# API accessible at: https://registry-api.example.com
+apicurio-registry:
+  image: apicurio/apicurio-registry:{registry-release}
+  ports:
+    - "443:8443"
+----
+
+Benefits: clean separation of concerns, independent DNS, easier independent scaling.
+
+*Option 2: Co-located with reverse proxy*
+
+Use a reverse proxy (nginx, HAProxy) to serve both the UI and API from the same domain:
+
+[source,yaml,subs="+attributes"]
+----
+services:
+  apicurio-registry:
+    image: apicurio/apicurio-registry:{registry-release}
+    environment:
+      - apicurio.app.context-path=/app/
+      - QUARKUS_HTTP_CORS_ORIGINS=*
+
+  apicurio-registry-ui:
+    image: apicurio/apicurio-registry-ui:{registry-release}
+    environment:
+      - REGISTRY_CONTEXT_PATH=/ui/
+      - REGISTRY_API_URL=/app/apis/registry/v3
+      - REGISTRY_DOCS_URL=/ui/docs/
+      - REGISTRY_EDITORS_URL=/ui/editors/
+
+  nginx:
+    image: nginx
+    ports:
+      - "443:8443"
+    # nginx.conf routes:
+    #   /ui/* → apicurio-registry-ui
+    #   /app/* → apicurio-registry
+----
+
+Benefits: single domain for users, simpler certificate management, avoids CORS complexity.
+--
+
+. Deploy the UI container with the `REGISTRY_API_URL` environment variable pointing to your backend API.
+
+. Configure UI settings on the application (API) container by using `apicurio.ui.*` properties.
++
+For a complete list of available properties, see xref:ui-configuration-properties_{context}[User interface configuration properties].
+
+. Optional: Enable Designer functionality.
++
+Designer functionality requires you to enable content mutability for artifact versions:
++
+[source,properties]
+----
+apicurio.rest.mutability.artifact-version-content.enabled=true
+----
++
+When enabled, users with the developer or admin role can create draft versions, edit draft content by using the visual editor, save changes iteratively, and finalize drafts to create immutable versions.
+
+.Verification
+
+* Verify that the UI loads and displays the registry dashboard.
+* Verify that the UI connects to the backend API and displays artifacts.
+* If Designer is enabled, verify that you can create and edit draft versions.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:ui-configuration-properties_{context}[]
+* {LinkServiceRegistryUser}[{NameServiceRegistryUser}]
+
+
+// ref-ui-configuration-properties
+:_mod-docs-content-type: REFERENCE

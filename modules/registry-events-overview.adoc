@@ -1,0 +1,22 @@
+[id="registry-events-overview_{context}"]
+= Overview of {registry} change events
+
+
+[role="_abstract"]
+{registry} generates structured change events as part of its normal operations. Every time the state of the registry changes, an event is emitted with details about what changed.
+
+Events follow the *outbox pattern*: they are produced as part of the same transaction that modifies the registry state, guaranteeing that events are consistent with the data. The delivery mechanism depends on which storage variant you use:
+
+* **SQL storage (PostgreSQL, MSSQL)**: Events are written to an `outbox` database table and consumed using Debezium Change Data Capture (CDC).
+* **KafkaSQL storage**: Events are published directly to a dedicated Kafka topic.
+
+Typical use cases for registry events include:
+
+* *Auditing and compliance* -- Track every change to schemas and API definitions.
+* *CI/CD automation* -- Trigger pipeline runs when a new artifact version is registered.
+* *Cache invalidation* -- Notify downstream services when a schema changes.
+* *Event-driven architectures* -- React to registry state changes in real time.
+
+NOTE: Event publishing is supported only with PostgreSQL and MSSQL when using SQL storage. MySQL and H2 do not support the outbox table. KafkaSQL supports events natively.
+
+

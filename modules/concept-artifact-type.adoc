@@ -1,0 +1,30 @@
+[id="concept-artifact-type_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-artifact-type_{context}
+
+== Artifact type
+
+[role="_abstract"]
+The *artifact type* identifies the format or schema language of an artifact's content.
+
+{registry} uses the artifact type to parse, validate, and check compatibility of the content.
+Supported artifact types include:
+
+* `AVRO`: Apache Avro schema
+* `PROTOBUF`: Google Protocol Buffers definition
+* `JSON`: JSON Schema
+* `OPENAPI`: OpenAPI specification
+* `ASYNCAPI`: AsyncAPI specification
+* `GRAPHQL`: GraphQL schema definition
+* `KCONNECT`: Apache Kafka Connect schema
+* `THRIFT`: Apache Thrift interface definition language
+* `WSDL`: Web Services Description Language definition
+* `XSD`: XML Schema Definition
+* `XML`: XML document
+* `AGENT_CARD`: AI Agent Card (A2A protocol)
+* `ICEBERG_TABLE`: Apache Iceberg table metadata
+* `ICEBERG_VIEW`: Apache Iceberg view metadata
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-artifact-reference.adoc[]

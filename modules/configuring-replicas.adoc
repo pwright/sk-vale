@@ -1,0 +1,27 @@
+[id="configuring-replicas_{context}"]
+:_mod-docs-content-type: REFERENCE
+= configuring-replicas_{context}
+
+== Replica configuration
+
+[role="_abstract"]
+You can configure the number of replicas for each component.
+
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry
+spec:
+  app:
+    replicas: 3
+    ingress:
+      host: registry.example.com
+  ui:
+    replicas: 2
+    ingress:
+      host: registry-ui.example.com
+----
+
+// ref-configuring-poddisruptionbudget

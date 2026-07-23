@@ -1,0 +1,25 @@
+[id="operator-config-reference_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= {operator} configuration reference
+
+[role="_abstract"]
+You can use the following reference information to configure {registry} instances by using the `ApicurioRegistry3`
+custom resource.
+
+* xref:operator-cr-structure_{context}[]
+* xref:operator-app-spec-reference_{context}[]
+* xref:operator-ui-spec-reference_{context}[]
+* xref:operator-storage-reference_{context}[]
+* xref:operator-auth-reference_{context}[]
+* xref:operator-ingress-reference_{context}[]
+
+//INCLUDES
+
+// ref-operator-cr-structure
+include::../modules/operator-cr-structure.adoc[leveloffset=+1]
+include::../modules/operator-app-spec-reference.adoc[leveloffset=+1]
+include::../modules/operator-ui-spec-reference.adoc[leveloffset=+1]
+include::../modules/operator-storage-reference.adoc[leveloffset=+1]
+include::../modules/operator-auth-reference.adoc[leveloffset=+1]
+include::../modules/operator-ingress-reference.adoc[leveloffset=+1]
+include::../modules/operator-for-developers.adoc[leveloffset=+1]

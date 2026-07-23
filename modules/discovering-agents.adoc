@@ -1,0 +1,44 @@
+[id="discovering-agents_{context}"]
+= Discovering agents
+
+
+[role="_abstract"]
+You can discover registered agents by searching with query parameters such as agent name, skill ID, or capability. {registry} also exposes its own agent card at a dedicated well-known endpoint.
+
+.Prerequisites
+* {registry} is running with agent features enabled
+* At least one agent card is registered
+
+.Procedure
+. Search for agents by name:
++
+[source,bash]
+----
+curl "http://localhost:8080/.well-known/agents?name=Customer"
+----
++
+. Search for agents by skill ID:
++
+[source,bash]
+----
+curl "http://localhost:8080/.well-known/agents?skill=sentiment-analysis"
+----
++
+. Retrieve a specific agent card by group and artifact ID:
++
+[source,bash]
+----
+curl "http://localhost:8080/.well-known/agents/ai-agents/customer-support-agent"
+----
++
+. View the {registry} built-in agent card:
++
+[source,bash]
+----
+curl http://localhost:8080/.well-known/agent.json
+----
++
+You can also browse registered agent cards by using the {registry} web console at `http://localhost:8888`.
+
+// proc-connecting-claude-desktop-by-using-mcp
+:_mod-docs-content-type: PROCEDURE

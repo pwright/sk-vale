@@ -1,0 +1,12 @@
+[id="concept-global-id_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-global-id_{context}
+
+== Global ID
+
+[role="_abstract"]
+A *global ID* is a globally unique numeric identifier for each artifact version in the registry.
+
+{registry} auto-generates the global ID when you create a version. You can use the global ID to retrieve a specific version directly, regardless of group or artifact.
+
+// con-concept-content-id

@@ -1,0 +1,29 @@
+[id="schema-lifecycle-best-practices_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= schema-lifecycle-best-practices_{context}
+
+= Schema lifecycle best practices
+
+[role="_abstract"]
+Teams that build event-driven architectures with {registry} face recurring questions about how to manage schemas over time. Poor answers lead to production incidents, schema sprawl, and compatibility failures. {registry} provides compatibility rules, artifact references, version states, and serializer/deserializer (SerDes) validation to help you manage every phase of the schema lifecycle.
+
+The following sections cover the schema lifecycle from initial design to retirement, including shared type references, safe evolution patterns, data structure recommendations, state management, runtime validation, and event-driven integration.
+
+* xref:schema-lifecycle-overview_{context}[]
+* xref:schema-references-shared-types_{context}[]
+* xref:schema-evolution-strategies_{context}[]
+* xref:schema-data-structure-recommendations_{context}[]
+* xref:managing-schema-lifecycle-states_{context}[]
+* xref:validating-data-avro-generated-classes_{context}[]
+* xref:schema-event-driven-integration_{context}[]
+* xref:schema-lifecycle-checklist_{context}[]
+
+// con-schema-lifecycle-overview
+include::../modules/schema-lifecycle-overview.adoc[leveloffset=+1]
+include::../modules/schema-references-shared-types.adoc[leveloffset=+1]
+include::../modules/schema-evolution-strategies.adoc[leveloffset=+1]
+include::../modules/schema-data-structure-recommendations.adoc[leveloffset=+1]
+include::../modules/managing-schema-lifecycle-states.adoc[leveloffset=+1]
+include::../modules/validating-data-avro-generated-classes.adoc[leveloffset=+1]
+include::../modules/schema-event-driven-integration.adoc[leveloffset=+1]
+include::../modules/schema-lifecycle-checklist.adoc[leveloffset=+1]

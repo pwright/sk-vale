@@ -1,0 +1,35 @@
+[id="implementing-multitenancy_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= implementing-multitenancy_{context}
+
+= Implementing multitenancy with {registry}
+
+[role="_abstract"]
+Implement multitenancy with {registry} on {kubernetes} using the {operator}.
+{registry} uses a multi-instance operator pattern. Each tenant receives a dedicated `ApicurioRegistry3` custom resource (CR), which the operator reconciles into an independent set of {kubernetes} resources. This approach provides strong isolation between tenants at the infrastructure level. It uses {kubernetes}-native mechanisms for security, resource management, and network segmentation.
+
+* xref:multitenancy-overview_{context}[]
+* xref:multitenancy-deployment-patterns_{context}[]
+* xref:multitenancy-namespace-per-tenant_{context}[]
+* xref:multitenancy-storage-isolation_{context}[]
+* xref:multitenancy-authentication-per-tenant_{context}[]
+* xref:multitenancy-resource-management_{context}[]
+* xref:multitenancy-network-isolation_{context}[]
+* xref:multitenancy-lightweight-group-isolation_{context}[]
+
+.Prerequisites
+
+* {installing-the-registry-openshift}
+* The {operator} is installed. See xref:deploying-registry-operator_{context}[].
+
+//INCLUDES
+
+// con-multitenancy-overview
+include::../modules/multitenancy-overview.adoc[leveloffset=+1]
+include::../modules/multitenancy-deployment-patterns.adoc[leveloffset=+1]
+include::../modules/multitenancy-namespace-per-tenant.adoc[leveloffset=+1]
+include::../modules/multitenancy-storage-isolation.adoc[leveloffset=+1]
+include::../modules/multitenancy-authentication-per-tenant.adoc[leveloffset=+1]
+include::../modules/multitenancy-resource-management.adoc[leveloffset=+1]
+include::../modules/multitenancy-network-isolation.adoc[leveloffset=+1]
+include::../modules/multitenancy-lightweight-group-isolation.adoc[leveloffset=+1]

@@ -1,0 +1,14 @@
+[id="concept-group_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-group_{context}
+
+== Group
+
+[role="_abstract"]
+A *group* is a named namespace for organizing related artifacts.
+
+Every artifact belongs to a group.
+If you do not specify a group when creating an artifact, {registry} places it in the `default` group.
+Groups can carry their own metadata (description, labels) and can have group-level rules that apply to all artifacts within the group.
+
+// con-concept-artifact

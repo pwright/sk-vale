@@ -1,0 +1,75 @@
+[id="secured-kafka-tls_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= secured-kafka-tls_{context}
+
+== Configuring KafkaSQL with TLS encryption
+
+[role="_abstract"]
+When your Kafka cluster requires TLS encryption, you configure {registry} with the Kafka cluster CA certificate so that {registry} can verify the broker identity.
+
+.Prerequisites
+* The Kafka cluster CA certificate is available as a {kubernetes} Secret in PKCS12 format.
+ifdef::apicurio-registry[]
+** {kafka-streams} creates a Secret named `<cluster-name>-cluster-ca-cert` that contains the CA certificate.
+endif::[]
+
+.Procedure
+
+. Create or update your `ApicurioRegistry3` custom resource with the `tls` configuration:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry-kafkasql-tls
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: "my-cluster-kafka-bootstrap.my-project.svc:9093"
+        tls:
+          truststoreSecretRef:
+            name: my-cluster-cluster-ca-cert
+            key: ca.p12
+          truststorePasswordSecretRef:
+            name: my-cluster-cluster-ca-cert
+            key: ca.password
+    ingress:
+      host: registry.example.com
+  ui:
+    ingress:
+      host: registry-ui.example.com
+----
+
+. Apply the custom resource:
++
+[source,bash]
+----
+{kubernetes-client} apply -f my-registry.yaml
+----
++
+NOTE: The operator sets the security protocol to `SSL` when you configure TLS without authentication.
+
+. Optional: For mutual TLS (mTLS), where the Kafka cluster also verifies the {registry} client certificate, add the keystore configuration to the `tls` section:
++
+[source,yaml]
+----
+tls:
+  keystoreSecretRef:
+    name: apicurio-client-auth
+    key: user.p12
+  keystorePasswordSecretRef:
+    name: apicurio-client-auth
+    key: user.password
+  truststoreSecretRef:
+    name: my-cluster-cluster-ca-cert
+    key: ca.p12
+  truststorePasswordSecretRef:
+    name: my-cluster-cluster-ca-cert
+    key: ca.password
+----
+
+
+// proc-secured-kafka-scram

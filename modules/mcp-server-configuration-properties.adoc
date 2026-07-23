@@ -1,0 +1,142 @@
+[id="mcp-server-configuration-properties_{context}"]
+= MCP server configuration properties
+
+
+[role="_abstract"]
+You can configure the {registry} MCP server by using the following properties. Pass properties as Java system properties when you use the JAR, or as environment variables when you use Docker.
+
+For the JAR method, place properties before the `-jar` argument:
+
+[source,bash]
+----
+java -Dregistry.url=myhost:8080 -jar apicurio-registry-mcp-server-*-runner.jar
+----
+
+For the Docker method, pass environment variables by using separate `-e` elements in the `args` array of the Claude Desktop configuration:
+
+[source,json]
+----
+"args": [
+  "run", "-i", "--rm",
+  "-e", "REGISTRY_URL=myhost:8080",
+  "quay.io/apicurio/apicurio-registry-mcp-server:latest"
+]
+----
+
+.General properties
+
+[cols="3,2,1,4",options="header"]
+|===
+|Property
+|Environment variable
+|Default
+|Description
+
+|`registry.url`
+|`REGISTRY_URL`
+|`localhost:8080`
+|URL of the {registry} server that the MCP server connects to.
+
+|`apicurio.mcp.safe-mode`
+|`APICURIO_MCP_SAFE_MODE`
+|`true`
+|Restricts certain operations for safety. When enabled, you can update only allowlisted configuration properties.
+
+|`apicurio.mcp.paging.limit`
+|`APICURIO_MCP_PAGING_LIMIT`
+|`200`
+|Maximum number of items to return in a single paged result. Increase this value if {registry} contains a large number of objects.
+
+|`apicurio.mcp.paging.limit-error`
+|`APICURIO_MCP_PAGING_LIMIT_ERROR`
+|`true`
+|When the result count exceeds the paging limit, the operation fails. This property helps prevent inaccurate results when you count or list large datasets.
+|===
+
+.Authentication properties
+
+[cols="3,2,1,4",options="header"]
+|===
+|Property
+|Environment variable
+|Default
+|Description
+
+|`apicurio.mcp.auth.enabled`
+|`APICURIO_MCP_AUTH_ENABLED`
+|`false`
+|When set to `true`, the MCP server uses OAuth2 client credentials authentication for connections to {registry}.
+
+|`apicurio.mcp.auth.token-endpoint`
+|`APICURIO_MCP_AUTH_TOKEN_ENDPOINT`
+|_none_
+|OAuth2 token endpoint URL. Required when authentication is enabled.
+
+|`apicurio.mcp.auth.client-id`
+|`APICURIO_MCP_AUTH_CLIENT_ID`
+|_none_
+|OAuth2 client ID. Required when authentication is enabled.
+
+|`apicurio.mcp.auth.client-secret`
+|`APICURIO_MCP_AUTH_CLIENT_SECRET`
+|_none_
+|OAuth2 client secret. Required when authentication is enabled.
+
+|`apicurio.mcp.auth.scope`
+|`APICURIO_MCP_AUTH_SCOPE`
+|_none_
+|OAuth2 scope. Optional.
+|===
+
+.TLS properties
+
+[cols="3,2,1,4",options="header"]
+|===
+|Property
+|Environment variable
+|Default
+|Description
+
+|`apicurio.mcp.tls.trust-all`
+|`APICURIO_MCP_TLS_TRUST_ALL`
+|`false`
+|When set to `true`, all certificates are trusted. Use only in development environments.
+
+|`apicurio.mcp.tls.verify-host`
+|`APICURIO_MCP_TLS_VERIFY_HOST`
+|`true`
+|When set to `true`, the MCP server verifies the hostname in the server certificate.
+
+|`apicurio.mcp.tls.truststore.type`
+|`APICURIO_MCP_TLS_TRUSTSTORE_TYPE`
+|_none_
+|Trust store type: `JKS`, `PKCS12`, or `PEM`.
+
+|`apicurio.mcp.tls.truststore.path`
+|`APICURIO_MCP_TLS_TRUSTSTORE_PATH`
+|_none_
+|Path to the trust store file.
+
+|`apicurio.mcp.tls.truststore.password`
+|`APICURIO_MCP_TLS_TRUSTSTORE_PASSWORD`
+|_none_
+|Trust store password. Not required for PEM type.
+
+|`apicurio.mcp.tls.keystore.type`
+|`APICURIO_MCP_TLS_KEYSTORE_TYPE`
+|_none_
+|Key store type for mTLS client certificates: `JKS` or `PKCS12`.
+
+|`apicurio.mcp.tls.keystore.path`
+|`APICURIO_MCP_TLS_KEYSTORE_PATH`
+|_none_
+|Path to the key store file for mTLS.
+
+|`apicurio.mcp.tls.keystore.password`
+|`APICURIO_MCP_TLS_KEYSTORE_PASSWORD`
+|_none_
+|Key store password for mTLS.
+|===
+
+// proc-configuring-mcp-server-authentication
+:_mod-docs-content-type: PROCEDURE

@@ -1,0 +1,21 @@
+[id="registry-iceberg-catalog-limitations_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-iceberg-catalog-limitations_{context}
+
+== Limitations
+
+[role="_abstract"]
+The {registry} Iceberg REST Catalog implementation has several known limitations:
+
+* *Multi-table transactions are not supported.* Each CommitTable operation is scoped to a single table. Cross-table atomic commits are not available.
+* *Server-side content management.* {registry} stores table metadata but does not manage data files. Clients are responsible for writing data files to the configured warehouse location.
+* *Rename is not atomic.* Renaming a table or view creates the destination and then deletes the source as two separate operations. If the delete fails, the source may need manual cleanup.
+* *Experimental feature.* The Iceberg REST Catalog API requires `apicurio.features.experimental.enabled=true` and may change in future releases.
+
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/apache/iceberg/blob/main/open-api/rest-catalog-open-api.yaml[Apache Iceberg REST Catalog OpenAPI specification]
+* {registry-overview}
+* link:https://iceberg.apache.org/[Apache Iceberg documentation]
+

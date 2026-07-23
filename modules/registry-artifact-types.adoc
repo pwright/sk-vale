@@ -1,0 +1,60 @@
+[id="registry-artifact-types_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-artifact-types_{context}
+
+== {registry} artifact types
+
+[role="_abstract"]
+You can store and manage a wide range of schema and API artifact types in {registry}.
+
+.{registry} artifact types
+[%header,cols=3*]
+|===
+|Type
+|Description
+|Supported versions
+|`ASYNCAPI`
+|AsyncAPI specification
+|`2.0.0` -> `2.6.0`, `3.0.0`
+|`AVRO`
+|Apache Avro schema
+|`1.0` -> `1.12`,
+|`GRAPHQL`
+|GraphQL schema
+|*
+|`JSON`
+|JSON Schema
+|`draft-04`, `draft-07`, `2019-09`, `2020-12`
+|`KCONNECT`
+|Apache Kafka Connect schema
+|`2.0.0`
+|`MCP_TOOL`
+|MCP tool definitions (Model Context Protocol)
+|`2025-11-25`
+|`MODEL_SCHEMA`
+|AI/ML model input/output schema definitions
+|`v1`
+|`OPENAPI`
+|OpenAPI specification
+|`2.0.0`, `3.0.0` -> `3.0.3`, `3.1.0`
+|`PROMPT_TEMPLATE`
+|LLM prompt templates with variable schemas
+|`v1`
+|`PROTOBUF`
+|Google protocol buffers schema
+|`proto2`, `proto3`
+|`THRIFT`
+|Apache Thrift interface definition language
+|*
+|`WSDL`
+|Web Services Definition Language
+|http://schemas.xmlsoap.org/wsdl/
+|`XML`
+|Extensible Markup Language
+|
+|`XSD`
+|XML Schema Definition
+|http://www.w3.org/2001/XMLSchema
+|===
+
+// ref-registry-ai-ml-artifact-types

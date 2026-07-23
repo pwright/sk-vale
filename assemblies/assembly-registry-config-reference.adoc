@@ -1,0 +1,21 @@
+[id="registry-config-reference_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= registry-config-reference_{context}
+
+= {registry} configuration reference
+
+[role="_abstract"]
+You can use the following reference information to configure {registry}.
+
+* xref:all-registry-configs_{context}[]
+
+[role="_additional-resources"]
+.Additional resources
+* xref:migration-table_{context}[{registry} version 2 to version 3 configuration changes]
+* {registry-rest-api}
+* {registry-client-serdes-config}
+
+//INCLUDES
+
+include::../modules/all-registry-configs.adoc[leveloffset=+1]
+include::../modules/migration-table.adoc[leveloffset=+1]

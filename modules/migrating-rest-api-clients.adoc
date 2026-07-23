@@ -1,0 +1,109 @@
+[id="migrating-rest-api-clients_{context}"]
+= Migrating REST API and SDK client applications
+
+
+[role="_abstract"]
+You can update applications that use the {registry} REST API directly by updating SDK dependencies, reconfiguring TLS settings, and updating OAuth2/OIDC authentication.
+
+.Prerequisites
+
+* You have existing applications that use the {registry} {registry-v2} REST API or Java SDK.
+* You have access to the source code or deployment configuration for each application.
+
+.Procedure
+
+. Update your SDK Maven dependency coordinates from v2 to v3.
++
+Replace the v2 SDK dependency:
++
+[source,xml]
+----
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-client</artifactId>
+    <version>2.6.13.Final</version>
+</dependency>
+----
++
+With the v3 SDK dependency:
++
+[source,xml,subs="+attributes"]
+----
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-java-sdk</artifactId>
+    <version>{registry-release}</version>
+</dependency>
+----
+
+. Update your TLS configuration.
++
+Replace the v2 system-property-based TLS configuration:
++
+[source,java]
+----
+// v2 clients use system properties
+System.setProperty("javax.net.ssl.trustStore", "/path/to/truststore.jks");
+System.setProperty("javax.net.ssl.trustStorePassword", "password");
+----
++
+With the v3 `RegistryClientOptions`-based configuration:
++
+[source,java]
+----
+// v3 clients use RegistryClientOptions
+RegistryClientOptions options = RegistryClientOptions.builder()
+    .trustStore(new File("/path/to/truststore.jks"))
+    .trustStorePassword("password")
+    .build();
+
+props.put(SerdeConfig.REGISTRY_CLIENT_OPTIONS, options);
+----
+
+. Update your OAuth2/OIDC authentication configuration.
++
+Replace the v2 authentication setup:
++
+[source,java]
+----
+import io.apicurio.rest.client.auth.OidcAuth;
+import io.apicurio.rest.client.spi.ApicurioHttpClientFactory;
+
+String authServerUrl = "https://keycloak.example.com/realms/registry";
+ApicurioHttpClient httpClient = ApicurioHttpClientFactory.create(authServerUrl,
+    new AuthErrorHandler());
+Auth auth = new OidcAuth(httpClient, clientId, clientSecret, null, null);
+RegistryClient client = RegistryClientFactory.create(registryUrl, Collections.emptyMap(), auth);
+----
++
+With the v3 authentication setup:
++
+[source,java]
+----
+import io.apicurio.registry.client.RegistryClientFactory;
+import io.apicurio.registry.client.RegistryClientOptions;
+
+String tokenEndpoint = "https://keycloak.example.com/realms/registry/protocol/openid-connect/token";
+RegistryClientOptions options = RegistryClientOptions.create(registryUrl)
+    .oauth2(tokenEndpoint, clientId, clientSecret, null);
+RegistryClient client = RegistryClientFactory.create(options);
+----
++
+For a detailed comparison of all authentication changes, see xref:client-migration-reference_{context}[Client migration configuration reference].
+
+.Verification
+
+* Verify that REST API calls to v3 endpoints return expected results.
+* Verify that authenticated requests succeed with the new OAuth2 configuration.
+* Verify that v2 API backward compatibility endpoints respond correctly.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:client-migration-reference_{context}[]
+* {LinkServiceRegistryUser}[{NameServiceRegistryUser}]
+* https://docs.redhat.com/en/documentation/red_hat_build_of_apicurio_registry/3.1/html/apicurio_registry_user_guide/configuring-kafka-client-serdes_registry[Kafka SerDes Configuration Guide]
+* https://learn.microsoft.com/en-us/openapi/kiota/[Kiota SDK Documentation]
+
+
+// ref-client-migration-reference
+:_mod-docs-content-type: REFERENCE

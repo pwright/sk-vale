@@ -1,0 +1,21 @@
+[id="operator-overview_{context}"]
+:_mod-docs-content-type: CONCEPT
+= operator-overview_{context}
+
+== Understanding {operator} deployment
+
+[role="_abstract"]
+The {operator} installs the `ApicurioRegistry3` custom resource definition (CRD). You use the `ApicurioRegistry3` CR to deploy and manage {registry} instances on {kubernetes}. The custom resource enables you to declaratively configure all aspects of your {registry} deployment,
+including storage, authentication, networking, and component-specific settings.
+
+NOTE: Additional `ApicurioRegistry3` custom resource examples can be found in the https://github.com/Apicurio/apicurio-registry/tree/{upstream-version-tag}/operator/controller/src/test/resources/k8s/examples[{registry} upstream repository].
+
+The `ApicurioRegistry3` custom resource is organized into two main components:
+
+* `spec.app` - Configures the {registry-app}
+* `spec.ui` - Configures the {registry-ui}
+
+Each component can be independently configured with its own settings for replicas, ingress, environment variables,
+and pod specifications.
+
+// ref-operator-storage-options

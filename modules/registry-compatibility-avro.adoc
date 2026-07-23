@@ -1,0 +1,72 @@
+[id="registry-compatibility-avro_{context}"]
+= Avro schema compatibility
+
+
+[role="_abstract"]
+{registry} uses the Apache Avro library to check compatibility for Avro schemas.
+The following table describes common Avro schema changes and whether they maintain or break backward and forward compatibility.
+
+.Avro schema compatibility changes
+[%header,cols="3,1,1,5"]
+|===
+|Change type
+|Backward compatible?
+|Forward compatible?
+|Reason
+
+|Add a field with a default value
+|Yes
+|Yes
+|New consumers use the default for old data; old consumers ignore the new field.
+
+|Add a field without a default value
+|No
+|Yes
+|New consumers have no value for old data; old consumers ignore the new field.
+
+|Remove a field that has a default value
+|Yes
+|Yes
+|New consumers ignore the field; old consumers use their own default for new data.
+
+|Remove a field without a default value
+|Yes
+|No
+|New consumers ignore the field; old consumers have no value to fill the gap.
+
+|Add a type to a union
+|Yes
+|No
+|New consumers can handle the new type; old consumers fail if they encounter it.
+
+|Remove a type from a union
+|No
+|Yes
+|New consumers cannot parse the old type; old consumers only expect types they already know.
+
+|Rename a field without an alias
+|No
+|No
+|The field name mapping is broken for both parties.
+
+|Change a field type
+|No
+|No
+|Data types are fundamentally incompatible (for example, `string` to `int`).
+|===
+
+.Transitive compatibility example for Avro
+
+The following example demonstrates how transitive compatibility differs from non-transitive compatibility:
+
+* *Version 1*: `{fields: [name: string]}`
+* *Version 2*: `{fields: [name: string, email: string (default: "")]}`
+* *Version 3*: `{fields: [name: string, email: string]}` (default removed from `email`)
+
+In the example, Version 3 is backward compatible with Version 2 because the `email` field exists in Version 2 data.
+However, Version 3 is _not_ backward compatible with Version 1 because the `email` field is missing and there is no default value.
+As a result, Version 3 passes the `BACKWARD` check but fails the `BACKWARD_TRANSITIVE` check.
+
+
+// ref-registry-compatibility-json-schema
+:_mod-docs-content-type: REFERENCE

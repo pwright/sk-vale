@@ -1,0 +1,29 @@
+[id="mcp-validation-rules_{context}"]
+= Validation rules
+
+
+[role="_abstract"]
+{registry} validates MCP tool definitions at three levels.
+
+[cols="1,3"]
+|===
+|Level |Description
+
+|`NONE`
+|No validation
+
+|`SYNTAX_ONLY`
+|Validates JSON syntax and that the document is a JSON object
+
+|`FULL`
+a|Complete validation including:
+
+* Required `name` field (non-empty string)
+* Required `inputSchema` field (object with `type` = `"object"` per spec docs guidance)
+* Optional `title` and `description` must be strings if present
+* Optional `outputSchema` must be an object if present
+* Optional `annotations` validated as ToolAnnotations: `title` (string), `audience` (array of strings), `priority` (number 0-1). Note: `annotations.title` validation follows spec docs guidance; `audience` values are not restricted to the `Role` enum for forward compatibility.
+|===
+
+// ref-mcp-compatibility-checking
+:_mod-docs-content-type: REFERENCE

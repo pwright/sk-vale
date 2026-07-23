@@ -1,0 +1,114 @@
+[id="ui-configuration-properties_{context}"]
+= User interface configuration properties
+
+
+[role="_abstract"]
+The following tables list the configuration properties for the {registry} 3.x user interface. Configure most settings on the application (API) container. The UI container environment variables override application settings when set.
+
+Configure the following properties on the `apicurio-registry` (API) container:
+
+.Application container properties
+[cols="1,2,1",options="header"]
+|===
+| Property
+| Description
+| Default
+
+| `apicurio.ui.contextPath`
+| Context path of the UI
+| `/`
+
+| `apicurio.ui.navPrefixPath`
+| Navigation prefix for all UI paths
+| `/`
+
+| `apicurio.ui.docsUrl`
+| URL of the documentation component
+| `/docs/`
+
+| `apicurio.ui.editorsUrl`
+| URL of the editors component (Designer)
+| `/editors/`
+
+| `apicurio.ui.auth.oidc.redirect-uri`
+| OAuth2/OIDC redirect URI
+| `/`
+
+| `apicurio.ui.auth.oidc.client-id`
+| OAuth2/OIDC client ID for UI
+| `apicurio-registry-ui`
+
+| `apicurio.ui.auth.oidc.logout-url`
+| OAuth2/OIDC logout URL
+| `f5`
+
+| `apicurio.ui.auth.oidc.scope`
+| OAuth2/OIDC scope
+| `openid profile email`
+
+| `apicurio.ui.features.read-only.enabled`
+| Enable read-only mode for the UI
+| `false`
+
+| `apicurio.ui.features.breadcrumbs`
+| Show breadcrumbs in the UI
+| `true`
+
+| `apicurio.ui.features.settings`
+| Show the Settings tab in the UI
+| `true`
+|===
+
+*Example application container configuration:*
+
+[source,properties]
+----
+apicurio.ui.contextPath=/
+apicurio.ui.editorsUrl=/editors/
+apicurio.ui.auth.oidc.client-id=registry-ui-client
+apicurio.ui.auth.oidc.scope=openid profile email
+apicurio.ui.features.read-only.enabled=false
+----
+
+The UI container environment variables override application configuration. You typically do not need to set these variables.
+
+.UI container environment variables
+[cols="1,2",options="header"]
+|===
+| Environment variable
+| Description
+
+| `REGISTRY_API_URL`
+| *Required:* URL to the backend API (for example, `http://registry-api:8080/apis/registry/v3`)
+
+| `REGISTRY_CONTEXT_PATH`
+| Override for the UI context path
+
+| `REGISTRY_NAV_PREFIX_PATH`
+| Override for the navigation prefix path
+
+| `REGISTRY_DOCS_URL`
+| Override for the documentation URL
+
+| `REGISTRY_EDITORS_URL`
+| Override for the editors (Designer) URL
+
+| `REGISTRY_AUTH_URL`
+| Override for the OAuth2/OIDC auth server URL
+
+| `REGISTRY_AUTH_CLIENT_ID`
+| Override for the OAuth2/OIDC client ID
+
+| `REGISTRY_FEATURE_READ_ONLY`
+| Override for read-only mode (`true` or `false`)
+|===
+
+NOTE: The only required UI container property is `REGISTRY_API_URL`. Configure all other UI settings on the application container by using `apicurio.ui.*` properties.
+
+[role="_additional-resources"]
+.Additional resources
+* {LinkServiceRegistryUser}[{NameServiceRegistryUser}]
+
+
+// ref-migration-scripts
+:_mod-docs-content-type: REFERENCE

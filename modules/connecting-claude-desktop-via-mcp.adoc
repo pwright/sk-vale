@@ -1,0 +1,50 @@
+[id="connecting-claude-desktop-via-mcp_{context}"]
+= Connecting Claude Desktop by using MCP
+
+
+[role="_abstract"]
+You can connect Claude Desktop to {registry} by using the MCP server. After you configure Claude Desktop, you can interact with {registry} artifacts, search for schemas, and manage agent cards by using natural language.
+
+.Prerequisites
+* {registry} is running (on `localhost:8080`)
+* Claude Desktop is installed (macOS or Windows)
++
+NOTE: Claude Desktop is officially supported on macOS and Windows. Linux support is available through community builds. For installation details, see the link:https://claude.ai/download[Claude Desktop download page].
+
+.Procedure
+. In Claude Desktop, open the MCP configuration file by navigating to *File* > *Settings* > *Developer* > *Edit Config*.
++
+. Add the {registry} MCP server to the configuration file:
++
+[source,json]
+----
+{
+  "mcpServers": {
+    "Apicurio Registry (docker)": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e", "REGISTRY_URL=<registry-url>",
+        "quay.io/apicurio/apicurio-registry-mcp-server:latest"
+      ]
+    }
+  }
+}
+----
++
+Replace `<registry-url>` with the URL of your {registry} instance. For local development with Docker Compose, use `\http://localhost:8080`. For OpenShift deployments, use the route URL of your {registry} instance.
++
+. Restart Claude Desktop by selecting *File* > *Exit* and reopening the application.
+
+.Verification
+. Verify the connection by asking Claude a question about {registry}, for example: "What groups are present in {registry}?"
++
+The MCP server provides tools for working with groups, artifacts, versions, and configuration properties in {registry}.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-a2a-features.adoc[A2A agent features]
+* xref:getting-started/assembly-llm-artifact-types-implementation.adoc[LLM artifact types]
+* xref:getting-started/assembly-mcp-tool-features.adoc[MCP tool definition features]

@@ -1,0 +1,18 @@
+[id="registry-rules_{context}"]
+= registry-rules_{context}
+
+
+== Govern {registry} content using rules
+
+[role="_abstract"]
+To govern the evolution of artifact content added to {registry}, you can configure optional rules. All configured global rules, group-specific rules, or artifact-specific rules must pass before a new artifact version can be added to {registry}. Configured artifact-specific rules override any configured group-specific rules, which in turn override any configured global rules.
+
+The goal of these rules is to prevent invalid content from being added to {registry} and to control the evolution of an artifact (by e.g. checking the compatibility of a new artifact version against previous versions). For example, content can be invalid for the following reasons:
+
+* Invalid syntax for a given artifact type, for example, `AVRO` or `PROTOBUF`.
+* Valid syntax, but semantics violate a specification.
+* Incompatibility, when new content includes breaking changes relative to the current artifact version.
+* Artifact reference integrity, for example, a duplicate or non-existent artifact reference mapping.
+
+You can enable optional content rules using the {registry} web console, REST API commands, or by using one of the SDKs.
+

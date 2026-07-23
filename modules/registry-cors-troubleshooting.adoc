@@ -1,0 +1,34 @@
+[id="registry-cors-troubleshooting_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-cors-troubleshooting_{context}
+
+== Troubleshooting CORS errors
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+.Common CORS errors and fixes
+[%header,cols="3,3,4"]
+|===
+|Error
+|Cause
+|Fix
+
+|"No Access-Control-Allow-Origin header is present on the requested resource"
+|Your application's origin is not in the {registry} allowed origins list.
+|Add your application's origin to `QUARKUS_HTTP_CORS_ORIGINS`. Include the protocol and port (for example, `https://my-app.example.com:3000`, not only the hostname `my-app.example.com`).
+
+|Preflight request fails with 403
+|The HTTP method or a request header is not allowed by the CORS configuration.
+|Check that `QUARKUS_HTTP_CORS_METHODS` includes the HTTP method your application uses, and that `QUARKUS_HTTP_CORS_HEADERS` includes any custom headers your application sends.
+
+|CORS works without authentication but fails with authentication enabled
+|You might have overridden `QUARKUS_HTTP_CORS_HEADERS` without including `authorization`.
+|Make sure `authorization` is in your `QUARKUS_HTTP_CORS_HEADERS` list.
+
+|Credentials or cookies are not sent
+|When you use `Access-Control-Allow-Origin: *`, some browsers do not send credentials (cookies, authorization headers).
+|Use explicit origins instead of `*` when your application needs to send credentials.
+|===
+
+// proc-registry-cors-diagnosing

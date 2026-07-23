@@ -1,0 +1,19 @@
+[id="installing-script-dependencies_{context}"]
+= Installing dependencies
+
+
+[role="_abstract"]
+All migration scripts require the following tools:
+
+* `bash` (version 4.0 or later).
+* `curl`.
+* `jq` (for JSON parsing).
+* `unzip` (optional, for ZIP validation).
+
+[role="_additional-resources"]
+.Additional resources
+* {LinkServiceRegistryUser}[{NameServiceRegistryUser}]
+
+
+// ref-troubleshooting-migration
+:_mod-docs-content-type: REFERENCE

@@ -1,0 +1,82 @@
+[id="registry-iceberg-catalog-api-reference_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-iceberg-catalog-api-reference_{context}
+
+== API reference
+
+[role="_abstract"]
+{registry} supports a set of Iceberg REST Catalog API endpoints for managing namespaces, tables, and views.
+
+.Iceberg REST Catalog API endpoints
+[.table-expandable,width="100%",cols="2,4,5",options="header"]
+|===
+|Method
+|Endpoint
+|Description
+|GET
+|`/apis/iceberg/v1/config`
+|Get catalog configuration
+|GET
+|`/apis/iceberg/v1/{prefix}/namespaces`
+|List all namespaces
+|POST
+|`/apis/iceberg/v1/{prefix}/namespaces`
+|Create a namespace
+|GET
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}`
+|Load namespace metadata
+|HEAD
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}`
+|Check if namespace exists
+|DELETE
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}`
+|Drop a namespace (must be empty)
+|POST
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/properties`
+|Update namespace properties
+|GET
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/tables`
+|List tables in a namespace
+|POST
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/tables`
+|Create a table
+|GET
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/tables/{table}`
+|Load a table
+|POST
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/tables/{table}`
+|Commit updates to a table (atomic metadata update with optimistic concurrency)
+|HEAD
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/tables/{table}`
+|Check if table exists
+|DELETE
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/tables/{table}`
+|Drop a table
+|POST
+|`/apis/iceberg/v1/{prefix}/tables/rename`
+|Rename a table
+|GET
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/views`
+|List views in a namespace
+|POST
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/views`
+|Create a view
+|GET
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/views/{view}`
+|Load a view
+|POST
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/views/{view}`
+|Replace/commit a view
+|HEAD
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/views/{view}`
+|Check if a view exists
+|DELETE
+|`/apis/iceberg/v1/{prefix}/namespaces/{namespace}/views/{view}`
+|Drop a view
+|POST
+|`/apis/iceberg/v1/{prefix}/views/rename`
+|Rename a view
+|===
+
+
+// ref-registry-iceberg-catalog-limitations

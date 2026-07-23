@@ -1,0 +1,450 @@
+[id="migration-scripts_{context}"]
+= Migration scripts reference
+
+
+[role="_abstract"]
+The migration scripts automate key steps in the workflow. All scripts support interactive and automated modes through environment variables, with OAuth2 authentication support.
+
+The migration scripts are production-ready tools that handle the most critical and error-prone aspects of migration:
+
+* *apicurio-capture-metrics.sh:* Captures metrics before and after migration for comparison.
+* *apicurio-export-registry-data.sh:* Exports all data from {registry-v2}.
+* *apicurio-import-registry-data.sh:* Imports data into {registry} 3.x.
+* *apicurio-verify-registry-version.sh:* Verifies registry version and health.
+* *apicurio-verify-v3-api-features.sh:* Tests v3-specific API features.
+
+Find all scripts in the {registry} GitHub repository under link:https://github.com/Apicurio/apicurio-registry/tree/3.2.x/docs/scripts[docs/scripts/].
+
+All migration scripts share the following common features:
+
+*Interactive and automated modes:*
+
+* Interactive mode: Scripts prompt for required inputs with sensible defaults.
+* Automated mode: Set environment variables to skip prompts (useful for CI/CD).
+
+*OAuth2 authentication support:*
+
+* Client credentials grant type.
+* Configurable token endpoint and client credentials.
+* Optional: Run without authentication for testing environments.
+
+*TLS/HTTPS support:*
+
+* Works with trusted certificates by default.
+* Option to skip TLS verification for development and testing (`SKIP_TLS_VERIFY=true`).
+
+*Clear output and error handling:*
+
+* Color-coded output (info, success, warning, error).
+* Detailed progress indicators.
+* Clear exit codes for automation (0 = success, 1 = failure).
+
+Script: apicurio-capture-metrics.sh
+
+*Purpose:* Captures metrics from the registry before and after migration.
+
+*What it captures:*
+
+* Total artifact count.
+* Sample of up to 5 artifacts with full metadata.
+* Global rule configurations.
+* Output saved to a text file for post-migration comparison.
+
+*Usage (interactive):*
+
+[source,bash]
+----
+./apicurio-capture-metrics.sh
+----
+
+*Usage (automated):*
+
+[source,bash]
+----
+export REGISTRY_URL="https://registry.example.com"
+export REGISTRY_API_VERSION="v2"
+export AUTH_ENABLED="true"
+export AUTH_TOKEN_URL="https://keycloak.example.com/realms/registry/protocol/openid-connect/token"
+export AUTH_CLIENT_ID="admin-client"
+export AUTH_CLIENT_SECRET="your-secret"
+export OUTPUT_FILE="registry-baseline.txt"
+
+./apicurio-capture-metrics.sh
+----
+
+*Environment variables:*
+
+[cols="1,2",options="header"]
+|===
+| Variable
+| Description
+
+| `REGISTRY_URL`
+| Registry base URL (for example, `https://registry.example.com`)
+
+| `REGISTRY_API_VERSION`
+| API version to use (default: `v2`)
+
+| `AUTH_ENABLED`
+| Set to `true` to enable OAuth2 authentication
+
+| `AUTH_TOKEN_URL`
+| OAuth2 token endpoint URL
+
+| `AUTH_CLIENT_ID`
+| OAuth2 client ID
+
+| `AUTH_CLIENT_SECRET`
+| OAuth2 client secret
+
+| `OUTPUT_FILE`
+| Output file path (default: `registry-baseline.txt`)
+
+| `SKIP_TLS_VERIFY`
+| Set to `true` to skip TLS certificate verification
+|===
+
+*Output:*
+
+Text file that contains artifact summary and global rules (default: `registry-baseline.txt`).
+
+Script: apicurio-export-registry-data.sh
+
+*Purpose:* Exports all data from a {registry-v2} deployment to a ZIP file.
+
+*What it exports:*
+
+* All artifacts and versions.
+* Artifact metadata (labels, properties, descriptions).
+* Global and artifact-specific rules.
+* Artifact references.
+
+*Usage (interactive):*
+
+[source,bash]
+----
+./apicurio-export-registry-data.sh
+----
+
+*Usage (automated):*
+
+[source,bash]
+----
+export REGISTRY_URL="https://registry-v2.example.com"
+export REGISTRY_API_VERSION="v2"
+export AUTH_ENABLED="true"
+export AUTH_TOKEN_URL="https://keycloak.example.com/realms/registry/protocol/openid-connect/token"
+export AUTH_CLIENT_ID="admin-client"
+export AUTH_CLIENT_SECRET="your-secret"
+export EXPORT_FILE="registry-export.zip"
+
+./apicurio-export-registry-data.sh
+----
+
+*Environment variables:*
+
+[cols="1,2",options="header"]
+|===
+| Variable
+| Description
+
+| `REGISTRY_URL`
+| Registry base URL (for example, `https://registry-v2.example.com`)
+
+| `REGISTRY_API_VERSION`
+| API version to use (default: `v2`)
+
+| `AUTH_ENABLED`
+| Set to `true` to enable OAuth2 authentication
+
+| `AUTH_TOKEN_URL`
+| OAuth2 token endpoint URL
+
+| `AUTH_CLIENT_ID`
+| OAuth2 client ID
+
+| `AUTH_CLIENT_SECRET`
+| OAuth2 client secret
+
+| `EXPORT_FILE`
+| Export file path (default: `registry-export.zip`)
+
+| `SKIP_TLS_VERIFY`
+| Set to `true` to skip TLS certificate verification
+|===
+
+*Output:*
+
+ZIP file that contains the complete registry export (default: `registry-export.zip`).
+
+*Important notes:*
+
+* Run this script while the registry is in read-only mode to maintain data consistency.
+* The export file size varies depending on registry size.
+
+Script: apicurio-import-registry-data.sh
+
+*Purpose:* Imports data from a v2 export file into a {registry} 3.x deployment.
+
+*What it does:*
+
+* Validates the import ZIP file.
+* Checks {registry} 3.x accessibility and version.
+* Imports all data from the export file.
+* Verifies the artifact count after import.
+* Reports global rules configuration.
+
+*Usage (interactive):*
+
+[source,bash]
+----
+./apicurio-import-registry-data.sh
+----
+
+*Usage (automated):*
+
+[source,bash]
+----
+export REGISTRY_URL="https://registry-v3.example.com"
+export REGISTRY_API_VERSION="v3"
+export AUTH_ENABLED="true"
+export AUTH_TOKEN_URL="https://keycloak.example.com/realms/registry/protocol/openid-connect/token"
+export AUTH_CLIENT_ID="admin-client"
+export AUTH_CLIENT_SECRET="your-secret"
+export IMPORT_FILE="registry-export.zip"
+
+./apicurio-import-registry-data.sh
+----
+
+*Environment variables:*
+
+[cols="1,2",options="header"]
+|===
+| Variable
+| Description
+
+| `REGISTRY_URL`
+| Registry base URL (for example, `https://registry-v3.example.com`)
+
+| `REGISTRY_API_VERSION`
+| API version to use (default: `v3`)
+
+| `AUTH_ENABLED`
+| Set to `true` to enable OAuth2 authentication
+
+| `AUTH_TOKEN_URL`
+| OAuth2 token endpoint URL
+
+| `AUTH_CLIENT_ID`
+| OAuth2 client ID
+
+| `AUTH_CLIENT_SECRET`
+| OAuth2 client secret
+
+| `IMPORT_FILE`
+| Import file path (default: `registry-export.zip`)
+
+| `SKIP_TLS_VERIFY`
+| Set to `true` to skip TLS certificate verification
+|===
+
+*Important notes:*
+
+* The import adds to existing data and does not replace it.
+* The script warns if the registry already contains artifacts.
+* Import into an empty v3 registry for best results.
+
+Script: apicurio-verify-registry-version.sh
+
+*Purpose:* Verifies the version and health of a {registry} deployment.
+
+*What it checks:*
+
+* Health endpoint (200 OK).
+* System information retrieval.
+* Version verification (2.x or 3.x).
+
+*Usage (interactive):*
+
+[source,bash]
+----
+./apicurio-verify-registry-version.sh
+----
+
+*Usage (automated):*
+
+[source,bash]
+----
+export REGISTRY_URL="https://registry.example.com"
+export REGISTRY_VERSION="v3"
+export AUTH_ENABLED="true"
+export AUTH_TOKEN_URL="https://keycloak.example.com/realms/registry/protocol/openid-connect/token"
+export AUTH_CLIENT_ID="admin-client"
+export AUTH_CLIENT_SECRET="your-secret"
+
+./apicurio-verify-registry-version.sh
+----
+
+*Environment variables:*
+
+[cols="1,2",options="header"]
+|===
+| Variable
+| Description
+
+| `REGISTRY_URL`
+| Registry base URL (for example, `https://registry.example.com`)
+
+| `REGISTRY_VERSION`
+| Registry version to test (default: `v3`)
+
+| `AUTH_ENABLED`
+| Set to `true` to enable OAuth2 authentication
+
+| `AUTH_TOKEN_URL`
+| OAuth2 token endpoint URL
+
+| `AUTH_CLIENT_ID`
+| OAuth2 client ID
+
+| `AUTH_CLIENT_SECRET`
+| OAuth2 client secret
+
+| `SKIP_TLS_VERIFY`
+| Set to `true` to skip TLS certificate verification
+|===
+
+*Exit codes:*
+
+* `0`: All checks passed.
+* `1`: One or more checks failed.
+
+Script: apicurio-verify-v3-api-features.sh
+
+*Purpose:* Verifies that v3-specific API features are available and functioning correctly.
+
+*What it tests:*
+
+* v3 system endpoints (`/system/info`, `/system/limits`).
+* v3 search endpoints (`/search/groups`, `/search/versions`).
+* Admin endpoints.
+
+*Usage (interactive):*
+
+[source,bash]
+----
+./apicurio-verify-v3-api-features.sh
+----
+
+*Usage (automated):*
+
+[source,bash]
+----
+export REGISTRY_URL="https://registry-v3.example.com"
+export AUTH_ENABLED="true"
+export AUTH_TOKEN_URL="https://keycloak.example.com/realms/registry/protocol/openid-connect/token"
+export AUTH_CLIENT_ID="admin-client"
+export AUTH_CLIENT_SECRET="your-secret"
+
+./apicurio-verify-v3-api-features.sh
+----
+
+*Environment variables:*
+
+[cols="1,2",options="header"]
+|===
+| Variable
+| Description
+
+| `REGISTRY_URL`
+| Registry base URL (for example, `https://registry-v3.example.com`)
+
+| `AUTH_ENABLED`
+| Set to `true` to enable OAuth2 authentication
+
+| `AUTH_TOKEN_URL`
+| OAuth2 token endpoint URL
+
+| `AUTH_CLIENT_ID`
+| OAuth2 client ID
+
+| `AUTH_CLIENT_SECRET`
+| OAuth2 client secret
+
+| `SKIP_TLS_VERIFY`
+| Set to `true` to skip TLS certificate verification
+|===
+
+*Exit codes:*
+
+* `0`: All feature tests passed.
+* `1`: One or more feature tests failed.
+
+All scripts support OAuth2 authentication by using the client credentials grant type.
+
+*Interactive mode (prompts):*
+
+If environment variables are not set, scripts prompt for the following information:
+
+* Auth token endpoint URL.
+* Client ID.
+* Client secret (hidden input).
+
+*Automated mode (environment variables):*
+
+For automation, set the following environment variables:
+
+[source,bash]
+----
+export AUTH_ENABLED="true"
+export AUTH_TOKEN_URL="https://keycloak.example.com/realms/registry/protocol/openid-connect/token"
+export AUTH_CLIENT_ID="admin-client"
+export AUTH_CLIENT_SECRET="your-secret"
+----
+
+*Unauthenticated deployments:*
+
+If your {registry} does not use authentication:
+
+[source,bash]
+----
+export AUTH_ENABLED="false"
+----
+
+Alternatively, press Enter when prompted for authentication.
+
+*Production (trusted certificates):*
+
+The scripts use trusted certificates by default. To configure this explicitly:
+
+[source,bash]
+----
+export SKIP_TLS_VERIFY="false"
+----
+
+*Development (self-signed certificates):*
+
+For testing with self-signed certificates:
+
+[source,bash]
+----
+export SKIP_TLS_VERIFY="true"
+----
+
+WARNING: Use `SKIP_TLS_VERIFY=true` only in non-production environments.
+
+"Failed to obtain access token"::
+Verify that `AUTH_TOKEN_URL` is correct. Check that client credentials are valid. Confirm that the client has appropriate roles (for example, `sr-admin`). Test manually with curl.
+
+"Registry is not accessible"::
+Verify that `REGISTRY_URL` is correct. Check network connectivity. Confirm that the registry is running and healthy. Verify firewall and security group rules.
+
+"Export file is too small"::
+Check that authentication is working. Verify admin permissions. Review registry logs for errors. Confirm that the export endpoint is accessible.
+
+"Import failed"::
+Verify that the export file is a valid ZIP: `unzip -t registry-export.zip`. Check that registry v3 has sufficient storage. Review registry v3 logs for errors. Confirm that registry v3 is healthy before import.
+
+"Artifact count mismatch"::
+Wait a few seconds after import (processing delay). Check import logs for errors. Verify export file integrity. Consider re-exporting and re-importing.
+

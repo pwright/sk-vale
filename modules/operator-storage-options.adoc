@@ -1,0 +1,19 @@
+[id="operator-storage-options_{context}"]
+:_mod-docs-content-type: REFERENCE
+= operator-storage-options_{context}
+
+== Storage options
+
+[role="_abstract"]
+{registry} supports the following storage options:
+
+* *Embedded H2 database* (default) - When you do not specify a storage type, {registry} uses SQL storage with an embedded H2 database. Suitable for development and testing only. {registry} stores all data in memory and loses it when the pod restarts.
+* *PostgreSQL* - Stores data in a PostgreSQL database. Suitable for production deployments.
+* *MySQL* - Stores data in a MySQL database. Suitable for production deployments.
+* *KafkaSQL* - Stores data in Apache Kafka topics, with an embedded H2 database as a local SQL store that {registry} rebuilds from the Kafka journal on each startup. Suitable for production deployments when you configure persistent Kafka storage.
+* *KubernetesOps* - Read-only storage that loads registry data from Kubernetes ConfigMaps. Suitable for
+Kubernetes-native and GitOps workflows. This is an experimental feature.
+
+IMPORTANT: The default embedded H2 configuration is not suitable for production environments. Configure a storage type (`postgresql`, `mysql`, `kafkasql`, or `kubernetesops`) for production use.
+
+// proc-deploying-registry-inmemory

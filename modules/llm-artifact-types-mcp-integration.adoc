@@ -1,0 +1,142 @@
+[id="llm-artifact-types-mcp-integration_{context}"]
+= MCP (Model Context Protocol) integration
+
+
+[role="_abstract"]
+{registry} supports the link:https://modelcontextprotocol.io/[Model Context Protocol (MCP)] and makes PROMPT_TEMPLATE artifacts available as MCP prompts. AI agents can discover and use prompt templates through MCP.
+
+.MCP extension in PROMPT_TEMPLATE
+
+Prompt templates can include an `mcp` section to enable MCP protocol integration:
+
+[source,yaml]
+----
+templateId: support-chat
+name: Support Chat Prompt
+template: |
+  Answer the question: {{question}}
+
+variables:
+  question:
+    type: string
+    required: true
+
+# MCP integration
+mcp:
+  enabled: true
+  name: support-chat
+  description: Answer customer support questions
+  arguments:
+    - name: question
+      description: The customer question
+      required: true
+----
+
+.MCP configuration fields
+[%header,cols="2,1,4"]
+|===
+|Field
+|Required
+|Description
+
+|`enabled`
+|No
+|Set to `true` to make this prompt available through MCP (default: false)
+
+|`name`
+|No
+|MCP prompt name (defaults to `templateId`)
+
+|`description`
+|No
+|MCP prompt description (defaults to template description)
+
+|`arguments`
+|No
+|MCP arguments (auto-derived from `variables` if not specified)
+|===
+
+.MCP server module
+
+The `mcp/` module contains an MCP Server for registry prompts:
+
+.MCP server components
+[%header,cols="2,4"]
+|===
+|Component
+|Description
+
+|`PromptTemplateMCPServer.java`
+|MCP Server that makes prompt templates available as MCP prompts
+
+|`PromptTemplateConverter.java`
+|Parses and renders prompt templates
+|===
+
+.MCP tools and prompts
+
+The MCP Server includes the following tools and prompts:
+
+.MCP tools
+[%header,cols="2,4"]
+|===
+|Tool
+|Description
+
+|`list_mcp_prompts`
+|List all MCP-enabled prompt templates in the registry
+
+|`get_mcp_prompt`
+|Get and render an MCP-enabled prompt with arguments
+
+|`render_prompt_template`
+|Render any prompt template (MCP-enabled or not)
+|===
+
+.MCP prompts
+[%header,cols="2,4"]
+|===
+|Prompt
+|Description
+
+|`render_registry_prompt`
+|Interactive prompt for rendering templates from the registry
+|===
+
+.MCP server usage
+
+To run the MCP Server:
+
+[source,bash]
+----
+cd mcp
+../mvnw quarkus:dev
+----
+
+The MCP Server communicates with the registry and makes prompts available through the MCP protocol. AI agents such as Claude and ChatGPT can discover and use registry-stored prompts.
+
+.MCP architecture data flow
+[cols="1,3",options="header"]
+|===
+|Layer
+|Description
+
+|{registry} (PROMPT_TEMPLATE artifacts)
+|Stores prompt templates with `mcp.enabled: true` in the MCP configuration section.
+
+|MCP server module
+a|Connects {registry} to AI agents by using the MCP protocol. Provides the following tools:
+
+* `list_mcp_prompts()`: lists MCP-enabled templates
+* `get_mcp_prompt()`: renders a template with arguments
+* `render_prompt_template()`: renders any template
+
+|AI agent or LLM (such as Claude or ChatGPT)
+a|Communicates with the MCP server by using the MCP protocol:
+
+* `prompts/list`: discovers available prompts
+* `prompts/get`: retrieves prompt content with arguments
+|===
+
+// ref-llm-artifact-types-prompt-template-implementation
+:_mod-docs-content-type: REFERENCE

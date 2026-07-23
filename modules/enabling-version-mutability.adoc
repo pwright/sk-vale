@@ -1,0 +1,20 @@
+[id="enabling-version-mutability_{context}"]
+:_mod-docs-content-type: REFERENCE
+= enabling-version-mutability_{context}
+
+== Artifact version mutability configuration
+
+[role="_abstract"]
+By default, artifact versions are immutable once created. To allow draft versions to be mutable, set the `versionMutabilityEnabled` feature flag.
+
+[source,yaml]
+----
+spec:
+  app:
+    features:
+      versionMutabilityEnabled: true
+----
+
+NOTE: Enabling version mutability also unlocks Studio functionality in the {registry} UI.
+
+// ref-disabling-ui-component

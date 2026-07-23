@@ -1,0 +1,78 @@
+[id="secured-kafka-oauth_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= secured-kafka-oauth_{context}
+
+== Configuring KafkaSQL with OAUTHBEARER authentication
+
+[role="_abstract"]
+When your Kafka cluster uses OAUTHBEARER authentication, you configure the OAuth credentials by using the structured `auth` section of the `ApicurioRegistry3` custom resource.
+
+.Prerequisites
+* Your Kafka cluster is configured with an OAuth-enabled listener.
+* You have the OAuth client ID, client secret, and token endpoint URL.
+* You have stored the client ID and client secret in a {kubernetes} Secret.
+
+.Procedure
+
+. Create a {kubernetes} Secret that contains the OAuth client credentials:
++
+[source,bash]
+----
+{kubernetes-client} create secret generic kafka-oauth-credentials \
+  --from-literal=clientId=my-client-id \
+  --from-literal=clientSecret=my-client-secret
+----
+
+. Create or update your `ApicurioRegistry3` custom resource with the OAUTHBEARER configuration:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry-kafkasql-oauth
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: "my-cluster-kafka-bootstrap.my-project.svc:9093"
+        tls:
+          truststoreSecretRef:
+            name: my-cluster-cluster-ca-cert
+            key: ca.p12
+          truststorePasswordSecretRef:
+            name: my-cluster-cluster-ca-cert
+            key: ca.password
+        auth:
+          enabled: true
+          mechanism: OAUTHBEARER
+          clientIdRef:
+            name: kafka-oauth-credentials
+            key: clientId
+          clientSecretRef:
+            name: kafka-oauth-credentials
+            key: clientSecret
+          tokenEndpoint: https://identity-server.example.com/token
+          loginHandlerClass: io.strimzi.kafka.oauth.client.JaasClientOauthLoginCallbackHandler
+    ingress:
+      host: registry.example.com
+  ui:
+    ingress:
+      host: registry-ui.example.com
+----
+
+. Apply the custom resource:
++
+[source,bash]
+----
+{kubernetes-client} apply -f my-registry.yaml
+----
++
+NOTE: The `loginHandlerClass` value is from the {kafka-streams} OAuth library. If you use a different OAuth provider, replace this value with the login handler class for your provider.
++
+NOTE: When you configure both TLS and OAUTHBEARER authentication, the operator sets the security protocol to `SASL_SSL`.
+
+
+ifndef::service-registry-downstream[]
+// proc-secured-kafka-access-operator

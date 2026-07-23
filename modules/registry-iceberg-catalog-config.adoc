@@ -1,0 +1,41 @@
+[id="registry-iceberg-catalog-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-iceberg-catalog-config_{context}
+
+== {registry} Iceberg REST Catalog configuration
+
+[role="_abstract"]
+You can configure the {registry} Iceberg REST Catalog by using several properties.
+
+.{registry} Iceberg configuration properties
+[.table-expandable,width="100%",cols="4,4,3,5",options="header"]
+|===
+|Property
+|Environment variable
+|Default
+|Description
+|`apicurio.iceberg.enabled`
+|`APICURIO_ICEBERG_ENABLED`
+|`false`
+|Enables or disables the Iceberg REST Catalog API. Because this feature is experimental, you must also set `apicurio.features.experimental.enabled=true`.
+|`apicurio.iceberg.warehouse`
+|`APICURIO_ICEBERG_WAREHOUSE`
+|Empty string
+|The default warehouse location for Iceberg tables. The catalog configuration response includes this value.
+|`apicurio.iceberg.default-prefix`
+|`APICURIO_ICEBERG_DEFAULT_PREFIX`
+|`default`
+|The default prefix (catalog identifier) used when none is specified.
+|===
+
+.Example: Configuring {registry} for Iceberg
+[source,properties]
+----
+apicurio.features.experimental.enabled=true
+apicurio.iceberg.enabled=true
+apicurio.iceberg.warehouse=s3://my-bucket/warehouse
+apicurio.iceberg.default-prefix=production
+----
+
+
+// ref-registry-iceberg-catalog-rest-api

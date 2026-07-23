@@ -1,0 +1,65 @@
+[id="multitenancy-lightweight-group-isolation_{context}"]
+:_mod-docs-content-type: CONCEPT
+= multitenancy-lightweight-group-isolation_{context}
+
+== Lightweight isolation with groups
+
+[role="_abstract"]
+For scenarios where full instance-per-tenant isolation is not required, {registry} supports logical isolation
+within a single instance using *groups* and *owner-based access control*.
+
+Each logical tenant uses one or more groups as their namespace within the registry. Users can only modify
+artifacts and groups they own.
+
+Enable owner-based access control in the `ApicurioRegistry3` CR:
+
+[source,yaml]
+----
+spec:
+  app:
+    auth:
+      enabled: true
+      appClientId: registry-api
+      uiClientId: apicurio-registry
+      authServerUrl: https://keycloak.example.com/realms/registry
+      redirectUri: https://registry-ui.apps.cluster.example
+      logoutUrl: https://registry-ui.apps.cluster.example
+      authz:
+        enabled: true
+        ownerOnlyEnabled: true
+        groupAccessEnabled: true
+----
+
+With this configuration:
+
+* `ownerOnlyEnabled` restricts artifact modifications to the artifact's creator
+* `groupAccessEnabled` restricts group modifications to the group's creator
+
+The following table compares the advantages and limitations of this approach:
+
+[cols="1,1", options="header"]
+|===
+| Advantage | Limitation
+
+| Shared compute and storage reduces overhead
+| Weaker isolation than separate instances
+
+| Faster tenant provisioning (create a group, not a deployment)
+| No separate storage per tenant
+
+| Single deployment to monitor and upgrade
+| A bug or outage affects all tenants
+
+| Lower per-tenant cost
+| No independent scaling per tenant
+|===
+
+This configuration is suitable for development environments, internal teams, or scenarios where tenants do not
+require strict data or infrastructure isolation.
+
+[role="_additional-resources"]
+.Additional resources
+
+* xref:getting-started/assembly-deploying-registry-operator.adoc[]
+* xref:getting-started/assembly-configuring-registry-security.adoc[]
+* xref:getting-started/assembly-operator-config-reference.adoc[]

@@ -1,0 +1,62 @@
+[id="configuring-kafkasql-sasl_{context}"]
+:_mod-docs-content-type: REFERENCE
+= configuring-kafkasql-sasl_{context}
+
+== KafkaSQL SASL authentication configuration
+
+[role="_abstract"]
+When your Kafka cluster requires SASL authentication (such as SCRAM-SHA-512), the recommended approach is to use
+the Strimzi Kafka Access Operator (available starting with {registry} version 3.2.0), which automatically provides
+all connection details in a single Kubernetes Secret.
+
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry-kafkasql-sasl
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        kafkaAccessSecretName: my-kafka-access
+    ingress:
+      host: registry.example.com
+----
+
+For OAuth (OAUTHBEARER) authentication, use the `auth` section instead:
+
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry-kafkasql-oauth
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: my-cluster-kafka-bootstrap.my-project.svc:9093
+        tls:
+          truststoreSecretRef:
+            name: kafka-cluster-ca-cert
+          truststorePasswordSecretRef:
+            name: kafka-cluster-ca-cert
+        auth:
+          enabled: true
+          mechanism: OAUTHBEARER
+          clientIdRef:
+            name: kafka-oauth-credentials
+            key: clientId
+          clientSecretRef:
+            name: kafka-oauth-credentials
+            key: clientSecret
+          tokenEndpoint: https://identity-server.example.com/token
+          loginHandlerClass: io.strimzi.kafka.oauth.client.JaasClientOauthLoginCallbackHandler
+    ingress:
+      host: registry.example.com
+----
+
+// proc-deploying-registry-kubernetesops

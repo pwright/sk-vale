@@ -1,0 +1,43 @@
+[id="a2a-overview_{context}"]
+= A2A protocol overview
+
+
+[role="_abstract"]
+With the A2A protocol, AI agents can discover and communicate with each other through standardized endpoints. {registry} serves as both an A2A agent and an agent registry.
+
+.{registry} as an A2A agent
+{registry} provides its own capabilities, including schema validation, search, and artifact management.
+
+.{registry} as an agent registry
+{registry} stores and discovers other agents' Agent Cards.
+
+.{registry} dual-role A2A architecture
+[cols="1,1",options="header"]
+|===
+|{registry} as an A2A agent
+|{registry} as an agent card registry
+
+a|Endpoint: `/.well-known/agent.json`
+
+Built-in skills:
+
+* `schema-validation`
+* `schema-search`
+* `artifact-management`
+* `compatibility-check`
+* `agent-discovery`
+
+a|Endpoints:
+
+* `/.well-known/agents`
+* `/.well-known/agents/\{groupId}/\{artifactId}`
+
+Capabilities:
+
+* Store agent cards as `AGENT_CARD` artifacts
+* Search by skill, capability, or input/output mode
+* Version management and compatibility checking
+|===
+
+// ref-a2a-configuration
+:_mod-docs-content-type: REFERENCE

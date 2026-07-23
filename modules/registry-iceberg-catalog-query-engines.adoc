@@ -1,0 +1,107 @@
+[id="registry-iceberg-catalog-query-engines_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-iceberg-catalog-query-engines_{context}
+
+== Query engine configuration for {registry}
+
+[role="_abstract"]
+You can configure popular query engines that support the Iceberg REST Catalog specification to use {registry} as their catalog.
+
+.Apache Spark
+
+Configure Spark to use {registry} as the Iceberg catalog:
+
+[source,scala]
+----
+spark.conf.set("spark.sql.catalog.apicurio", "org.apache.iceberg.spark.SparkCatalog")
+spark.conf.set("spark.sql.catalog.apicurio.type", "rest")
+spark.conf.set("spark.sql.catalog.apicurio.uri", "http://localhost:8080/apis/iceberg/v1")
+spark.conf.set("spark.sql.catalog.apicurio.prefix", "default")
+----
+
+.Using the catalog in Spark SQL
+[source,sql]
+----
+-- Switch to the Apicurio catalog
+USE apicurio;
+
+-- Create a namespace
+CREATE NAMESPACE my_database;
+
+-- Create a table
+CREATE TABLE apicurio.my_database.events (
+  id BIGINT,
+  event_type STRING,
+  event_time TIMESTAMP
+) USING iceberg;
+
+-- Query the table
+SELECT * FROM apicurio.my_database.events;
+----
+
+.Trino
+
+Configure Trino to use {registry} as the Iceberg catalog by creating a catalog properties file:
+
+.etc/catalog/apicurio.properties
+[source,properties]
+----
+connector.name=iceberg
+iceberg.catalog.type=rest
+iceberg.rest-catalog.uri=http://localhost:8080/apis/iceberg/v1
+iceberg.rest-catalog.prefix=default
+----
+
+.Using the catalog in Trino
+[source,sql]
+----
+-- Create a schema (namespace)
+CREATE SCHEMA apicurio.my_database;
+
+-- Create a table
+CREATE TABLE apicurio.my_database.products (
+  id BIGINT,
+  name VARCHAR,
+  price DECIMAL(10, 2)
+) WITH (format = 'PARQUET');
+
+-- Query the table
+SELECT * FROM apicurio.my_database.products;
+----
+
+.DuckDB
+
+Configure DuckDB to use {registry} as the Iceberg catalog:
+
+[source,sql]
+----
+-- Install and load the Iceberg extension
+INSTALL iceberg;
+LOAD iceberg;
+
+-- Attach the Apicurio Registry catalog
+ATTACH 'http://localhost:8080/apis/iceberg/v1' AS apicurio (TYPE ICEBERG);
+
+-- Query tables from the catalog
+SELECT * FROM apicurio.my_database.users;
+----
+
+.ClickHouse
+
+Configure ClickHouse to use {registry} as the Iceberg catalog:
+
+[source,sql]
+----
+-- Create a database using the Iceberg engine
+CREATE DATABASE apicurio_db ENGINE = Iceberg(
+  'http://localhost:8080/apis/iceberg/v1',
+  'default',
+  'my_database'
+);
+
+-- Query tables from the catalog
+SELECT * FROM apicurio_db.users;
+----
+
+
+// ref-registry-iceberg-catalog-api-reference

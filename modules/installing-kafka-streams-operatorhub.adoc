@@ -1,0 +1,41 @@
+[id="installing-kafka-streams-operatorhub_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= installing-kafka-streams-operatorhub_{context}
+
+== Installing {kafka-streams} from the OpenShift OperatorHub
+
+[role="_abstract"]
+If you do not already have {kafka-streams} installed, you can install the {kafka-streams} Operator on your OpenShift cluster from the OperatorHub. The OperatorHub is available from the OpenShift Container Platform web console. It provides an interface for cluster administrators to discover and install Operators. For more details, see link:{LinkOpenShiftIntroOperator}[{NameOpenShiftIntroOperator}].
+
+.Prerequisites
+
+* Cluster administrator access to an OpenShift cluster is configured.
+
+
+.Procedure
+
+. In the OpenShift Container Platform web console, log in using an account with cluster administrator privileges.
+
+. Change to the OpenShift project in which you want to install {kafka-streams}. For example, from the *Project* drop-down, select `my-project`.
+
+. In the left navigation menu, click *Operators* and then *OperatorHub*.
+. In the *Filter by keyword* text box, enter `{kafka-streams}` to find the *{kafka-streams}* Operator.
+. Read the information about the Operator, and click *Install* to display the Operator subscription page.
+
+. Select your subscription settings:
++
+** *Update Channel*: Select *stable*.
+** *Installation Mode*: Select one of the following:
+*** *All namespaces on the cluster (default)*
+*** *A specific namespace on the cluster* > *my-project*
+** *Approval Strategy*: Select *Automatic* or *Manual*.
+
+. Click *Install*, and wait a few moments until the Operator is ready for use.
+
+.Additional resources
+* link:{LinkOpenShiftAddOperator}[{NameOpenShiftAddOperator}]
+* link:{LinkDeployStreamsOpenShift}[{NameDeployStreamsOpenShift}]
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_installing-the-registry.adoc
+

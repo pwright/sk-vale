@@ -1,0 +1,39 @@
+[id="registry-rule-precedence_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-rule-precedence_{context}
+
+== {registry} content rule precedence
+
+[role="_abstract"]
+When you add or update an artifact, {registry} applies rules to check the validity, compatibility, or integrity of the artifact content. Configured artifact-specific rules override the equivalent configured global rules, as shown in the following table.
+
+.{registry} content rule precedence
+[%header,cols=4*]
+|===
+|Artifact-specific rule
+|Global rule
+|Rule applied to this artifact
+|Global rule available for other artifacts?
+|Enabled
+|Enabled
+|Artifact-specific
+|Yes
+|Disabled
+|Enabled
+|Global
+|Yes
+|Disabled
+|Disabled
+|None
+|No
+|Enabled, set to None
+|Enabled
+|None
+|Yes
+|Disabled
+|Enabled, set to None
+|None
+|No
+|===
+
+

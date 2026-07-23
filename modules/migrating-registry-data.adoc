@@ -1,0 +1,90 @@
+[id="migrating-registry-data_{context}"]
+= Migrating {registry} data
+
+
+[role="_abstract"]
+You can use the export and import APIs to migrate persisted content from {registry} {registry-v2} to a new {registry} 3.x deployment. The APIs preserve artifact identifiers, metadata, and references, which ensures that downstream Kafka payloads remain compatible.
+
+IMPORTANT: You must use the export and import procedure for migration. {registry} 3.x cannot directly read {registry-v2} storage because the underlying data structures changed significantly:
+
+* *SQL storage:* The v3 database schema is completely redesigned and incompatible with v2. The data model changes (separate artifact and version metadata, new branch support) require a different table structure.
+* *KafkaSQL storage:* The v3 Kafka journal topic uses a new event journaling format that is incompatible with v2. You cannot reuse the v2 topic.
+
+Export data from v2 and import it into v3 by using the export and import APIs. The import process automatically transforms the data to the v3 format.
+
+{registry} 3.x accepts the export archive that is generated from a {registry-v2} instance. Capture the archive from your existing deployment, provision the 3.x environment, and import the archive into the new cluster.
+
+.Prerequisites
+
+* The source {registry} {registry-v2} server and the destination 3.x server are both running.
+* You have administrative credentials that allow access to the `/apis/registry/v2/admin/export` and `/apis/registry/v3/admin/import` endpoints.
+* If you use OAuth2 authentication, you have valid client credentials with the admin role (for example, `sr-admin`).
+
+.Procedure
+
+The migration scripts automate the export, import, and validation process. They support OAuth2 authentication and provide detailed error handling.
+
+. Export all data from {registry} {registry-v2} by using the export script:
++
+[source,bash]
+----
+./apicurio-export-registry-data.sh
+----
++
+The script performs the following actions:
++
+* Connects to your {registry-v2} deployment.
+* Exports all artifacts, versions, metadata, and rules.
+* Saves the data to a ZIP file (default: `registry-export.zip`).
+* Validates the export file format and size.
+* Reports export duration and file details.
++
+For detailed configuration options and OAuth2 authentication setup, see xref:migration-scripts_{context}[Migration scripts reference].
+
+. Import the export archive into {registry} 3.x by using the import script:
++
+[source,bash]
+----
+./apicurio-import-registry-data.sh
+----
++
+The script performs the following actions:
++
+* Validates that the import ZIP file exists and is valid.
+* Checks {registry} 3.x accessibility and version.
+* Imports all data from the export file.
+* Verifies artifact counts before and after import.
+* Reports global rules configuration.
++
+For detailed configuration options, see xref:migration-scripts_{context}[Migration scripts reference].
+
+. Validate the imported data by using the verification script:
++
+[source,bash]
+----
+./apicurio-verify-registry-version.sh
+----
++
+The script performs the following validation:
++
+* Health endpoint verification.
+* System information and version check.
+* Artifact count comparison.
+* Global rules validation.
+* v2 API backward compatibility check (optional).
++
+For detailed configuration options, see xref:migration-scripts_{context}[Migration scripts reference].
+
+.Verification
+
+* Verify that artifact counts in v3 match the v2 baseline.
+* Verify that global rules are configured correctly in v3.
+* Verify that sample artifacts contain the expected content and metadata.
+
+[role="_additional-resources"]
+.Additional resources
+* {LinkServiceRegistryUser}[{NameServiceRegistryUser}]
+
+
+// con-client-backward-compatibility
+:_mod-docs-content-type: CONCEPT

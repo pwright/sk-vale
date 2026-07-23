@@ -1,0 +1,61 @@
+[id="registry-iceberg-catalog-auth_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-iceberg-catalog-auth_{context}
+
+== Authentication and authorization
+
+[role="_abstract"]
+When {registry} is configured with authentication enabled, the Iceberg REST Catalog API enforces the same role-based access control as the core {registry} API. Each endpoint requires a minimum authorization level.
+
+.Iceberg REST Catalog API authorization levels
+[.table-expandable,width="100%",cols="4,2,5",options="header"]
+|===
+|Operation
+|Minimum level
+|Notes
+|Get catalog configuration
+|Read
+|
+|List namespaces
+|Read
+|
+|Load namespace metadata
+|Read
+|
+|Check if namespace exists
+|Read
+|
+|Create a namespace
+|Write
+|
+|Update namespace properties
+|Write
+|
+|Drop a namespace
+|Admin
+|Namespace must be empty.
+|List tables in a namespace
+|Read
+|
+|Create a table
+|Write
+|
+|Load a table
+|Read
+|
+|Check if table exists
+|Read
+|
+|Commit updates to a table
+|Write
+|
+|Drop a table
+|Admin
+|
+|Rename a table
+|Write
+|
+|===
+
+
+// ref-registry-iceberg-catalog-query-engines

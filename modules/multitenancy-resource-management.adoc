@@ -1,0 +1,79 @@
+[id="multitenancy-resource-management_{context}"]
+:_mod-docs-content-type: REFERENCE
+= multitenancy-resource-management_{context}
+
+== Resource management per tenant
+
+[role="_abstract"]
+Each {registry} instance receives the following default resource requests and limits.
+
+.Default resource allocation
+[cols="1,1,1,1,1", options="header"]
+|===
+| Component | CPU request | CPU limit | Memory request | Memory limit
+
+| App
+| 500m
+| 1
+| 512Mi
+| 1Gi
+
+| UI
+| 100m
+| 200m
+| 256Mi
+| 512Mi
+|===
+
+The total minimum per tenant is approximately 600m CPU and 768Mi memory.
+
+Use `podTemplateSpec` to adjust resources for high-traffic or resource-constrained tenants:
+
+[source,yaml]
+----
+spec:
+  app:
+    podTemplateSpec:
+      spec:
+        containers:
+          - name: apicurio-registry-app
+            resources:
+              requests:
+                cpu: "1"
+                memory: 2Gi
+              limits:
+                cpu: "2"
+                memory: 4Gi
+----
+
+You can independently scale each tenant instance:
+
+[source,yaml]
+----
+spec:
+  app:
+    replicas: 3
+  ui:
+    replicas: 2
+----
+
+Use {kubernetes} `ResourceQuota` objects to enforce per-{kubernetes-namespace} resource limits when using the
+namespace-per-tenant pattern:
+
+[source,yaml]
+----
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: tenant-quota
+  namespace: tenant-alpha
+spec:
+  hard:
+    requests.cpu: "2"
+    requests.memory: 4Gi
+    limits.cpu: "4"
+    limits.memory: 8Gi
+    pods: "10"
+----
+
+// ref-multitenancy-network-isolation

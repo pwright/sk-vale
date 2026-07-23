@@ -1,0 +1,26 @@
+[id="configuring-env-vars_{context}"]
+:_mod-docs-content-type: REFERENCE
+= configuring-env-vars_{context}
+
+== Environment variable configuration
+
+[role="_abstract"]
+You can add custom environment variables to {registry} components.
+
+[source,yaml]
+----
+spec:
+  app:
+    env:
+      - name: QUARKUS_LOG_LEVEL
+        value: DEBUG
+      - name: CUSTOM_CONFIG
+        valueFrom:
+          configMapKeyRef:
+            name: my-config
+            key: custom.value
+----
+
+IMPORTANT: *Order of evaluation:* The environment variables defined in the `env` field override any environment variables set by the operator. This enables you to customize configuration and provide workarounds while still benefiting from operator-managed settings. Do not use the custom PodTemplateSpec method to set environment variables.
+
+// ref-using-podtemplatespec

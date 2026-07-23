@@ -1,0 +1,36 @@
+[id="mcp-tool-features-overview_{context}"]
+= Overview
+
+
+[role="_abstract"]
+The https://modelcontextprotocol.io/[Model Context Protocol (MCP)] defines a standard for servers to expose tools that language models can invoke. With MCP tools, models can interact with external systems, such as querying databases, calling APIs, or running computations.
+
+{registry} provides a Tool Registry that stores MCP tool definitions with the following capabilities:
+
+NOTE: Storing an `MCP_TOOL` definition in {registry} provides governance, versioning, and searchability for tool definitions. To make stored tools available to LLM clients such as Claude Desktop, you must also deploy the {registry} MCP server. For more information, see xref:getting-started/assembly-mcp-server-integration.adoc[MCP server integration].
+
+Version management:: Track tool evolution with full version history.
+Validation:: Ensure that tool definitions conform to the MCP specification.
+Compatibility checking:: Detect breaking changes in tool input schemas.
+Discovery:: Search for tools by name or input parameter.
+Well-known endpoints:: Serve tool definitions at standard URLs.
+
+.MCP tool registry endpoints and capabilities
+[cols="1,1",options="header"]
+|===
+|Well-known endpoints
+|Capabilities
+
+a|
+* `/.well-known/mcp-tools` (search tools)
+* `/.well-known/mcp-tools/\{groupId}/\{artifactId}` (retrieve tool)
+
+a|
+* Store tool definitions as `MCP_TOOL` artifacts
+* Search by name or input parameter
+* Version management
+* Validation and compatibility checking
+|===
+
+// ref-mcp-tool-configuration
+:_mod-docs-content-type: REFERENCE

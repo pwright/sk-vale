@@ -1,0 +1,81 @@
+[id="multitenancy-storage-isolation_{context}"]
+:_mod-docs-content-type: REFERENCE
+= multitenancy-storage-isolation_{context}
+
+== Storage isolation options
+
+[role="_abstract"]
+Each tenant's CR must point to a separate storage backend. The operator does not provision
+databases or Kafka topics automatically. Pre-provision storage before you deploy tenant CRs.
+
+Separate databases on a shared PostgreSQL instance::
+Use one database per tenant on a shared PostgreSQL instance.
+The registry manages its own schema within each database.
+Use separate PostgreSQL users with permissions limited to each tenant's database for additional security.
++
+[source,yaml]
+----
+# Tenant Alpha
+spec:
+  app:
+    storage:
+      type: postgresql
+      sql:
+        dataSource:
+          url: jdbc:postgresql://shared-postgres.infra.svc:5432/tenant_alpha
+          username: tenant_alpha
+          password:
+            name: tenant-alpha-db-credentials
+            key: password
+
+# Tenant Beta
+spec:
+  app:
+    storage:
+      type: postgresql
+      sql:
+        dataSource:
+          url: jdbc:postgresql://shared-postgres.infra.svc:5432/tenant_beta
+          username: tenant_beta
+          password:
+            name: tenant-beta-db-credentials
+            key: password
+----
+
+Separate PostgreSQL instances::
+For maximum storage isolation, each tenant can have its own PostgreSQL instance.
++
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: postgresql
+      sql:
+        dataSource:
+          url: jdbc:postgresql://postgres-alpha.tenant-alpha.svc:5432/apicurio
+          username: apicurio
+          password:
+            name: db-credentials
+            key: password
+----
+
+KafkaSQL storage::
+When you use KafkaSQL storage, configure each tenant with separate Kafka bootstrap servers or, at minimum, separate
+topics.
++
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: "kafka-alpha.tenant-alpha.svc:9092"
+----
+
+WARNING: When using KafkaSQL, ensure that each tenant uses separate Kafka topics. The default topic name
+`kafkasql-journal` is the same for all instances. Configure separate topic names by using the
+`APICURIO_KAFKASQL_TOPIC` environment variable if tenants share a Kafka cluster.
+
+// ref-multitenancy-authentication-per-tenant

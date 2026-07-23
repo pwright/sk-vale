@@ -1,0 +1,56 @@
+[id="configuring-rules-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring content rules using the {registry} web console
+
+[role="_abstract"]
+You can use the {registry} web console to configure optional rules to prevent invalid or incompatible content from being added to {registry}. All configured artifact-specific, group-specific, or global rules must pass before {registry} accepts a new artifact version. Artifact-specific rules override group-specific rules, which in turn override global rules.
+
+.Prerequisites
+
+* {registry} is installed and running in your environment.
+* You are logged in to the {registry} web console:
++
+`{registry-url}`
+* Artifacts have been added to {registry} using the web console, command line, Maven plug-in, or a Java client application.
+* When role-based authorization is enabled, you have administrator access for global rules configuration.
+
+.Procedure
+
+. To configure group-specific rules:
++
+.. On the *Explore* tab, browse the list of groups in {registry} by selecting *Groups* from the "Search for" menu.
+.. Click a group to view its details and content rules.
+.. In *Group-specific rules*, click *Enable* to configure a validity, compatibility, or integrity rule for all artifact content in the group, and select the appropriate rule configuration from the list. For example, for *Validity rule*, select *Full*.
++
+.Group-specific rules in {registry} web console
+image::images/getting-started/registry-web-console-group-rules.png[Configure group-specific rules in Registry web console]
+
+. To configure artifact-specific rules:
++
+.. On the *Explore* tab, browse the list of artifacts in {registry} by selecting *Artifacts* from the "Search for" menu.
+.. Click an artifact from the list to view its details and content rules.
+.. In *Artifact-specific rules*, click *Enable* to configure a validity, compatibility, or integrity rule for artifact content, and select the appropriate rule configuration from the list. For example, for *Validity rule*, select *Full*.
++
+.Artifact content rules in {registry} web console
+image::images/getting-started/registry-web-console-artifact-rules.png[Configure rules in Registry web console]
+
+. To configure global rules:
++
+.. Click the *Global rules* tab.
+.. Click *Enable* to configure global validity, compatibility, or integrity rules for all artifact content, and select the appropriate rule configuration from the list.
++
+.Artifact content rules in {registry} web console
+image::images/getting-started/registry-web-console-global-rules.png[Configure rules in Registry web console]
++
+NOTE: To disable a rule, click the trash icon next to the rule. If you do this and the rule is configured at a higher level, for example Global, {registry} applies the higher-level rule configuration again.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:adding-artifacts-using-console_{context}[]
+* {registry-rule-reference}
+
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_managing-registry-artifacts.adoc
+

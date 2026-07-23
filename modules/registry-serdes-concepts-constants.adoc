@@ -1,0 +1,70 @@
+[id="registry-serdes-concepts-constants_{context}"]
+= {registry} serializer/deserializer configuration in client applications
+
+
+[role="_abstract"]
+You can configure specific client serializer/deserializer (SerDes) services and schema lookup strategies directly in a client application by using the following example constants.
+
+The following examples show commonly used SerDes constants and configuration options.
+
+**Configuration for SerDes services**
+
+[source,java,subs="+quotes,attributes"]
+----
+public class SerdeConfig {
+
+   public static final String REGISTRY_URL = "apicurio.registry.url";
+   public static final String ID_HANDLER = "apicurio.registry.id-handler";
+----
+
+* `REGISTRY_URL`: The required URL of {registry}.
+* `ID_HANDLER`: Extends ID handling to support other ID formats and make them compatible with {registry} SerDes services.
+For example, you can change it from the default ID format `Integer`, which is also compatible with the Confluent ID format, to `Long`.
+
+**Configuration for SerDes lookup strategies**
+
+[source,java,subs="+quotes,attributes"]
+----
+public class SerdeConfig {
+
+   public static final String ARTIFACT_RESOLVER_STRATEGY = "apicurio.registry.artifact-resolver-strategy";
+   public static final String SCHEMA_RESOLVER = "apicurio.registry.schema-resolver";
+...
+----
+
+* `ARTIFACT_RESOLVER_STRATEGY`: Java class that implements the artifact resolver strategy and maps between the Kafka SerDes and artifact ID. Defaults to the topic ID strategy. Only the serializer class uses this option.
+* `SCHEMA_RESOLVER`: Java class that implements the schema resolver. Defaults to `DefaultSchemaResolver`. The serializer and deserializer classes use this option.
+
+**Configuration for Kafka converters**
+
+[source,java,subs="+quotes,attributes"]
+----
+public class SerdeBasedConverter<S, T> extends SchemaResolverConfigurer<S, T> implements Converter, Closeable {
+
+   public static final String REGISTRY_CONVERTER_SERIALIZER_PARAM = "apicurio.registry.converter.serializer";
+   public static final String REGISTRY_CONVERTER_DESERIALIZER_PARAM = "apicurio.registry.converter.deserializer";
+----
+
+* `REGISTRY_CONVERTER_SERIALIZER_PARAM`: The required serializer to use with the {registry} Kafka converter.
+* `REGISTRY_CONVERTER_DESERIALIZER_PARAM`: The required deserializer to use with the {registry} Kafka converter.
+
+**Configuration for different schema types**
+
+For details about how to configure SerDes for different schema technologies, see the following resources:
+
+* xref:registry-serdes-types-avro_registry[]
+* xref:registry-serdes-types-json_registry[]
+* xref:registry-serdes-types-protobuf_registry[]
+
+[role="_additional-resources"]
+.Additional resources
+* xref:registry-serdes-config-props_{context}[]
+* {kafka-client-serdes}
+* link:https://github.com/Apicurio/apicurio-registry/blob/main/utils/converter/src/main/java/io/apicurio/registry/utils/converter/SerdeBasedConverter.java[SerdeBasedConverter Java class]
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_registry-reference.adoc
+
+:_mod-docs-content-type: REFERENCE
+

@@ -1,0 +1,35 @@
+[id="using-iceberg-catalog_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= using-iceberg-catalog_{context}
+
+= Using {registry} as an Apache Iceberg REST Catalog
+
+[role="_abstract"]
+You can use {registry} as an Apache Iceberg REST Catalog to manage table metadata for your data lakehouse applications.
+
+* xref:registry-iceberg-catalog-overview_{context}[]
+* xref:registry-iceberg-catalog-config_{context}[]
+* xref:registry-iceberg-catalog-rest-api_{context}[]
+* xref:registry-iceberg-catalog-commit-table_{context}[]
+* xref:registry-iceberg-catalog-error-handling_{context}[]
+* xref:registry-iceberg-catalog-auth_{context}[]
+* xref:registry-iceberg-catalog-query-engines_{context}[]
+* xref:registry-iceberg-catalog-api-reference_{context}[]
+* xref:registry-iceberg-catalog-limitations_{context}[]
+
+
+.Prerequisites
+* A running {registry} instance with `apicurio.features.experimental.enabled=true` and `apicurio.iceberg.enabled=true`
+* Query engines or tools that support the Iceberg REST Catalog specification (Apache Spark, Trino, ClickHouse, DuckDB, Flink)
+
+
+// con-registry-iceberg-catalog-overview
+include::../modules/registry-iceberg-catalog-overview.adoc[leveloffset=+1]
+include::../modules/registry-iceberg-catalog-config.adoc[leveloffset=+1]
+include::../modules/registry-iceberg-catalog-rest-api.adoc[leveloffset=+1]
+include::../modules/registry-iceberg-catalog-commit-table.adoc[leveloffset=+1]
+include::../modules/registry-iceberg-catalog-error-handling.adoc[leveloffset=+1]
+include::../modules/registry-iceberg-catalog-auth.adoc[leveloffset=+1]
+include::../modules/registry-iceberg-catalog-query-engines.adoc[leveloffset=+1]
+include::../modules/registry-iceberg-catalog-api-reference.adoc[leveloffset=+1]
+include::../modules/registry-iceberg-catalog-limitations.adoc[leveloffset=+1]

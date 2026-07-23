@@ -1,0 +1,100 @@
+[id="ha-sql-storage_{context}"]
+= Configuring SQL database storage for high availability
+
+
+When using PostgreSQL or MySQL storage, high availability depends on your database configuration. The database
+must be configured with replication and automatic failover.
+
+NOTE: MySQL storage is not yet supported by the operator and requires manual configuration using environment variables.
+
+=== Database high availability options
+
+Consider these database HA strategies:
+
+* *PostgreSQL with streaming replication* - Primary-replica configuration with automatic failover using tools
+like Patroni, CloudNativePG, or Crunchy PostgreSQL Operator
+* *PostgreSQL with synchronous replication* - Ensures zero data loss but may impact performance
+* *MySQL with Group Replication* - Multi-primary or single-primary mode with automatic failover
+* *Managed database services* - Cloud provider managed databases (RDS, Cloud SQL, Azure Database) with built-in HA
+
+=== Configuring connection pool for failover
+
+Configure the Agroal connection pool to handle database failover gracefully. Add these environment variables
+to the `app` component:
+
+[source,yaml]
+----
+spec:
+  app:
+    env:
+      # Connection pool sizing
+      - name: APICURIO_DATASOURCE_JDBC_INITIAL-SIZE
+        value: "10"
+      - name: APICURIO_DATASOURCE_JDBC_MIN-SIZE
+        value: "10"
+      - name: APICURIO_DATASOURCE_JDBC_MAX-SIZE
+        value: "50"
+
+      # Connection acquisition timeout (5 seconds)
+      - name: QUARKUS_DATASOURCE_JDBC_ACQUISITION-TIMEOUT
+        value: "5S"
+
+      # Background validation to detect stale connections (every 2 minutes)
+      - name: QUARKUS_DATASOURCE_JDBC_BACKGROUND-VALIDATION-INTERVAL
+        value: "2M"
+
+      # Foreground validation before use (every 1 minute)
+      - name: QUARKUS_DATASOURCE_JDBC_FOREGROUND-VALIDATION-INTERVAL
+        value: "1M"
+
+      # Maximum connection lifetime (30 minutes)
+      - name: QUARKUS_DATASOURCE_JDBC_MAX-LIFETIME
+        value: "30M"
+----
+
+These settings ensure that:
+
+* Connections are validated regularly to detect database failovers
+* Stale connections are removed and recreated
+* Connection acquisition times out rather than hanging indefinitely
+
+=== Example: PostgreSQL with CloudNativePG
+
+When using the CloudNativePG operator for PostgreSQL HA:
+
+[source,yaml]
+----
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: registry-db-cluster
+spec:
+  instances: 3
+  storage:
+    size: 20Gi
+    storageClass: standard
+  postgresql:
+    parameters:
+      max_connections: "200"
+  backup:
+    barmanObjectStore:
+      # Configure backup storage
+----
+
+Then reference the cluster in your `ApicurioRegistry3` CR:
+
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: postgresql
+      sql:
+        dataSource:
+          url: jdbc:postgresql://registry-db-cluster-rw:5432/app
+          username: app
+          password:
+            name: registry-db-cluster-app
+            key: password
+----
+

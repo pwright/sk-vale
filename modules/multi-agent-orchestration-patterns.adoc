@@ -1,0 +1,65 @@
+[id="multi-agent-orchestration-patterns_{context}"]
+= Multi-agent orchestration patterns
+
+
+[role="_abstract"]
+You can orchestrate multi-agent workflows by combining {registry} discovery endpoints with A2A task execution. {registry} provides the discovery layer, and your orchestrator code coordinates the agent interactions.
+
+.Sequential pipeline with context chaining
+
+In a sequential pipeline, each agent receives the original message and the accumulated outputs from all previous agents. Each agent builds on the work of the agents that ran before it.
+
+Use a sequential pipeline when:
+
+* Each processing step depends on results from previous steps
+* You need to accumulate context across a multi-step workflow
+* Agent outputs serve as inputs to subsequent agents
+
+The `examples/a2a-real-world-integration` example in the {registry} repository shows context chaining with four agents that process a customer complaint:
+
+. **Sentiment agent**: analyzes the original message and produces a sentiment score
+. **Issue analyzer**: receives the original message and the sentiment output, then identifies specific issues
+. **Response generator**: receives the original message, sentiment, and analysis, then generates a response
+. **Translation agent**: receives the generated response and translates it
+
+Each step stores its output under a context key. Subsequent steps reference previous outputs by using `\{{variable}}` template placeholders. A `WorkflowContext` object tracks the original message and all agent outputs:
+
+[source,java]
+----
+WorkflowContext context = new WorkflowContext();
+context.originalMessage = customerMessage;
+
+// After each step completes:
+context.agentOutputs.put("sentiment", sentimentResult);
+context.agentOutputs.put("analysis", analysisResult);
+
+// Build prompt for the next step:
+String prompt = context.buildPrompt("Original: {{original}}\nSentiment: {{sentiment}}");
+----
+
+.Parallel fan-out
+
+In a parallel fan-out, you send the same input to multiple agents simultaneously and aggregate the results. You discover the agents by using `/.well-known/agents` with appropriate filters.
+
+Use parallel fan-out when:
+
+* Multiple independent agents can process the same input
+* You want to reduce total processing time
+* You need to compare or merge results from different agents
+
+In a typical parallel fan-out, the orchestrator discovers agents with a specific skill by querying `/.well-known/agents?skill=<skill-id>`, sends the same A2A task to each discovered agent in parallel, and then collects the responses to merge or compare them.
+
+.Conditional routing
+
+In conditional routing, you use agent capabilities and skills to decide which agent handles a request. You inspect agent cards to select the best match.
+
+Use conditional routing when:
+
+* Different request types require different agents
+* You want to select agents based on their reported capabilities
+* You need to match input and output modalities
+
+In a typical conditional routing flow, the orchestrator determines the required capability from the incoming request (for example, `streaming:true` for real-time processing), queries `/.well-known/agents` with the appropriate filters, selects an agent from the results based on additional criteria such as version or provider, and sends the A2A task to the selected agent.
+
+// ref-agent-error-handling-and-resilience
+:_mod-docs-content-type: REFERENCE

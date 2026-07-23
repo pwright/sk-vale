@@ -1,0 +1,92 @@
+[id="ccompat-behavioral-differences_{context}"]
+= Behavioral differences from Confluent
+
+
+[role="_abstract"]
+Although the ccompat API provides broad compatibility, some behavioral differences exist when you migrate from Confluent Schema Registry.
+
+**Avro schema formatting**
+
+The ccompat API normalizes returned Avro schemas to compact single-line JSON, matching the Confluent behavior. This normalization has the following effects:
+
+* The API returns pretty-printed Avro schemas submitted during registration in compact form.
+* The API simplifies Avro primitive type wrappers (for example, `{"type": "string"}` becomes `"string"`).
+* Field ordering follows the Avro canonical form.
+
+This normalization applies only to ccompat API responses (`/apis/ccompat/*`). The native {registry} v3 API returns schemas in their original submitted format.
+
+**Default compatibility level**
+
+When you do not configure an explicit compatibility rule at the artifact, group, or global level, the ccompat compatibility check endpoint (`POST /compatibility/subjects/{subject}/versions/{version}`) defaults to `BACKWARD` compatibility. This matches the default behavior of Confluent Schema Registry.
+
+NOTE: This default only applies to the compatibility _check_ endpoint. Schema registration does not enforce this default unless you explicitly configure a compatibility rule by using `PUT /config` or `PUT /config/{subject}`.
+
+**Config response format**
+
+The `PUT /config` and `PUT /config/{subject}` endpoints return a response with the following fields:
+
+[source,json]
+----
+{
+  "compatibility": "BACKWARD",
+  "normalize": false
+}
+----
+
+The `GET /config` endpoint returns the following response:
+
+[source,json]
+----
+{
+  "compatibilityLevel": "BACKWARD"
+}
+----
+
+The field name differs between the update response (`compatibility`) and the get response (`compatibilityLevel`). This matches the Confluent API behavior.
+
+**Error responses**
+
+Error responses use Confluent-compatible error codes and message formats:
+
+.Error codes
+[%header,cols="1,2,1"]
+|===
+|Error code
+|Meaning
+|HTTP status
+
+|40401
+|Subject not found
+|404
+
+|40402
+|Version not found
+|404
+
+|40403
+|Schema not found
+|404
+
+|40408
+|Subject-level compatibility not configured
+|404
+
+|42201
+|Invalid schema
+|422
+
+|42203
+|Invalid compatibility level
+|422
+
+|42206
+|Schema has existing references
+|422
+|===
+
+**Sorted results**
+
+List endpoints (`GET /subjects`, `GET /schemas/ids/{id}/subjects`, `GET /schemas/ids/{id}/versions`) return results in sorted order (alphabetical for subjects, numerical for versions).
+
+:_mod-docs-content-type: REFERENCE
+

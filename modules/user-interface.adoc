@@ -1,0 +1,59 @@
+[id="user-interface_{context}"]
+= User interface architecture changes
+
+
+[role="_abstract"]
+{registry} 3.x introduces a significant architectural change to the user interface. You deploy the UI as a separate container, which provides more deployment flexibility but requires additional configuration considerations during migration.
+
+In {registry} {registry-v2}, the UI is built into the main `apicurio-registry` container as a single monolithic application. {registry} 3.x separates the UI into its own container:
+
+*Registry 2.x architecture:*
+
+----
+┌─────────────────────────────┐
+│  apicurio-registry-sql:2.x  │
+│  ┌───────────┬────────────┐ │
+│  │    UI     │    API     │ │
+│  └───────────┴────────────┘ │
+└─────────────────────────────┘
+----
+
+*Registry 3.x architecture:*
+
+----
+┌────────────────────┐    ┌────────────────────┐
+│ apicurio-registry  │    │ apicurio-registry  │
+│       -ui:3.x      │    │       :3.x         │
+│                    │    │                    │
+│   UI (Frontend)    │───▶│   API (Backend)    │
+└────────────────────┘    └────────────────────┘
+----
+
+*Implications for migration:*
+
+* You deploy and manage two containers instead of one.
+* Additional networking configuration is required.
+* You have more flexible deployment options.
+* You can scale UI and API components independently.
+
+{registry} 3.1.0 introduces integrated Designer functionality, which replaces the standalone Apicurio Studio project.
+
+Designer provides visual editing capabilities for OpenAPI and AsyncAPI specifications directly within the {registry} UI. This functionality previously existed as a separate project (Apicurio Studio) but is now fully integrated into {registry}.
+
+*Key features:*
+
+* Visual editor for OpenAPI 3.x specifications.
+* Visual editor for AsyncAPI specifications.
+* Draft artifact version state for work-in-progress designs.
+* Direct integration with {registry} storage.
+* No separate deployment required.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:deploying-registry-ui_{context}[]
+* xref:ui-configuration-properties_{context}[]
+* https://www.apicur.io/blog/2025/10/23/studio-fully-deprecated[Apicurio Studio Deprecation Announcement]
+
+
+// proc-deploying-registry-ui
+:_mod-docs-content-type: PROCEDURE

@@ -1,0 +1,26 @@
+[id="support-window_{context}"]
+= Support window
+
+
+[role="_abstract"]
+{registry} maintains the *two most recent minor versions* with security patches.
+
+When a new minor version is released, the oldest supported minor version reaches end-of-life and no longer receives updates.
+
+.Example support timeline
+[cols="1,1,1", options="header"]
+|===
+| Event
+| Supported versions
+| End-of-life
+
+| 3.3.0 released
+| 3.3.x, 3.2.x
+| 3.1.x and older
+
+| 3.4.0 released
+| 3.4.x, 3.3.x
+| 3.2.x and older
+|===
+
+

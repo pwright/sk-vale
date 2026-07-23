@@ -1,0 +1,22 @@
+[id="backup-before-upgrade_{context}"]
+= Backing up before an upgrade
+
+
+[role="_abstract"]
+Before any minor version upgrade, create a backup of your {registry} database.
+
+For PostgreSQL deployments:
+
+[source,bash]
+----
+pg_dump -h <host> -U <username> -d <database> -F c -f registry-backup-$(date +%Y%m%d).dump
+----
+
+For KafkaSQL deployments, back up both the Kafka topic data and the SQL snapshot database.
+
+Store backups in a secure location and verify that they can be restored before proceeding with the upgrade.
+
+
+[role="_additional-resources"]
+.Additional resources
+* xref:registry-migration_{context}[Migrating from {registry} {registry-v2} to {registry} 3.x]

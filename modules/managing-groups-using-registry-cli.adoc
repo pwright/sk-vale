@@ -1,0 +1,108 @@
+[id="managing-groups-using-registry-cli_{context}"]
+= Managing groups using the CLI
+
+
+[role="_abstract"]
+You can use the CLI to create, list, update, and delete artifact groups in {registry}. Groups offer a way to organize related artifacts.
+
+.Prerequisites
+* You have configured at least one CLI context.
+
+=== Listing groups
+
+To list all groups in the registry:
+
+[source,bash]
+----
+$ acr group
+----
+
+You can use pagination options for large result sets:
+
+[source,bash]
+----
+$ acr group --page 1 --size 50
+----
+
+=== Creating a group
+
+To create a new group:
+
+[source,bash,subs="+quotes"]
+----
+$ acr group create _GROUP_ID_
+----
+
+You can include a description and labels:
+
+[source,bash]
+----
+$ acr group create my-schemas --description "Production schemas" --label env=prod --label team=platform
+----
+
+=== Getting group details
+
+To get details for a specific group:
+
+[source,bash,subs="+quotes"]
+----
+$ acr group get _GROUP_ID_
+----
+
+For example:
+
+[source,bash]
+----
+$ acr group get my-schemas
+----
+
+=== Updating a group
+
+To update a group description:
+
+[source,bash]
+----
+$ acr group update my-schemas --description "Updated description"
+----
+
+To add or update labels:
+
+[source,bash]
+----
+$ acr group update my-schemas --set-label env=staging --set-label owner=alice
+----
+
+To delete labels:
+
+[source,bash]
+----
+$ acr group update my-schemas --delete-label env
+----
+
+=== Deleting a group
+
+To delete a group:
+
+[source,bash,subs="+quotes"]
+----
+$ acr group delete _GROUP_ID_
+----
+
+[NOTE]
+====
+You must configure {registry} with `apicurio.rest.deletion.group.enabled=true` to allow group deletions.
+====
+
+To delete a group that has artifacts, use the `--force` option:
+
+[source,bash]
+----
+$ acr group delete my-schemas --force
+----
+
+[NOTE]
+====
+Using `--force` deletes the group and all artifacts it contains. Use this option with caution.
+====
+
+

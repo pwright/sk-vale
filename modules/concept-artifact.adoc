@@ -1,0 +1,13 @@
+[id="concept-artifact_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-artifact_{context}
+
+== Artifact
+
+[role="_abstract"]
+An *artifact* is a named schema or API definition within a group, uniquely identified by the combination of `groupId` and `artifactId`.
+
+An artifact acts as a container for zero or more artifact versions.
+Examples of artifacts include an Avro schema, a Protobuf definition, an OpenAPI specification, or an AsyncAPI definition.
+
+// con-concept-artifact-version

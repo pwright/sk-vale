@@ -1,0 +1,22 @@
+[id="mcp-server-overview_{context}"]
+= MCP server overview
+
+
+[role="_abstract"]
+The {registry} MCP server container acts as an adapter between LLM clients and {registry}. On the LLM side, it communicates by using stdio transport (standard input/output). On the {registry} side, it communicates by using HTTP or HTTPS to the {registry} REST API, configured through the `REGISTRY_URL` environment variable.
+
+When an LLM client sends a request, the MCP server converts that request into {registry} REST API calls, runs the operation, and returns the results to the LLM client. The LLM client prompts you for confirmation before each tool call.
+
+The MCP server supports operations in the following categories:
+
+* **System**: Retrieve server information such as version and status
+* **Groups**: Create, list, search, and update artifact groups
+* **Artifacts**: Create, list, search, and update artifacts and metadata
+* **Versions**: Create, list, search, update content, and manage version state
+* **Configuration**: List, get, and update dynamic configuration properties
+* **Prompt templates**: List, get, and render prompt templates stored in {registry}
+
+The MCP server has a safe mode that is enabled by default. Safe mode restricts operations that could cause unintended changes, such as limiting which configuration properties you can update.
+
+// proc-installing-the-mcp-server
+:_mod-docs-content-type: PROCEDURE

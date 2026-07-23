@@ -1,0 +1,47 @@
+[id="a2a-multi-agent-workflow-example_{context}"]
+= Multi-agent workflow example
+
+
+[role="_abstract"]
+You can chain context across multiple agents in a pipeline. The link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/a2a-real-world-integration[a2a-real-world-integration example] in the {registry} repository demonstrates this pattern.
+
+.Context chaining pipeline
+[cols="1,3,3",options="header"]
+|===
+|Step
+|Input context
+|Output
+
+|1. Sentiment agent
+|`\{{original}}`
+|`{"sentiment": "very_negative", "urgency": "critical"}`
+
+|2. Issue analyzer
+|`\{{original}}` + `\{{sentiment}}`
+|`{"priority": "P1", "issue_type": "delayed_delivery"}`
+
+|3. Response generator
+|`\{{original}}` + `\{{sentiment}}` + `\{{analysis}}`
+|`{"response": "Dear customer, I sincerely apologize..."}`
+
+|4. Translation agent
+|`\{{response}}`
+|`{"translated": "Estimado cliente, le pido disculpas..."}`
+|===
+
+ifndef::service-registry-downstream[]
+.Example commands
+To run the example application locally, clone the {registry} repository and run the following commands:
+
+[source,bash]
+----
+cd examples/a2a-real-world-integration
+docker-compose up -d
+mvn clean compile exec:java
+----
+
+The Web UI is available at http://localhost:9000.
+endif::[]
+
+// ref-a2a-java-sdk-usage
+:_mod-docs-content-type: REFERENCE

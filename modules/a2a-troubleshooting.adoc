@@ -1,0 +1,34 @@
+[id="a2a-troubleshooting_{context}"]
+= A2A troubleshooting
+
+
+[role="_abstract"]
+Use the following information to troubleshoot common issues with A2A features in {registry}.
+
+.A2A endpoints return 404
+Ensure A2A is enabled in your configuration:
+[source,properties]
+----
+apicurio.a2a.enabled=true
+----
+
+.Agent Card validation fails
+Verify the following conditions:
+
+* The `name` field is present and non-empty.
+* Skills have both `id` and `name` fields.
+* Capabilities are boolean values.
+* The JSON is well-formed.
+
+.Search returns no results
+Verify the following conditions:
+
+* Agent Cards are stored with type `AGENT_CARD`.
+* The registry extracted labels correctly (check artifact labels).
+* Search filters match stored values exactly.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-llm-artifact-types-implementation.adoc[LLM Artifact Types]
+* link:https://google.github.io/A2A/[A2A Protocol Specification]
+* xref:getting-started/assembly-configuring-the-registry.adoc[{registry} configuration]

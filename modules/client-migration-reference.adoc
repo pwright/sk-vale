@@ -1,0 +1,71 @@
+[id="client-migration-reference_{context}"]
+= Client migration configuration reference
+
+
+[role="_abstract"]
+The following tables summarize the configuration property changes between {registry} {registry-v2} and {registry} 3.x for SerDes applications, REST API clients, and authentication.
+
+.SerDes configuration property changes
+
+[cols="1,1,1",options="header"]
+|===
+| Property
+| Registry 2.x
+| Registry 3.x
+
+| OAuth2 endpoint
+| `AUTH_SERVICE_URL` + `AUTH_REALM`
+| `AUTH_TOKEN_ENDPOINT` (full URL)
+
+| ID handler
+| `ID_HANDLER` (optional default "8 byte handler")
+| `ID_HANDLER` (optional default "4 byte handler")
+
+| Confluent ID handler
+| `ENABLE_CONFLUENT_ID_HANDLER` (optional convenience property)
+| Removed
+
+| Content ID usage
+| `USE_ID` with `IdOption` (default "globalId")
+| `USE_ID` with `IdOption` (default "contentId")
+|===
+
+NOTE: The default ID option changed from `globalId` to `contentId` in v3. Both v2 and v3 SerDes can read messages that use either ID type, which ensures compatibility during migration. If your v2 applications explicitly set `USE_ID=contentId`, you can remove this configuration in v3 because it is now the default.
+
+.REST API client authentication changes
+
+[cols="1,1,1",options="header"]
+|===
+| Aspect
+| Registry 2.x
+| Registry 3.x
+
+| Configuration approach
+| Separate `Auth` object with `OidcAuth`
+| Fluent builder with `RegistryClientOptions`
+
+| OAuth2 endpoint
+| Full auth server URL with realm path
+| Full OIDC token endpoint URL
+
+| Factory method
+| `RegistryClientFactory.create(url, map, auth)`
+| `RegistryClientFactory.create(options)`
+|===
+
+With proper configuration, {registry} 3.x SerDes reads messages that v2 SerDes serialized:
+
+* *v3 consumers* read messages that v2 producers produce.
+* *v2 consumers* read messages that v3 producers produce.
+* *Mixed environment* (v2 and v3 clients) is fully supported.
+
+This compatibility helps you avoid data loss during migration.
+
+[role="_additional-resources"]
+.Additional resources
+* {LinkServiceRegistryUser}[{NameServiceRegistryUser}]
+* https://docs.redhat.com/en/documentation/red_hat_build_of_apicurio_registry/3.1/html/apicurio_registry_user_guide/configuring-kafka-client-serdes_registry[Kafka SerDes Configuration Guide]
+
+
+// ref-configuration-property-changes
+:_mod-docs-content-type: REFERENCE

@@ -1,0 +1,56 @@
+[id="registry-migration_{context}"]
+= Migrating from {registry} {registry-v2} to {registry} 3.x
+
+
+[role="_abstract"]
+You can migrate from {registry} {registry-v2} to {registry} 3.x by deploying a new 3.x instance, exporting and importing your persisted data, and updating your client applications.
+
+{registry} 3.x includes breaking changes that require a new deployment, data migration, and client application updates. There is no in-place upgrade path from v2 to v3.
+
+NOTE: For general versioning policy, upgrade guidance within the 3.x series, and rollback procedures, see xref:versioning-support-policy_{context}[].
+
+* xref:registry-migration-overview_{context}[]
+* xref:migration-planning_{context}[]
+* xref:migrating-minimal-downtime_{context}[]
+* xref:migrating-maintenance-window_{context}[]
+* xref:migrating-registry-data_{context}[]
+* xref:migrating-registry-applications_{context}[]
+* xref:migrating-kafka-serdes_{context}[]
+* xref:migrating-rest-api-clients_{context}[]
+* xref:client-migration-reference_{context}[]
+* xref:migrating-registry-configuration_{context}[]
+* xref:kafkasql-architecture_{context}[]
+* xref:configuring-kafkasql-topic_{context}[]
+* xref:verifying-migration-configuration_{context}[]
+* xref:resolving-configuration-issues_{context}[]
+* xref:user-interface_{context}[]
+* xref:deploying-registry-ui_{context}[]
+* xref:ui-configuration-properties_{context}[]
+* xref:migration-scripts_{context}[]
+* xref:troubleshooting-migration_{context}[]
+
+
+// con-registry-migration-overview
+:_mod-docs-content-type: CONCEPT
+include::../modules/registry-migration-overview.adoc[leveloffset=+1]
+include::../modules/migration-planning.adoc[leveloffset=+1]
+include::../modules/migrating-minimal-downtime.adoc[leveloffset=+1]
+include::../modules/migrating-maintenance-window.adoc[leveloffset=+1]
+include::../modules/migrating-registry-data.adoc[leveloffset=+1]
+include::../modules/migrating-registry-applications.adoc[leveloffset=+1]
+include::../modules/choosing-migration-strategy.adoc[leveloffset=+1]
+include::../modules/migrating-kafka-serdes.adoc[leveloffset=+1]
+include::../modules/migrating-rest-api-clients.adoc[leveloffset=+1]
+include::../modules/client-migration-reference.adoc[leveloffset=+1]
+include::../modules/migrating-registry-configuration.adoc[leveloffset=+1]
+include::../modules/configuring-storage.adoc[leveloffset=+1]
+include::../modules/kafkasql-architecture.adoc[leveloffset=+1]
+include::../modules/configuring-kafkasql-topic.adoc[leveloffset=+1]
+include::../modules/verifying-migration-configuration.adoc[leveloffset=+1]
+include::../modules/resolving-configuration-issues.adoc[leveloffset=+1]
+include::../modules/user-interface.adoc[leveloffset=+1]
+include::../modules/deploying-registry-ui.adoc[leveloffset=+1]
+include::../modules/ui-configuration-properties.adoc[leveloffset=+1]
+include::../modules/migration-scripts.adoc[leveloffset=+1]
+include::../modules/installing-script-dependencies.adoc[leveloffset=+2]
+include::../modules/troubleshooting-migration.adoc[leveloffset=+1]

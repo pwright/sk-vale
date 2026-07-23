@@ -1,0 +1,40 @@
+[id="kafkasql-architecture_{context}"]
+= KafkaSQL storage changes in {registry} 3.x
+
+
+[role="_abstract"]
+{registry} 3.x completely re-engineers the KafkaSQL storage implementation with significant architectural improvements. If you use KafkaSQL storage, understand these changes before you configure the v3 journal topic.
+
+{registry} 3.x introduces a fundamentally different KafkaSQL implementation:
+
+* *True journaling approach:* The new implementation uses a true event journaling pattern.
+* *No log compaction:* Unlike v2, the v3 implementation does not rely on Kafka log compaction.
+* *Immutable event log:* All registry operations are stored as immutable events in the journal topic.
+* *Improved consistency:* Better handling of concurrent operations and edge cases.
+
+{registry} 3.x KafkaSQL includes an optional snapshotting feature for advanced use cases.
+
+Snapshotting creates periodic database snapshots of the registry state, which provides the following benefits:
+
+* *Faster startup times:* The registry loads from the snapshot instead of replaying the entire journal.
+* *Backup capability:* Use snapshots for disaster recovery.
+* *Optional journal cleanup:* When snapshotting is enabled, you can configure finite retention to remove older journal events.
+
+*When to use snapshotting:*
+
+* Large registries with many artifacts (thousands or more).
+* Long-running deployments with growing journal topics.
+* Situations that need faster registry startup and recovery times.
+
+IMPORTANT: Without snapshotting enabled, you must preserve all journal events (infinite retention). If you enable snapshotting and want to use finite retention, set `apicurio.kafkasql.topic-configuration-verification-override-enabled=true` and ensure that snapshots are created more frequently than messages are deleted.
+
+NOTE: Snapshotting is an advanced feature. Most deployments do not need snapshotting enabled. Consult the link:https://www.apicur.io/registry/docs/apicurio-registry/3.1.x/index.html[official {registry} documentation] for more information on how to configure and use the snapshotting feature.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:configuring-kafkasql-topic_{context}[]
+* xref:migrating-registry-configuration_{context}[]
+
+
+// proc-configuring-kafkasql-topic
+:_mod-docs-content-type: PROCEDURE

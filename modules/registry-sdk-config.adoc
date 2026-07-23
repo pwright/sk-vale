@@ -1,0 +1,77 @@
+[id="registry-sdk-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-sdk-config_{context}
+
+== {registry} Java SDK configuration
+
+[role="_abstract"]
+The {registry} Java client supports several configuration options, including client factory settings, custom headers, TLS authentication, and OpenTelemetry distributed tracing.
+
+.{registry} Java client configuration options
+[%header,cols="1,2,1"]
+|===
+|Option
+|Description
+|Arguments
+|Plain client
+|Connects to a running {registry} with no additional configuration.
+|`baseUrl`
+|Client with custom configuration
+|{registry} client that uses the configuration that you provide.
+|`baseUrl`, `Map<String Object> configs`
+|Client with custom configuration and authentication
+|Accepts a map containing custom configuration and an authentication server. You can use this option to add custom headers and authenticate requests.
+|`baseUrl, Map<String Object> configs, Auth auth`
+|===
+
+**Custom header configuration**
+
+To configure custom headers, add the `apicurio.registry.request.headers` prefix to the `configs` map key. For example, a `configs` map key of `apicurio.registry.request.headers.Authorization` with a value of `Basic: YWxhZGRpbjpvcGVuc2VzYW1` sets the `Authorization` header with the same value.
+
+**TLS configuration properties**
+
+The following properties configure Transport Layer Security (TLS) authentication for the {registry} Java client:
+
+* `apicurio.registry.request.ssl.truststore.location`
+* `apicurio.registry.request.ssl.truststore.password`
+* `apicurio.registry.request.ssl.truststore.type`
+* `apicurio.registry.request.ssl.keystore.location`
+* `apicurio.registry.request.ssl.keystore.password`
+* `apicurio.registry.request.ssl.keystore.type`
+* `apicurio.registry.request.ssl.key.password`
+
+**OpenTelemetry distributed tracing**
+
+The {registry} Java SDK supports optional OpenTelemetry trace context propagation. When enabled, W3C trace context headers (`traceparent` and `tracestate`) are injected into every HTTP request made to {registry}, providing end-to-end distributed tracing across your services and the registry.
+
+Enabling tracing:: Call `enableOpenTelemetry()` when building the client options:
++
+[source,java]
+----
+RegistryClientOptions options = RegistryClientOptions.create()
+        .registryUrl("http://localhost:8080")
+        .enableOpenTelemetry();
+RegistryClient client = RegistryClientFactory.create(options);
+----
+
+Required dependency:: The `opentelemetry-api` library must be on the classpath. Add it to your project if it is not already provided transitively:
++
+[source,xml,subs="+quotes,attributes"]
+----
+<dependency>
+    <groupId>io.opentelemetry</groupId>
+    <artifactId>opentelemetry-api</artifactId>
+    <version>${opentelemetry.version}</version>
+</dependency>
+----
+
+Runtime behavior:: When an OpenTelemetry SDK is initialized in your application (for example, through the OpenTelemetry Java agent or the Quarkus OpenTelemetry extension), the {registry} SDK participates in the active trace. If no OpenTelemetry SDK is configured, the behavior is a no-op and no trace headers are added.
+
+NOTE: This feature also applies to the {registry} Kafka client serializers/deserializers (SerDes), which use the SDK internally to communicate with {registry}. See {kafka-client-serdes} for SerDes-specific configuration.
+
+
+[role="_additional-resources"]
+.Additional resources
+* {kafka-client-serdes}
+
+

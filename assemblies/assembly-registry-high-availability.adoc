@@ -1,0 +1,27 @@
+[id="registry-high-availability_{context}"]
+= Deploying {registry} for high availability
+
+
+[role="_abstract"]
+This chapter explains how to configure {registry} for high availability in a single {kubernetes} cluster:
+
+* xref:ha-architecture-overview_{context}[]
+* xref:ha-application-scaling_{context}[]
+* xref:ha-sql-storage_{context}[]
+* xref:ha-kafkasql-storage_{context}[]
+* xref:ha-monitoring_{context}[]
+* xref:ha-rolling-updates_{context}[]
+* xref:ha-backup-restore_{context}[]
+
+.Prerequisites
+* {installing-the-registry-openshift}
+
+//INCLUDES
+
+include::../modules/ha-architecture-overview.adoc[leveloffset=+1]
+include::../modules/ha-application-scaling.adoc[leveloffset=+1]
+include::../modules/ha-sql-storage.adoc[leveloffset=+1]
+include::../modules/ha-kafkasql-storage.adoc[leveloffset=+1]
+include::../modules/ha-monitoring.adoc[leveloffset=+1]
+include::../modules/ha-rolling-updates.adoc[leveloffset=+1]
+include::../modules/ha-backup-restore.adoc[leveloffset=+1]

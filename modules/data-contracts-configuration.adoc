@@ -1,0 +1,36 @@
+[id="data-contracts-configuration_{context}"]
+= Configuration
+
+
+[role="_abstract"]
+Data contracts are always available — no special configuration is required. Submitting a contract is an explicit opt-in action that does not affect existing registry functionality.
+
+=== SerDes configuration
+
+.SerDes contract rule properties
+[cols="3,1,3", options="header"]
+|===
+|Property |Default |Description
+
+|`apicurio.registry.contract-rules.enabled`
+|`false`
+|Enable contract rule execution during serialize/deserialize
+
+|`apicurio.registry.contract-rules.fail-on-error`
+|`true`
+|When `true`, rule violations throw `RuntimeException`. When `false`, violations are logged but serialization proceeds
+|===
+
+=== Storage compatibility
+
+Data contracts work across all storage variants:
+
+* *SQL (PostgreSQL)* — Full support with immediate consistency. The `contract_audit_log` table is created automatically (DB upgrade 106).
+* *KafkaSQL* — Full support; label writes go through the Kafka journal for multi-node consistency
+* *GitOps / KubernetesOps* — Read-only safe; write operations are rejected by the read-only decorator
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-rules}
+* link:https://bitol.io/[Open Data Contract Standard (ODCS)]
+* link:{attachmentsdir}/registry-rest-api.htm[Apicurio Registry REST API documentation]

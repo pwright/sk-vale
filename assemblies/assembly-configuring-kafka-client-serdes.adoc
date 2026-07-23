@@ -1,0 +1,33 @@
+[id="configuring-kafka-client-serdes_{context}"]
+= Configuring Kafka serializers/deserializers in Java clients
+
+//If the assembly covers a task, start the title with a verb in the gerund form, such as Creating or Configuring.
+
+[role="_abstract"]
+You can configure Kafka serializers/deserializers (SerDes) in your producer and consumer Java client applications:
+
+* xref:registry-serdes-concepts-constants_{context}[]
+* xref:registry-serdes-config-props_{context}[]
+* xref:registry-serdes-types-serde_{context}[]
+* xref:registry-serdes-types-avro_{context}[]
+* xref:registry-serdes-types-json_{context}[]
+* xref:registry-serdes-types-protobuf_{context}[]
+
+
+.Prerequisites
+* You have read {kafka-client-serdes}.
+
+//INCLUDES
+
+
+// Module included in the following assemblies:
+//  assembly-using-kafka-client-serdes
+
+:_mod-docs-content-type: REFERENCE
+
+include::../modules/registry-serdes-concepts-constants.adoc[leveloffset=+1]
+include::../modules/registry-serdes-config-props.adoc[leveloffset=+1]
+include::../modules/registry-serdes-types-serde.adoc[leveloffset=+1]
+include::../modules/registry-serdes-types-avro.adoc[leveloffset=+1]
+include::../modules/registry-serdes-types-json.adoc[leveloffset=+1]
+include::../modules/registry-serdes-types-protobuf.adoc[leveloffset=+1]

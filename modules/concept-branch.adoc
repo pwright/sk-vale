@@ -1,0 +1,13 @@
+[id="concept-branch_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-branch_{context}
+
+== Branch
+
+[role="_abstract"]
+A *branch* is a named, ordered sequence of artifact versions within an artifact.
+
+Branches track parallel evolution paths for an artifact.
+For example, an artifact might have a `latest` branch (the default) and a `1.x` branch for maintenance releases.
+
+// con-concept-artifact-reference

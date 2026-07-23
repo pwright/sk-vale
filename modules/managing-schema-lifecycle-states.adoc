@@ -1,0 +1,96 @@
+[id="managing-schema-lifecycle-states_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= managing-schema-lifecycle-states_{context}
+
+== Managing schema lifecycle states
+
+[role="_abstract"]
+You can use {registry} version states to control whether consumers can retrieve a schema version. Moving a schema through the ENABLED, DEPRECATED, and DISABLED states gives your team a structured way to retire schemas without breaking active consumers.
+
+{registry} supports three version states:
+
+* *ENABLED*: consumers can retrieve the schema version normally. All new versions start in this state.
+* *DEPRECATED*: consumers can still retrieve the schema version, but {registry} adds an `X-Registry-Deprecated` header to the response. Use this state to signal that consumers must migrate to a newer version.
+* *DISABLED*: consumers receive a `404 Not Found` response when they request the schema version. Use this state after you confirm that all consumers have migrated away.
+
+The following table summarizes when to use each state transition.
+
+.Schema state decision guide
+[cols="3,2",options="header"]
+|===
+|Scenario
+|Recommended action
+
+|Producers and consumers actively use the schema
+|Keep ENABLED
+
+|A newer version is available and consumers are migrating
+|Set DEPRECATED
+
+|Events have stopped and all consumers have confirmed migration
+|Set DISABLED
+
+|No audit or compliance requirements mandate retaining the schema
+|Delete the artifact
+|===
+
+.Prerequisites
+* You have a running {registry} instance.
+* You have registered a schema artifact with at least one version.
+* You have the group ID, artifact ID, and version identifier for the version you want to update.
+* If your {registry} instance requires authentication, you have a valid access token. Changing version states requires the `developer` or `admin` role when role-based access control is enabled. For details, see xref:configuring-registry-security_{context}[].
+
+NOTE: The examples in this procedure omit authentication headers for brevity. If your {registry} instance requires authentication, include an `Authorization` header with a valid bearer token in each request.
+
+.Procedure
+. Deprecate the schema version by sending a `PUT` request to the version state endpoint:
++
+[source,bash]
+----
+curl -X PUT \
+  http://MY-REGISTRY-URL/apis/registry/v3/groups/my-group/artifacts/my-schema/versions/1.0/state \
+  -H "Content-Type: application/json" \
+  -d '{"state": "DEPRECATED"}'
+----
++
+After you set the state to `DEPRECATED`, consumers that fetch the schema receive an `X-Registry-Deprecated` header in the response. The schema content remains accessible, and existing consumers continue to work without interruption.
+
+. Notify your consumer teams that the schema version is deprecated and provide a reasonable grace period for migration, commonly two to four weeks depending on your organization and consumer count.
+
+. After the grace period expires, verify that no active consumers depend on the deprecated version. Check application logs or monitoring dashboards to confirm that no clients fetch the deprecated version.
+
+. Disable the schema version by sending a `PUT` request:
++
+[source,bash]
+----
+curl -X PUT \
+  http://MY-REGISTRY-URL/apis/registry/v3/groups/my-group/artifacts/my-schema/versions/1.0/state \
+  -H "Content-Type: application/json" \
+  -d '{"state": "DISABLED"}'
+----
++
+After you set the state to `DISABLED`, any consumer that requests the schema version receives a `404 Not Found` response. SerDes clients that cache schemas locally continue to work until the cache expires. When a client requests the latest version (for example, `branch=latest`), {registry} skips disabled versions and returns the most recent enabled or deprecated version.
++
+NOTE: All state transitions between ENABLED, DEPRECATED, and DISABLED are reversible. You can re-enable a disabled version by setting the state back to `ENABLED`, revert a deprecated version to `ENABLED`, or move a disabled version directly to `DEPRECATED`. Use reverse transitions when you discover that consumers still depend on a version.
+
+. Optionally, delete the artifact version after you confirm that no audit or compliance requirements mandate retaining the schema:
++
+NOTE: Artifact version deletion is disabled by default. To enable deletion, set the `apicurio.rest.deletion.artifact-version.enabled` property to `true` in your {registry} configuration. Without this property, the DELETE request returns a `405 Method Not Allowed` response.
++
+[source,bash]
+----
+curl -X DELETE \
+  http://MY-REGISTRY-URL/apis/registry/v3/groups/my-group/artifacts/my-schema/versions/1.0
+----
+
+.Verification
+* Send a `GET` request to retrieve the version state and verify that it matches the expected value:
++
+[source,bash]
+----
+curl http://MY-REGISTRY-URL/apis/registry/v3/groups/my-group/artifacts/my-schema/versions/1.0/state
+----
++
+The response body contains the current state, for example `{"state": "DEPRECATED"}`.
+
+// proc-validating-data-avro-generated-classes

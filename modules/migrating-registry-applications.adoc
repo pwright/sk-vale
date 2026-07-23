@@ -1,0 +1,20 @@
+[id="migrating-registry-applications_{context}"]
+= Client application backward compatibility
+
+
+[role="_abstract"]
+{registry} 3.x maintains backward compatibility with v2 client libraries and SerDes. You can continue to use v2 clients with a v3 registry during your migration period, which allows you to update clients gradually.
+
+{registry} 3.x provides the following backward compatibility for existing v2 clients:
+
+* *v2 REST API:* remains available at `/apis/registry/v2`.
+* *v2 SerDes libraries:* continue to work with the v3 registry.
+* *v3 SerDes:* can consume v2 client Kafka messages with proper configuration.
+* *No immediate client updates required:* you can update clients gradually during the migration period.
+
+This backward compatibility enables you to:
+
+. Migrate the registry to v3 first.
+. Test with existing v2 clients.
+. Gradually update clients to v3 libraries over time.
+

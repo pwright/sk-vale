@@ -1,0 +1,359 @@
+[id="operator-storage-reference_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Storage configuration reference
+
+[role="_abstract"]
+The `spec.app.storage` section configures the storage backend for {registry}.
+
+.StorageSpec
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`type`
+|Storage type: `<empty>` (embedded H2 database), `postgresql`, `mysql`, `kafkasql`, or `kubernetesops`. When left empty, {registry} uses SQL storage with an embedded H2 database.
+|String
+|`""` (embedded H2, development only)
+
+|`sql`
+|SQL database configuration. Required when `type` is `postgresql` or `mysql`
+|<<SqlSpec>>
+|None
+
+|`kafkasql`
+|KafkaSQL storage configuration. Required when `type` is `kafkasql`
+|<<KafkaSqlSpec>>
+|None
+
+|`kubernetesops`
+|KubernetesOps storage configuration (read-only, experimental). Required when `type` is `kubernetesops`
+|<<KubernetesOpsSpec>>
+|None
+|===
+
+IMPORTANT: The default embedded H2 configuration is not suitable for production environments. Specify a storage type for production use.
+
+.SqlSpec
+
+Configure SQL database storage (PostgreSQL or MySQL):
+
+[cols="1,2,1",options="header"]
+|===
+|Field
+|Description
+|Type
+
+|`dataSource`
+|Data source configuration
+|<<DataSourceSpec>>
+|===
+
+.DataSourceSpec
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`url`
+|JDBC connection URL. Example: `jdbc:postgresql://postgresql.my-ns.svc:5432/registry`
+|String
+|None
+
+|`username`
+|Database username
+|String
+|None
+
+|`password`
+|Reference to a Secret containing the database password. Default key: `password`
+|<<SecretKeyRef>>
+|None
+|===
+
+Example for PostgreSQL:
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: postgresql
+      sql:
+        dataSource:
+          url: jdbc:postgresql://postgresql.my-project.svc:5432/registry
+          username: registry_user
+          password:
+            name: postgresql-credentials
+            key: password
+----
+
+Example for MySQL:
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: mysql
+      sql:
+        dataSource:
+          url: jdbc:mysql://mysql.my-project.svc:3306/registry
+          username: registry_user
+          password:
+            name: mysql-credentials
+            key: password
+----
+
+.KafkaSqlSpec
+
+Configure KafkaSQL storage:
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`kafkaAccessSecretName`
+|Name of a Kubernetes Secret produced by the Strimzi Kafka Access Operator (type `servicebinding.io/kafka`). When set, the operator reads connection details (bootstrap servers, TLS certificates, SASL credentials) from this secret instead of requiring manual configuration. Available starting with {registry} version 3.2.0.
+|String
+|None
+
+|`bootstrapServers`
+|Kafka bootstrap servers address. Required if `kafkaAccessSecretName` is not set.
+|String
+|None
+
+|`tls`
+|TLS configuration for connecting to Kafka
+|<<KafkaSqlTLSSpec>>
+|None
+
+|`auth`
+|Authentication configuration for connecting to Kafka
+|<<KafkaSqlAuthSpec>>
+|None
+|===
+
+Example:
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: my-cluster-kafka-bootstrap.my-project.svc:9092
+----
+
+Example using the Kafka Access Operator (available starting with version 3.2.0):
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        kafkaAccessSecretName: my-kafka-access
+----
+
+.KafkaSqlTLSSpec
+
+Configure TLS for KafkaSQL storage:
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`keystoreSecretRef`
+|Reference to a Secret containing the TLS keystore (PKCS12 format). Default key: `user.p12`
+|<<SecretKeyRef>>
+|None
+
+|`keystorePasswordSecretRef`
+|Reference to a Secret containing the TLS keystore password. Default key: `user.password`
+|<<SecretKeyRef>>
+|None
+
+|`truststoreSecretRef`
+|Reference to a Secret containing the TLS truststore (PKCS12 format). Default key: `ca.p12`
+|<<SecretKeyRef>>
+|None
+
+|`truststorePasswordSecretRef`
+|Reference to a Secret containing the truststore password. Default key: `ca.password`
+|<<SecretKeyRef>>
+|None
+|===
+
+Example with mutual TLS (client certificate authentication):
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: my-cluster-kafka-bootstrap.my-project.svc:9093
+        tls:
+          keystoreSecretRef:
+            name: my-user
+          keystorePasswordSecretRef:
+            name: my-user
+          truststoreSecretRef:
+            name: kafka-cluster-ca-cert
+          truststorePasswordSecretRef:
+            name: kafka-cluster-ca-cert
+----
+
+NOTE: Default keys match the secret structure produced by the {kafka-streams} Operator, so you typically only need to specify the secret `name`.
+
+.KafkaSqlAuthSpec
+
+Configure SASL OAuth authentication for KafkaSQL storage:
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`enabled`
+|Enables SASL OAuth authentication. Must be set to `true` for other auth fields to have effect.
+|Boolean
+|`false`
+
+|`mechanism`
+|SASL mechanism. Use `OAUTHBEARER` for OAuth authentication.
+|String
+|None
+
+|`clientIdRef`
+|Reference to a Secret containing the OAuth client ID. Default key: `clientId`
+|<<SecretKeyRef>>
+|None
+
+|`clientSecretRef`
+|Reference to a Secret containing the OAuth client secret. Default key: `clientSecret`
+|<<SecretKeyRef>>
+|None
+
+|`tokenEndpoint`
+|OAuth token endpoint URI
+|String
+|None
+
+|`loginHandlerClass`
+|The login callback handler class for OAuth authentication
+|String
+|None
+|===
+
+Example with OAuth:
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: my-cluster-kafka-bootstrap.my-project.svc:9093
+        auth:
+          enabled: true
+          mechanism: OAUTHBEARER
+          clientIdRef:
+            name: kafka-oauth-credentials
+            key: clientId
+          clientSecretRef:
+            name: kafka-oauth-credentials
+            key: clientSecret
+          tokenEndpoint: https://identity-server.example.com/token
+          loginHandlerClass: io.strimzi.kafka.oauth.client.JaasClientOauthLoginCallbackHandler
+----
+
+NOTE: The operator provides first-class support for OAuth (OAUTHBEARER) authentication through the `auth` field. For other SASL mechanisms such as SCRAM-SHA-512, the recommended approach is to use the Strimzi Kafka Access Operator through the `kafkaAccessSecretName` field (available starting with {registry} version 3.2.0). Alternatively, you can use custom environment variables through the `spec.app.env` field to configure the Kafka client properties directly. See the xref:getting-started/assembly-config-reference.adoc[] for available `apicurio.kafkasql.*` configuration properties.
+
+.KubernetesOpsSpec
+
+Configure KubernetesOps storage (read-only, experimental). Loads registry data from Kubernetes ConfigMaps:
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`registryId`
+|Unique identifier for this registry instance. Only ConfigMaps with a matching label will be loaded. Required.
+|String
+|None
+
+|`namespace`
+|Kubernetes namespace to watch for ConfigMaps.
+|String
+|Current namespace
+
+|`refreshEvery`
+|Polling interval for ConfigMap changes. Supports duration format (e.g., `10s`, `1m`).
+|String
+|`30s`
+
+|`labelRegistryId`
+|Label key used to identify ConfigMaps belonging to this registry.
+|String
+|`apicurio.io/registry-id`
+
+|`watchEnabled`
+|Enable Watch API for real-time ConfigMap change detection. Set to `false` to use polling only.
+|Boolean
+|`true`
+
+|`watchReconnectDelay`
+|Base delay before reconnecting after watch failure. Uses exponential backoff up to 5 minutes.
+|String
+|`10s`
+|===
+
+IMPORTANT: KubernetesOps storage is an experimental feature. The operator automatically enables the experimental features gate when this storage type is configured.
+
+Example:
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: kubernetesops
+      kubernetesops:
+        registryId: my-registry
+        namespace: apicurio
+----
+
+Example with custom polling and watch settings:
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: kubernetesops
+      kubernetesops:
+        registryId: my-registry
+        namespace: apicurio
+        refreshEvery: 10s
+        watchEnabled: true
+        watchReconnectDelay: 5s
+----
+
+NOTE: KubernetesOps storage is read-only. All changes must be made by creating or updating ConfigMaps. For more details on ConfigMap format and RBAC requirements, see xref:getting-started/assembly-configuring-kubernetesops-storage.adoc[].
+
+// ref-operator-auth-reference

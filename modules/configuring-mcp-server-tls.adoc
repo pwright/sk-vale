@@ -1,0 +1,69 @@
+[id="configuring-mcp-server-tls_{context}"]
+= Configuring MCP server TLS
+
+
+[role="_abstract"]
+You can configure the {registry} MCP server to connect to {registry} over TLS. You configure trust store settings to verify the server certificate, and optionally configure key store settings for mutual TLS (mTLS) client certificate authentication.
+
+.Prerequisites
+* {registry} is configured with TLS.
+* You have the trust store file containing the CA certificate or server certificate.
+* For mTLS, you have a key store file containing the client certificate and private key.
+
+.Procedure
+. Update the Claude Desktop MCP configuration to include TLS settings.
++
+If you are using the Docker or Podman image, add environment variables and mount the certificate files:
++
+[source,json]
+----
+{
+  "mcpServers": {
+    "Apicurio Registry (docker)": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-v", "/path/to/certs:/certs:ro",
+        "-e", "REGISTRY_URL=https://registry.example.com:8443",
+        "-e", "APICURIO_MCP_TLS_TRUSTSTORE_TYPE=PKCS12",
+        "-e", "APICURIO_MCP_TLS_TRUSTSTORE_PATH=/certs/truststore.p12",
+        "-e", "APICURIO_MCP_TLS_TRUSTSTORE_PASSWORD=<truststore-password>",
+        "quay.io/apicurio/apicurio-registry-mcp-server:latest"
+      ]
+    }
+  }
+}
+----
++
+If you built the MCP server from source, add system properties:
++
+[source,json]
+----
+{
+  "mcpServers": {
+    "Apicurio Registry (jar)": {
+      "command": "java",
+      "args": [
+        "-Dregistry.url=https://registry.example.com:8443",
+        "-Dapicurio.mcp.tls.truststore.type=PKCS12",
+        "-Dapicurio.mcp.tls.truststore.path=/path/to/truststore.p12",
+        "-Dapicurio.mcp.tls.truststore.password=<truststore-password>",
+        "-jar",
+        "<path-to-repo>/apicurio-registry/mcp/target/apicurio-registry-mcp-server-<version>-runner.jar"
+      ]
+    }
+  }
+}
+----
+
+. Optional: Add key store properties in addition to the trust store properties to configure mTLS with a client certificate:
++
+* Docker: add `"-e", "APICURIO_MCP_TLS_KEYSTORE_TYPE=PKCS12"`, `"-e", "APICURIO_MCP_TLS_KEYSTORE_PATH=/certs/keystore.p12"`, and `"-e", "APICURIO_MCP_TLS_KEYSTORE_PASSWORD=<keystore-password>"` to the `args` array.
+* JAR: add `-Dapicurio.mcp.tls.keystore.type=PKCS12`, `-Dapicurio.mcp.tls.keystore.path=/path/to/keystore.p12`, and `-Dapicurio.mcp.tls.keystore.password=<keystore-password>` before the `-jar` argument.
+
+. Optional: In development environments, skip certificate verification by setting `apicurio.mcp.tls.trust-all=true`. Do not use this setting in production.
+
+. Restart Claude Desktop to apply the changes.
+
+// ref-mcp-server-troubleshooting
+:_mod-docs-content-type: REFERENCE

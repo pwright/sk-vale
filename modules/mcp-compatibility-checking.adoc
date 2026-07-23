@@ -1,0 +1,21 @@
+[id="mcp-compatibility-checking_{context}"]
+= Compatibility checking
+
+
+[role="_abstract"]
+When you version MCP tool definitions, {registry} checks for breaking changes based on compatibility rules.
+
+.Compatible changes (allowed)
+* Adding optional input parameters
+* Changing name, title, or description
+* Changing annotations
+* Adding or modifying outputSchema
+
+.Incompatible changes (might break clients)
+* Removing input parameters from inputSchema.properties
+* Adding new required parameters
+* Removing required parameters
+* Changing the inputSchema type
+
+// ref-mcp-automatic-label-extraction
+:_mod-docs-content-type: REFERENCE

@@ -1,0 +1,24 @@
+[id="configuring-kubernetesops-storage_{context}"]
+= Configuring {registry} with KubernetesOps storage
+
+
+[role="_abstract"]
+This chapter explains how to configure {registry} to use Kubernetes ConfigMaps as the data source for registry artifacts. KubernetesOps storage enables Kubernetes-native management of schemas and APIs using standard tools like `kubectl`, ArgoCD, or Flux.
+
+* xref:kubernetesops-overview_{context}[]
+* xref:configuring-kubernetesops-storage_{context}[]
+* xref:kubernetesops-configmap-format_{context}[]
+* xref:kubernetesops-rbac-requirements_{context}[]
+* xref:kubernetesops-limitations_{context}[]
+
+.Prerequisites
+* You have installed {registry} on Kubernetes or OpenShift.
+* You have access to create ConfigMaps and RBAC resources in your cluster.
+
+//INCLUDES
+
+include::../modules/kubernetesops-overview.adoc[leveloffset=+1]
+include::../modules/configuring-kubernetesops-storage.adoc[leveloffset=+1]
+include::../modules/kubernetesops-configmap-format.adoc[leveloffset=+1]
+include::../modules/kubernetesops-rbac-requirements.adoc[leveloffset=+1]
+include::../modules/kubernetesops-limitations.adoc[leveloffset=+1]

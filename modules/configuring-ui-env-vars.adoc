@@ -1,0 +1,21 @@
+[id="configuring-ui-env-vars_{context}"]
+:_mod-docs-content-type: REFERENCE
+= configuring-ui-env-vars_{context}
+
+== UI environment variable configuration
+
+[role="_abstract"]
+You can configure the UI with environment variables in the `ApicurioRegistry3` custom resource.
+
+[source,yaml]
+----
+spec:
+  ui:
+    env:
+      - name: REGISTRY_API_URL
+        value: https://registry.example.com/apis/registry/v3
+    ingress:
+      host: registry-ui.example.com
+----
+
+// ref-configuring-replicas

@@ -1,0 +1,35 @@
+[id="a2a-automatic-label-extraction_{context}"]
+= Automatic label extraction for Agent Cards
+
+
+[role="_abstract"]
+{registry} automatically extracts labels from Agent Cards for search. You can use these labels for efficient capability-based discovery by using the {registry} label search.
+
+[cols="2,3"]
+|===
+|Label pattern |Source
+
+|`agent_card:skill:<id>`
+|Each skill ID in the `skills` array
+
+|`agent_card:capability:<name>`
+|Each enabled capability in the `capabilities` object (where value is `true`)
+
+|`agent_card:inputmode:<mode>`
+|Each value in the `defaultInputModes` array
+
+|`agent_card:outputmode:<mode>`
+|Each value in the `defaultOutputModes` array
+
+|`agent_card:protocolbinding:<binding>`
+|Each `protocolBinding` value in the `supportedInterfaces` array
+
+|`agent_card:securityscheme:<name>`
+|Each key in the `securitySchemes` object
+
+|`agent_card:tag:<value>`
+|Each value in the `tags` array within each skill (deduplicated across skills)
+|===
+
+// ref-a2a-registry-built-in-skills
+:_mod-docs-content-type: REFERENCE

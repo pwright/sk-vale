@@ -1,0 +1,51 @@
+[id="registry-ai-ml-artifact-types_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-ai-ml-artifact-types_{context}
+
+== AI/ML artifact types
+
+[role="_abstract"]
+{registry} includes built-in support for AI/ML artifact types designed for LLMOps and prompt engineering workflows.
+
+.MCP_TOOL
+MCP (Model Context Protocol) tool definitions. Use this artifact type to:
+
+* Store MCP tool definitions with input/output schemas
+* Track tool evolution with version history and compatibility checking
+* Enable discovery of tools via well-known endpoints
+* Validate tool definitions against the MCP specification
+
+Content types: `application/json`
+
+.MODEL_SCHEMA
+Defines and validates AI/ML model input/output schemas and metadata. Use this artifact type to:
+
+* Document model input/output contracts using JSON Schema
+* Track model capabilities (chat, vision, function calling)
+* Store provider information and context window limits
+* Ensure backward compatibility when updating model schemas
+
+Content types: `application/json`, `application/x-yaml`
+
+.PROMPT_TEMPLATE
+Version-controlled prompt templates with variable schemas. Use this artifact type to:
+
+* Store prompt templates with `{{variable}}` syntax
+* Define variable schemas with types, constraints, and defaults
+* Track prompt evolution with version history
+* Validate prompts have all required variables defined
+
+Content types: `application/x-yaml`, `application/json`, `text/x-prompt-template`
+
+[role="_additional-resources"]
+.Additional resources
+* For detailed examples and SDK integration, see the link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/llm-artifact-types[LLM artifact types example]
+* For a complete support chat application with RAG, see link:https://github.com/carlesarnal/apicurio-registry-support-chat[Apicurio Registry Support Chat]
+
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_registry-reference.adoc
+
+// ref-registry-artifact-states
+:_mod-docs-content-type: REFERENCE

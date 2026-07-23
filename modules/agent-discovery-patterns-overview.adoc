@@ -1,0 +1,83 @@
+[id="agent-discovery-patterns-overview_{context}"]
+= Discovery patterns
+
+
+[role="_abstract"]
+{registry} indexes agent card content as structured data when you store an `AGENT_CARD` artifact. You can query agents by skill, capability, input mode, output mode, or name by using the `/.well-known/agents` endpoint.
+
+.Capability-based discovery
+
+You can find agents that have specific skills by using the `skill` query parameter. {registry} indexes each skill ID from the agent card `skills` array as structured content with the key `agent_card:skill:<id>`.
+
+To find agents that have a specific skill, send a request with one `skill` parameter:
+
+[source,bash]
+----
+$ curl "http://localhost:8080/.well-known/agents?skill=translation"
+----
+
+To find agents that have multiple skills, repeat the `skill` parameter. {registry} returns only agents that match all specified skills:
+
+[source,bash]
+----
+$ curl "http://localhost:8080/.well-known/agents?skill=translation&skill=sentiment-analysis"
+----
+
+.Filtering by capabilities
+
+You can filter agents by capabilities such as streaming or push notification support. {registry} indexes each enabled capability from the agent card `capabilities` object as structured content with the key `agent_card:capability:<name>`.
+
+Specify capabilities in `name:value` format. For example, to find agents that support streaming:
+
+[source,bash]
+----
+$ curl "http://localhost:8080/.well-known/agents?capability=streaming:true"
+----
+
+To exclude agents that support streaming, set the value to `false`. {registry} negates the filter and returns only agents that do not have streaming enabled:
+
+[source,bash]
+----
+$ curl "http://localhost:8080/.well-known/agents?capability=streaming:false"
+----
+
+.Input and output mode filtering
+
+You can match agents by the data modalities they accept or produce. {registry} indexes each mode from the agent card `defaultInputModes` and `defaultOutputModes` arrays as structured content with the keys `agent_card:inputmode:<mode>` and `agent_card:outputmode:<mode>`.
+
+To find agents that accept image input and produce text output:
+
+[source,bash]
+----
+$ curl "http://localhost:8080/.well-known/agents?inputMode=image&outputMode=text"
+----
+
+.Name-based search
+
+You can filter agents by name by using partial matching. {registry} matches the `name` parameter against the artifact name:
+
+[source,bash]
+----
+$ curl "http://localhost:8080/.well-known/agents?name=sentiment"
+----
+
+.Combined filtering
+
+You can combine any of the previous filters in a single request. {registry} applies all filters together and returns only agents that match all specified criteria:
+
+[source,bash]
+----
+$ curl "http://localhost:8080/.well-known/agents?skill=translation&inputMode=text&outputMode=text&capability=streaming:true&limit=10"
+----
+
+.MCP tool discovery
+
+You can search for registered MCP tool definitions by name or input parameter. {registry} indexes each input parameter name from the tool `inputSchema.properties` as structured content with the key `mcp_tool:parameter:<name>`:
+
+[source,bash]
+----
+$ curl "http://localhost:8080/.well-known/mcp-tools?name=search&parameter=query"
+----
+
+// con-multi-agent-orchestration-patterns
+:_mod-docs-content-type: CONCEPT

@@ -1,0 +1,20 @@
+[id="secured-kafka-prerequisites_{context}"]
+:_mod-docs-content-type: REFERENCE
+= secured-kafka-prerequisites_{context}
+
+== Prerequisites for secured Kafka deployment
+
+[role="_abstract"]
+Before you deploy {registry} with a secured Kafka instance, verify that you have the required resources.
+
+* You have cluster administrator access to an {kubernetes} cluster.
+* You have installed the {operator}.
+* You have a Kafka cluster with security enabled (TLS, SASL, or both).
+ifdef::apicurio-registry[]
+** For {kafka-streams}, see the https://strimzi.io/docs/overview/latest/[{kafka-streams} documentation].
+endif::[]
+* If your Kafka cluster uses TLS, you have access to the cluster CA certificate in PKCS12 format.
+* If your Kafka cluster uses SASL authentication, you have the required credentials (SCRAM-SHA-512 username and password, or OAUTHBEARER client ID, client secret, and token endpoint URL).
+
+
+// proc-secured-kafka-tls

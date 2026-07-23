@@ -1,0 +1,33 @@
+[id="installing-the-registry-docker_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= installing-the-registry-docker_{context}
+
+= Installing {registry} using Docker
+
+[role="_abstract"]
+Install and run {registry} using Docker with the following storage options:
+
+* xref:installing-registry-h2-storage_{context}[]
+* xref:installing-registry-sql-storage_{context}[]
+* xref:installing-registry-kafka-storage_{context}[]
+
+.Prerequisites
+* {registry-overview}
+
+NOTE: You can install more than one replica of {registry} depending on your environment. The number of replicas depends on your storage option, for example, your Kafka or database cluster configuration, and on the number and type of artifacts stored in {registry}.
+
+[role="_additional-resources"]
+.Additional resources
+* https://github.com/Apicurio/apicurio-registry[Apicurio Registry source repository]
+
+//INCLUDES
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_installing-the-registry.adoc
+
+// proc-installing-registry-h2-storage
+include::../modules/installing-registry-h2-storage.adoc[leveloffset=+1]
+include::../modules/installing-registry-sql-storage.adoc[leveloffset=+1]
+include::../modules/installing-registry-sql-storage-secrets.adoc[leveloffset=+1]
+include::../modules/installing-registry-kafka-storage.adoc[leveloffset=+1]

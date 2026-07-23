@@ -1,0 +1,20 @@
+[id="versioning-support-policy_{context}"]
+= Versioning and support policy
+
+
+[role="_abstract"]
+This chapter describes the {registry} versioning scheme, support policy, release channels, and guidance for upgrading and handling rollbacks.
+
+* xref:versioning-scheme_{context}[]
+* xref:support-window_{context}[]
+* xref:release-channels_{context}[]
+* xref:upgrading-registry_{context}[]
+* xref:downgrades-and-rollbacks_{context}[]
+
+
+include::../modules/versioning-scheme.adoc[leveloffset=+1]
+include::../modules/support-window.adoc[leveloffset=+1]
+include::../modules/release-channels.adoc[leveloffset=+1]
+include::../modules/upgrading-registry.adoc[leveloffset=+1]
+include::../modules/downgrades-and-rollbacks.adoc[leveloffset=+1]
+include::../modules/backup-before-upgrade.adoc[leveloffset=+1]

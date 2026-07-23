@@ -1,0 +1,69 @@
+[id="configuring-claude-desktop-for-mcp_{context}"]
+= Configuring Claude Desktop for MCP
+
+
+[role="_abstract"]
+You can configure Claude Desktop to use the {registry} MCP server. After configuration, you interact with {registry} artifacts, groups, and versions by using natural language in Claude Desktop.
+
+.Prerequisites
+* Claude Desktop is installed (macOS or Windows).
+* A running {registry} instance is accessible.
+* The {registry} MCP server Docker or Podman image is available, or you have built the MCP server JAR from source.
+
+.Procedure
+. In Claude Desktop, navigate to *File* > *Settings* > *Developer* > *Edit Config* to open the MCP configuration file.
+
+. Add the {registry} MCP server entry to the configuration file.
++
+If you are using the Docker or Podman image, add the following configuration:
++
+[source,json]
+----
+{
+  "mcpServers": {
+    "Apicurio Registry (docker)": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e", "REGISTRY_URL=<registry-url>",
+        "quay.io/apicurio/apicurio-registry-mcp-server:latest"
+      ]
+    }
+  }
+}
+----
++
+Replace `<registry-url>` with the URL of your {registry} instance. For local development, use `\http://localhost:8080`. For OpenShift deployments, use the route URL of your {registry} instance.
++
+If you built the MCP server from source, add the following configuration:
++
+[source,json]
+----
+{
+  "mcpServers": {
+    "Apicurio Registry (jar)": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "<path-to-repo>/apicurio-registry/mcp/target/apicurio-registry-mcp-server-<version>-runner.jar"
+      ]
+    }
+  }
+}
+----
++
+Replace `<path-to-repo>` with the absolute path to your local clone of the {registry} repository, and replace `<version>` with the version you built.
+
+. Save the configuration file and restart Claude Desktop by selecting *File* > *Exit* and reopening the application.
+
+.Verification
+* Verify the connection by asking Claude a question about {registry}, for example:
++
+** "What is the version of the Registry server?"
+** "What groups are present in the Registry?"
+** "Create 10 example artifacts."
+
+// ref-mcp-server-available-tools
+:_mod-docs-content-type: REFERENCE

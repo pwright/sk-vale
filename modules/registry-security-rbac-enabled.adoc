@@ -1,0 +1,148 @@
+[id="registry-security-rbac-enabled_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} role-based authorization
+
+[role="_abstract"]
+You can set the following options to `true` to enable role-based authorization in {registry}:
+
+.Configuration for {registry} role-based authorization
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+|`QUARKUS_OIDC_TENANT_ENABLED`
+|`quarkus.oidc.tenant-enabled`
+|Boolean
+|`false`
+|`APICURIO_AUTH_ROLE_BASED_AUTHORIZATION`
+|`apicurio.auth.role-based-authorization`
+|Boolean
+|`false`
+|===
+
+You can then configure role-based authorization to use roles included in the user's authentication token (for example, granted when authenticating by using {keycloak}), or to use role mappings managed internally by {registry}.
+
+.Using roles assigned in {keycloak}
+
+To use roles assigned in {keycloak}, set the following environment variables:
+
+.Configuration for {registry} role-based authorization by using {keycloak}
+[id="registry-security-rbac-keycloak-settings_{context}",.table-expandable,width="100%",cols="6,6,2,3",options="header"]
+|===
+|Environment variable
+|Description
+|Type
+|Default
+|`APICURIO_AUTH_ROLE_SOURCE`
+| When set to `token`, user roles are taken from the authentication token.
+|String
+|`token`
+|`APICURIO_AUTH_ROLES_ADMIN`
+|The name of the role that indicates a user is an admin.
+|String
+|`sr-admin`
+|`APICURIO_AUTH_ROLES_DEVELOPER`
+|The name of the role that indicates a user is a developer.
+|String
+|`sr-developer`
+|`APICURIO_AUTH_ROLES_READONLY`
+|The name of the role that indicates a user has read-only access.
+|String
+|`sr-readonly`
+|===
+
+When you configure {registry} to use roles from {keycloak}, you must assign {registry} users to at least one
+of the following user roles in {keycloak}. However, you can configure different user role names by using the environment variables in xref:registry-security-rbac-keycloak-settings_{context}[].
+
+.{registry} roles for authentication and authorization
+[.table-expandable,width="100%",cols="2,2,2,2,4",options="header"]
+|===
+|Role name
+|Read artifacts
+|Write artifacts
+|Global rules
+|Description
+|`sr-admin`
+|Yes
+|Yes
+|Yes
+|Full access to all create, read, update, and delete operations.
+|`sr-developer`
+|Yes
+|Yes
+|No
+|Access to create, read, update, and delete operations, except configuring global rules and import/export. This role can configure artifact-specific rules only.
+|`sr-readonly`
+|Yes
+|No
+|No
+|Access to read and search operations only. This role cannot configure any rules.
+|===
+
+.Managing roles directly in {registry}
+
+To use roles managed internally by {registry}, set the following environment variable:
+
+.Configuration for {registry} role-based authorization by using internal role mappings
+[.table-expandable,width="100%",cols="6,6,2,3",options="header"]
+|===
+|Environment variable
+|Description
+|Type
+|Default
+|`APICURIO_AUTH_ROLE_SOURCE`
+| When set to `application`, user roles are managed internally by {registry}.
+|String
+|`token`
+|===
+
+When you use internally managed role mappings, you can assign a role to users by using the `/admin/roleMappings`
+endpoint in the {registry} REST API. For more details, see {registry-rest-api}.
+
+You can grant each user exactly one role: `ADMIN`, `DEVELOPER`, or `READ_ONLY`. Only admin
+users can grant access to other users.
+
+
+.{registry} admin-override configuration
+
+Because {registry} has no default admin users, you can configure an alternative way to identify admins. Configure the admin-override feature by using the following environment variables:
+
+.Configuration for {registry} admin-override
+[.table-expandable,width="100%",cols="6,6,2,3",options="header"]
+|===
+|Environment variable
+|Description
+|Type
+|Default
+|`APICURIO_AUTH_ADMIN_OVERRIDE_ENABLED`
+| Enables the admin-override feature.
+|String
+|`false`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_FROM`
+|Where to look for admin-override information. Only `token` is currently supported.
+|String
+|`token`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_TYPE`
+|The type of information used to determine whether a user is an admin. Values depend on the value of the FROM variable, for example, `role` or `claim` when FROM is `token`.
+|String
+|`role`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_ROLE`
+|The name of the role that indicates a user is an admin.
+|String
+|`sr-admin`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_CLAIM`
+|The name of a JWT token claim to use for determining admin-override.
+|String
+|`org-admin`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_CLAIM_VALUE`
+|The value that the JWT token claim indicated by the CLAIM variable must be for the user to be granted admin-override.
+|String
+|`true`
+|===
+
+For example, you can use this admin-override feature to assign the `sr-admin` role to a single user
+in {keycloak}, which grants that user the admin role. That user can then use the `/admin/roleMappings`
+REST API (or associated UI) to grant roles to additional users (including additional admins).
+

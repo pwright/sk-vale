@@ -1,0 +1,30 @@
+[id="managing-registry-artifacts-maven_{context}"]
+= Managing {registry} content using the Maven plug-in
+
+
+[role="_abstract"]
+When developing client applications, you can use the {registry} Maven plug-in to manage schema and API artifacts stored in {registry}:
+
+* xref:adding-artifacts-using-maven-plugin_{context}[]
+* xref:downloading-artifacts-using-maven-plugin_{context}[]
+* xref:testing-artifacts-using-maven-plugin_{context}[]
+* xref:adding-artifact-references-manually-using-maven-plugin_{context}[]
+* xref:adding-artifact-references-automatically-using-maven-plugin_{context}[]
+* xref:configuring-tls-maven-plugin_{context}[]
+
+.Prerequisites
+* {registry} is installed and running in your environment.
+* Apache Maven is installed and configured in your environment.
+
+//INCLUDES
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_installing-the-registry.adoc
+
+include::../modules/adding-artifacts-using-maven-plugin.adoc[leveloffset=+1]
+include::../modules/downloading-artifacts-using-maven-plugin.adoc[leveloffset=+1]
+include::../modules/testing-artifacts-using-maven-plugin.adoc[leveloffset=+1]
+include::../modules/adding-artifact-references-manually-using-maven-plugin.adoc[leveloffset=+1]
+include::../modules/adding-artifact-references-automatically-using-maven-plugin.adoc[leveloffset=+1]
+include::../modules/configuring-tls-maven-plugin.adoc[leveloffset=+1]

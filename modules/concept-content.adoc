@@ -1,0 +1,12 @@
+[id="concept-content_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-content_{context}
+
+== Content
+
+[role="_abstract"]
+*Content* is the actual schema or API payload stored in the registry (for example, an Avro JSON schema, a Protobuf `.proto` definition, or an OpenAPI YAML specification).
+
+Content is deduplicated: if two artifact versions have identical content, they share the same `contentId`.
+
+// con-concept-global-id

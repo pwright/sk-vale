@@ -1,0 +1,43 @@
+[id="kubernetesops-rbac-requirements_{context}"]
+= RBAC requirements
+
+
+[role="_abstract"]
+{registry} requires read access to ConfigMaps in the configured namespace. Create the following RBAC resources:
+
+[source,yaml]
+----
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: apicurio-registry
+  namespace: apicurio
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: apicurio-registry-configmaps
+  namespace: apicurio
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: apicurio-registry-configmaps
+  namespace: apicurio
+subjects:
+  - kind: ServiceAccount
+    name: apicurio-registry
+    namespace: apicurio
+roleRef:
+  kind: Role
+  name: apicurio-registry-configmaps
+  apiGroup: rbac.authorization.k8s.io
+----
+
+For multi-namespace scenarios, create a ClusterRole and ClusterRoleBinding instead.
+
+

@@ -1,0 +1,14 @@
+[id="concept-artifact-version_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-artifact-version_{context}
+
+== Artifact version
+
+[role="_abstract"]
+An *artifact version* is an immutable snapshot of an artifact's content.
+
+Each version is identified within its artifact by a `version` string and is also assigned a globally unique numeric `globalId`.
+After you create a version, you cannot change its content.
+Versions have a lifecycle state (see xref:concept-version-state_{context}[]) and can carry user-defined metadata and labels.
+
+// con-concept-content

@@ -1,0 +1,23 @@
+[id="registry-cors-configuration_{context}"]
+:_mod-docs-content-type: CONCEPT
+= registry-cors-configuration_{context}
+
+== Configuring {registry} Cross-Origin Resource Sharing (CORS)
+
+[role="_abstract"]
+To allow your browser-based application (React, Angular, Vue, or plain JavaScript) to call the {registry} REST API from a different origin, you must configure Cross-Origin Resource Sharing (CORS).
+Without the correct CORS configuration on the {registry} server, the browser blocks API calls from your application, even though the same requests succeed from a non-browser client such as `curl`.
+{registry} includes built-in CORS support based on the Quarkus HTTP CORS filter that you can configure for your deployment.
+
+* xref:registry-cors-understanding_{context}[]
+* xref:registry-cors-defaults_{context}[]
+* xref:registry-cors-env-vars_{context}[]
+* xref:registry-cors-local-dev_{context}[]
+* xref:registry-cors-production_{context}[]
+* xref:registry-cors-authentication_{context}[]
+* xref:registry-cors-operator_{context}[]
+* xref:registry-cors-troubleshooting_{context}[]
+* xref:registry-cors-diagnosing_{context}[]
+
+
+// con-registry-cors-understanding

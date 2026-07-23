@@ -1,0 +1,42 @@
+[id="registry-iceberg-catalog-overview_{context}"]
+:_mod-docs-content-type: CONCEPT
+= registry-iceberg-catalog-overview_{context}
+
+== Overview of the {registry} Iceberg REST Catalog
+
+[role="_abstract"]
+{registry} implements the Apache Iceberg REST Catalog API specification, which means it can serve as a metadata catalog for Iceberg tables. Query engines such as Apache Spark, Trino, ClickHouse, DuckDB, and Flink can use {registry} as their Iceberg catalog for managing table metadata.
+
+The catalog maps {registry} concepts to Iceberg concepts as follows:
+
+.Mapping between {registry} and Iceberg concepts
+[.table-expandable,width="100%",cols="3,3,5",options="header"]
+|===
+|{registry} concept
+|Iceberg concept
+|Description
+|Group
+|Namespace
+|A logical namespace for organizing tables. Each group in {registry} appears as a namespace in Iceberg.
+|Artifact (type: `ICEBERG_TABLE`)
+|Table
+|An Iceberg table registered in {registry}. The artifact content contains the full TableMetadata JSON.
+|Artifact Content
+|TableMetadata / ViewMetadata
+|The metadata JSON stored as artifact content, containing schema, partition spec, sort order, snapshots, and other Iceberg metadata.
+|Group Labels
+|Namespace Properties
+|Key-value properties associated with a namespace, stored as group labels.
+|Artifact Version
+|Table Commit
+|Each commit to an Iceberg table creates a new artifact version in {registry}. The version content contains the updated TableMetadata JSON.
+|Artifact Labels
+|Table Properties
+|Key-value properties associated with a table, stored as artifact labels.
+|Prefix (path parameter)
+|Catalog Identifier
+|A configurable prefix that identifies the catalog instance (default: `default`).
+|===
+
+
+// ref-registry-iceberg-catalog-config

@@ -1,0 +1,48 @@
+[id="registry-compatibility-mode-descriptions_{context}"]
+= Compatibility mode descriptions
+
+
+[role="_abstract"]
+Compatibility modes act as a set of rules that determine whether a new schema version is allowed based on its ability to work with existing data and applications.
+
+.{registry} compatibility modes
+[%header,cols="1,3"]
+|===
+|Mode
+|Description
+
+|`NONE`
+|All compatibility checks are disabled.
+{registry} accepts any changes to the schema, regardless of whether they are backward or forward compatible.
+
+|`BACKWARD`
+|Clients using the new artifact can read data that the most recently added artifact wrote.
+Use `BACKWARD` when you want to ensure that updated consumers can process existing data.
+
+|`BACKWARD_TRANSITIVE`
+|Clients using the new artifact can read data that all previously added artifacts wrote.
+Unlike `BACKWARD`, which checks only against the latest version, `BACKWARD_TRANSITIVE` checks against every prior version.
+
+|`FORWARD`
+|Clients using the most recently added artifact can read data that the new artifact writes.
+Use `FORWARD` when you want to ensure that existing consumers can process data that the updated schema produces.
+
+|`FORWARD_TRANSITIVE`
+|Clients using all previously added artifacts can read data that the new artifact writes.
+Unlike `FORWARD`, which checks only against the latest version, `FORWARD_TRANSITIVE` checks against every prior version.
+
+|`FULL`
+|The new artifact is both forward and backward compatible with the most recently added artifact.
+Both old and new consumers can read data that either the old or new version of the schema produces.
+
+|`FULL_TRANSITIVE`
+|The new artifact is both forward and backward compatible with all previously added artifacts.
+`FULL_TRANSITIVE` is the strictest compatibility mode and enforces complete interoperability across all schema versions.
+|===
+
+NOTE: The `BACKWARD` and `FORWARD` modes compare the proposed schema only with the most recently added version.
+The transitive modes (`BACKWARD_TRANSITIVE`, `FORWARD_TRANSITIVE`, and `FULL_TRANSITIVE`) compare the proposed schema against all existing versions, which provides stricter validation but restricts the changes you can make.
+
+
+// ref-registry-compatibility-avro
+:_mod-docs-content-type: REFERENCE

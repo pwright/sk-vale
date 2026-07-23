@@ -1,0 +1,157 @@
+[id="registry-iceberg-catalog-rest-api_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-iceberg-catalog-rest-api_{context}
+
+== Iceberg REST API usage
+
+[role="_abstract"]
+{registry} exposes the Iceberg REST Catalog API at the `/apis/iceberg/v1` endpoint. You can interact with the API by using `curl` as shown in these examples.
+
+.Getting catalog configuration
+
+[source,bash]
+----
+curl http://localhost:8080/apis/iceberg/v1/config
+----
+
+.Example response
+[source,json]
+----
+{
+  "defaults": {},
+  "overrides": {}
+}
+----
+
+.Creating a namespace
+
+[source,bash]
+----
+curl -X POST http://localhost:8080/apis/iceberg/v1/default/namespaces \
+  -H "Content-Type: application/json" \
+  -d '{
+    "namespace": ["my_database"],
+    "properties": {
+      "owner": "data-team",
+      "description": "Production database"
+    }
+  }'
+----
+
+.Example response
+[source,json]
+----
+{
+  "namespace": ["my_database"],
+  "properties": {
+    "owner": "data-team",
+    "description": "Production database"
+  }
+}
+----
+
+.Listing namespaces
+
+[source,bash]
+----
+curl http://localhost:8080/apis/iceberg/v1/default/namespaces
+----
+
+.Example response
+[source,json]
+----
+{
+  "namespaces": [
+    ["my_database"],
+    ["another_database"]
+  ]
+}
+----
+
+.Creating a table
+
+[source,bash]
+----
+curl -X POST http://localhost:8080/apis/iceberg/v1/default/namespaces/my_database/tables \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "users",
+    "schema": {
+      "type": "struct",
+      "schema-id": 0,
+      "fields": [
+        {"id": 1, "name": "id", "required": true, "type": "long"},
+        {"id": 2, "name": "name", "required": true, "type": "string"},
+        {"id": 3, "name": "email", "required": false, "type": "string"},
+        {"id": 4, "name": "created_at", "required": true, "type": "timestamp"}
+      ]
+    },
+    "properties": {
+      "write.format.default": "parquet"
+    }
+  }'
+----
+
+.Loading a table
+
+[source,bash]
+----
+curl http://localhost:8080/apis/iceberg/v1/default/namespaces/my_database/tables/users
+----
+
+.Listing tables in a namespace
+
+[source,bash]
+----
+curl http://localhost:8080/apis/iceberg/v1/default/namespaces/my_database/tables
+----
+
+.Example response
+[source,json]
+----
+{
+  "identifiers": [
+    {
+      "namespace": ["my_database"],
+      "name": "users"
+    }
+  ]
+}
+----
+
+.Renaming a table
+
+[source,bash]
+----
+curl -X POST http://localhost:8080/apis/iceberg/v1/default/tables/rename \
+  -H "Content-Type: application/json" \
+  -d '{
+    "source": {
+      "namespace": ["my_database"],
+      "name": "users"
+    },
+    "destination": {
+      "namespace": ["my_database"],
+      "name": "customers"
+    }
+  }'
+----
+
+.Dropping a table
+
+[source,bash]
+----
+curl -X DELETE http://localhost:8080/apis/iceberg/v1/default/namespaces/my_database/tables/users
+----
+
+.Dropping a namespace
+
+[source,bash]
+----
+curl -X DELETE http://localhost:8080/apis/iceberg/v1/default/namespaces/my_database
+----
+
+NOTE: A namespace must be empty (contain no tables) before you can drop it.
+
+
+// ref-registry-iceberg-catalog-commit-table

@@ -1,0 +1,78 @@
+[id="starting-registry-with-agent-features_{context}"]
+= Starting {registry} with agent features
+
+
+[role="_abstract"]
+You can start {registry} with agent features enabled by using Docker Compose. Because A2A support is an experimental feature, you must enable the experimental features flag and the A2A flag.
+
+.Prerequisites
+* Docker and Docker Compose are installed
+* `curl` is installed
+
+.Procedure
+. Create a `docker-compose.yml` file with the following content:
++
+[source,yaml]
+----
+version: '3.8'
+
+services:
+  apicurio-registry:
+    image: quay.io/apicurio/apicurio-registry:latest
+    container_name: agent-registry
+    ports:
+      - "8080:8080"
+    environment:
+      APICURIO_FEATURES_EXPERIMENTAL_ENABLED: "true"
+      APICURIO_A2A_ENABLED: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  apicurio-registry-ui:
+    image: quay.io/apicurio/apicurio-registry-ui:latest
+    container_name: agent-registry-ui
+    ports:
+      - "8888:8080"
+    environment:
+      REGISTRY_API_URL: "http://localhost:8080/apis/registry/v3"
+    depends_on:
+      apicurio-registry:
+        condition: service_healthy
+----
++
+NOTE: The `latest` tag refers to the most recent stable release. For development builds, use the `latest-snapshot` tag. For a specific version, use the version number as the tag, for example `{registry-release}`.
++
+. Start the services:
++
+[source,bash]
+----
+docker compose up -d
+----
++
+. Wait for the services to start.
+
+.Verification
+. Verify that {registry} is running:
++
+[source,bash]
+----
+curl http://localhost:8080/apis/registry/v3/system/info
+----
++
+. Verify that the A2A endpoint is active by retrieving the {registry} agent card:
++
+[source,bash]
+----
+curl http://localhost:8080/.well-known/agent.json
+----
++
+The response contains the agent card for the {registry} instance, including its built-in skills such as `schema-validation`, `schema-search`, `artifact-management`, `compatibility-check`, and `agent-discovery`.
+
+endif::[]
+
+// proc-registering-an-agent-card
+:_mod-docs-content-type: PROCEDURE

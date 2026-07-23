@@ -1,0 +1,40 @@
+[id="registry-cors-production_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-cors-production_{context}
+
+== CORS configuration for production
+
+[role="_abstract"]
+In production, explicitly list the origins that are allowed to access the {registry} REST API.
+
+TIP: If you deploy {registry} by using the {kubernetes} Operator, see xref:registry-cors-operator_{context}[]. The operator includes automatic CORS origin detection based on your Ingress configuration, and you often do not need to configure CORS manually.
+
+To allow a single origin:
+
+[source,yaml]
+----
+services:
+  apicurio-registry:
+    image: apicurio/apicurio-registry:latest-snapshot
+    environment:
+      QUARKUS_HTTP_CORS_ORIGINS: "https://my-app.example.com"
+    ports:
+      - "8080:8080"
+----
+
+To allow multiple origins, separate them with commas:
+
+[source,yaml]
+----
+services:
+  apicurio-registry:
+    image: apicurio/apicurio-registry:latest-snapshot
+    environment:
+      QUARKUS_HTTP_CORS_ORIGINS: "https://my-app.example.com,https://admin.example.com"
+    ports:
+      - "8080:8080"
+----
+
+
+
+// ref-registry-cors-authentication

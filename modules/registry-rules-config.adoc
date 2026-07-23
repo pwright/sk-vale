@@ -1,0 +1,42 @@
+[id="registry-rules-config_{context}"]
+= Content rule configuration
+
+Administrators can configure {registry} global rules, group-specific rules, and artifact-specific rules. Developers can configure group-specific and artifact-specific rules only.
+
+{registry} applies the rules configured for the specific artifact. If no rules are configured at that level, {registry} applies the group-specific rules.  If no rules are configured at the group level, then {registry} applies the globally configured rules. If no global rules are configured, then no rules are applied.
+
+[discrete]
+==== Configure group and artifact specific rules
+You can configure group-specific and artifact-specific rules using the {registry} web console or REST API. For details, see the following:
+
+* {managing-registry-artifacts-ui}
+* link:{attachmentsdir}/registry-rest-api.htm[Apicurio Registry REST API documentation]
+
+[discrete]
+==== Configure global rules
+Administrators can configure global rules in several ways:
+
+* Use the `admin/rules` operations in the REST API
+* Use the {registry} web console
+* Set default global rules using {registry} application properties
+
+.Configure default global rules
+Administrators can configure {registry} at the application level to enable or disable global rules. You can configure default global rules at installation time without post-install configuration using the following application property format:
+----
+apicurio.rules.global.<ruleName>
+----
+
+The following rule names are currently supported:
+
+* `compatibility`
+* `validity`
+* `integrity`
+
+The value of the application property must be a valid configuration option that is specific to the rule being
+configured.
+
+NOTE: You can configure these application properties as Java system properties or include them in the Quarkus
+`application.properties` file. For more details, see the https://quarkus.io/guides/config#overriding-properties-at-runtime[Quarkus documentation].
+
+
+

@@ -1,0 +1,125 @@
+[id="migrating-kafka-serdes_{context}"]
+= Migrating Kafka SerDes applications
+
+
+[role="_abstract"]
+You can update your Kafka SerDes applications from {registry} {registry-v2} to 3.x by updating Maven dependencies, reconfiguring SerDes properties, and updating TLS settings.
+
+.Prerequisites
+
+* You have existing Kafka SerDes applications that use {registry} {registry-v2} libraries.
+* You have access to the source code and build configuration for each application.
+* You installed the required dependencies for running migration scripts. See xref:installing-script-dependencies_{context}[Installing dependencies].
+
+.Procedure
+
+. Update your Maven dependency coordinates from v2 to v3.
++
+Replace the v2 SerDes dependency:
++
+[source,xml]
+----
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-serdes-avro-serde</artifactId>
+    <version>2.6.13.Final</version>
+</dependency>
+----
++
+With the v3 SerDes dependency:
++
+[source,xml,subs="+attributes"]
+----
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-avro-serde-kafka</artifactId>
+    <version>{registry-release}</version>
+</dependency>
+----
++
+NOTE: Artifact IDs changed in v3. The v2 artifact ID is `apicurio-registry-serdes-avro-serde`, while v3 uses `apicurio-registry-avro-serde-kafka`.
+
+. Update your SerDes configuration properties for v3.
++
+Replace the v2 configuration:
++
+[source,java]
+----
+Properties props = new Properties();
+
+// v2 SerDes configuration
+props.put(SerdeConfig.REGISTRY_URL, "https://registry-v2.example.com/apis/registry/v2");
+props.put(SerdeConfig.AUTO_REGISTER_ARTIFACT, Boolean.TRUE);
+props.put(SerdeConfig.ENABLE_HEADERS, false);
+props.put(SerdeConfig.ENABLE_CONFLUENT_ID_HANDLER, true);
+props.put(SerdeConfig.USE_ID, IdOption.contentId.name());
+
+// v2 OAuth2 configuration
+props.put(SerdeConfig.AUTH_SERVICE_URL, "https://keycloak.example.com");
+props.put(SerdeConfig.AUTH_REALM, "registry");
+props.put(SerdeConfig.AUTH_CLIENT_ID, "kafka-client");
+props.put(SerdeConfig.AUTH_CLIENT_SECRET, "secret");
+----
++
+With the v3 configuration:
++
+[source,java]
+----
+Properties props = new Properties();
+
+// v3 SerDes configuration
+props.put(SerdeConfig.REGISTRY_URL, "https://registry-v3.example.com/apis/registry/v3");
+props.put(SerdeConfig.AUTO_REGISTER_ARTIFACT, Boolean.TRUE);
+
+// v3 OAuth2 configuration (simplified)
+props.put(SerdeConfig.AUTH_TOKEN_ENDPOINT, "https://keycloak.example.com/realms/registry/protocol/openid-connect/token");
+props.put(SerdeConfig.AUTH_CLIENT_ID, "kafka-client");
+props.put(SerdeConfig.AUTH_CLIENT_SECRET, "secret");
+----
++
+For a detailed comparison of all changed properties, see xref:client-migration-reference_{context}[Client migration configuration reference].
+
+. Update your TLS configuration.
++
+Replace the v2 system-property-based TLS configuration:
++
+[source,java]
+----
+// v2 SerDes clients use system properties for TLS configuration
+System.setProperty("javax.net.ssl.trustStore", "/path/to/truststore.jks");
+System.setProperty("javax.net.ssl.trustStorePassword", "password");
+----
++
+With the v3 SerdeConfig-based configuration:
++
+[source,java]
+----
+// v3 SerDes clients use SerdeConfig properties for TLS configuration
+Properties props = new Properties();
+
+// Configure trust store for Registry HTTPS connections
+props.put(SerdeConfig.TLS_TRUSTSTORE_LOCATION, "/path/to/truststore.jks");
+props.put(SerdeConfig.TLS_TRUSTSTORE_PASSWORD, "password");
+props.put(SerdeConfig.TLS_TRUSTSTORE_TYPE, "JKS");
+
+// System properties for OAuth2 Keycloak connections
+System.setProperty("javax.net.ssl.trustStore", "/path/to/truststore.jks");
+System.setProperty("javax.net.ssl.trustStorePassword", "password");
+----
++
+IMPORTANT: v3 SerDes requires both SerdeConfig TLS properties (for Registry SDK connections) and system properties (for OAuth2 Keycloak connections). This differs from v2, which uses only system properties.
+
+.Verification
+
+* Verify that v3 consumers read messages that v2 producers produced.
+* Verify that v2 consumers read messages that v3 producers produced.
+* Verify that mixed-environment deployments (v2 and v3 clients) operate without data loss.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:client-migration-reference_{context}[]
+* {LinkServiceRegistryUser}[{NameServiceRegistryUser}]
+
+
+// proc-migrating-rest-api-clients
+:_mod-docs-content-type: PROCEDURE

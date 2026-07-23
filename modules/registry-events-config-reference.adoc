@@ -1,0 +1,82 @@
+[id="registry-events-config-reference_{context}"]
+= Configuration reference
+
+
+[role="_abstract"]
+The following table lists configuration properties related to the {registry} event system.
+
+.Event configuration properties
+[cols="2,1,2",options="header"]
+|===
+|Property
+|Default
+|Description
+
+|`apicurio.events.kafka.topic`
+|`registry-events`
+|Name of the Kafka topic used for publishing registry change events. Applies to both SQL (via Debezium) and KafkaSQL storage variants.
+
+|`apicurio.events.kafka.topic.replication.factor`
+|Inherited from journal topic
+|Replication factor for the events topic (KafkaSQL only). If not set, inherits from the main KafkaSQL journal topic configuration.
+
+|`apicurio.events.kafka.topic.cleanup.policy`
+|`delete`
+|Cleanup policy for the events topic (KafkaSQL only).
+
+|`apicurio.events.kafka.topic.retention.ms`
+|`-1` (infinite)
+|Retention time in milliseconds for the events topic (KafkaSQL only).
+|===
+
+[discrete]
+=== Storage variant support
+
+.Event support by storage variant
+[cols="1,1,1,1",options="header"]
+|===
+|Storage variant
+|Events supported
+|Delivery mechanism
+|Requirements
+
+|SQL (PostgreSQL)
+|Yes
+|Outbox table + Debezium CDC
+|Debezium connector, Kafka
+
+|SQL (MSSQL)
+|Yes
+|Outbox table + Debezium CDC
+|Debezium connector, Kafka
+
+|SQL (MySQL)
+|No
+|--
+|--
+
+|SQL (H2)
+|No
+|--
+|--
+
+|KafkaSQL
+|Yes
+|Direct Kafka publishing
+|None (built-in)
+
+|GitOps
+|No
+|--
+|--
+
+|KubernetesOps
+|No
+|--
+|--
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-config-reference}
+* link:https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html[Debezium Outbox Event Router documentation]

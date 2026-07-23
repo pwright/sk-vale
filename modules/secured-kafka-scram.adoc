@@ -1,0 +1,84 @@
+[id="secured-kafka-scram_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= secured-kafka-scram_{context}
+
+== Configuring KafkaSQL with SCRAM-SHA-512 authentication
+
+[role="_abstract"]
+When your Kafka cluster uses SCRAM-SHA-512 authentication, you configure the SASL credentials by using environment variables in the `spec.app.env` section of the `ApicurioRegistry3` custom resource.
+
+IMPORTANT: The structured `auth` section of the custom resource supports only OAUTHBEARER authentication. For SCRAM-SHA-512, you must use environment variables as described in this procedure.
+
+.Prerequisites
+* Your Kafka cluster is configured with a SASL listener that uses SCRAM-SHA-512.
+* You have created a {kubernetes} Secret that contains the JAAS configuration for your Kafka user.
+ifdef::apicurio-registry[]
+** {kafka-streams} automatically creates this Secret when you create a `KafkaUser` resource with `authentication.type: scram-sha-512`.
+endif::[]
+
+.Procedure
+
+. Verify that your {kubernetes} Secret contains the `sasl.jaas.config` key with the JAAS login module definition:
++
+----
+org.apache.kafka.common.security.scram.ScramLoginModule required username="my-user" password="<password>";
+----
++
+IMPORTANT: The `sasl.jaas.config` value must be a one-line login module definition. Do not include the `KafkaClient { ... }` wrapper.
+
+. Create or update your `ApicurioRegistry3` custom resource with the SCRAM-SHA-512 configuration:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-apicurioregistry-kafkasql-scram
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: "my-cluster-kafka-bootstrap.my-project.svc:9093"
+        tls:
+          truststoreSecretRef:
+            name: my-cluster-cluster-ca-cert
+            key: ca.p12
+          truststorePasswordSecretRef:
+            name: my-cluster-cluster-ca-cert
+            key: ca.password
+    env:
+      - name: APICURIO_KAFKA_COMMON_SECURITY_PROTOCOL
+        value: "SASL_SSL"
+      - name: APICURIO_KAFKA_COMMON_SASL_MECHANISM
+        value: "SCRAM-SHA-512"
+      - name: APICURIO_KAFKA_COMMON_SASL_JAAS_CONFIG
+        valueFrom:
+          secretKeyRef:
+            name: my-user
+            key: sasl.jaas.config
+    ingress:
+      host: registry.example.com
+  ui:
+    ingress:
+      host: registry-ui.example.com
+----
+
+. Apply the custom resource:
++
+[source,bash]
+----
+{kubernetes-client} apply -f my-registry.yaml
+----
+
+. Verify that the {registry} pod starts successfully:
++
+[source,bash]
+----
+{kubernetes-client} get pods -l app=example-apicurioregistry-kafkasql-scram
+----
++
+NOTE: This example uses `SASL_SSL` because TLS is also configured via the `tls` section. If you use SCRAM-SHA-512 without TLS, set `APICURIO_KAFKA_COMMON_SECURITY_PROTOCOL` to `SASL_PLAINTEXT` instead.
+
+
+// proc-secured-kafka-oauth

@@ -1,0 +1,19 @@
+[id="agent-registry-overview_{context}"]
+= Agent registry overview
+
+
+[role="_abstract"]
+{registry} functions as both an A2A (Agent-to-Agent) agent and an agent registry. As an A2A agent, {registry} exposes its own capabilities, such as schema validation, artifact management, and agent discovery. As an agent registry, {registry} stores and serves agent cards that other AI agents publish for discovery.
+
+The A2A protocol is a standard that AI agents use to discover and communicate with each other through well-known endpoints. MCP (Model Context Protocol) is a standard that LLM-powered tools such as Claude Desktop use to interact with external services and data sources.
+
+{registry} supports the following AI and ML artifact types:
+
+* `AGENT_CARD`: A2A agent card that describes an agent, its skills, and its capabilities
+* `PROMPT_TEMPLATE`: versioned prompt template with variable substitution for LLM interactions
+* `MODEL_SCHEMA`: input and output schema definition for an AI or ML model
+* `MCP_TOOL`: MCP tool definition that describes a tool, its input parameters, and its output schema
+
+ifndef::service-registry-downstream[]
+// proc-starting-registry-with-agent-features
+:_mod-docs-content-type: PROCEDURE

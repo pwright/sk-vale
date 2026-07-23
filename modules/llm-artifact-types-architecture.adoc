@@ -1,0 +1,64 @@
+[id="llm-artifact-types-architecture_{context}"]
+= Architecture overview
+
+
+[role="_abstract"]
+The LLM artifact types are first-class Java artifact types in {registry}. They follow the same pattern as other built-in types such as Avro, JSON Schema, and Agent Card.
+
+.Native Java artifact type system
+
+The LLM artifact types consist of the following components:
+
+.Architecture components
+[%header,cols="2,4"]
+|===
+|Component
+|Description
+
+|Java implementation
+|Source files in `schema-util/common/src/main/java/io/apicurio/registry/`, including accepters, validators, compatibility checkers, reference finders, dereferencers, content extractors, and canonicalizers for each type.
+
+|Provider wiring
+|`ModelSchemaArtifactTypeUtilProvider` and `PromptTemplateArtifactTypeUtilProvider` in `schema-util/util-provider/` wire each type's implementations together and register them as standard artifact types.
+
+|Prompt rendering service
+|Java service (`PromptRenderingService`) for server-side template rendering of PROMPT_TEMPLATE artifacts.
+|===
+
+.Handler functions
+
+Each artifact type includes the following handler functions (as Java classes in `schema-util/common/`):
+
+.Artifact type handler functions
+[%header,cols="2,4"]
+|===
+|Function
+|Purpose
+
+|`acceptsContent()`
+|Checks whether content matches this artifact type based on structure and content type.
+
+|`validate()`
+|Validates content structure, required fields, and constraint violations.
+
+|`testCompatibility()`
+|Checks backward compatibility between existing and proposed versions.
+
+|`canonicalize()`
+|Normalizes content for consistent hashing and comparison.
+
+|`findExternalReferences()`
+|Identifies `$ref` references to external schemas.
+
+|`dereference()`
+|Resolves `$ref` references by substituting actual content.
+
+|`rewriteReferences()`
+|Rewrites `$ref` paths to use registry URLs.
+
+|`validateReferences()`
+|Verifies that all references are properly mapped.
+|===
+
+// ref-llm-artifact-types-json-schema-backing
+:_mod-docs-content-type: REFERENCE

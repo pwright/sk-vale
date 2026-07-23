@@ -1,0 +1,235 @@
+[id="configuring-storage_{context}"]
+= configuring-storage_{context}
+
+
+[role="_abstract"]
+You must use separate database instances or schemas for v2 and v3 because the database schemas are incompatible.
+
+[cols="1,1",options="header"]
+|===
+| Registry 2.x property
+| Registry 3.x property
+
+| `REGISTRY_DATASOURCE_URL`
+| `APICURIO_DATASOURCE_URL`
+
+| `REGISTRY_DATASOURCE_USERNAME`
+| `APICURIO_DATASOURCE_USERNAME`
+
+| `REGISTRY_DATASOURCE_PASSWORD`
+| `APICURIO_DATASOURCE_PASSWORD`
+
+| `QUARKUS_DATASOURCE_DB_KIND`
+| Not required (auto-detected from URL)
+
+| `REGISTRY_SQL_INIT`
+| `APICURIO_SQL_INIT`
+
+| Not applicable
+| `APICURIO_STORAGE_KIND=sql` (required)
+
+| Not applicable
+| `APICURIO_STORAGE_SQL_KIND` (PostgreSQL, MySQL, H2)
+|===
+
+*Example migration:*
+
+[source,properties]
+----
+# Registry 2.x SQL configuration
+REGISTRY_DATASOURCE_URL=jdbc:postgresql://postgres:5432/registry
+REGISTRY_DATASOURCE_USERNAME=apicurio
+REGISTRY_DATASOURCE_PASSWORD=password123
+QUARKUS_DATASOURCE_DB_KIND=postgresql
+
+# Registry 3.x SQL configuration
+APICURIO_STORAGE_KIND=sql
+APICURIO_STORAGE_SQL_KIND=postgresql
+APICURIO_DATASOURCE_URL=jdbc:postgresql://postgres:5432/registry_v3
+APICURIO_DATASOURCE_USERNAME=apicurio
+APICURIO_DATASOURCE_PASSWORD=password123
+----
+
+IMPORTANT: Use separate database instances or different database names for v2 and v3. The v3 database schema is incompatible with v2.
+
+You must use a different Kafka topic for v3 than v2 because the journal formats are incompatible.
+
+.KafkaSQL storage properties
+[cols="1,1",options="header"]
+|===
+| Registry 2.x property
+| Registry 3.x property
+
+| `KAFKA_BOOTSTRAP_SERVERS`
+| `APICURIO_KAFKASQL_BOOTSTRAP_SERVERS`
+
+| `REGISTRY_KAFKASQL_TOPIC`
+| `APICURIO_KAFKASQL_TOPIC`
+
+| `REGISTRY_KAFKASQL_CONSUMER_GROUP_ID`
+| Not applicable. Remove this property. In v3, the consumer group ID is always auto-generated. Use
+`APICURIO_KAFKASQL_CONSUMER_GROUP_PREFIX` to set a recognizable prefix if needed.
+
+| Not applicable
+| `APICURIO_STORAGE_KIND=kafkasql` (required)
+|===
+
+*Example migration:*
+
+[source,properties]
+----
+# Registry 2.x KafkaSQL configuration
+KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+REGISTRY_KAFKASQL_TOPIC=kafkasql-journal-v2
+REGISTRY_KAFKASQL_CONSUMER_GROUP_ID=registry-v2-consumer
+
+# Registry 3.x KafkaSQL configuration
+APICURIO_STORAGE_KIND=kafkasql
+APICURIO_KAFKASQL_BOOTSTRAP_SERVERS=kafka:9092
+APICURIO_KAFKASQL_TOPIC=kafkasql-journal-v3
+----
+
+IMPORTANT: Use a different topic name for v3 (`kafkasql-journal-v3`) than v2 (`kafkasql-journal-v2`). The v3 journal format is incompatible with v2.
+
+.Authentication and authorization properties
+
+[cols="1,1",options="header"]
+|===
+| Registry 2.x property
+| Registry 3.x property
+
+| `AUTH_ENABLED`
+| `QUARKUS_OIDC_TENANT_ENABLED`
+
+| `KEYCLOAK_URL`
+| Use `QUARKUS_OIDC_AUTH_SERVER_URL` with full realm path
+
+| `KEYCLOAK_REALM`
+| Included in `QUARKUS_OIDC_AUTH_SERVER_URL`
+
+| `KEYCLOAK_API_CLIENT_ID`
+| `QUARKUS_OIDC_CLIENT_ID`
+
+| `ROLE_BASED_AUTHZ_ENABLED`
+| `APICURIO_AUTH_ROLE-BASED-AUTHORIZATION`
+
+| `REGISTRY_AUTH_ROLES_ADMIN`
+| `APICURIO_AUTH_ROLES_ADMIN`
+
+| `REGISTRY_AUTH_ROLES_DEVELOPER`
+| `APICURIO_AUTH_ROLES_DEVELOPER`
+
+| `REGISTRY_AUTH_ROLES_READONLY`
+| `APICURIO_AUTH_ROLES_READONLY`
+
+| `QUARKUS_OIDC_TLS_VERIFICATION`
+| `QUARKUS_OIDC_TLS_VERIFICATION` (same)
+|===
+
+*Example migration with Keycloak:*
+
+[source,properties]
+----
+# Registry 2.x authentication
+AUTH_ENABLED=true
+KEYCLOAK_URL=https://keycloak:8443
+KEYCLOAK_REALM=registry
+KEYCLOAK_API_CLIENT_ID=registry-api
+ROLE_BASED_AUTHZ_ENABLED=true
+REGISTRY_AUTH_ROLES_ADMIN=sr-admin
+REGISTRY_AUTH_ROLES_DEVELOPER=sr-developer
+REGISTRY_AUTH_ROLES_READONLY=sr-readonly
+
+# Registry 3.x authentication
+QUARKUS_OIDC_TENANT_ENABLED=true
+QUARKUS_OIDC_AUTH_SERVER_URL=https://keycloak:8443/realms/registry
+QUARKUS_OIDC_CLIENT_ID=registry-api
+APICURIO_AUTH_ROLE-BASED-AUTHORIZATION=true
+APICURIO_AUTH_ROLES_ADMIN=sr-admin
+APICURIO_AUTH_ROLES_DEVELOPER=sr-developer
+APICURIO_AUTH_ROLES_READONLY=sr-readonly
+----
+
+IMPORTANT: The `QUARKUS_OIDC_AUTH_SERVER_URL` property in v3 requires the full realm path (for example, `https://keycloak.example.com/realms/registry`). In v2, you specified the realm by using a separate property.
+
+.API and deletion properties
+
+[cols="1,1",options="header"]
+|===
+| Registry 2.x property
+| Registry 3.x property
+
+| `REGISTRY_REST_ARTIFACT_DELETION_ENABLED`
+| `APICURIO_REST_DELETION_ARTIFACT_ENABLED`
+
+| Not available
+| `APICURIO_REST_DELETION_ARTIFACT-VERSION_ENABLED`
+
+| Not available
+| `APICURIO_REST_DELETION_GROUP_ENABLED`
+
+| `REGISTRY_UI_FEATURES_READONLY`
+| `APICURIO_UI_FEATURES_READ-ONLY_ENABLED`
+
+| `CORS_ALLOWED_ORIGINS`
+| `QUARKUS_HTTP_CORS_ORIGINS`
+|===
+
+*Example migration:*
+
+[source,properties]
+----
+# Registry 2.x API configuration
+REGISTRY_REST_ARTIFACT_DELETION_ENABLED=true
+REGISTRY_UI_FEATURES_READONLY=false
+CORS_ALLOWED_ORIGINS=*
+
+# Registry 3.x API configuration
+APICURIO_REST_DELETION_ARTIFACT_ENABLED=true
+APICURIO_REST_DELETION_ARTIFACT-VERSION_ENABLED=true
+APICURIO_REST_DELETION_GROUP_ENABLED=true
+APICURIO_UI_FEATURES_READ-ONLY_ENABLED=false
+QUARKUS_HTTP_CORS_ORIGINS=*
+----
+
+TLS configuration remains unchanged between v2 and v3 for server-side settings.
+
+.TLS/HTTPS properties
+[cols="1,1",options="header"]
+|===
+| Registry 2.x property
+| Registry 3.x property
+
+| `QUARKUS_HTTP_SSL_PORT`
+| `QUARKUS_HTTP_SSL_PORT` (same)
+
+| `QUARKUS_HTTP_SSL_CERTIFICATE_KEY_STORE_FILE`
+| `QUARKUS_HTTP_SSL_CERTIFICATE_KEY_STORE_FILE` (same)
+
+| `QUARKUS_HTTP_SSL_CERTIFICATE_KEY_STORE_PASSWORD`
+| `QUARKUS_HTTP_SSL_CERTIFICATE_KEY_STORE_PASSWORD` (same)
+
+| `QUARKUS_HTTP_INSECURE_REQUESTS`
+| `QUARKUS_HTTP_INSECURE_REQUESTS` (same)
+|===
+
+*Example (same for v2 and v3):*
+
+[source,properties]
+----
+# TLS configuration (unchanged)
+QUARKUS_HTTP_SSL_PORT=8443
+QUARKUS_HTTP_SSL_CERTIFICATE_KEY_STORE_FILE=/certs/registry-keystore.p12
+QUARKUS_HTTP_SSL_CERTIFICATE_KEY_STORE_PASSWORD=password123
+QUARKUS_HTTP_INSECURE_REQUESTS=disabled
+----
+
+NOTE: TLS configuration is identical for v2 and v3. If the hostname and routes remain the same, reuse the same certificates.
+
+[role="_additional-resources"]
+.Additional resources
+* {LinkServiceRegistryUser}[{NameServiceRegistryUser}]
+
+
+// con-kafkasql-architecture
+:_mod-docs-content-type: CONCEPT

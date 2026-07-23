@@ -1,0 +1,22 @@
+[id="choosing-migration-strategy_{context}"]
+= choosing-migration-strategy_{context}
+
+
+[role="_abstract"]
+You can choose from two client migration strategies.
+
+Gradual migration::
+Migrate the registry first, then update clients incrementally. Deploy {registry} 3.x, verify that v2 clients continue to work, update high-priority clients to v3 SerDes or SDKs, gradually migrate remaining clients, and deprecate v2 API access after you update all clients. This approach provides lower risk because clients continue to work during migration, a flexible timeline for client updates, and easier rollback if issues occur.
+
+Big-bang migration::
+Update all clients and the registry simultaneously. Prepare all client updates in advance, deploy {registry} 3.x, deploy updated client applications, and verify that all integrations work. This approach provides a clean cutover to v3 with no mixed v2/v3 client environment, but requires higher complexity and coordination and is more difficult to troubleshoot if issues arise.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:migrating-kafka-serdes_{context}[]
+* xref:migrating-rest-api-clients_{context}[]
+* xref:client-migration-reference_{context}[]
+
+
+// proc-migrating-kafka-serdes
+:_mod-docs-content-type: PROCEDURE

@@ -1,0 +1,65 @@
+[id="ccompat-migration-considerations_{context}"]
+= Migration considerations
+
+
+[role="_abstract"]
+When you migrate from Confluent Schema Registry to {registry}, consider the following areas:
+
+.Migration checklist
+[%header,cols="1,3"]
+|===
+|Area
+|Consideration
+
+|*Basic operations*
+|Schema registration, retrieval, and compatibility checks work identically. No changes required.
+
+|*Client configuration*
+|Update `schema.registry.url` to point to the {registry} ccompat endpoint.
+
+|*Schema types*
+|{registry} fully supports Avro, JSON Schema, and Protobuf.
+
+|*Schema IDs*
+|{registry} uses `contentId` by default (the same schema content produces the same ID across subjects). Set `apicurio.ccompat.legacy-id-mode.enabled=true` if your application depends on unique IDs per registration.
+
+|*Avro schema formatting*
+|Avro schemas are returned in compact JSON through ccompat endpoints. If your application compares schema strings directly, be aware of formatting differences.
+
+|*Default compatibility*
+|The compatibility check endpoint defaults to `BACKWARD` when you do not configure a rule, matching Confluent. Set an explicit global compatibility level by using `PUT /config` if you need a different default.
+
+|*Config response parsing*
+|The `PUT /config` response uses the field name `compatibility` (not `compatibilityLevel`). Update client code that parses this response.
+
+|*Authentication*
+|{registry} supports OpenID Connect (OIDC) authentication. Update client security configuration as needed.
+
+|*Exporters / Schema Linking*
+|Not supported. Use {registry} import/export API or Kafka topic replication.
+
+|*Data Contracts*
+|Metadata and rules from the ccompat API are not enforced. Use {registry} native Data Contracts feature for contract metadata and rulesets.
+
+|*Encryption (KEK/DEK)*
+|Not supported. Implement encryption at the application layer.
+|===
+
+.Example: Migrating a Kafka producer
+[source,java]
+----
+// Before: Confluent Schema Registry
+Properties props = new Properties();
+props.put("schema.registry.url", "http://confluent-registry:8081");
+
+// After: Apicurio Registry (using ccompat API)
+Properties props = new Properties();
+props.put("schema.registry.url", "http://apicurio-registry:8080/apis/ccompat/v7");
+----
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-rest-api}
+* link:https://docs.confluent.io/platform/current/schema-registry/develop/api.html[Confluent Schema Registry API Reference]
+* link:https://docs.confluent.io/platform/current/schema-registry/fundamentals/data-contracts.html[Confluent Data Contracts Documentation]
+* link:https://docs.confluent.io/platform/current/schema-registry/schema-linking-cp.html[Confluent Schema Linking Documentation]

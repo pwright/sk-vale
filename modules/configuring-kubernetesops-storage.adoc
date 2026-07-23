@@ -1,0 +1,100 @@
+[id="configuring-kubernetesops-storage_{context}"]
+= Configuring KubernetesOps storage
+
+
+[role="_abstract"]
+This section explains how to configure {registry} to use KubernetesOps storage.
+
+.Prerequisites
+* You have a Kubernetes or OpenShift cluster with cluster administrator access.
+* You have installed {registry}.
+
+.Procedure
+
+. Configure the following environment variables in your {registry} deployment:
++
+.Environment variables for KubernetesOps storage
+[.table-expandable,width="100%",cols="4,2,4",options="header"]
+|===
+|Environment Variable
+|Default
+|Description
+
+|`APICURIO_FEATURES_EXPERIMENTAL_ENABLED`
+|`false`
+|*Required*. Must be set to `true` to enable KubernetesOps storage. This feature is currently experimental.
+
+|`APICURIO_STORAGE_KIND`
+|-
+|Set to `kubernetesops` to enable KubernetesOps storage.
+
+|`APICURIO_POLLING_STORAGE_ID`
+|`main`
+|Unique identifier for this registry instance. Only ConfigMaps with matching label will be loaded.
+
+|`APICURIO_KUBERNETESOPS_NAMESPACE`
+|Current namespace
+|Kubernetes namespace to watch for ConfigMaps.
+
+|`APICURIO_POLLING_STORAGE_POLL_PERIOD`
+|`PT10S`
+|Minimum period between polls for ConfigMap changes. Uses ISO 8601 duration format (e.g., `PT10S`, `PT1M`).
+
+|`APICURIO_KUBERNETESOPS_LABEL_REGISTRY_ID`
+|`apicurio.io/registry-id`
+|Label key used to identify ConfigMaps belonging to this registry.
+
+|`APICURIO_POLLING_STORAGE_DEBOUNCE_QUIET_PERIOD`
+|`PT3S`
+|After detecting a change, wait until no new changes are seen for this duration before loading data. Absorbs rapid successive changes. Set to `PT0S` to disable debouncing.
+
+|`APICURIO_POLLING_STORAGE_DEBOUNCE_MAX_WAIT_PERIOD`
+|`PT90S`
+|Maximum time to wait for changes to settle before forcing a load. Prevents indefinite delay when changes keep arriving. Set to `PT0S` for no maximum.
+
+|`APICURIO_POLLING_STORAGE_DETERMINISTIC_IDS_ENABLED`
+|`true`
+|When enabled, `contentId` and `globalId` are deterministically generated from content hashes and artifact coordinates if not explicitly specified. When disabled, missing IDs cause an error.
+
+|`APICURIO_POLLING_STORAGE_REQUIRE_REGISTRY_CONFIG`
+|`true`
+|When enabled, a load is rejected if the data source does not contain a registry configuration file matching the configured registry ID. Prevents accidental data loss from empty ConfigMaps.
+
+|`APICURIO_POLLING_STORAGE_FILE_SUFFIXES`
+|`registry,ar`
+|Comma-separated list of file suffixes that identify registry metadata files. Each suffix is combined with extensions (`.yaml`, `.yml`, `.json`) to form the full pattern. For example, suffix `registry` matches `*.registry.yaml`, `*.registry.yml`, and `*.registry.json`. Data keys that do not match a recognized suffix are treated as raw content files.
+|===
+
+. Example deployment configuration:
++
+[source,yaml]
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apicurio-registry
+spec:
+  template:
+    spec:
+      serviceAccountName: apicurio-registry
+      containers:
+        - name: registry
+          image: apicurio/apicurio-registry:latest
+          env:
+            - name: APICURIO_FEATURES_EXPERIMENTAL_ENABLED
+              value: "true"
+            - name: APICURIO_STORAGE_KIND
+              value: "kubernetesops"
+            - name: APICURIO_POLLING_STORAGE_ID
+              value: "my-registry"
+            - name: APICURIO_KUBERNETESOPS_NAMESPACE
+              value: "apicurio"
+            - name: APICURIO_POLLING_STORAGE_POLL_PERIOD
+              value: "PT10S"
+----
+
+. Create the required RBAC resources as described in xref:kubernetesops-rbac-requirements_{context}[].
+
+. Create ConfigMaps containing your registry data as described in xref:kubernetesops-configmap-format_{context}[].
+
+

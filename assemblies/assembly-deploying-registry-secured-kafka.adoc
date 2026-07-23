@@ -1,0 +1,33 @@
+[id="deploying-registry-secured-kafka_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= deploying-registry-secured-kafka_{context}
+
+= Deploying {registry} with a secured Kafka instance
+
+[role="_abstract"]
+You can deploy {registry} with KafkaSQL storage connected to a Kafka instance that requires TLS encryption, SASL authentication, or both.
+{registry} supports multiple security configurations for Kafka connections, including TLS-only encryption, OAUTHBEARER authentication, and SCRAM-SHA-512 authentication.
+
+* xref:secured-kafka-overview_{context}[]
+* xref:secured-kafka-prerequisites_{context}[]
+* xref:secured-kafka-tls_{context}[]
+* xref:secured-kafka-scram_{context}[]
+* xref:secured-kafka-oauth_{context}[]
+ifndef::service-registry-downstream[]
+* xref:secured-kafka-access-operator_{context}[]
+endif::[]
+* xref:secured-kafka-security-protocols_{context}[]
+* xref:secured-kafka-topic-config_{context}[]
+* xref:secured-kafka-troubleshooting_{context}[]
+
+
+// con-secured-kafka-overview
+include::../modules/secured-kafka-overview.adoc[leveloffset=+1]
+include::../modules/secured-kafka-prerequisites.adoc[leveloffset=+1]
+include::../modules/secured-kafka-tls.adoc[leveloffset=+1]
+include::../modules/secured-kafka-scram.adoc[leveloffset=+1]
+include::../modules/secured-kafka-oauth.adoc[leveloffset=+1]
+include::../modules/secured-kafka-access-operator.adoc[leveloffset=+1]
+include::../modules/secured-kafka-security-protocols.adoc[leveloffset=+1]
+include::../modules/secured-kafka-topic-config.adoc[leveloffset=+1]
+include::../modules/secured-kafka-troubleshooting.adoc[leveloffset=+1]

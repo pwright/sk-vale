@@ -1,0 +1,62 @@
+[id="installing-registry-cli_{context}"]
+= Installing the {registry} CLI
+
+
+[role="_abstract"]
+You can install the {registry} CLI to interact with {registry} from the command line. The CLI comes as a .zip file that has the executable program and required dependencies.
+
+.Prerequisites
+* You have Java 11 or higher installed on your system.
+* You have access to a bash shell (Linux) or zsh shell (macOS).
+
+.Procedure
+ifndef::service-registry-downstream[]
+. Download the latest `apicurio-registry-cli-VERSION.zip` file from the https://github.com/Apicurio/apicurio-registry/releases[{registry} GitHub Releases page]. Alternatively, you can download the CLI from the https://search.maven.org/search?q=g:io.apicurio%20AND%20a:apicurio-registry-cli[Maven Central repository] by searching for `apicurio-registry-cli`.
+endif::[]
+ifdef::service-registry-downstream[]
+. Download the CLI .zip file from the Red{nbsp}Hat Customer Portal.
+endif::[]
+. Extract the downloaded file to a location of your choice:
++
+[source,bash]
+----
+$ unzip apicurio-registry-cli-VERSION.zip -d ~/apicurio-cli
+----
+. Install the CLI for the current user:
++
+[source,bash]
+----
+$ cd ~/apicurio-cli
+$ ./acr install
+----
++
+This command installs the CLI executable to `$HOME/bin` and creates a configuration directory at `$HOME/.apicurio/apicurio-registry-cli`. The command also updates your `~/.bashrc` file (Linux) or `~/.zshrc` file (macOS) and configures shell completions.
+. Reload your shell configuration:
++
+On Linux:
++
+[source,bash]
+----
+$ source ~/.bashrc
+----
++
+On macOS:
++
+[source,bash]
+----
+$ source ~/.zshrc
+----
+. Verify the installation:
++
+[source,bash]
+----
+$ acr --help
+----
+
+[role="_additional-resources"]
+.Additional resources
+ifndef::service-registry-downstream[]
+* For more information, see the link:https://github.com/Apicurio/apicurio-registry/tree/main/cli[CLI README] on GitHub.
+endif::[]
+
+

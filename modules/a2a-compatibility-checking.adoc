@@ -1,0 +1,23 @@
+[id="a2a-compatibility-checking_{context}"]
+= Agent Card compatibility rules
+
+
+[role="_abstract"]
+When you version Agent Cards, {registry} enforces compatibility rules to ensure that changes do not break existing clients.
+
+.Compatible changes (allowed)
+* Adding new skills
+* Adding new capabilities
+* Adding authentication schemes
+* Adding input or output modes
+
+.Incompatible changes (can break clients)
+* Removing skills
+* Removing or disabling capabilities
+* Removing supported interfaces (matched by URL and protocol binding)
+* Changing the protocol version on an existing interface
+* Removing security schemes
+* Removing input or output modes
+
+// ref-a2a-automatic-label-extraction
+:_mod-docs-content-type: REFERENCE

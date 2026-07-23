@@ -1,0 +1,50 @@
+[id="a2a-java-sdk-usage_{context}"]
+= Java SDK usage for A2A
+
+
+[role="_abstract"]
+You can use the Java SDK to discover agents and register Agent Cards programmatically.
+
+.Agent discovery example
+[source,java]
+----
+RegistryClient client = RegistryClientFactory.create(
+    RegistryClientOptions.create("http://localhost:8080/apis/registry/v3"));
+
+// Search for agents with specific skill
+var agents = client.wellKnown().agents()
+    .get(config -> {
+        config.queryParameters.skill = List.of("translation");
+        config.queryParameters.limit = 10;
+    });
+
+for (var agent : agents.getAgents()) {
+    System.out.println("Found: " + agent.getName() + " @ " + agent.getUrl());
+}
+----
+
+.Agent Card registration example
+[source,java]
+----
+CreateArtifact artifact = new CreateArtifact();
+artifact.setArtifactId("my-agent");
+artifact.setArtifactType("AGENT_CARD");
+
+CreateVersion version = new CreateVersion();
+version.setVersion("1.0.0");
+
+VersionContent content = new VersionContent();
+content.setContentType("application/json");
+content.setContent(agentCardJson);
+version.setContent(content);
+
+artifact.setFirstVersion(version);
+
+client.groups().byGroupId("ai-agents").artifacts()
+    .post(artifact, config -> {
+        config.queryParameters.ifExists = IfArtifactExists.FIND_OR_CREATE_VERSION;
+    });
+----
+
+// ref-a2a-rest-api-reference
+:_mod-docs-content-type: REFERENCE

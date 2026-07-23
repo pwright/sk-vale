@@ -1,0 +1,124 @@
+[id="ha-application-scaling_{context}"]
+= Configuring application component high availability
+
+
+The {registry} backend and UI components are stateless and can scale horizontally to provide high availability
+and increased throughput.
+
+=== Configuring multiple replicas
+
+Configure the number of replicas for each component in the `ApicurioRegistry3` custom resource:
+
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry-ha
+spec:
+  app:
+    replicas: 3
+    storage:
+      type: postgresql
+      sql:
+        dataSource:
+          url: jdbc:postgresql://postgresql-ha.my-project.svc:5432/registry
+          username: registry_user
+          password:
+            name: postgresql-credentials
+            key: password
+    ingress:
+      host: registry.example.com
+  ui:
+    replicas: 2
+    ingress:
+      host: registry-ui.example.com
+----
+
+IMPORTANT: Running multiple replicas requires a production-ready storage backend (PostgreSQL, MySQL, or KafkaSQL
+with persistent Kafka). Do not use the default embedded H2 configuration with multiple replicas.
+
+=== Distributing pods across nodes
+
+To ensure high availability, distribute {registry} pods across different nodes and availability zones:
+
+[source,yaml]
+----
+spec:
+  app:
+    replicas: 3
+    podTemplateSpec:
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app: example-registry
+                      app.kubernetes.io/component: app
+                      app.kubernetes.io/part-of: apicurio-registry
+                  topologyKey: kubernetes.io/hostname
+              - weight: 50
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app: example-registry
+                      app.kubernetes.io/component: app
+                      app.kubernetes.io/part-of: apicurio-registry
+                  topologyKey: topology.kubernetes.io/zone
+----
+
+This configuration spreads pods across different nodes (hostname) and availability zones when possible.
+
+=== Configuring resource requests and limits
+
+Set appropriate resource requests and limits to ensure pod scheduling and prevent resource contention:
+
+[source,yaml]
+----
+spec:
+  app:
+    podTemplateSpec:
+      spec:
+        containers:
+          - name: apicurio-registry-app
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "500m"
+              limits:
+                memory: "1Gi"
+                cpu: "1000m"
+----
+
+=== Configuring PodDisruptionBudget
+
+Ensure minimum availability during voluntary disruptions such as node drains or cluster upgrades. The operator
+creates a PodDisruptionBudget with `maxUnavailable: 1` by default, but you can customize it by creating your own:
+
+[source,yaml]
+----
+spec:
+  app:
+    replicas: 3
+    podDisruptionBudget:
+      enabled: false
+----
+
+[source,yaml]
+----
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+    name: example-registry-app-poddisruptionbudget
+spec:
+    minAvailable: 1
+    selector:
+      matchLabels:
+        app: example-registry
+        app.kubernetes.io/component: app
+        app.kubernetes.io/part-of: apicurio-registry
+----
+

@@ -1,0 +1,33 @@
+[id="registry-security-azure-oauth-scopes_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-security-azure-oauth-scopes_{context}
+
+== Client-specific OAuth scopes for Azure Entra ID
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+Azure Entra ID requires that each app registration uses a unique scope. When you have multiple app registrations (for example, one for developers and one for read-only access), you can configure client-specific scopes:
+
+[source,properties]
+----
+# Default scope for all clients (fallback)
+APICURIO_AUTHN_BASIC_SCOPE=api://default-app-id/.default
+
+# Client-specific scope overrides
+# Replace dots in client IDs with underscores for environment variables
+APICURIO_AUTHN_BASIC_SCOPE_SR_DEVELOPER_CLIENT=api://developer-app-id/.default
+APICURIO_AUTHN_BASIC_SCOPE_SR_READONLY_CLIENT=api://readonly-app-id/.default
+----
+
+When a client authenticates, {registry} does the following:
+
+1. Check for a client-specific scope configuration matching the client ID
+2. If not found, use the default scope
+3. If no scope is configured, proceed without a scope parameter
+
+NOTE: You can specify multiple scopes by using comma separation. The scopes are converted to space-separated format per the OAuth2 specification.
+
+
+
+// proc-registry-security-dex

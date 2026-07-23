@@ -1,0 +1,36 @@
+[id="registry-cors-operator_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-cors-operator_{context}
+
+== CORS configuration with the {kubernetes} Operator
+
+[role="_abstract"]
+When you deploy {registry} by using the {kubernetes} Operator, you can set CORS environment variables in the `ApicurioRegistry3` custom resource.
+
+To configure explicit origins:
+
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: my-registry
+spec:
+  app:
+    env:
+      - name: QUARKUS_HTTP_CORS_ORIGINS
+        value: "https://my-app.example.com,https://admin.example.com"
+----
+
+The {registry} Operator includes built-in logic for automatic CORS origin detection. In most {kubernetes} deployments, you do not need to configure CORS manually:
+
+. If you set `QUARKUS_HTTP_CORS_ORIGINS` in the `spec.app.env` section, those origins are used (manual override).
+. If you do not configure origins and you have an Ingress for the registry UI, the operator automatically detects the Ingress host and adds both `http://` and `https://` variants of that host to the allowed origins.
+. If you do not configure origins and no Ingress is found, the operator defaults to `*` (allow all origins).
+
+You only need to configure `QUARKUS_HTTP_CORS_ORIGINS` manually if your browser application runs on a different origin than the one auto-detected from your Ingress.
+
+NOTE: This automatic CORS detection works whether your networking layer uses {kubernetes} Ingress or OpenShift Routes. CORS is configured at the application level, not at the networking layer.
+
+
+// ref-registry-cors-troubleshooting

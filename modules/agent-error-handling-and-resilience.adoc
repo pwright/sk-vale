@@ -1,0 +1,61 @@
+[id="agent-error-handling-and-resilience_{context}"]
+= Error handling and resilience
+
+
+[role="_abstract"]
+When you build multi-agent workflows, you must handle agent unavailability, version changes, and unexpected errors. The following table lists common error scenarios and recommended handling strategies.
+
+[cols="2,1,3",options="header"]
+|===
+|Scenario |HTTP status |Recommended handling
+
+|A2A support is disabled
+|404
+|Verify that `apicurio.a2a.enabled` is set to `true` in the {registry} configuration.
+
+|Agent card not found
+|404
+|Check that the agent card exists in the specified group and artifact ID. Verify that the artifact type is `AGENT_CARD`.
+
+|MCP tools support is disabled
+|404
+|Verify that MCP tools support is enabled in the {registry} configuration.
+
+|MCP tool not found
+|404
+|Check that the MCP tool definition exists in the specified group and artifact ID. Verify that the artifact type is `MCP_TOOL`.
+
+|Artifact type mismatch
+|404
+|The artifact exists but is not an `AGENT_CARD` or `MCP_TOOL`. Store the artifact with the correct artifact type.
+
+|Schema not found
+|404
+|The requested schema type or version is not supported. Use one of the supported types: `prompt-template`, `model-schema`, or `mcp-tool` with version `v1`.
+
+|Agent task execution fails
+|Varies
+|Store the error in the workflow context so that subsequent steps can detect and handle the failure. Implement fallback agent selection.
+
+|Search returns no results
+|200 (empty)
+|Verify that agent cards are stored with artifact type `AGENT_CARD`, check that your filter values match stored values, and confirm that structured content was indexed correctly.
+|===
+
+.Resilience strategies
+
+Agent health checks:: Before you send a task to a discovered agent, verify that the agent is reachable. Fetch the agent card from `/.well-known/agents/\{groupId}/\{artifactId}` and check the `supportedInterfaces` array for the agent URL. Send a health check request to the agent URL before dispatching the full task.
+
+Fallback agent selection:: When your primary agent is unavailable, query `/.well-known/agents` with the same skill filter to find alternative agents. Select the next available agent from the results and retry the task.
+
+Version pinning:: By default, the `/.well-known/agents/\{groupId}/\{artifactId}` endpoint returns the latest version of an agent card. To pin a specific version, include the `version` query parameter:
++
+[source,bash]
+----
+$ curl "http://localhost:8080/.well-known/agents/ai-agents/my-agent?version=1.0.0"
+----
++
+Use version pinning in production environments to prevent unexpected behavior when you update agent cards.
+
+// con-agent-catalog-design
+:_mod-docs-content-type: CONCEPT

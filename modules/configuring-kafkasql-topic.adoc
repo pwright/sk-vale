@@ -1,0 +1,57 @@
+[id="configuring-kafkasql-topic_{context}"]
+= Configuring the KafkaSQL journal topic
+
+
+[role="_abstract"]
+You can create and configure the v3 KafkaSQL journal topic with the correct cleanup policy and retention settings.
+
+.Prerequisites
+
+* You have access to Kafka administrative tools (`kafka-topics.sh`).
+* You understand the KafkaSQL architectural changes in v3. See xref:kafkasql-architecture_{context}[KafkaSQL storage changes].
+
+.Procedure
+
+. Create the v3 KafkaSQL journal topic with the correct settings.
++
+[source,bash]
+----
+kafka-topics.sh --bootstrap-server kafka:9092 --create \
+  --topic kafkasql-journal-v3 \
+  --partitions 1 \
+  --replication-factor 3 \
+  --config cleanup.policy=delete \
+  --config retention.ms=-1 \
+  --config retention.bytes=-1
+----
++
+The partition count is configurable. All journal messages use a global partition key for ordering, so a single partition is sufficient. Adjust based on your Kafka cluster configuration.
++
+IMPORTANT: Configure the journal topic with `cleanup.policy=delete` and infinite retention (`retention.ms=-1`). Do not use log compaction. You must preserve all journal events for proper registry operation.
+
+. Verify the topic configuration.
++
+[source,bash]
+----
+kafka-topics.sh --bootstrap-server kafka:9092 --describe \
+  --topic kafkasql-journal-v3
+
+# Expected output:
+#   cleanup.policy=delete
+#   retention.ms=-1
+#   retention.bytes=-1
+----
+
+.Verification
+
+* Verify that the topic uses `cleanup.policy=delete` (not `compact`).
+* Verify that `retention.ms=-1` and `retention.bytes=-1` are set for infinite retention.
+* Verify that the topic is accessible from the {registry} 3.x deployment.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:kafkasql-architecture_{context}[]
+
+
+// proc-verifying-migration-configuration
+:_mod-docs-content-type: PROCEDURE

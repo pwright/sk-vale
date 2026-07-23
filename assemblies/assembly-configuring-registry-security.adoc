@@ -1,0 +1,45 @@
+[id="configuring-registry-security_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= configuring-registry-security_{context}
+
+= Configuring {registry} security options
+
+[role="_abstract"]
+You can configure security options for {registry}, including authentication in {keycloak}, Microsoft Azure Active Directory, or Dex, and role-based authorization.
+
+* xref:registry-security-keycloak_{context}[]
+* xref:registry-security-azure_{context}[]
+* xref:registry-security-dex_{context}[]
+* xref:registry-security-settings_{context}[]
+* xref:registry-cors-configuration_{context}[]
+
+NOTE: For a list of all available configuration options, see {registry-config-reference}.
+
+
+// proc-registry-security-keycloak
+include::../modules/registry-security-keycloak.adoc[leveloffset=+1]
+include::../modules/registry-security-azure.adoc[leveloffset=+1]
+include::../modules/registry-security-azure-role-mappings.adoc[leveloffset=+1]
+include::../modules/registry-security-azure-oauth-scopes.adoc[leveloffset=+1]
+include::../modules/registry-security-dex.adoc[leveloffset=+1]
+include::../modules/registry-security-dex-connectors.adoc[leveloffset=+1]
+include::../modules/registry-security-dex-m2m.adoc[leveloffset=+1]
+include::../modules/registry-security-dex-production.adoc[leveloffset=+1]
+include::../modules/registry-security-dex-troubleshooting.adoc[leveloffset=+1]
+include::../modules/registry-security-settings.adoc[leveloffset=+1]
+include::../modules/registry-security-authn-keycloak.adoc[leveloffset=+2]
+include::../modules/registry-security-authn-http.adoc[leveloffset=+2]
+include::../modules/registry-security-rbac-enabled.adoc[leveloffset=+2]
+include::../modules/registry-security-obac-enabled.adoc[leveloffset=+2]
+include::../modules/registry-security-auth-read.adoc[leveloffset=+2]
+include::../modules/registry-security-anon-read.adoc[leveloffset=+2]
+include::../modules/registry-cors-configuration.adoc[leveloffset=+1]
+include::../modules/registry-cors-understanding.adoc[leveloffset=+1]
+include::../modules/registry-cors-defaults.adoc[leveloffset=+1]
+include::../modules/registry-cors-env-vars.adoc[leveloffset=+1]
+include::../modules/registry-cors-local-dev.adoc[leveloffset=+1]
+include::../modules/registry-cors-production.adoc[leveloffset=+1]
+include::../modules/registry-cors-authentication.adoc[leveloffset=+1]
+include::../modules/registry-cors-operator.adoc[leveloffset=+1]
+include::../modules/registry-cors-troubleshooting.adoc[leveloffset=+1]
+include::../modules/registry-cors-diagnosing.adoc[leveloffset=+1]

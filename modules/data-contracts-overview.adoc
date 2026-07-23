@@ -1,0 +1,18 @@
+[id="data-contracts-overview_{context}"]
+= Overview
+
+
+[role="_abstract"]
+The Data Contracts framework enables teams to define, enforce, and track formal agreements about schema structure, ownership, and quality using the industry-standard ODCS format.
+
+A data contract in {registry} combines:
+
+* *ODCS format* - Contracts are submitted as ODCS v3.1 YAML documents and projected onto schema artifacts
+* *Metadata* - Ownership, classification, SLA, and support information projected as labels
+* *Lifecycle* - Status tracking (DRAFT, STABLE, DEPRECATED) and promotion stages (DEV, STAGE, PROD)
+* *Quality rules* - Accuracy and completeness rules from ODCS projected as CEL contract rules
+* *Field tags* - PII and classification annotations stored as version labels, with automatic extraction from Avro, JSON Schema, and Protobuf schemas
+* *Multi-contract support* - Multiple contracts can reference the same schema artifact without overwriting each other
+
+NOTE: Data contracts are always available. No special configuration is required — submitting a contract is an explicit opt-in action.
+

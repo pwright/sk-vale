@@ -1,0 +1,31 @@
+[id="configuring-ingress-hostname_{context}"]
+:_mod-docs-content-type: REFERENCE
+= configuring-ingress-hostname_{context}
+
+== Ingress hostname and class configuration
+
+[role="_abstract"]
+You can specify the Ingress hostname and IngressClass for each component.
+
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry
+spec:
+  app:
+    ingress:
+      host: registry-api.example.com
+      ingressClassName: nginx
+      annotations:
+        nginx.org/proxy-connect-timeout: "30s"
+  ui:
+    ingress:
+      host: registry-ui.example.com
+      ingressClassName: nginx
+      annotations:
+        nginx.org/proxy-connect-timeout: "30s"
+----
+
+// ref-disabling-operator-ingress

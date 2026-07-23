@@ -1,0 +1,29 @@
+[id="enabling-deletion-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Enabling deletion of groups, artifacts, and artifact versions
+
+[role="_abstract"]
+Before you can delete groups, artifacts, or artifact versions, you must enable the deletion settings in the {registry} web console.
+
+WARNING: When you enable deletion, users can permanently remove groups, artifacts, and artifact versions. Deleting a group removes all of its artifacts and their versions. Deleting an artifact removes all of its versions. These operations cannot be undone.
+
+.Procedure
+
+. In the {registry} web console, click the *Settings* tab.
+. In the *Additional properties* section, select the appropriate settings:
++
+** *Delete group*: Select this option to enable deletion of groups.
+** *Delete artifact*: Select this option to enable deletion of artifacts.
+** *Delete artifact version*: Select this option to enable deletion of artifact versions.
++
+NOTE: All three settings are disabled by default. You can enable any combination of these settings depending on your requirements.
+ifndef::service-registry-downstream[]
++
+TIP: Alternatively, if you are deploying {registry} on Kubernetes by using the {operator}, you can enable deletion by configuring the `ApicurioRegistry3` custom resource. For more information, see xref:getting-started/assembly-operator-config-reference.adoc[{operator} configuration reference].
+endif::[]
+ifdef::service-registry-downstream[]
++
+TIP: Alternatively, if you are deploying {registry} on OpenShift by using the {operator}, you can enable deletion by setting `resourceDeleteEnabled` to `true` in the `ApicurioRegistry3` custom resource.
+endif::[]
+
+

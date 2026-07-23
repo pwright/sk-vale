@@ -1,0 +1,21 @@
+[id="configuring-networkpolicy_{context}"]
+:_mod-docs-content-type: REFERENCE
+= configuring-networkpolicy_{context}
+
+== NetworkPolicy configuration
+
+[role="_abstract"]
+The operator creates NetworkPolicy resources by default. To manage NetworkPolicy manually, disable the operator-managed NetworkPolicy.
+
+[source,yaml]
+----
+spec:
+  app:
+    networkPolicy:
+      enabled: false
+  ui:
+    networkPolicy:
+      enabled: false
+----
+
+// ref-enabling-resource-deletion

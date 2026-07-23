@@ -1,0 +1,291 @@
+[id="registry-serdes-config-props_{context}"]
+= {registry} serializer/deserializer configuration properties
+
+
+[role="_abstract"]
+{registry} Kafka serializers/deserializers (SerDes) support the following Java configuration properties.
+
+**SchemaResolver interface**
+
+{registry} SerDes are based on the `SchemaResolver` interface, which abstracts access to the registry and applies the same lookup logic for the SerDes classes of all supported formats.
+
+.Configuration property for SchemaResolver interface
+[.table-expandable,width="100%",cols="5,5,5,3,5",options="header"]
+|===
+|Constant
+|Property
+|Description
+|Type
+|Default
+|`SCHEMA_RESOLVER`
+|`apicurio.registry.schema-resolver`
+|Used by serializers and deserializers. Fully qualified Java class name that implements `SchemaResolver`.
+|String
+|`io.apicurio.registry.resolver.DefaultSchemaResolver`
+|===
+
+NOTE: Use the `DefaultSchemaResolver`, which provides useful features for most use cases.
+For some advanced use cases, you might use a custom implementation of `SchemaResolver`.
+
+**DefaultSchemaResolver class**
+
+You can use the `DefaultSchemaResolver` to configure the following features:
+
+* Access to the registry API
+* How to look up artifacts in the registry
+* How to write and read artifact information to and from Kafka
+* Fall-back options for deserializers
+
+**Configuration for registry API access options**
+
+The `DefaultSchemaResolver` provides the following properties to configure access to the core registry API:
+
+.Configuration properties for access to registry API
+[.table-expandable,width="100%",cols="4,5,5,3,2",options="header"]
+|===
+|Constant
+|Property
+|Description
+|Type
+|Default
+|`REGISTRY_URL`
+|`apicurio.registry.url`
+|Used by serializers and deserializers. URL to access the registry API.
+|`String`
+|None
+|`AUTH_TOKEN_ENDPOINT`
+|`apicurio.registry.auth.service.token.endpoint`
+|Used by serializers and deserializers. URL of the token endpoint.
+|`String`
+|None
+|`AUTH_CLIENT_ID`
+|`apicurio.registry.auth.client.id`
+|Used by serializers and deserializers. Client ID to access the authentication service. Required when accessing a secure registry by using the OAuth client credentials flow.
+|`String`
+|None
+|`AUTH_CLIENT_SECRET`
+|`apicurio.registry.auth.client.secret`
+|Used by serializers and deserializers. Client secret to access the authentication service. Required when accessing a secure registry by using the OAuth client credentials flow.
+|`String`
+|None
+|`AUTH_USERNAME`
+|`apicurio.registry.auth.username`
+|Used by serializers and deserializers. Username to access the registry. Required when accessing a secure registry by using HTTP basic authentication.
+|`String`
+|None
+|`AUTH_PASSWORD`
+|`apicurio.registry.auth.password`
+|Used by serializers and deserializers. Password to access the registry. Required when accessing a secure registry by using HTTP basic authentication.
+|`String`
+|None
+|===
+
+**OpenTelemetry distributed tracing**
+
+The SerDes libraries support optional OpenTelemetry trace context propagation. When enabled,
+W3C trace context headers (`traceparent` and `tracestate`) are injected into all HTTP requests
+to {registry}, allowing schema resolution and registration calls to appear as spans in your
+distributed traces alongside your Kafka producer and consumer operations.
+
+To enable this feature, set the following configuration property:
+
+[source,properties]
+----
+apicurio.registry.otel.enabled=true
+----
+
+The `opentelemetry-api` library must be on the classpath. When you initialize an OpenTelemetry SDK
+in your application (for example, by using the OpenTelemetry Java agent or the Quarkus OpenTelemetry
+extension), the SerDes HTTP calls participate in the active trace. If no OpenTelemetry SDK is
+configured, the behavior is a no-op and the SerDes add no trace headers.
+
+For more details about SDK-level configuration, see xref:registry-sdk-config_{context}[].
+
+**Configuration for registry lookup options**
+
+The `DefaultSchemaResolver` uses the following properties to configure how to look up artifacts in {registry}.
+
+.Configuration properties for registry artifact lookup
+[.table-expandable,width="100%",cols="5,5,5,3,4",options="header"]
+|===
+|Constant
+|Property
+|Description
+|Type
+|Default
+|`ARTIFACT_RESOLVER_STRATEGY`
+|`apicurio.registry.artifact-resolver-strategy`
+|Used by serializers only. Fully qualified Java class name that implements `ArtifactReferenceResolverStrategy` and maps each Kafka message to an `ArtifactReference` (`groupId`, `artifactId`, and version). For example, the default strategy uses the topic name as the schema `artifactId`.
+|`String`
+|`io.apicurio.registry.serde.strategy.TopicIdStrategy`
+|`EXPLICIT_ARTIFACT_GROUP_ID`
+|`apicurio.registry.artifact.group-id`
+|Used by serializers only. Sets the `groupId` used for querying or creating an artifact. Overrides the `groupId` returned by the `ArtifactResolverStrategy`.
+|`String`
+|None
+|`EXPLICIT_ARTIFACT_ID`
+|`apicurio.registry.artifact.artifact-id`
+|Used by serializers only. Sets the `artifactId` used for querying or creating an artifact. Overrides the `artifactId` returned by the `ArtifactResolverStrategy`.
+|`String`
+|None
+|`EXPLICIT_ARTIFACT_VERSION`
+|`apicurio.registry.artifact.version`
+|Used by serializers only. Sets the artifact version used for querying or creating an artifact. Overrides the version returned by the `ArtifactResolverStrategy`.
+|`String`
+|None
+|`FIND_LATEST_ARTIFACT`
+|`apicurio.registry.find-latest`
+|Used by serializers only. Specifies whether the serializer tries to find the latest artifact in the registry for the corresponding group ID and artifact ID.
+|`boolean`
+|`false`
+|`AUTO_REGISTER_ARTIFACT`
+|`apicurio.registry.auto-register`
+|Used by serializers only. Specifies whether the serializer tries to create an artifact in the registry. The JSON Schema serializer does not support this feature.
+|`boolean, boolean String`
+|`false`
+|`DEREFERENCE_SCHEMA`
+|`apicurio.registry.dereference-schema`
+|Used by serializers and deserializers. Configures the SerDes to dereference the schema. After the schema is registered, this property instructs the SerDes to request the dereferenced schema from the server. It also instructs the serializer to dereference the schema before registering it in {registry}, but this is only supported for Avro.
+|`boolean`
+|`false`
+|`AUTO_REGISTER_ARTIFACT_IF_EXISTS`
+|`apicurio.registry.auto-register.if-exists`
+|Used by serializers only. Configures the behavior of the client when a conflict occurs while creating an artifact because the artifact already exists. Available values are `FAIL`, `UPDATE`, `RETURN`, or `RETURN_OR_UPDATE`.
+|`String`
+|`RETURN_OR_UPDATE`
+|`CHECK_PERIOD_MS`
+|`apicurio.registry.check-period-ms`
+|Used by serializers and deserializers. Specifies how long to cache artifacts before auto-eviction (milliseconds). If set to zero, artifacts are fetched every time.
+|`java.time.Duration, non-negative Number, or integer String`
+|`30000`
+|`RETRY_BACKOFF_MS`
+|`apicurio.registry.retry-backoff-ms`
+|Used by serializers and deserializers. If the SerDes cannot retrieve a schema from the registry, they can retry a number of times. This configuration option controls the delay between the retry attempts (milliseconds).
+|`java.time.Duration, non-negative Number, or integer String`
+|`300`
+|`RETRY_COUNT`
+|`apicurio.registry.retry-count`
+|Used by serializers and deserializers. If the SerDes cannot retrieve a schema from the registry, they can retry a number of times. This configuration option controls the number of retry attempts.
+|`non-negative Number, or integer String`
+|`3`
+|`FAULT_TOLERANT_REFRESH`
+|`apicurio.registry.fault-tolerant-refresh`
+|Used by serializers and deserializers. If `true`, the SerDes log exceptions instead of throwing them when an error occurs while refreshing a schema in the cache. This is useful for production situations where a stale schema is better than completely failing schema resolution. This does not affect retry attempts, because the SerDes attempt retries before considering this flag.
+|`boolean`
+|`false`
+|`BACKGROUND_REFRESH_ENABLED`
+|`apicurio.registry.background-refresh-enabled`
+|Used by serializers and deserializers. If `true`, enables background refresh of expired cache entries following the "stale-while-revalidate" pattern. When an entry expires and a stale value exists, the cache returns the stale value immediately (non-blocking) and triggers an asynchronous refresh in the background. This prevents latency spikes in high-concurrency scenarios where multiple threads would otherwise block waiting for cache refresh. If no stale value exists (first fetch), the cache falls back to synchronous refresh behavior. When a background refresh fails, the cache logs errors and continues to serve stale values (similar to `FAULT_TOLERANT_REFRESH` behavior). This option complements `FAULT_TOLERANT_REFRESH`, which handles refresh failures rather than refresh latency.
+|`boolean`
+|`false`
+|`BACKGROUND_REFRESH_EXECUTOR_THREADS`
+|`apicurio.registry.background-refresh.executor-threads`
+|Used by serializers and deserializers when `BACKGROUND_REFRESH_ENABLED` is enabled. Specifies the number of threads in the background refresh executor pool. The executor uses a fixed thread pool with daemon threads to prevent blocking application shutdown. A value of 2-4 threads is typically sufficient for most workloads.
+|`non-negative Number, or integer String`
+|`2`
+|`BACKGROUND_REFRESH_TIMEOUT_MS`
+|`apicurio.registry.background-refresh.timeout-ms`
+|Used by serializers and deserializers when `BACKGROUND_REFRESH_ENABLED` is enabled. Specifies the maximum time (milliseconds) to wait for a background refresh operation to complete before timing out. If a background refresh exceeds this timeout, it is interrupted and the cache continues to serve the stale value until the next refresh attempt.
+|`java.time.Duration, non-negative Number, or integer String`
+|`30000`
+|`USE_ID`
+|`apicurio.registry.use-id`
+|Used by serializers and deserializers. Configures the SerDes to use the specified `IdOption` as the identifier for artifacts. Options are `globalId` and `contentId`. Instructs the serializer to write the specified ID to Kafka, and instructs the deserializer to use this ID to find the schema.
+|`String`
+|`contentId`
+|`CANONICALIZE`
+|`apicurio.registry.canonicalize`
+|Used by serializers only. Specifies whether the serializer canonicalizes schema content when looking up or creating an artifact version in the registry by content. When set to `true`, semantically equivalent schemas with different formatting match. When `false`, schema content is compared as-is. NOTE: In versions before 3.1.0, canonicalization was always attempted as a fallback. Starting with 3.1.0, you must explicitly set this property to `true` if you want canonicalized lookups.
+|`boolean`
+|`false`
+|===
+
+**Configuration to read and write registry artifacts in Kafka**
+
+The `DefaultSchemaResolver` uses the following properties to configure how artifact information is written to and read from Kafka.
+
+.Configuration properties to read/write artifact information in Kafka
+[.table-expandable,width="100%",cols="5,5,5,3,5",options="header"]
+|===
+|Constant
+|Property
+|Description
+|Type
+|Default
+|`ENABLE_HEADERS`
+|`apicurio.registry.headers.enabled`
+|Used by serializers and deserializers. Configures the SerDes to read and write the artifact identifier in Kafka message headers instead of in the message payload.
+|`boolean`
+|`false`
+|`HEADERS_HANDLER`
+|`apicurio.registry.headers.handler`
+|Used by serializers and deserializers. Fully qualified Java class name that implements `HeadersHandler` and writes and reads the artifact identifier to and from the Kafka message headers.
+|`String`
+|`io.apicurio.registry.serde.headers.DefaultHeadersHandler`
+|`ID_HANDLER`
+|`apicurio.registry.id-handler`
+|Used by serializers and deserializers. Fully qualified Java class name of a class that implements `IdHandler` and writes and reads the artifact identifier to and from the message payload. Defaults to a 4-byte format that includes the `contentId` in the message payload.
+|`String`
+|`io.apicurio.registry.serde.Default4ByteIdHandler`
+|===
+
+**Configuration for deserializer fall-back options**
+
+The `DefaultSchemaResolver` uses the following property to configure a fall-back provider for all deserializers.
+
+.Configuration property for deserializer fall-back provider
+[.table-expandable,width="100%",cols="5,5,5,3,5",options="header"]
+|===
+|Constant
+|Property
+|Description
+|Type
+|Default
+|`FALLBACK_ARTIFACT_PROVIDER`
+|`apicurio.registry.fallback.provider`
+|Used by deserializers only. Sets a custom implementation of `FallbackArtifactProvider` for resolving the artifact used for deserialization. `FallbackArtifactProvider` configures a fallback artifact to fetch from the registry if the lookup fails.
+|`String`
+|`io.apicurio.registry.serde.fallback.DefaultFallbackArtifactProvider`
+|===
+
+The `DefaultFallbackArtifactProvider` uses the following properties to configure deserializer fall-back options:
+
+.Configuration properties for deserializer fall-back options
+[.table-expandable,width="100%",cols="5,5,5,3,2",options="header"]
+|===
+|Constant
+|Property
+|Description
+|Type
+|Default
+|`FALLBACK_ARTIFACT_ID`
+|`apicurio.registry.fallback.artifact-id`
+|Used by deserializers only. Sets the `artifactId` used as fallback for resolving the artifact used for deserialization.
+|`String`
+|None
+|`FALLBACK_ARTIFACT_GROUP_ID`
+|`apicurio.registry.fallback.group-id`
+|Used by deserializers only. Sets the `groupId` used as fallback for resolving the group used for deserialization.
+|`String`
+|None
+|`FALLBACK_ARTIFACT_VERSION`
+|`apicurio.registry.fallback.version`
+|Used by deserializers only. Sets the version used as fallback for resolving the artifact used for deserialization.
+|`String`
+|None
+|===
+
+You can configure application properties as Java system properties or include them in the Quarkus
+`application.properties` file.
+For more details, see the https://quarkus.io/guides/config#overriding-properties-at-runtime[Quarkus documentation].
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/Apicurio/apicurio-registry/blob/main/serdes/generic/serde-common/src/main/java/io/apicurio/registry/serde/config/SerdeConfig.java[SerdeConfig Java class]
+
+
+// Module included in the following assemblies:
+//  assembly-using-kafka-client-serdes
+
+:_mod-docs-content-type: REFERENCE
+

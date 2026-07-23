@@ -1,0 +1,140 @@
+[id="mcp-server-available-tools_{context}"]
+= Available MCP tools
+
+
+[role="_abstract"]
+The {registry} MCP server provides the following tools for LLM clients to call. Claude Desktop prompts you for confirmation before each tool call.
+
+.System tools
+
+[cols="2,4",options="header"]
+|===
+|Tool name
+|Description
+
+|`get_server_info`
+|Returns information about the {registry} server, including the version number.
+|===
+
+.Group tools
+
+[cols="2,4",options="header"]
+|===
+|Tool name
+|Description
+
+|`list_groups`
+|Returns a list of artifact groups from {registry}. The result always contains the default group named `default`.
+
+|`create_group`
+|Creates a group in {registry} with an optional description and labels.
+
+|`get_group_metadata`
+|Returns metadata for a specific group.
+
+|`update_group_metadata`
+|Updates the description and labels for a group.
+
+|`search_groups`
+|Searches for groups by group ID, description, or labels.
+|===
+
+.Artifact tools
+
+[cols="2,4",options="header"]
+|===
+|Tool name
+|Description
+
+|`list_artifacts`
+|Returns a list of artifacts within a group.
+
+|`get_artifact_metadata`
+|Returns metadata for a specific artifact within a group.
+
+|`update_artifact_metadata`
+|Updates the name, description, and labels for an artifact.
+
+|`create_artifact`
+|Creates an empty artifact in {registry} with optional name, description, type, and labels. Add content later by creating a version.
+
+|`search_artifacts`
+|Searches for artifacts by group ID, artifact ID, type, name, description, or labels.
+|===
+
+.Version tools
+
+[cols="2,4",options="header"]
+|===
+|Tool name
+|Description
+
+|`list_versions`
+|Returns a list of versions within an artifact.
+
+|`get_version_content`
+|Returns the content of a specific artifact version, identified by a version expression.
+
+|`get_version_metadata`
+|Returns metadata for a specific artifact version.
+
+|`create_version`
+|Creates an artifact version with content. Supports draft mode for mutable versions.
+
+|`update_version_state`
+|Updates the state of an artifact version to ENABLED, DEPRECATED, DISABLED, or DRAFT.
+
+|`update_version_metadata`
+|Updates the name, description, and labels for an artifact version.
+
+|`update_version_content`
+|Updates the content of an artifact version that is in the DRAFT state.
+
+|`search_versions`
+|Searches for versions by group ID, artifact ID, type, name, description, or labels.
+|===
+
+.Configuration tools
+
+[cols="2,4",options="header"]
+|===
+|Tool name
+|Description
+
+|`get_artifact_types`
+|Returns a list of artifact types supported by {registry}.
+
+|`list_configuration_properties`
+|Returns a list of all dynamic configuration properties that you can modify without restarting {registry}.
+
+|`get_configuration_property`
+|Returns information about a specific dynamic configuration property.
+
+|`update_configuration_property`
+|Updates a dynamic configuration property. In safe mode, you can update only the `apicurio.rest.mutability.artifact-version-content.enabled` property.
+|===
+
+.Prompt template tools
+
+[cols="2,4",options="header"]
+|===
+|Tool name
+|Description
+
+|`list_mcp_prompts`
+|Lists all `PROMPT_TEMPLATE` artifacts that are MCP-enabled in {registry}.
+
+|`get_mcp_prompt`
+|Retrieves an MCP-enabled prompt template from {registry} and renders it with arguments that you provide.
+
+|`render_prompt_template`
+|Renders any `PROMPT_TEMPLATE` artifact with variables that you provide, regardless of MCP enablement.
+|===
+
+You can also use the following MCP prompts in Claude Desktop by clicking the *+* icon and selecting *Add from {registry}*:
+
+* **create_new_artifact_version**: A guided workflow for creating artifact versions, including draft mode support and content iteration.
+* **render_registry_prompt**: Renders a prompt template from {registry} for interactive use.
+
+// ref-mcp-server-configuration-properties
+:_mod-docs-content-type: REFERENCE

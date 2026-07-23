@@ -1,0 +1,74 @@
+[id="registry-cors-authentication_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-cors-authentication_{context}
+
+== CORS configuration with authentication
+
+[role="_abstract"]
+When you use OIDC authentication (for example, {keycloak}), CORS and authentication work together.
+Your browser application must send an `Authorization` header with a bearer token, and the {registry} CORS configuration must allow that header for authenticated cross-origin requests to succeed.
+
+The `authorization` header is already included in the default allowed headers, so you typically only need to configure the allowed origins.
+
+Use a Docker Compose configuration such as this example to run {registry} with {keycloak} and CORS configured for browser-based applications:
+
+[source,yaml]
+----
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.7
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: "localhost"
+      KC_HOSTNAME_PORT: "8080"
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
+    command:
+      - start-dev
+      - --import-realm
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./realm.json:/opt/keycloak/data/import/realm.json
+
+  apicurio-registry:
+    image: apicurio/apicurio-registry:latest-snapshot
+    environment:
+      apicurio.rest.deletion.group.enabled: "true"
+      apicurio.rest.deletion.artifact.enabled: "true"
+      apicurio.rest.deletion.artifact-version.enabled: "true"
+      QUARKUS_OIDC_TENANT_ENABLED: "true"
+      QUARKUS_OIDC_AUTH_SERVER_URL: "http://keycloak:8080/realms/registry"
+      QUARKUS_OIDC_CLIENT_ID: "registry-api"
+      APICURIO_UI_AUTH_OIDC_CLIENT_ID: "apicurio-registry"
+      QUARKUS_OIDC_TLS_VERIFICATION: "none"
+      QUARKUS_HTTP_CORS_ORIGINS: "http://localhost:8888,http://localhost:3000"
+      QUARKUS_PROFILE: "prod"
+    ports:
+      - "8081:8080"
+    depends_on:
+      - keycloak
+
+  apicurio-registry-ui:
+    image: apicurio/apicurio-registry-ui:latest-snapshot
+    environment:
+      REGISTRY_API_URL: "http://localhost:8081/apis/registry/v3"
+      REGISTRY_AUTH_TYPE: "oidc"
+      REGISTRY_AUTH_URL: "http://localhost:8080/realms/registry"
+    ports:
+      - "8888:8080"
+    depends_on:
+      - apicurio-registry
+      - keycloak
+----
+
+When you configure CORS with authentication, keep these points in mind:
+
+* The default CORS allowed headers already include the `authorization` header. You do not need to add it manually unless you override `QUARKUS_HTTP_CORS_HEADERS`.
+* If you override `QUARKUS_HTTP_CORS_HEADERS`, make sure to include `authorization` in your list.
+* When you use `QUARKUS_HTTP_CORS_ORIGINS: "*"` with credentials, some browsers reject the request. Use explicit origins when authentication is involved.
+
+NOTE: Authentication is a complex topic with many possible configurations ({keycloak}, Microsoft Entra ID, and other OIDC providers). For a complete guide to configuring authentication, see xref:registry-security-settings_{context}[].
+
+
+// ref-registry-cors-operator

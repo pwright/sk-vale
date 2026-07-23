@@ -1,0 +1,290 @@
+[id="data-contracts-api_{context}"]
+= REST API
+
+
+[role="_abstract"]
+The Data Contracts REST API provides endpoints for managing ODCS contracts, contract metadata, and contract rulesets.
+
+=== ODCS contract endpoints
+
+.ODCS contract REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|POST
+|`/groups/{groupId}/contracts`
+|Submit an ODCS contract YAML. Creates the contract artifact and projects onto referenced schema artifacts.
+
+|GET
+|`/groups/{groupId}/contracts?limit=&offset=`
+|List ODCS contracts in a group (paginated, default 20, max 500)
+
+|GET
+|`/groups/{groupId}/contracts/{contractId}`
+|Retrieve the ODCS contract YAML
+
+|PUT
+|`/groups/{groupId}/contracts/{contractId}`
+|Update an ODCS contract (creates a new version and re-projects)
+
+|DELETE
+|`/groups/{groupId}/contracts/{contractId}`
+|Delete an ODCS contract artifact
+
+|GET
+|`/groups/{groupId}/artifacts/{artifactId}/contract/export`
+|Export an artifact's contract data as ODCS YAML
+|===
+
+=== Contract metadata endpoints
+
+.Contract metadata REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/groups/{groupId}/artifacts/{artifactId}/contract/metadata`
+|Get contract metadata for an artifact
+
+|PUT
+|`/groups/{groupId}/artifacts/{artifactId}/contract/metadata`
+|Create or update contract metadata
+|===
+
+=== Contract ruleset endpoints
+
+.Contract ruleset REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/groups/{groupId}/artifacts/{artifactId}/contract/ruleset`
+|Get the contract ruleset for an artifact
+
+|PUT
+|`/groups/{groupId}/artifacts/{artifactId}/contract/ruleset`
+|Create or replace the contract ruleset
+
+|DELETE
+|`/groups/{groupId}/artifacts/{artifactId}/contract/ruleset`
+|Delete the contract ruleset
+|===
+
+Version-level rulesets are also available at `.../versions/{version}/contract/ruleset`.
+
+=== Contract status transition endpoint
+
+.Contract status transition endpoint
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|POST
+|`/groups/{groupId}/artifacts/{artifactId}/contract/status`
+|Change lifecycle status with transition validation
+|===
+
+=== Governance and quality endpoints
+
+.Governance REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|POST
+|`/groups/{groupId}/artifacts/{artifactId}/contract/promote`
+|Promote contract stage (DEV -> STAGE -> PROD). Body: `{"contractId": "...", "targetStage": "STAGE"}`
+
+|GET
+|`/groups/{groupId}/artifacts/{artifactId}/contract/quality?contractId=`
+|Get quality score (overall, completeness, compliance, stability)
+|===
+
+=== Rule execution and migration endpoints
+
+.Rule execution REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|POST
+|`/groups/{groupId}/artifacts/{artifactId}/versions/{version}/contract/execute`
+|Execute contract rules against a data record. Body: `{"mode": "WRITE", "record": {...}}`
+
+|POST
+|`/groups/{groupId}/artifacts/{artifactId}/contract/migrate`
+|Migrate a record between versions. Body: `{"sourceVersion": "1", "targetVersion": "3", "record": {...}}`
+|===
+
+=== Audit log endpoint
+
+.Contract audit log REST API endpoint
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/groups/{groupId}/artifacts/{artifactId}/contract/audit`
+|Get contract audit log entries for an artifact
+|===
+
+=== Compatibility group endpoints
+
+.Compatibility group REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/groups/{groupId}/artifacts/{artifactId}/contract/compatibility-group`
+|Get the compatibility group for an artifact
+
+|PUT
+|`/groups/{groupId}/artifacts/{artifactId}/contract/compatibility-group`
+|Set the compatibility group for an artifact
+|===
+
+=== Contract search endpoint
+
+.Contract search REST API endpoint
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/search/contracts?status=&ownerTeam=&classification=&limit=&offset=`
+|Search contracts across the registry
+|===
+
+=== Global contract ruleset endpoints
+
+.Global contract ruleset REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/admin/contracts/ruleset`
+|Get the global contract ruleset
+
+|PUT
+|`/admin/contracts/ruleset`
+|Set the global contract ruleset
+
+|DELETE
+|`/admin/contracts/ruleset`
+|Delete the global contract ruleset
+|===
+
+Uses real CEL (Common Expression Language) via the `cel-standalone` library. Full CEL spec support including parenthesized grouping, ternary expressions, string functions, `has()`, `size()`. JSONata is also supported for data transformation rules.
+
+=== Example: Submitting an ODCS contract
+
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/contracts \
+  -H 'Content-Type: application/x-yaml' \
+  --data-binary @my-contract.yaml
+----
+
+.Response
+[source,json]
+----
+{
+  "contractId": "orders-contract",
+  "version": "1.0.0",
+  "projection": {
+    "rulesApplied": 2,
+    "labelsApplied": 8,
+    "tagsApplied": 3,
+    "warnings": []
+  }
+}
+----
+
+=== Example: Listing contracts
+
+[source,bash]
+----
+curl "http://localhost:8080/apis/registry/v3/groups/my-group/contracts?limit=10&offset=0"
+----
+
+=== Example: Exporting as ODCS
+
+[source,bash]
+----
+curl http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/export
+----
+
+Returns the reconstructed ODCS v3.1 YAML from the artifact's current contract labels, rules, and field tags.
+
+=== Example: Promoting a contract
+
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/promote \
+  -H 'Content-Type: application/json' \
+  -d '{"contractId": "orders-contract", "targetStage": "STAGE"}'
+----
+
+=== Example: Getting quality score
+
+[source,bash]
+----
+curl "http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/quality?contractId=orders-contract"
+----
+
+.Response
+[source,json]
+----
+{"overall": 0.85, "completeness": 0.83, "compliance": 1.0, "stability": 0.67}
+----
+
+=== Example: Executing contract rules
+
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/versions/1/contract/execute \
+  -H 'Content-Type: application/json' \
+  -d '{"mode": "WRITE", "record": {"message": {"totalAmount": 100, "status": "active"}}}'
+----
+
+.Response
+[source,json]
+----
+{"passed": true, "violations": [], "executedRules": 2, "failedRules": 0}
+----
+
+=== Example: Setting contract metadata directly
+
+[source,bash]
+----
+curl -X PUT \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/metadata \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "status": "DRAFT",
+    "ownerTeam": "Platform Team",
+    "ownerDomain": "payments",
+    "supportContact": "platform@example.com",
+    "classification": "CONFIDENTIAL",
+    "stage": "DEV"
+  }'
+----
+
+=== Example: Transitioning contract status
+
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/status \
+  -H 'Content-Type: application/json' \
+  -d '{ "status": "STABLE" }'
+----
+

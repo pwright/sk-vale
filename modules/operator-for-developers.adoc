@@ -1,0 +1,27 @@
+[id="operator-for-developers_{context}"]
+:_mod-docs-content-type: REFERENCE
+= For Developers
+
+[role="_abstract"]
+Java model classes for the `ApicurioRegistry3` custom resource are available as a Maven artifact:
+
+[source,xml,subs="attributes+"]
+----
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-operator-model</artifactId>
+    <version>{registry-release}</version>
+</dependency>
+----
+
+and can be used with the link:https://github.com/fabric8io/kubernetes-client[Fabric8 Kubernetes Client library] to programmatically create and manage {operator} resources.
+
+[role="_additional-resources"]
+.Additional resources
+
+* For deployment examples, see xref:getting-started/assembly-deploying-registry-operator.adoc[].
+* For Kubernetes PodTemplateSpec documentation, see
+https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-template-v1/#PodTemplateSpec
+* For Kubernetes EnvVar documentation, see
+https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#envvar-v1-core
+* You can also explore the link:https://github.com/Apicurio/apicurio-registry/tree/{upstream-version-tag}/operator/model/src/main/java/io/apicurio/registry/operator/api/v1[{operator} Java model source code in GitHub]

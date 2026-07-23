@@ -1,0 +1,73 @@
+[id="registry-liveness-env-vars_{context}"]
+= Environment variables for {registry} health checks
+
+
+[role="_abstract"]
+You can use the following environment variables to configure {registry} health checks on OpenShift. These variables control liveness and readiness probes that monitor the health of the {registry} server. For an example procedure, see xref:configuring-liveness-readiness-probes_{context}[].
+
+IMPORTANT: The following environment variables are provided for reference only. The default values are designed for most cases. Change these values only if required by your environment. Any changes to the defaults depend on your hardware, network, and amount of data stored. Keep these values as low as possible to avoid unnecessary processing overhead.
+
+.Environment variables for {registry} liveness probes
+//[%header,cols="5,5,2,5"]
+[.table-expandable,width="100%",cols="5,5,2,5",options="header"]
+|===
+|Name
+|Description
+|Type
+|Default
+|`LIVENESS_ERROR_THRESHOLD`
+|Number of liveness issues or errors that can occur before the liveness probe fails.
+|Integer
+|`1`
+|`LIVENESS_COUNTER_RESET`
+|Period in which the threshold number of errors must occur. For example, if this value is 60 and the threshold is 1, the check fails after two errors occur in 1 minute.
+|Seconds
+|`60`
+|`LIVENESS_STATUS_RESET`
+|Number of seconds that must elapse without any more errors for the liveness probe to reset to OK status.
+|Seconds
+|`300`
+|`LIVENESS_ERRORS_IGNORED`
+|Comma-separated list of ignored liveness exceptions.
+|String
+|`io.grpc.StatusRuntimeException,org.apache.kafka.streams.errors.InvalidStateStoreException`
+|===
+
+NOTE: Because OpenShift automatically restarts a Pod that fails a liveness check, the liveness settings, unlike readiness settings, do not directly affect behavior of {registry} on OpenShift.
+
+.Environment variables for {registry} readiness probes
+//[%header,cols="4,5,2,2"]
+[.table-expandable,width="100%",cols="4,5,2,2",options="header"]
+|===
+|Name
+|Description
+|Type
+|Default
+|`READINESS_ERROR_THRESHOLD`
+|Number of readiness issues or errors that can occur before the readiness probe fails.
+|Integer
+|`1`
+|`READINESS_COUNTER_RESET`
+|Period in which the threshold number of errors must occur. For example, if this value is 60 and the threshold is 1, the check fails after two errors occur in 1 minute.
+|Seconds
+|`60`
+|`READINESS_STATUS_RESET`
+|Number of seconds that must elapse without any more errors for the readiness probe to reset to OK status. This value determines how long the Pod remains not ready before it returns to normal operation.
+|Seconds
+|`300`
+|`READINESS_TIMEOUT`
+a|Readiness tracks the timeout of two operations:
+
+* How long it takes for storage requests to complete
+* How long it takes for HTTP REST API requests to return a response
+
+If either operation exceeds the configured timeout, {registry} reports a readiness issue or error. This value controls the timeouts for both operations.
+|Seconds
+|`5`
+|===
+
+
+[role="_additional-resources"]
+.Additional resources
+* xref:configuring-liveness-readiness-probes_{context}[]
+* link:https://docs.openshift.com/container-platform/{registry-ocp-version}/applications/application-health.html[OpenShift documentation on monitoring application health]

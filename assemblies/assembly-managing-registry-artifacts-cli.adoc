@@ -1,0 +1,42 @@
+[id="managing-registry-artifacts-cli_{context}"]
+= Managing {registry} content using the command-line interface
+
+
+[role="_abstract"]
+You can use the {registry} command-line interface (CLI) to manage {registry} content from the command line. The CLI provides commands for managing CLI contexts and artifact groups.
+
+ifndef::service-registry-downstream[]
+[NOTE]
+====
+The CLI is currently in *dev-preview* status. The CLI supports Linux (bash) and macOS (zsh). Windows is not supported yet. The CLI currently implements only group management commands. Future releases will include additional commands.
+====
+
+[IMPORTANT]
+====
+The CLI does not yet support authentication. You can only use the CLI with {registry} instances that do not require authentication.
+====
+endif::[]
+
+ifdef::service-registry-downstream[]
+[IMPORTANT]
+====
+The CLI is a Technology Preview feature. Technology Preview features are not supported with Red{nbsp}Hat production service level agreements (SLAs) and might not be functionally complete. Red{nbsp}Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+====
+endif::[]
+
+* xref:installing-registry-cli_{context}[]
+* xref:configuring-registry-cli-contexts_{context}[]
+* xref:managing-groups-using-registry-cli_{context}[]
+* xref:registry-cli-output-formats_{context}[]
+* xref:registry-cli-reference_{context}[]
+
+.Prerequisites
+* You have installed {registry}.
+* You have Java 11 or higher installed.
+* You have access to a bash shell (Linux) or zsh shell (macOS).
+
+include::../modules/installing-registry-cli.adoc[leveloffset=+1]
+include::../modules/configuring-registry-cli-contexts.adoc[leveloffset=+1]
+include::../modules/managing-groups-using-registry-cli.adoc[leveloffset=+1]
+include::../modules/registry-cli-output-formats.adoc[leveloffset=+1]
+include::../modules/registry-cli-reference.adoc[leveloffset=+1]

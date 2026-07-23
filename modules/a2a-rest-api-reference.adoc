@@ -1,0 +1,38 @@
+[id="a2a-rest-api-reference_{context}"]
+= A2A REST API endpoints
+
+
+[role="_abstract"]
+The following table describes the core A2A endpoints available in {registry}.
+
+[cols="2,1,4"]
+|===
+|Endpoint |Method |Description
+
+|`/.well-known/agent.json`
+|GET
+|Get the registry's own Agent Card
+
+|`/.well-known/agents`
+|GET
+|Search registered Agent Cards
+
+|`/.well-known/agents/{groupId}/{artifactId}`
+|GET
+|Get a specific Agent Card by artifact ID
+
+|`/apis/registry/v3/groups/{groupId}/artifacts`
+|POST
+|Create an Agent Card artifact (type: AGENT_CARD)
+
+|`/apis/registry/v3/groups/{groupId}/artifacts/{artifactId}`
+|GET
+|Get Agent Card artifact metadata
+
+|`/apis/registry/v3/groups/{groupId}/artifacts/{artifactId}/versions/{version}/content`
+|GET
+|Get Agent Card content
+|===
+
+// ref-a2a-troubleshooting
+:_mod-docs-content-type: REFERENCE

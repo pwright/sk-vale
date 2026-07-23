@@ -1,0 +1,27 @@
+[id="registry-security-azure-role-mappings_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-security-azure-role-mappings_{context}
+
+== Multiple role mappings for Azure Entra ID
+
+[role="_abstract"]
+When you use Azure Entra ID (formerly Azure AD), you might need to map multiple Azure AD groups or app roles to a single {registry} role. Use multiple role mappings when:
+
+* Interactive users authenticate by using Azure AD groups
+* Service principals authenticate by using app roles
+* Both must grant the same {registry} permissions
+
+To configure multiple role mappings, use comma-separated values:
+
+[source,properties]
+----
+# Map multiple Azure AD groups/roles to registry roles
+APICURIO_AUTH_ROLES_ADMIN=sr-admin,12345678-aaaa-bbbb-cccc-ddddeeeefffff,AppRole.Admin
+APICURIO_AUTH_ROLES_DEVELOPER=sr-developer,87654321-aaaa-bbbb-cccc-ddddeeeefffff,AppRole.Developer
+APICURIO_AUTH_ROLES_READONLY=sr-readonly,abcd1234-aaaa-bbbb-cccc-ddddeeeefffff,AppRole.Reader
+----
+
+With this configuration, a user with any of the listed roles or group memberships receives the corresponding {registry} authorization level.
+
+
+// ref-registry-security-azure-oauth-scopes

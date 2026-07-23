@@ -1,0 +1,12 @@
+[id="concept-labels_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-labels_{context}
+
+== Labels
+
+[role="_abstract"]
+*Labels* are user-defined key-value string pairs that you can attach to groups, artifacts, or artifact versions.
+
+You can use labels for organization, categorization, and filtering when searching.
+
+// con-concept-rule

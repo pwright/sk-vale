@@ -1,0 +1,70 @@
+[id="agent-catalog-design_{context}"]
+= Agent catalog design
+
+
+[role="_abstract"]
+You can organize your agent cards in {registry} by using groups, naming conventions, and versioning strategies that support efficient discovery and lifecycle management.
+
+.Group structure
+
+Organize agent cards into groups based on your organizational needs:
+
+* **By team**: `team-alpha`, `team-beta`. Use this approach when teams own distinct sets of agents and you want clear ownership boundaries.
+* **By capability**: `nlp-agents`, `vision-agents`, `data-agents`. Use this approach when you want to browse agents by functional area.
+* **By environment**: `dev-agents`, `staging-agents`, `prod-agents`. Use this approach when you run separate agent registries per environment, or when you need to distinguish agent versions by deployment target.
+
+.Agent card naming and versioning
+
+Use descriptive artifact IDs that indicate the agent purpose, such as `sentiment-analyzer` or `document-translator`. Include the version in the agent card content to distinguish between released versions.
+
+Follow semantic versioning for agent cards:
+
+* Increment the major version when you remove skills or change the agent URL.
+* Increment the minor version when you add skills or capabilities.
+* Increment the patch version for description or metadata updates.
+
+.Agent lifecycle
+
+Manage agent cards through a defined lifecycle:
+
+* **Draft**: an initial agent card in a development group (for example, `dev-agents/my-agent`), validated against {registry} validation rules.
+* **Published**: a production-ready agent card in a production group (for example, `prod-agents/my-agent`). Other agents and orchestrators discover the agent through well-known endpoints.
+* **Deprecated**: a disabled agent card version. Disabled versions are excluded from the `latest` branch and do not appear in search results that use default version resolution.
+
+.Structured content taxonomy
+
+{registry} automatically extracts structured content from agent cards for search indexing. The following table lists the structured content key prefixes and their sources.
+
+[cols="2,3",options="header"]
+|===
+|Structured content key |Source in agent card
+
+|`agent_card:skill:<id>`
+|Each `id` value in the `skills` array
+
+|`agent_card:capability:<name>`
+|Each property name in the `capabilities` object where the value is `true`
+
+|`agent_card:inputmode:<mode>`
+|Each value in the `defaultInputModes` array
+
+|`agent_card:outputmode:<mode>`
+|Each value in the `defaultOutputModes` array
+
+|`agent_card:protocolbinding:<binding>`
+|Each `protocolBinding` value in the `supportedInterfaces` array
+
+|`agent_card:securityscheme:<name>`
+|Each key in the `securitySchemes` object
+
+|`agent_card:tag:<value>`
+|Each value in the `tags` array within each skill (deduplicated across skills)
+|===
+
+Design your agent cards with consistent skill IDs and capability names across your organization. With consistent naming, discovery queries return accurate results. For example, use `translation` rather than `translate` or `translator` as the skill ID across all translation agents.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-a2a-features.adoc[A2A agent features]
+* xref:getting-started/assembly-agent-registry-quickstart.adoc[Agent registry quick start]
+* xref:getting-started/assembly-mcp-server-integration.adoc[MCP server integration]

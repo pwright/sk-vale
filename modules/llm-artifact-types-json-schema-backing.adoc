@@ -1,0 +1,168 @@
+[id="llm-artifact-types-json-schema-backing_{context}"]
+= JSON Schema backing and industry standards
+
+
+[role="_abstract"]
+The PROMPT_TEMPLATE and MODEL_SCHEMA artifact types in {registry} have formal JSON Schemas, aligned with industry standards for interoperability.
+
+.Schema locations
+
+You can find the JSON Schemas in `app/src/main/resources/schemas/`:
+
+.JSON Schema files
+[%header,cols="2,3"]
+|===
+|File
+|Description
+
+|`prompt-template-v1.schema.json`
+|Schema for PROMPT_TEMPLATE artifacts, aligned with Microsoft Prompty
+
+|`model-schema-v1.schema.json`
+|Schema for MODEL_SCHEMA artifacts, aligned with Google Model Card Toolkit
+|===
+
+.PROMPT_TEMPLATE schema - Prompty alignment
+
+The PROMPT_TEMPLATE schema is aligned with the link:https://prompty.ai/specification/page/[Microsoft Prompty specification] for interoperability with the Azure AI ecosystem.
+
+.Prompty field mappings
+[%header,cols="2,2,3"]
+|===
+|Apicurio field
+|Prompty field
+|Notes
+
+|`templateId`
+|`name`
+|Primary identifier
+
+|`variables`
+|`inputs`
+|Both names supported
+
+|`outputSchema`
+|`outputs`
+|Both names supported
+
+|`template`
+|Body content
+|{{variable}} syntax
+
+|`model`
+|`model`
+|Model configuration
+
+|`authors`
+|`authors`
+|Contributors list
+
+|`tags`
+|`tags`
+|Categorization
+|===
+
+.PROMPT_TEMPLATE with Prompty-aligned fields
+[source,yaml]
+----
+templateId: sentiment-analysis
+name: Sentiment Analysis Prompt
+version: "1.0.0"
+description: Analyzes customer sentiment
+
+# Prompty-aligned fields
+authors:
+  - Apicurio Team
+tags:
+  - sentiment
+  - nlp
+
+templateFormat: mustache  # or jinja2, handlebars
+
+# Model configuration (Prompty-aligned)
+model:
+  api: chat
+  parameters:
+    temperature: 0.3
+    max_tokens: 500
+
+template: |
+  Analyze the sentiment of: {{customerMessage}}
+
+variables:
+  customerMessage:
+    type: string
+    required: true
+----
+
+.MODEL_SCHEMA schema - Model Card Toolkit alignment
+
+The MODEL_SCHEMA is aligned with the link:https://github.com/tensorflow/model-card-toolkit[Google Model Card Toolkit] for governance and compliance use cases.
+
+.Model Card field mappings
+[%header,cols="2,2,3"]
+|===
+|Apicurio field
+|Model Card field
+|Notes
+
+|`modelId`
+|`model_details.name`
+|Model identifier
+
+|`provider`
+|`model_details.owners`
+|Model provider
+
+|`version`
+|`model_details.version`
+|Version info
+
+|`input`
+|`model_parameters.input_format`
+|I/O schema
+
+|`output`
+|`model_parameters.output_format`
+|I/O schema
+
+|`modelDetails`
+|`model_details`
+|Full metadata
+
+|`quantitativeAnalysis`
+|`quantitative_analysis`
+|Metrics
+
+|`considerations`
+|`considerations`
+|Ethics, limitations
+|===
+
+.MODEL_SCHEMA with Model Card-aligned sections
+[source,json]
+----
+{
+  "modelId": "claude-3-opus",
+  "provider": "anthropic",
+  "version": "2024-02",
+  "input": { "type": "object" },
+  "output": { "type": "object" },
+  "modelDetails": {
+    "name": "Claude 3 Opus",
+    "overview": "Advanced multimodal AI assistant",
+    "owners": [{"name": "Anthropic"}],
+    "licenses": [{"identifier": "Proprietary"}]
+  },
+  "considerations": {
+    "users": ["Developers", "Enterprises"],
+    "limitations": ["May produce inaccurate information"],
+    "ethicalConsiderations": [
+      {"name": "Bias", "mitigationStrategy": "Regular auditing"}
+    ]
+  }
+}
+----
+
+// ref-llm-artifact-types-mcp-integration
+:_mod-docs-content-type: REFERENCE

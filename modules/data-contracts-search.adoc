@@ -1,0 +1,43 @@
+[id="data-contracts-search_{context}"]
+= Contract search
+
+
+[role="_abstract"]
+Search for contracts across the registry using metadata filters.
+
+=== Search parameters
+
+.Contract search query parameters
+[cols="2,3", options="header"]
+|===
+|Parameter |Description
+
+|`status`
+|Filter by lifecycle status (DRAFT, STABLE, DEPRECATED)
+
+|`ownerTeam`
+|Filter by owner team name
+
+|`classification`
+|Filter by data classification (e.g., CONFIDENTIAL, PUBLIC)
+
+|`groupId`
+|Filter by group
+
+|`artifactId`
+|Filter by artifact
+
+|`limit` / `offset`
+|Pagination (default limit: 20, max: 500)
+
+|`orderby` / `order`
+|Sort by field and direction
+|===
+
+=== Example
+
+[source,bash]
+----
+curl "http://localhost:8080/apis/registry/v3/search/contracts?status=STABLE&ownerTeam=orders-team&limit=10"
+----
+

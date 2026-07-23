@@ -1,0 +1,24 @@
+[id="intro-to-registry-rules_{context}"]
+= {registry} content rules
+
+//If the assembly covers a task, start the title with a verb in the gerund form, such as Creating or Configuring.
+
+[role="_abstract"]
+This chapter introduces the optional rules used to govern {registry} content and provides details on the available rule configuration:
+
+* xref:registry-rules_{context}[]
+* xref:registry-rules-apply_{context}[]
+* xref:registry-rules-precedence_{context}[]
+* xref:registry-rules-work_{context}[]
+* xref:registry-rules-config_{context}[]
+
+//INCLUDES
+
+
+// Metadata created by nebel
+
+include::../modules/registry-rules.adoc[leveloffset=+1]
+include::../modules/registry-rules-apply.adoc[leveloffset=+2]
+include::../modules/registry-rules-precedence.adoc[leveloffset=+2]
+include::../modules/registry-rules-work.adoc[leveloffset=+2]
+include::../modules/registry-rules-config.adoc[leveloffset=+2]

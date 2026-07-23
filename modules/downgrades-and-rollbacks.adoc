@@ -1,0 +1,25 @@
+[id="downgrades-and-rollbacks_{context}"]
+= Downgrades and rollbacks
+
+
+[role="_abstract"]
+{registry} does *not* support downgrades.
+
+Database schema migrations are forward-only and irreversible.
+Starting an older version of {registry} against a database that has been migrated to a newer schema version will fail.
+
+If you deploy {registry} using the {operator}, switching to an older OLM channel is also not supported.
+
+=== Handling a failed upgrade
+
+If an upgrade introduces issues, restore from the database backup taken before the upgrade:
+
+.Procedure
+. Stop {registry}.
+. Restore the database from the backup taken before the upgrade.
+. Deploy the previous version of {registry}.
+. Investigate the issue before attempting the upgrade again.
+
+Do *not* attempt to manually revert database schema changes.
+
+

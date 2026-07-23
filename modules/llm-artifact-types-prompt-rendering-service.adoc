@@ -1,0 +1,92 @@
+[id="llm-artifact-types-prompt-rendering-service_{context}"]
+= Prompt rendering service
+
+
+[role="_abstract"]
+{registry} includes a server-side prompt rendering service for PROMPT_TEMPLATE artifacts.
+
+.REST API endpoint
+
+[source,text]
+----
+POST /apis/registry/v3/groups/{groupId}/artifacts/{artifactId}/versions/{versionExpression}/render
+----
+
+.Request body
+[source,json]
+----
+{
+  "variables": {
+    "variableName": "value",
+    "anotherVariable": 123
+  }
+}
+----
+
+.Response body
+[source,json]
+----
+{
+  "rendered": "The fully rendered template with substituted values",
+  "groupId": "default",
+  "artifactId": "my-prompt",
+  "version": "1.0",
+  "validationErrors": []
+}
+----
+
+.Java implementation
+
+The `PromptRenderingService` class (`app/src/main/java/io/apicurio/registry/services/PromptRenderingService.java`) includes the following features:
+
+.Rendering service features
+[%header,cols="2,4"]
+|===
+|Feature
+|Description
+
+|Content parsing
+|Parses YAML or JSON prompt templates
+
+|Variable substitution
+|Replaces `{{variable}}` placeholders with provided values
+
+|Type validation
+|Validates that variable values match their defined types
+
+|Required field checking
+|Reports missing required variables as validation errors
+
+|Enum validation
+|Checks that values are within allowed enum options
+
+|Range validation
+|Validates numeric values against minimum/maximum constraints
+|===
+
+.Validation error response
+
+When validation fails, the response includes validation errors:
+
+[source,json]
+----
+{
+  "rendered": "Template with {{missing}} placeholder intact",
+  "groupId": "default",
+  "artifactId": "my-prompt",
+  "version": "1.0",
+  "validationErrors": [
+    {
+      "variableName": "missing",
+      "message": "Required variable is missing"
+    },
+    {
+      "variableName": "count",
+      "message": "Value 200 is greater than maximum 100"
+    }
+  ]
+}
+----
+
+// ref-llm-artifact-types-customization
+:_mod-docs-content-type: REFERENCE

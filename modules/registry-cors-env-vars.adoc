@@ -1,0 +1,41 @@
+[id="registry-cors-env-vars_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-cors-env-vars_{context}
+
+== CORS environment variables
+
+[role="_abstract"]
+You can override the default CORS settings by using environment variables.
+Environment variables are the recommended approach because they let you configure {registry} without modifying configuration files.
+
+.{registry} CORS environment variables
+[.table-expandable,width="100%",cols="3,5,4",options="header"]
+|===
+|Environment variable
+|Description
+|Example
+
+|`QUARKUS_HTTP_CORS`
+|Enables or disables the CORS filter.
+|`true`
+
+|`QUARKUS_HTTP_CORS_ORIGINS`
+|A comma-separated list of allowed origins, or `*` to allow all origins.
+|`https://my-app.example.com,https://other.example.com`
+
+|`QUARKUS_HTTP_CORS_METHODS`
+|A comma-separated list of allowed HTTP methods.
+|`GET,PUT,POST,PATCH,DELETE,OPTIONS`
+
+|`QUARKUS_HTTP_CORS_HEADERS`
+|A comma-separated list of allowed request headers.
+|`authorization,content-type`
+|===
+
+NOTE: Setting `QUARKUS_HTTP_CORS_ORIGINS` by using an environment variable completely overrides the default origins from `application.properties`. The default methods and headers still apply unless you also override them.
+
+For the full set of Quarkus CORS options, see the link:https://quarkus.io/guides/http-reference#cors-filter[Quarkus HTTP Reference - CORS Filter].
+
+
+ifndef::service-registry-downstream[]
+// ref-registry-cors-local-dev

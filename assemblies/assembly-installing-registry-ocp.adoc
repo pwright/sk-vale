@@ -1,0 +1,25 @@
+[id="installing-registry-ocp_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= installing-registry-ocp_{context}
+
+= Installing {registry} on OpenShift
+
+[role="_abstract"]
+Install {registry} on OpenShift Container Platform:
+
+* xref:installing-registry-operatorhub_{context}[]
+
+
+[role="_additional-resources"]
+.Additional resources
+* https://github.com/Apicurio/apicurio-registry[Apicurio Registry source repository]
+
+//INCLUDES
+
+
+// Metadata created by nebel
+//
+// ParentAssemblies: assemblies/getting-started/as_installing-the-registry.adoc
+
+// proc-installing-registry-operatorhub
+include::../modules/installing-registry-operatorhub.adoc[leveloffset=+1]

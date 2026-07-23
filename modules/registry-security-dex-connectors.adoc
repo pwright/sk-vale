@@ -1,0 +1,136 @@
+[id="registry-security-dex-connectors_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-security-dex-connectors_{context}
+
+== Dex connector examples
+
+[role="_abstract"]
+Dex supports many upstream identity providers by using pluggable connectors. The following examples show how to configure the most common connectors.
+
+ifdef::apicurio-registry[]
+.OpenShift connector
+
+First, create an OAuthClient for Dex on your OpenShift cluster:
+
+[source,bash]
+----
+CLIENT_SECRET=$(openssl rand -base64 32 | tr -d '=' | head -c 32)
+
+cat <<EOF | oc apply -f -
+apiVersion: oauth.openshift.io/v1
+kind: OAuthClient
+metadata:
+  name: dex
+grantMethod: auto
+secret: "$CLIENT_SECRET"
+redirectURIs:
+  - "https://dex.<cluster-domain>/callback"
+EOF
+----
+
+Then add the connector to your `dex-values.yaml`:
+
+[source,yaml]
+----
+connectors:
+  - type: openshift
+    id: openshift
+    name: OpenShift
+    config:
+      issuer: https://api.<cluster-domain>:6443
+      clientID: dex
+      clientSecret: "<CLIENT_SECRET>"
+      redirectURI: https://dex.<cluster-domain>/callback
+      groups:
+        - registry-admins
+        - registry-developers
+        - registry-readers
+      insecureCA: true  # Set to false in production and configure proper CA
+----
+endif::[]
+
+.LDAP connector
+
+[source,yaml]
+----
+connectors:
+  - type: ldap
+    id: ldap
+    name: LDAP
+    config:
+      host: ldap.example.com:636
+      bindDN: cn=admin,dc=example,dc=com
+      bindPW: <bind-password>
+      userSearch:
+        baseDN: ou=users,dc=example,dc=com
+        filter: "(objectClass=person)"
+        username: uid
+        idAttr: uid
+        emailAttr: mail
+        nameAttr: cn
+      groupSearch:
+        baseDN: ou=groups,dc=example,dc=com
+        filter: "(objectClass=groupOfNames)"
+        userMatchers:
+          - userAttr: DN
+            groupAttr: member
+        nameAttr: cn
+----
+
+.GitHub connector
+
+[source,yaml]
+----
+connectors:
+  - type: github
+    id: github
+    name: GitHub
+    config:
+      clientID: <github-oauth-app-client-id>
+      clientSecret: <github-oauth-app-client-secret>
+      redirectURI: https://dex.<cluster-domain>/callback
+      orgs:
+        - name: your-organization
+          teams:
+            - registry-admins
+            - registry-developers
+----
+
+.Microsoft Azure AD connector
+
+[source,yaml]
+----
+connectors:
+  - type: microsoft
+    id: microsoft
+    name: Microsoft
+    config:
+      clientID: <azure-app-client-id>
+      clientSecret: <azure-app-client-secret>
+      redirectURI: https://dex.<cluster-domain>/callback
+      tenant: <azure-tenant-id>
+      groups:
+        - <registry-admins-group-uuid>
+        - <registry-developers-group-uuid>
+----
+
+.SAML 2.0 connector
+
+[source,yaml]
+----
+connectors:
+  - type: saml
+    id: saml
+    name: Corporate SSO
+    config:
+      ssoURL: https://idp.example.com/sso
+      ca: /etc/dex/saml-ca.crt
+      redirectURI: https://dex.<cluster-domain>/callback
+      usernameAttr: name
+      emailAttr: email
+      groupsAttr: groups
+----
+
+NOTE: Dex supports multiple connectors simultaneously. You can federate across multiple identity providers so that users from different organizations or systems authenticate to {registry} through a single Dex instance.
+
+// ref-registry-security-dex-m2m

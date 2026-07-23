@@ -1,0 +1,143 @@
+[id="mcp-tool-definition-schema_{context}"]
+= MCP tool definition schema
+
+
+[role="_abstract"]
+Tool definitions follow the https://modelcontextprotocol.io/specification/2025-11-25/server/tools[MCP specification (2025-11-25)].
+
+NOTE: The MCP specification has two authoritative sources: the formal https://github.com/modelcontextprotocol/specification/blob/main/schema/2025-11-25/schema.json[JSON schema] and the https://modelcontextprotocol.io/specification/2025-11-25/server/tools[specification docs]. In some cases, these sources diverge. The following table notes where {registry} validation follows the spec docs guidance rather than the formal JSON schema.
+
+.Tool fields
+
+[cols="1,1,1,3"]
+|===
+|Field |Type |Required |Description
+
+|`name`
+|string
+|Yes
+|Unique identifier for the tool (1-128 characters, alphanumeric + underscore/hyphen/dot)
+
+|`title`
+|string
+|No
+|Human-readable name for display purposes
+
+|`description`
+|string
+|No
+|Human-readable description of tool functionality
+
+|`inputSchema`
+|object
+|Yes
+|JSON Schema defining expected input parameters
+
+|`outputSchema`
+|object
+|No
+|JSON Schema defining expected output structure. _Described in the spec docs but not yet present in the formal MCP JSON schema._
+
+|`annotations`
+|object
+|No
+|Optional metadata annotations (audience, priority)
+
+|`icons`
+|array
+|No
+|Optional icons for display in user interfaces. _Described in the spec docs but not yet present in the formal MCP Tool JSON schema._ Passed through without validation.
+
+|`execution`
+|object
+|No
+|Optional execution-related properties such as task support. _Described in the spec docs but not yet present in the formal MCP Tool JSON schema._ Passed through without validation.
+|===
+
+.Input schema
+
+The `inputSchema` field is a JSON Schema object with the following properties:
+
+[cols="1,1,1,3"]
+|===
+|Field |Type |Required |Description
+
+|`type`
+|string
+|Yes
+|Must be `"object"`. The formal MCP JSON schema does not enforce this constraint, but the spec docs and all examples require it. {registry} enforces `type` = `"object"` during full validation.
+
+|`properties`
+|object
+|No
+|Parameter definitions (each value is a JSON Schema object)
+
+|`required`
+|array
+|No
+|List of required parameter names
+|===
+
+.Annotations (ToolAnnotations)
+
+Annotations provide metadata about the tool by using the MCP `ToolAnnotations` type:
+
+[cols="1,1,3"]
+|===
+|Field |Type |Description
+
+|`title`
+|string
+|Optional fallback display name. Per the spec docs, display precedence is: top-level `title` -> `annotations.title` -> `name`. _Note: the spec docs reference the `annotations.title` field as a display name fallback, but the `ToolAnnotations` JSON schema does not formally define it._ {registry} validates and displays it for interoperability.
+
+|`audience`
+|array of strings
+|Intended audience. The MCP spec defines a `Role` enum with values `"user"` and `"assistant"`. {registry} accepts any string values for forward compatibility with future spec revisions.
+
+|`priority`
+|number (0-1)
+|Priority hint; higher values indicate higher priority
+|===
+
+.Example tool definition
+
+[source,json]
+----
+{
+  "name": "get_weather",
+  "title": "Weather Information Provider",
+  "description": "Get current weather information for a location",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "location": {
+        "type": "string",
+        "description": "City name or zip code"
+      }
+    },
+    "required": ["location"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "temperature": {
+        "type": "number",
+        "description": "Temperature in celsius"
+      },
+      "conditions": {
+        "type": "string",
+        "description": "Weather conditions"
+      }
+    },
+    "required": ["temperature", "conditions"]
+  },
+  "annotations": {
+    "title": "Weather Lookup",
+    "audience": ["user", "assistant"],
+    "priority": 0.8
+  }
+}
+----
+
+// ref-mcp-well-known-endpoints
+:_mod-docs-content-type: REFERENCE

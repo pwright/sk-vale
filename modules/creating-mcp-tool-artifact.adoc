@@ -1,0 +1,33 @@
+[id="creating-mcp-tool-artifact_{context}"]
+= Creating an MCP tool artifact
+
+
+[role="_abstract"]
+You can create an MCP tool artifact in {registry} by using the REST API.
+
+.Prerequisites
+* {registry} is installed and running.
+* MCP tools support is enabled (`apicurio.mcp-tools.enabled=true` and `apicurio.features.experimental.enabled=true`).
+
+.Procedure
+* Send a `POST` request to the {registry} REST API to create the MCP tool artifact:
++
+[source,bash]
+----
+curl -X POST "http://localhost:8080/apis/registry/v3/groups/mcp-tools/artifacts" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "artifactId": "weather-tool",
+    "artifactType": "MCP_TOOL",
+    "firstVersion": {
+      "version": "1.0.0",
+      "content": {
+        "contentType": "application/json",
+        "content": "{\"name\": \"get_weather\", \"title\": \"Weather Tool\", \"description\": \"Get weather data\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"location\": {\"type\": \"string\"}}, \"required\": [\"location\"]}}"
+      }
+    }
+  }'
+----
+
+// ref-mcp-validation-rules
+:_mod-docs-content-type: REFERENCE

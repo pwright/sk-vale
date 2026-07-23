@@ -1,0 +1,54 @@
+[id="registering-an-agent-card_{context}"]
+= Registering an agent card
+
+
+[role="_abstract"]
+You can register an agent card as an `AGENT_CARD` artifact in {registry}. After registration, other AI agents and orchestrators can discover the agent by using the well-known endpoints.
+
+.Prerequisites
+* {registry} is running with agent features enabled
+
+.Procedure
+. Create a group to organize your agent cards:
++
+[source,bash]
+----
+curl -X POST "http://localhost:8080/apis/registry/v3/groups" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "groupId": "ai-agents",
+    "description": "AI agent cards"
+  }'
+----
++
+. Register an agent card artifact in the group:
++
+[source,bash]
+----
+curl -X POST "http://localhost:8080/apis/registry/v3/groups/ai-agents/artifacts" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "artifactId": "customer-support-agent",
+    "artifactType": "AGENT_CARD",
+    "firstVersion": {
+      "version": "1.0.0",
+      "content": {
+        "contentType": "application/json",
+        "content": "{\"name\": \"Customer Support Agent\", \"description\": \"Handles customer inquiries, analyzes sentiment, and generates responses\", \"version\": \"1.0.0\", \"supportedInterfaces\": [{\"url\": \"http://support-agent:9001\", \"protocolBinding\": \"http+json\", \"protocolVersion\": \"1.0\"}], \"provider\": {\"organization\": \"Acme Corp\", \"url\": \"https://acme.example.com\"}, \"skills\": [{\"id\": \"sentiment-analysis\", \"name\": \"Sentiment Analysis\", \"description\": \"Analyzes customer message sentiment\"}, {\"id\": \"response-generation\", \"name\": \"Response Generation\", \"description\": \"Generates context-aware customer responses\"}], \"capabilities\": {\"streaming\": false, \"pushNotifications\": false}, \"defaultInputModes\": [\"text\"], \"defaultOutputModes\": [\"text\"]}"
+      }
+    }
+  }'
+----
+
+.Verification
+. Verify that the agent card is available through the well-known agents endpoint:
++
+[source,bash]
+----
+curl http://localhost:8080/.well-known/agents
+----
++
+The response includes the registered agent card with its skills and capabilities.
+
+// proc-discovering-agents
+:_mod-docs-content-type: PROCEDURE

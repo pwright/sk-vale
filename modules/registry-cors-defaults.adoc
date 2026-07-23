@@ -1,0 +1,35 @@
+[id="registry-cors-defaults_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-cors-defaults_{context}
+
+== {registry} CORS defaults
+
+[role="_abstract"]
+{registry} ships with CORS enabled by default, configured for the bundled {registry} web console.
+The default settings from `application.properties` are:
+
+.Default {registry} CORS configuration properties
+[.table-expandable,width="100%",cols="4,6",options="header"]
+|===
+|Property
+|Default value
+
+|`quarkus.http.cors`
+|`true`
+
+|`quarkus.http.cors.origins`
+|`http://localhost:8888,http://127.0.0.1:8888`
+
+|`quarkus.http.cors.methods`
+|`GET,PUT,POST,PATCH,DELETE,OPTIONS`
+
+|`quarkus.http.cors.headers`
+|`x-registry-name`, `x-registry-name-encoded`, `x-registry-description`, `x-registry-description-encoded`, `x-registry-version`, `x-registry-artifactid`, `x-registry-artifacttype`, `x-registry-hash-algorithm`, `x-registry-content-hash`, `access-control-request-method`, `access-control-allow-credentials`, `access-control-allow-origin`, `access-control-allow-headers`, `authorization`, `content-type`, `content-encoding`, `user-agent`
+|===
+
+The default allowed origins (`localhost:8888` and `127.0.0.1:8888`) match the bundled {registry} web console.
+If your application runs on a different host, port, or protocol, {registry} rejects preflight requests from your origin.
+You must add your application's origin to the allowed list.
+
+
+// ref-registry-cors-env-vars

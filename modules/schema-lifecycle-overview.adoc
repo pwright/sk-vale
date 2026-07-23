@@ -1,0 +1,51 @@
+[id="schema-lifecycle-overview_{context}"]
+:_mod-docs-content-type: CONCEPT
+= schema-lifecycle-overview_{context}
+
+== Schema lifecycle overview
+
+[role="_abstract"]
+Managing schemas through a structured lifecycle prevents breaking changes from reaching consumers, reduces schema sprawl, and eliminates unplanned production incidents.
+
+Without lifecycle management, teams encounter common problems:
+
+* Producers deploy incompatible schema changes that break downstream consumers.
+* Deprecated schemas accumulate without cleanup.
+* No one knows which schema versions are safe to remove.
+
+A structured lifecycle addresses each of these risks.
+
+Every schema moves through four phases. The following table summarizes each phase, the actions you take, and the {registry} features that support each action.
+
+.Schema lifecycle phases
+[cols="1,2,2,2",options="header"]
+|===
+|Phase
+|What you do
+|{registry} feature
+|Why it matters
+
+|Creation
+|Define the schema, register it as an artifact, and configure rules.
+|Artifact types, groups, compatibility and validity rules, artifact references
+|You establish a validated baseline and catch structural errors before any consumer reads the schema.
+
+|Evolution
+|Add, modify, or remove fields as requirements change.
+|Compatibility modes (BACKWARD, FORWARD, FULL, and transitive variants)
+|{registry} validates each new version against previous versions and rejects breaking changes automatically.
+
+|Deprecation
+|Signal consumers to migrate away from an outdated version.
+|Version states (`DEPRECATED`)
+|Consumers receive a deprecation warning header but continue to operate without interruption during the migration window.
+
+|Retirement
+|Disable or delete the schema version after all consumers have migrated.
+|Version states (`DISABLED`), artifact deletion
+|You remove unused schemas and prevent new consumers from depending on outdated versions.
+|===
+
+After you understand these four phases, decide how to structure shared types so that you do not duplicate definitions across schemas.
+
+// con-schema-references-shared-types

@@ -1,0 +1,28 @@
+[id="registry-security-auth-read_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} authenticated read access
+
+[role="_abstract"]
+When the authenticated read access option is enabled, {registry} grants at least read-only access to requests from any authenticated user in the same organization, regardless of their user role.
+
+To enable authenticated read access, you must first enable role-based authorization, and then ensure that the following options are set to `true`:
+
+.Configuration for authenticated read access
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+|`QUARKUS_OIDC_TENANT_ENABLED`
+|`quarkus.oidc.tenant-enabled`
+|Boolean
+|`false`
+|`APICURIO_AUTH_AUTHENTICATED_READ_ACCESS_ENABLED`
+|`apicurio.auth.authenticated-read-access.enabled`
+|Boolean
+|`false`
+|===
+
+For more details, see xref:registry-security-rbac-enabled_{context}[].
+

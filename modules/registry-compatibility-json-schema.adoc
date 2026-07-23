@@ -1,0 +1,115 @@
+[id="registry-compatibility-json-schema_{context}"]
+= JSON Schema compatibility
+
+
+[role="_abstract"]
+{registry} uses a custom library to analyze differences between JSON Schema versions.
+Because JSON Schema uses a constraint-based validation model, the following table describes common changes and whether they maintain or break backward compatibility. For JSON Schema, forward compatibility is the inverse of backward compatibility: a change that makes the schema more permissive is backward compatible but forward incompatible, and a change that makes the schema more restrictive is forward compatible but backward incompatible.
+
+.JSON Schema compatibility changes
+[%header,cols="3,1,5"]
+|===
+|Change type
+|Backward compatible?
+|Reason
+
+|Add a new optional property
+|Yes
+|Old data without the property remains valid under the new schema.
+
+|Remove a property from `required`
+|Yes
+|The new schema relaxes the constraint, so old data with or without the property remains valid.
+
+|Decrease `minProperties`, `minLength`, or `minItems`
+|Yes
+|The new schema relaxes the minimum constraint. Old data that met the stricter minimum still passes.
+
+|Increase `maxProperties`, `maxLength`, or `maxItems`
+|Yes
+|The new schema relaxes the maximum constraint. Old data that met the stricter maximum still passes.
+
+|Add a value to `enum`
+|Yes
+|The new schema expands the set of accepted values. Existing valid values remain valid.
+
+|Change `additionalProperties` from `false` to `true`
+|Yes
+|The new schema becomes more permissive by accepting additional properties.
+
+|Extend the `additionalProperties` schema
+|Yes
+|Making the additional properties schema more permissive accepts more data.
+
+|Increase the size of `oneOf` or `anyOf`
+|Yes
+|Adding alternatives to combined schemas accepts more data patterns.
+
+|Decrease `minimum` or `exclusiveMinimum`
+|Yes
+|The new schema relaxes the lower bound. Old data above the previous bound still passes.
+
+|Increase `maximum` or `exclusiveMaximum`
+|Yes
+|The new schema relaxes the upper bound. Old data below the previous bound still passes.
+
+|Remove a `format` constraint
+|Yes
+|The new schema removes a validation check, making it more permissive.
+
+|Change `uniqueItems` from `true` to `false`
+|Yes
+|The new schema relaxes the array constraint. Old data with unique items remains valid.
+
+|Add a property to `required`
+|No
+|Old data without the newly required property fails validation.
+
+|Increase `minProperties`, `minLength`, or `minItems`
+|No
+|The new schema tightens the minimum constraint. Old data that met the previous minimum might fail.
+
+|Decrease `maxProperties`, `maxLength`, or `maxItems`
+|No
+|The new schema tightens the maximum constraint. Old data that met the previous maximum might fail.
+
+|Remove a value from `enum`
+|No
+|Old data that contains the removed value fails validation.
+
+|Change `additionalProperties` from `true` to `false`
+|No
+|Old data with additional properties fails validation.
+
+|Change the `type` keyword
+|No
+|Old data of the previous type fails validation. For example, changing `string` to `integer` breaks compatibility.
+
+|Add a `pattern` or `format` constraint
+|No
+|Old data that does not match the new pattern or format fails validation.
+
+|Increase `minimum` or `exclusiveMinimum`
+|No
+|The new schema tightens the lower bound. Old data below the new bound fails validation.
+
+|Decrease `maximum` or `exclusiveMaximum`
+|No
+|The new schema tightens the upper bound. Old data above the new bound fails validation.
+
+|Decrease the size of `oneOf` or `anyOf`
+|No
+|Removing alternatives from combined schemas causes some previously valid data to fail validation.
+
+|Change `uniqueItems` from `false` to `true`
+|No
+|Old data with duplicate items fails validation.
+
+|Change a `const` value
+|No
+|Old data with the previous constant value fails validation.
+|===
+
+
+// ref-registry-compatibility-protobuf
+:_mod-docs-content-type: REFERENCE

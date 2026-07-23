@@ -1,0 +1,109 @@
+[id="secured-kafka-access-operator_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= secured-kafka-access-operator_{context}
+
+== Configuring KafkaSQL with the {kafka-streams} Kafka Access Operator
+
+[role="_abstract"]
+Starting with {registry} version 3.2.0, you can use the {kafka-streams} Kafka Access Operator to automatically provide all Kafka connection details, including security credentials, in a single {kubernetes} Secret.
+
+.Prerequisites
+* The {kafka-streams} Kafka Access Operator is installed on your {kubernetes} cluster.
+* You have a {kafka-streams} Kafka cluster with a configured listener and a `KafkaUser` resource.
+
+.Procedure
+
+. Create a `KafkaUser` resource that grants {registry} access to the required Kafka topics:
++
+[source,yaml]
+----
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: apicurio-registry
+  labels:
+    strimzi.io/cluster: example-cluster
+spec:
+  authentication:
+    type: tls
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: kafkasql-journal
+        operations:
+          - All
+      - resource:
+          type: topic
+          name: kafkasql-snapshots
+        operations:
+          - All
+      - resource:
+          type: topic
+          name: registry-events
+        operations:
+          - All
+      - resource:
+          type: group
+          name: apicurio-registry
+          patternType: prefix
+        operations:
+          - Read
+----
++
+NOTE: This example scopes consumer group access to groups that start with `apicurio-registry`. In production deployments, avoid granting `All` operations on all consumer groups (`name: '*'`). Adjust the group name prefix to match your {registry} consumer group configuration.
+
+. Create a `KafkaAccess` resource that references your Kafka cluster and user:
++
+[source,yaml]
+----
+apiVersion: access.strimzi.io/v1alpha1
+kind: KafkaAccess
+metadata:
+  name: my-kafka-access
+spec:
+  kafka:
+    name: example-cluster
+    listener: tls
+  user:
+    kind: KafkaUser
+    apiGroup: kafka.strimzi.io
+    name: apicurio-registry
+----
++
+NOTE: The `KafkaAccess` resource uses the `access.strimzi.io/v1alpha1` API version, which is an alpha API that might change in future {kafka-streams} releases. Check the {kafka-streams} Kafka Access Operator documentation for the current API version.
+
+. Create the `ApicurioRegistry3` custom resource that references the `KafkaAccess` Secret:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-kafkasql-access
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        kafkaAccessSecretName: my-kafka-access
+    ingress:
+      host: registry.example.com
+  ui:
+    ingress:
+      host: registry-ui.example.com
+----
+
+. Apply all resources:
++
+[source,bash]
+----
+{kubernetes-client} apply -f kafkauser.yaml -f kafkaaccess.yaml -f my-registry.yaml
+----
++
+NOTE: When you specify `kafkaAccessSecretName`, it takes precedence over `bootstrapServers`. The Kafka Access Operator provides all connection details automatically, including bootstrap servers, security protocol, TLS certificates, and SASL credentials.
+endif::[]
+
+
+// ref-secured-kafka-security-protocols

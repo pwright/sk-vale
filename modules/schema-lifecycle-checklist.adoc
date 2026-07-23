@@ -1,0 +1,75 @@
+[id="schema-lifecycle-checklist_{context}"]
+:_mod-docs-content-type: REFERENCE
+= schema-lifecycle-checklist_{context}
+
+== Schema lifecycle best practices checklist
+
+[role="_abstract"]
+Use the following checklist as a quick reference for schema lifecycle best practices. The phase-specific lists after the summary table provide additional detail.
+
+.Schema lifecycle best practices
+[cols="1,1",options="header"]
+|===
+|Do
+|Avoid
+
+|Always add fields with default values
+|Adding required fields without defaults
+
+|Use `["null", "type"]` for optional fields
+|Removing enum symbols from existing schemas
+
+|Define shared types as separate artifacts
+|Duplicating type definitions across schemas
+
+|Deprecate before disabling
+|Disabling schemas without warning consumers
+
+|Use `BACKWARD_TRANSITIVE` for production
+|Using `NONE` compatibility in production
+
+|Test schema changes against compatibility rules
+|Deploying schema changes without testing
+
+|Use aliases when renaming fields
+|Renaming fields without aliases
+
+|Reserve removed Protobuf field tags
+|Removing fields without reserving tags
+|===
+
+**Design phase**
+
+Follow these recommendations when you design schemas. For detailed guidance and examples, see xref:schema-references-shared-types_{context}[] and xref:schema-data-structure-recommendations_{context}[].
+
+* Choose the right artifact type (Avro, JSON Schema, Protobuf, or OpenAPI) based on your serialization format and language ecosystem.
+* Define shared types as separate artifacts in {registry} and reference them from dependent schemas.
+* Use `["null", "type"]` unions with `null` defaults for all optional fields. New fields that you add later must follow this pattern.
+* Wrap related fields in nested records to support independent evolution.
+
+**Registration phase**
+
+Follow these recommendations when you register schemas. For a working Maven plug-in example, see xref:validating-data-avro-generated-classes_{context}[].
+
+* Register schemas before deployment by using the {registry} Maven plug-in or REST API.
+* Configure compatibility rules (`BACKWARD`, `FORWARD`, `FULL`, or their transitive variants) on each artifact immediately after creation.
+* Use `BACKWARD_TRANSITIVE` for production environments where consumers might lag behind producers by more than one version.
+* Set `ifExists` to `FIND_OR_CREATE_VERSION` in the Maven plug-in to avoid duplicate registrations.
+
+**Evolution phase**
+
+Follow these recommendations when you evolve schemas. For compatible and incompatible change patterns with examples, see xref:schema-evolution-strategies_{context}[].
+
+* Always add new fields with default values to maintain backward compatibility.
+* Use Avro aliases when renaming fields to preserve compatibility with existing consumers.
+* Reserve removed Protobuf field tags by adding `reserved` declarations to prevent tag reuse.
+* Test every schema change against the configured compatibility rules before merging your code.
+
+**Deprecation and retirement phase**
+
+Follow these recommendations when you deprecate and retire schemas. For the step-by-step procedure, see xref:managing-schema-lifecycle-states_{context}[].
+
+* Set the version state to `DEPRECATED` before disabling a schema. Give consumers a reasonable grace period, commonly two to four weeks depending on your organization and consumer count.
+* Set the version state to `DISABLED` only after you confirm that all consumers have migrated.
+* Delete artifact versions only after you confirm that no audit or compliance requirements mandate retention.
+* Monitor consumer access patterns to verify that no consumers fetch deprecated versions.

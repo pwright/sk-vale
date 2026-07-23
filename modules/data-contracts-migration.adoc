@@ -1,0 +1,64 @@
+[id="data-contracts-migration_{context}"]
+= Schema migration
+
+
+[role="_abstract"]
+Schema migration allows you to transform data records between different schema versions using migration rules.
+
+=== Migration rules
+
+Migration rules use the UPGRADE or DOWNGRADE mode and are typically JSONata TRANSFORM rules that reshape data from one version to another:
+
+.Migration rule example
+[source,json]
+----
+{
+  "domainRules": [],
+  "migrationRules": [
+    {
+      "name": "v1-to-v2-upgrade",
+      "kind": "TRANSFORM",
+      "type": "JSONATA",
+      "mode": "UPGRADE",
+      "expr": "$ ~> |$|{'fullName': firstName & ' ' & lastName}|",
+      "onFailure": "ERROR",
+      "disabled": false
+    }
+  ]
+}
+----
+
+=== Migration endpoint
+
+The migration endpoint chains transforms across multiple versions:
+
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/migrate \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "sourceVersion": "1",
+    "targetVersion": "3",
+    "record": {"firstName": "John", "lastName": "Doe", "amount": 100}
+  }'
+----
+
+The service determines the direction (upgrade or downgrade), loads migration rules for each intermediate version, and chains the transforms sequentially.
+
+=== Compatibility groups
+
+Compatibility groups partition the version history for compatibility checking. Versions in different groups are not compared against each other during compatibility validation.
+
+[source,bash]
+----
+# Set compatibility group
+curl -X PUT \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/compatibility-group \
+  -H 'Content-Type: application/json' \
+  -d '{"group": "v2-family"}'
+
+# Get compatibility group
+curl http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/compatibility-group
+----
+

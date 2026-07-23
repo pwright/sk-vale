@@ -1,0 +1,28 @@
+[id="concept-rule_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-rule_{context}
+
+== Rule
+
+[role="_abstract"]
+A *rule* is a validation constraint that {registry} applies when you add new content.
+
+Rules operate at three levels:
+
+* *Global rules* apply to all artifacts in the registry.
+* *Group rules* apply to all artifacts within a specific group.
+* *Artifact rules* apply to a specific artifact.
+
+When you configure a rule at multiple levels, the most specific level takes precedence (artifact > group > global).
+
+The available rule types are:
+
+* *Validity rule*: validates that the content is syntactically and semantically correct for its artifact type.
+* *Compatibility rule*: validates that new content is compatible with previous versions according to a specified compatibility level.
+* *Integrity rule*: validates referential integrity of artifact references.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-rule-reference.adoc[]
+
+// con-concept-version-state

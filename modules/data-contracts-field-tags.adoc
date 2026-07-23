@@ -1,0 +1,77 @@
+[id="data-contracts-field-tags_{context}"]
+= Field-level tags
+
+
+[role="_abstract"]
+Field tags provide semantic annotation of schema fields, enabling you to identify sensitive data and apply tag-based governance.
+
+=== Tag sources
+
+Tags come from two sources:
+
+* *Inline tags* - Extracted automatically from schema content during registration by tag extractors
+* *External tags* - Projected from ODCS contracts or set manually via the version labels API
+
+=== Supported schema formats
+
+Tag extractors are available for the following formats:
+
+==== Avro
+
+Tags are extracted from `tags` and `confluent:tags` field properties:
+
+[source,json]
+----
+{
+  "type": "record",
+  "name": "User",
+  "fields": [{
+    "name": "email",
+    "type": "string",
+    "tags": ["PII", "EMAIL"]
+  }]
+}
+----
+
+==== JSON Schema
+
+Tags are extracted from `x-tags` and `x-confluent-tags` extension properties:
+
+[source,json]
+----
+{
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "x-tags": ["PII", "EMAIL"]
+    }
+  }
+}
+----
+
+Supports nested objects, arrays, `additionalProperties`, and `allOf`/`oneOf`/`anyOf` compositions.
+
+==== Protobuf
+
+Tags are extracted from documentation comments using the `@tag:` annotation:
+
+[source,protobuf]
+----
+message User {
+  // @tag:PII,EMAIL
+  string email = 1;
+}
+----
+
+Also supports Confluent `confluent.field_meta` field options.
+
+=== Common tags
+
+* `PII` - Personally Identifiable Information
+* `SENSITIVE` - Sensitive data requiring special handling
+* `EMAIL` - Email address fields
+* `PHONE` - Phone number fields
+* `FINANCIAL` - Financial data
+* `HEALTH` - Health-related data (PHI)
+

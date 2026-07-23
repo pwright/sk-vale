@@ -1,0 +1,86 @@
+[id="operator-ingress-reference_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Ingress configuration reference
+
+[role="_abstract"]
+The `ingress` section is available for both `spec.app` and `spec.ui` components.
+
+.IngressSpec
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`enabled`
+|Whether the operator should manage an Ingress resource. Set to `false` to create your own Ingress
+|Boolean
+|`true`
+
+|`host`
+|Hostname for the Ingress. If empty, the operator will not create an Ingress resource
+|String
+|`""`
+
+|`ingressClassName`
+|IngressClass to use for the Ingress resource
+|String
+|None
+
+|`annotations`
+|Additional annotations for the Ingress resource
+|Map[String]String
+|`{}`
+|===
+
+Example:
+[source,yaml]
+----
+spec:
+  app:
+    ingress:
+      host: registry-api.example.com
+      ingressClassName: nginx
+      annotations:
+        nginx.org/proxy-connect-timeout: "30s"
+  ui:
+    ingress:
+      host: registry-ui.example.com
+      ingressClassName: nginx
+      annotations:
+        nginx.org/proxy-connect-timeout: "30s"
+----
+
+.SecretKeyRef
+
+Many configuration fields use `SecretKeyRef` to reference Kubernetes Secrets:
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`name`
+|Name of the Secret
+|String
+|Required
+
+|`key`
+|Key within the Secret containing the target data
+|String
+|Field-specific default (e.g., `password`, `ca.p12`)
+|===
+
+Example:
+[source,yaml]
+----
+password:
+  name: db-credentials
+  key: db-password
+----
+
+// ref-operator-for-developers

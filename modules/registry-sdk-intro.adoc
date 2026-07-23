@@ -1,0 +1,51 @@
+[id="registry-sdk-intro_{context}"]
+:_mod-docs-content-type: CONCEPT
+= registry-sdk-intro_{context}
+
+== {registry} SDK
+
+[role="_abstract"]
+You can manage artifacts stored in {registry} by using one of the provided SDKs. You can perform any operation supported by the REST API, including create, read, update, or delete of artifacts. You can even use the {registry} SDKs to perform administrator functions, such as managing global rules or importing and exporting {registry} data.
+
+You can use any of the following SDKs provided as part of {registry}:
+
+- Java
+- Typescript
+- Python
+- Golang
+
+**Java**
+
+You can access the {registry} Java SDK by adding the correct dependency to your Apache Maven project.
+For more details, see xref:writing-registry-sdk_registry[].
+
+The {registry} client is implemented by using the HTTP client provided by the JDK. You can customize the client as needed, for example, by adding custom headers or enabling configuration options for Transport Layer Security (TLS) authentication.
+For more details, see xref:registry-sdk-config_registry[].
+
+**Typescript**
+
+You can access the {registry} Typescript SDK by adding the correct dependency to your application's `package.json`
+file (assumes a node.js application):
+
+https://www.npmjs.com/package/@apicurio/apicurio-registry-sdk
+
+**Python**
+
+You can access the {registry} Python SDK by adding the correct dependency to your python project (assumes you
+are using pypi):
+
+https://pypi.org/project/apicurioregistrysdk/
+
+**Golang**
+
+You can access the {registry} Golang SDK by adding the correct dependency to your project:
+
+https://github.com/Apicurio/apicurio-registry/tree/main/go-sdk
+
+
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_installing-the-registry.adoc
+
+// proc-writing-registry-sdk

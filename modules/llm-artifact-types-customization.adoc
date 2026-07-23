@@ -1,0 +1,39 @@
+[id="llm-artifact-types-customization_{context}"]
+= LLM artifact type customization
+
+
+[role="_abstract"]
+You can modify the built-in LLM artifact types or use them as templates for custom types.
+
+.Source code location
+
+.Source files
+[%header,cols="2,4"]
+|===
+|File
+|Purpose
+
+|`schema-util/common/.../content/ModelSchemaContentAccepter.java`
+|MODEL_SCHEMA content type detection
+
+|`schema-util/common/.../rules/validity/ModelSchemaContentValidator.java`
+|MODEL_SCHEMA validation
+
+|`schema-util/common/.../rules/compatibility/ModelSchemaCompatibilityChecker.java`
+|MODEL_SCHEMA backward compatibility checking
+
+|`schema-util/common/.../content/PromptTemplateContentAccepter.java`
+|PROMPT_TEMPLATE content type detection
+
+|`schema-util/common/.../rules/validity/PromptTemplateContentValidator.java`
+|PROMPT_TEMPLATE validation (including template variable cross-checking)
+
+|`schema-util/common/.../rules/compatibility/PromptTemplateCompatibilityChecker.java`
+|PROMPT_TEMPLATE backward compatibility checking
+
+|`schema-util/util-provider/.../ModelSchemaArtifactTypeUtilProvider.java`
+|MODEL_SCHEMA provider wiring
+
+|`schema-util/util-provider/.../PromptTemplateArtifactTypeUtilProvider.java`
+|PROMPT_TEMPLATE provider wiring
+|===

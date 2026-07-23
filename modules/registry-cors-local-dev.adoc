@@ -1,0 +1,54 @@
+[id="registry-cors-local-dev_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-cors-local-dev_{context}
+
+== CORS configuration for local development
+
+[role="_abstract"]
+During local development, you can allow all origins by using `*` as the value for `QUARKUS_HTTP_CORS_ORIGINS`.
+
+Use a Docker Compose configuration such as this example to run {registry} with CORS open for all origins:
+
+[source,yaml]
+----
+services:
+  apicurio-registry:
+    image: apicurio/apicurio-registry:latest-snapshot
+    environment:
+      apicurio.rest.deletion.group.enabled: "true"
+      apicurio.rest.deletion.artifact.enabled: "true"
+      apicurio.rest.deletion.artifact-version.enabled: "true"
+      QUARKUS_HTTP_CORS_ORIGINS: "*"
+    ports:
+      - "8080:8080"
+
+  apicurio-registry-ui:
+    image: apicurio/apicurio-registry-ui:latest-snapshot
+    ports:
+      - "8888:8080"
+    depends_on:
+      - apicurio-registry
+----
+
+Start the deployment by running:
+
+[source,bash]
+----
+docker compose -f docker-compose-no-auth.yaml up
+----
+
+With {registry} running on `localhost:8080`, you can call the API from any origin:
+
+[source,javascript]
+----
+// List all groups in the registry
+const response = await fetch("http://localhost:8080/apis/registry/v3/groups");
+const data = await response.json();
+console.log(data);
+----
+
+WARNING: Using `QUARKUS_HTTP_CORS_ORIGINS: "*"` is acceptable for local development but must not be used in production. A wildcard origin means any website can make requests to your {registry} instance.
+endif::[]
+
+
+// ref-registry-cors-production

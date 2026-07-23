@@ -1,0 +1,40 @@
+[id="operator-ui-spec-reference_{context}"]
+:_mod-docs-content-type: REFERENCE
+= UI component configuration reference
+
+[role="_abstract"]
+The `spec.ui` section configures the {registry} web console component.
+
+.UI-specific fields
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`enabled`
+|Whether the operator should deploy the UI component
+|Boolean
+|`true`
+|===
+
+The UI component also supports all common component fields listed in
+xref:operator-app-spec-reference_{context}[].
+
+Example:
+[source,yaml]
+----
+spec:
+  ui:
+    enabled: true
+    replicas: 2
+    env:
+      - name: REGISTRY_API_URL
+        value: https://registry-api.example.com/apis/registry/v3
+    ingress:
+      host: registry-ui.example.com
+----
+
+// ref-operator-storage-reference

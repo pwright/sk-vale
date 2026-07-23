@@ -1,0 +1,47 @@
+[id="troubleshooting-migration_{context}"]
+= Troubleshooting migration issues
+
+
+[role="_abstract"]
+If you encounter issues during migration, use the following guidance to diagnose and resolve common problems.
+
+Export fails::
++
+--
+* Verify that the authentication credentials are valid.
+* Verify that {registry-v2} is accessible.
+* Review registry logs for errors.
+--
+
+Import fails::
++
+--
+* Verify that the export file is a valid ZIP format.
+* Verify that {registry} 3.x has sufficient storage.
+* Review registry v3 logs for specific errors.
+* If a partial import occurred, drop the v3 database (or Kafka topic) and retry.
+--
+
+Baseline metrics mismatch::
++
+--
+* Review import logs for skipped artifacts.
+* Check for import errors or warnings.
+* Verify export file integrity.
+* Consider re-exporting and re-importing.
+--
+
+Rollback needed::
++
+--
+. Switch load balancer traffic back to {registry-v2}.
+. Investigate v3 issues.
++
+Recovery time is 30-60 seconds. Your v2 data remains unchanged because the export operation is read-only.
+--
+
+[role="_additional-resources"]
+.Additional resources
+* xref:migrating-minimal-downtime_{context}[]
+* xref:resolving-configuration-issues_{context}[]
+* xref:migration-scripts_{context}[]

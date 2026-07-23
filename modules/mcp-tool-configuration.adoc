@@ -1,0 +1,30 @@
+[id="mcp-tool-configuration_{context}"]
+= Configuration
+
+
+[role="_abstract"]
+You can configure MCP tool features by using the following configuration properties.
+
+[cols="2,1,3"]
+|===
+|Property |Default |Description
+
+|`apicurio.mcp-tools.enabled`
+|`false`
+|Enables or disables MCP tool definition support (experimental)
+
+|`apicurio.features.experimental.enabled`
+|`false`
+|Set to `true` to use experimental features such as MCP tools
+|===
+
+To enable MCP tool support, set both properties:
+
+[source,properties]
+----
+apicurio.features.experimental.enabled=true
+apicurio.mcp-tools.enabled=true
+----
+
+// ref-mcp-tool-definition-schema
+:_mod-docs-content-type: REFERENCE

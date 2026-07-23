@@ -1,0 +1,32 @@
+[id="installing-the-mcp-server_{context}"]
+= Installing the MCP server
+
+
+[role="_abstract"]
+You can run the {registry} MCP server as a Docker or Podman container, or build it from source. Both methods produce a server binary that LLM clients start on demand.
+
+.Prerequisites
+* Docker or Podman is installed, or Java 21 and Maven are installed for building from source.
+* A running {registry} instance is accessible at `localhost:8080`, or you set a custom URL by using the `REGISTRY_URL` environment variable.
+
+NOTE: You can substitute `podman` for `docker` in all commands.
+
+.Procedure
+. Pull the MCP server Docker image:
++
+[source,bash]
+----
+docker pull quay.io/apicurio/apicurio-registry-mcp-server:latest
+----
++
+NOTE: The `latest` tag refers to the most recent stable release. For development builds, use the `latest-snapshot` tag. For a specific version, use the version number as the tag, for example `{registry-release}`.
++
+Alternatively, to build the MCP server from source, clone the {registry} repository and run the following Maven command:
++
+[source,bash]
+----
+mvn clean install -pl mcp -am -DskipTests
+----
+
+// proc-configuring-claude-desktop-for-mcp
+:_mod-docs-content-type: PROCEDURE

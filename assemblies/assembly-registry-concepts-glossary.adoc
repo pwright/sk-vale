@@ -1,0 +1,22 @@
+[id="registry-concepts-glossary_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= registry-concepts-glossary_{context}
+
+= {registry} concepts and glossary
+
+[role="_abstract"]
+You can use these definitions to understand the core concepts of {registry}.
+
+// con-concept-group
+include::../modules/concept-group.adoc[leveloffset=+1]
+include::../modules/concept-artifact.adoc[leveloffset=+1]
+include::../modules/concept-artifact-version.adoc[leveloffset=+1]
+include::../modules/concept-content.adoc[leveloffset=+1]
+include::../modules/concept-global-id.adoc[leveloffset=+1]
+include::../modules/concept-content-id.adoc[leveloffset=+1]
+include::../modules/concept-branch.adoc[leveloffset=+1]
+include::../modules/concept-artifact-reference.adoc[leveloffset=+1]
+include::../modules/concept-labels.adoc[leveloffset=+1]
+include::../modules/concept-rule.adoc[leveloffset=+1]
+include::../modules/concept-version-state.adoc[leveloffset=+1]
+include::../modules/concept-artifact-type.adoc[leveloffset=+1]

@@ -1,0 +1,58 @@
+[id="secured-kafka-topic-config_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= secured-kafka-topic-config_{context}
+
+== Configuring Kafka topics for {registry}
+
+[role="_abstract"]
+{registry} uses Kafka topics to store artifact data. You must configure these topics with the correct retention settings to prevent data loss.
+
+By default, {registry} auto-creates the required topics. If your Kafka cluster does not allow auto-creation, or if you want to control topic settings, create the topics manually.
+
+.Procedure
+. Create the Kafka topics by using the `KafkaTopic` custom resource:
++
+[source,yaml]
+----
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kafkasql-journal
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    cleanup.policy: delete
+    retention.ms: "-1"
+    retention.bytes: "-1"
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kafkasql-snapshots
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    cleanup.policy: delete
+    retention.ms: "-1"
+    retention.bytes: "-1"
+----
++
+NOTE: This example uses `partitions: 3` and `replicas: 3`, which requires at least 3 Kafka brokers. The replica count must not exceed the number of brokers in your cluster. Adjust partition and replica counts based on your deployment size.
++
+WARNING: You must configure the Kafka topics used by {registry} with `cleanup.policy: delete` and infinite retention (`retention.ms: -1` and `retention.bytes: -1`). Do not use `cleanup.policy: compact` or `cleanup.policy: compact,delete`, because both policies can result in data loss.
+
+. Apply the topic resources:
++
+[source,bash]
+----
+{kubernetes-client} apply -f kafkatopics.yaml
+----
+
+
+// ref-secured-kafka-troubleshooting

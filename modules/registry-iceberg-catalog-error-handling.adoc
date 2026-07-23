@@ -1,0 +1,43 @@
+[id="registry-iceberg-catalog-error-handling_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-iceberg-catalog-error-handling_{context}
+
+== Error handling
+
+[role="_abstract"]
+All Iceberg REST Catalog API endpoints return errors in the Iceberg error format. Each error response includes an HTTP status code and error type.
+
+.Iceberg REST Catalog API error types
+[.table-expandable,width="100%",cols="2,3,5",options="header"]
+|===
+|HTTP status
+|Error type
+|Description
+|`400`
+|`BadRequestException`
+|The request is malformed or contains invalid parameters.
+|`404`
+|`NotFoundException`
+|A generic resource was not found.
+|`404`
+|`NoSuchNamespaceException`
+|The specified namespace does not exist.
+|`404`
+|`NoSuchTableException`
+|The specified table does not exist.
+|`409`
+|`AlreadyExistsException`
+|A namespace or table with the same name already exists.
+|`409`
+|`NamespaceNotEmptyException`
+|The namespace cannot be dropped because it still contains tables.
+|`409`
+|`CommitFailedException`
+|A commit requirement was not met, or a concurrent commit was detected.
+|`500`
+|`InternalServerError`
+|An unexpected internal error occurred.
+|===
+
+
+// ref-registry-iceberg-catalog-auth

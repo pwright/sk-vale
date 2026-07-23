@@ -1,0 +1,117 @@
+[id="ccompat-supported-features_{context}"]
+= Supported features
+
+
+[role="_abstract"]
+{registry} fully supports the following Confluent Schema Registry features:
+
+.Fully supported API endpoints
+[%header,cols="2,3"]
+|===
+|Feature
+|Description
+
+|*Schemas API*
+|Full support for schema management including `GET /schemas`, `GET /schemas/ids/{id}`, `GET /schemas/types`, `GET /schemas/ids/{id}/subjects`, `GET /schemas/ids/{id}/versions`, and `GET /schemas/ids/{id}/schema`. Includes pagination with `offset` and `limit` parameters.
+
+|*Subjects API*
+|Complete create, retrieve, update, and delete operations for subjects including listing, registration, lookup by content (`POST /subjects/{subject}`), lookup by version (`POST /subjects/{subject}/versions/{version}`), and deletion. Supports pagination with `offset`, `limit`, `deleted`, and `deletedOnly` parameters.
+
+|*Compatibility API*
+|Schema compatibility checking against specific versions or all versions. Supports `verbose` and `normalize` parameters. Defaults to `BACKWARD` compatibility when you do not configure an explicit rule, matching the Confluent behavior.
+
+|*Config API*
+|Global and subject-level compatibility configuration. Supports `GET`, `PUT`, and `DELETE` operations, including `defaultToGlobal` parameter for subject config. The `PUT` response includes `compatibility` and `normalize` fields.
+
+|*Mode API*
+|Global and subject-level mode management (`READWRITE`, `READONLY`, `READONLY_OVERRIDE`, `IMPORT`). Supports `force` parameter for mode changes.
+
+|*Contexts API*
+|Returns the default context for Confluent client compatibility.
+|===
+
+.Supported schema types
+[%header,cols="1,2"]
+|===
+|Schema type
+|Support status
+
+|Apache Avro
+|Fully supported
+
+|JSON Schema
+|Fully supported
+
+|Google Protobuf
+|Fully supported
+|===
+
+.v8-specific features
+[%header,cols="2,3"]
+|===
+|Feature
+|Description
+
+|*X-Confluent-Accept-Unknown-Properties header*
+|When set to `true`, the API ignores unknown JSON properties in request bodies. This provides forward compatibility for clients that send newer API requests.
+
+|*Enhanced pagination*
+|Full pagination support on schemas and subjects endpoints.
+|===
+
+**Schema ID mapping**
+
+{registry} uses two internal ID types: `globalId` (unique per artifact version) and `contentId` (unique per content hash). Confluent Schema Registry uses a single incrementing schema ID.
+
+The `apicurio.ccompat.legacy-id-mode.enabled` configuration property controls the mapping between Confluent schema IDs and {registry} internal IDs:
+
+.Schema ID mode
+[%header,cols="1,1,3"]
+|===
+|Mode
+|Config value
+|Behavior
+
+|Content ID mode (default)
+|`false`
+|Confluent `id` maps to {registry} `contentId`. Registering the same schema content under different subjects returns the same ID, matching the Confluent behavior.
+
+|Legacy ID mode
+|`true`
+|Confluent `id` maps to {registry} `globalId`. Each version registration gets a unique ID regardless of content.
+|===
+
+For most use cases, use the default content ID mode, because it matches the Confluent behavior where identical schemas share the same ID across subjects.
+
+**Configuration properties**
+
+.Confluent compatibility API configuration
+[%header,cols="2,1,3"]
+|===
+|Property
+|Default
+|Description
+
+|`apicurio.ccompat.legacy-id-mode.enabled`
+|`false`
+|Use `globalId` instead of `contentId` for Confluent schema IDs.
+
+|`apicurio.ccompat.use-canonical-hash`
+|`false`
+|Always use canonical hash for schema content comparison.
+
+|`apicurio.ccompat.max-subjects`
+|`1000`
+|Maximum number of subjects returned by the `/subjects` endpoint.
+
+|`apicurio.ccompat.group-concat.enabled`
+|`false`
+|Enable {registry} group support by concatenating group ID and artifact ID into the subject name.
+
+|`apicurio.ccompat.group-concat.separator`
+|`:`
+|Separator character used when you enable group concatenation.
+|===
+
+:_mod-docs-content-type: REFERENCE
+

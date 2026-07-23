@@ -1,0 +1,66 @@
+[id="multitenancy-authentication-per-tenant_{context}"]
+:_mod-docs-content-type: REFERENCE
+= multitenancy-authentication-per-tenant_{context}
+
+== Authentication options per tenant
+
+[role="_abstract"]
+Each tenant instance can be configured with its own authentication settings. Different tenants can
+use different identity providers or OIDC realms.
+
+Shared {keycloak} with separate realms::
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: registry
+  namespace: tenant-alpha
+spec:
+  app:
+    auth:
+      enabled: true
+      appClientId: registry-api
+      uiClientId: apicurio-registry
+      authServerUrl: https://keycloak.example.com/realms/alpha
+      redirectUri: https://tenant-alpha-ui.apps.cluster.example
+      logoutUrl: https://tenant-alpha-ui.apps.cluster.example
+      authz:
+        enabled: true
+        ownerOnlyEnabled: true
+        groupAccessEnabled: true
+        readAccessEnabled: true
+        roles:
+          source: token
+          admin: sr-admin
+          developer: sr-developer
+          readOnly: sr-readonly
+    ingress:
+      host: tenant-alpha-registry.apps.cluster.example
+  ui:
+    ingress:
+      host: tenant-alpha-ui.apps.cluster.example
+----
+
+Separate identity providers::
+Each tenant CR can reference a different OIDC provider by specifying different `authServerUrl` values.
++
+[source,yaml]
+----
+# Tenant Alpha uses Keycloak
+spec:
+  app:
+    auth:
+      enabled: true
+      authServerUrl: https://keycloak.example.com/realms/alpha
+
+# Tenant Beta uses Microsoft Entra ID
+spec:
+  app:
+    auth:
+      enabled: true
+      authServerUrl: https://login.microsoftonline.com/{tenant-id}/v2.0
+----
+
+// ref-multitenancy-resource-management

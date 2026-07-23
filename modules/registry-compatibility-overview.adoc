@@ -1,0 +1,26 @@
+[id="registry-compatibility-overview_{context}"]
+= Overview of compatibility rules
+
+
+[role="_abstract"]
+When you add a new version of an artifact to {registry}, you can configure the `COMPATIBILITY` rule to check whether the new content is compatible with existing versions.
+Compatibility checking helps you ensure that producers and consumers can continue to work together without disruption when schemas evolve.
+
+You can configure the `COMPATIBILITY` rule at three levels. {registry} applies these rules in order of precedence, where the most specific level always overrides the broader levels:
+
+. **Artifact-specific rules**: Apply to a single artifact and have the highest priority.
+. **Group-specific rules**: Apply to all artifacts in a specific group.
+. **Global rules**: Apply to all artifacts across the registry unless a group or artifact rule is set.
+
+NOTE: To disable a rule inherited from a higher level, you must explicitly set the rule at the lower level to `NONE`.
+
+Not all artifact types support compatibility checking. The following sections cover the supported types: Avro, JSON Schema, Protobuf, OpenAPI, and XSD.
+For the full list of supported artifact types and rule maturity levels, see the content rule maturity matrix in {registry-rule-reference}.
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-rules}
+
+
+// ref-registry-compatibility-mode-descriptions
+:_mod-docs-content-type: REFERENCE

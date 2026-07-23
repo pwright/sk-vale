@@ -1,0 +1,111 @@
+[id="ha-backup-restore_{context}"]
+= Backup and restore procedures
+
+
+Regular backups are essential for disaster recovery and data protection.
+
+=== SQL database backup
+
+For SQL storage (PostgreSQL or MySQL), backup strategies depend on your database setup:
+
+==== PostgreSQL backup options
+
+* *pg_dump logical backups:*
++
+[source,bash]
+----
+pg_dump -h postgresql-host -U registry_user -d registry > registry-backup.sql
+----
+
+* *Continuous archiving with WAL* - For point-in-time recovery
+* *Operator-managed backups* - If using CloudNativePG or Crunchy PostgreSQL Operator:
++
+[source,yaml]
+----
+spec:
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://my-backups/registry-db
+      s3Credentials:
+        accessKeyId:
+          name: backup-credentials
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: backup-credentials
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+    retentionPolicy: "30d"
+----
+
+==== MySQL backup options
+
+* *mysqldump logical backups:*
++
+[source,bash]
+----
+mysqldump -h mysql-host -u registry_user -p registry > registry-backup.sql
+----
+
+* *Binary backups* - Using tools like Percona XtraBackup or MySQL Enterprise Backup
+
+==== Restoring from SQL backup
+
+To restore from a logical backup:
+
+[source,bash]
+----
+# PostgreSQL
+psql -h postgresql-host -U registry_user -d registry < registry-backup.sql
+
+# MySQL
+mysql -h mysql-host -u registry_user -p registry < registry-backup.sql
+----
+
+=== KafkaSQL storage backup
+
+For KafkaSQL storage, back up the Kafka journal topic and snapshots topic.
+
+==== Backing up Kafka topics
+
+Use Kafka's MirrorMaker 2 or {kafka-streams} Mirror Maker for topic replication (recommended):
+
+[source,yaml]
+----
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaMirrorMaker2
+metadata:
+  name: registry-backup-mirror
+spec:
+  version: 3.5.0
+  replicas: 1
+  connectCluster: "backup-cluster"
+  clusters:
+    - alias: "source-cluster"
+      bootstrapServers: registry-kafka-bootstrap:9092
+    - alias: "backup-cluster"
+      bootstrapServers: backup-kafka-bootstrap:9092
+  mirrors:
+    - sourceCluster: "source-cluster"
+      targetCluster: "backup-cluster"
+      topicsPattern: "kafkasql-.*"
+      groupsPattern: ".*"
+----
+
+Alternatively, export and import topics using Kafka's console consumer or CLI tools like `kcat`/`kafkacat`. Since the topics might contain binary data, which might be affected by text file encoding, make sure they are exported correctly when using CLI tools. See our xref:getting-started/guide-exporting-registry-kafka-topic-data.adoc[] guide for more details.
+
+=== Testing backup and restore
+
+Regularly test your backup and restore procedures:
+
+. Create a test {registry} deployment in a separate namespace
+. Restore from backup to the test deployment
+. Verify that all artifacts and metadata are present
+. Test API functionality to ensure data integrity
+
+[role="_additional-resources"]
+.Additional resources
+
+* For more information on {registry} configuration, see xref:getting-started/assembly-deploying-registry-operator.adoc[].
+* For Kafka HA configuration with {kafka-streams}, see link:{LinkDeployStreamsOpenShift}[{NameDeployStreamsOpenShift}].
+* For health checks and metrics, see the health endpoint (`/health/ready` on management port 9000) and metrics endpoint (`/metrics` on management port 9000) in your {registry} deployment.

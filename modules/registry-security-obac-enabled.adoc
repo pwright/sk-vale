@@ -1,0 +1,35 @@
+[id="registry-security-obac-enabled_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} owner-only authorization
+
+[role="_abstract"]
+You can set the following options to `true` to enable owner-only authorization for updates to artifacts or artifact groups in {registry}:
+
+.Configuration for owner-only authorization
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+
+|`QUARKUS_OIDC_TENANT_ENABLED`
+|`quarkus.oidc.tenant-enabled`
+|Boolean
+|`false`
+
+|`APICURIO_AUTH_OWNER_ONLY_AUTHORIZATION`
+|`apicurio.auth.owner-only-authorization`
+|Boolean
+|`false`
+
+|`APICURIO_AUTH_OWNER_ONLY_AUTHORIZATION_LIMIT_GROUP_ACCESS`
+|`apicurio.auth.owner-only-authorization.limit-group-access`
+|Boolean
+|`false`
+|===
+
+When owner-only authorization is enabled, only the user who created an artifact can modify or delete that artifact.
+
+When owner-only authorization and group owner-only authorization are both enabled, only the user who created an artifact group has write access to that artifact group, for example, to add or remove artifacts in that group.
+

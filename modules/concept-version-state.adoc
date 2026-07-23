@@ -1,0 +1,18 @@
+[id="concept-version-state_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-version-state_{context}
+
+== Version state
+
+[role="_abstract"]
+The *version state* represents the lifecycle state of an artifact version.
+
+The possible states are:
+
+* `ENABLED`: the version is fully available. You can retrieve content and metadata normally.
+* `DEPRECATED`: the version is still available, but {registry} returns a warning header to signal that consumers must migrate to a newer version.
+* `DISABLED`: the version metadata is visible, but you cannot fetch the version content.
+
+You can transition between any of these three states.
+
+// con-concept-artifact-type

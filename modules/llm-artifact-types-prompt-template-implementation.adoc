@@ -1,0 +1,161 @@
+[id="llm-artifact-types-prompt-template-implementation_{context}"]
+= PROMPT_TEMPLATE implementation details
+
+
+[role="_abstract"]
+The PROMPT_TEMPLATE artifact type implementation resides in `schema-util/util-provider/src/main/java/io/apicurio/registry/types/provider/PromptTemplateArtifactTypeUtilProvider.java`, with validators, extractors, and compatibility checkers in `schema-util/common/`.
+
+.Schema structure
+
+.PROMPT_TEMPLATE schema interface (Prompty-aligned)
+[source,typescript]
+----
+interface PromptTemplate {
+    $schema?: string;           // Schema URL for identification
+    templateId: string;         // Required: unique identifier
+    name?: string;              // Human-readable name
+    description?: string;       // Template description
+    version?: string;           // Semantic version
+    template: string;           // Required: template text with {{variable}} placeholders
+
+    // Prompty-aligned fields
+    authors?: string[];         // Contributors list
+    tags?: string[];            // Categorization tags
+    templateFormat?: string;    // 'mustache' | 'jinja2' | 'handlebars'
+    model?: ModelConfiguration; // Model configuration
+
+    // Input/output definitions (Prompty: inputs/outputs)
+    variables?: Record<string, VariableSchema>;  // Variable definitions
+    inputs?: Record<string, VariableSchema>;     // Alias for variables (Prompty)
+    outputSchema?: Record<string, unknown>;      // Expected output structure
+    outputs?: Record<string, unknown>;           // Alias for outputSchema (Prompty)
+
+    // Extensions
+    metadata?: Record<string, unknown>;          // Custom metadata
+    mcp?: MCPConfiguration;                      // MCP integration
+}
+
+interface VariableSchema {
+    type?: string;              // string, integer, number, boolean, array, object
+    required?: boolean;         // Whether variable is required
+    default?: unknown;          // Default value
+    description?: string;       // Variable description
+    enum?: unknown[];           // Allowed values
+    minimum?: number;           // Minimum value for numeric types
+    maximum?: number;           // Maximum value for numeric types
+    $ref?: string;              // Reference to external schema
+}
+
+interface ModelConfiguration {
+    api?: string;               // 'chat' | 'completion'
+    configuration?: {
+        type?: string;          // Provider type
+        azure_deployment?: string;
+        azure_endpoint?: string;
+    };
+    parameters?: {
+        temperature?: number;
+        max_tokens?: number;
+        top_p?: number;
+    };
+    response?: string;          // 'first' | 'all'
+}
+
+interface MCPConfiguration {
+    enabled?: boolean;          // Expose via MCP protocol
+    name?: string;              // MCP prompt name
+    description?: string;       // MCP prompt description
+    arguments?: MCPArgument[];  // MCP arguments
+}
+----
+
+.Content detection
+
+The `acceptsContent()` function detects PROMPT_TEMPLATE content by checking the following criteria:
+
+* Content type is `application/json`, `application/x-yaml`, or `text/x-prompt-template`.
+* Schema identifier: the `$schema` field contains `prompt-template`.
+* Required fields: both `templateId` and `template` fields are present.
+
+.Validation rules
+
+The `validate()` function checks the following rules:
+
+* `templateId` must be a non-empty string.
+* `template` must be a non-empty string.
+* All `{{variable}}` placeholders in the template must have corresponding definitions in `variables`.
+* Variable types must be valid: `string`, `integer`, `number`, `boolean`, `array`, `object`.
+* Numeric constraints (`minimum`, `maximum`) must be numbers.
+* Enum values must be arrays.
+
+.Compatibility rules
+
+.PROMPT_TEMPLATE backward compatibility
+[%header,cols="3,1,3"]
+|===
+|Change type
+|Allowed
+|Reason
+
+|Add new optional variable
+|Yes
+|Existing consumers can ignore new variables
+
+|Remove unused variable (not in template)
+|Yes
+|No impact on template rendering
+
+|Remove used variable (in template)
+|No
+|Breaks template rendering
+
+|Change variable type
+|No
+|Existing variable values might become invalid
+
+|Make optional variable required
+|No
+|Existing consumers might not provide the value
+
+|Narrow enum values (remove options)
+|No
+|Existing valid values might become invalid
+
+|Change template text (same variables)
+|Yes
+|Variable contract remains intact
+
+|Remove output schema property
+|No
+|Consumers might depend on removed properties
+|===
+
+.Template variable extraction
+
+The system extracts variables from template text by using the regex pattern `\{\{(\w+)\}\}`:
+
+[source,typescript]
+----
+function extractTemplateVariables(template: string): string[] {
+    const regex = /\{\{(\w+)\}\}/g;
+    const variables: string[] = [];
+    let match;
+    while ((match = regex.exec(template)) !== null) {
+        if (!variables.includes(match[1])) {
+            variables.push(match[1]);
+        }
+    }
+    return variables;
+}
+----
+
+.Canonicalization
+
+The canonicalization process converts PROMPT_TEMPLATE content to YAML format with the following characteristics:
+
+* Recursively sorted object keys
+* Preserved multiline template strings
+* Consistent quoting style
+
+// ref-llm-artifact-types-model-schema-implementation
+:_mod-docs-content-type: REFERENCE

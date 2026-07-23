@@ -1,0 +1,22 @@
+[id="using-the-registry-sdk_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= using-the-registry-sdk_{context}
+
+= Managing {registry} content using an SDK
+
+[role="_abstract"]
+You can write a {registry} client application in Java, Typescript, Python, or Golang to manage artifacts stored in {registry}.
+
+* xref:registry-sdk-intro_{context}[]
+* xref:writing-registry-sdk_{context}[]
+* xref:registry-sdk-config_{context}[]
+
+//INCLUDES
+
+
+// Metadata created by nebel
+
+// con-registry-sdk-intro
+include::../modules/registry-sdk-intro.adoc[leveloffset=+1]
+include::../modules/writing-registry-sdk.adoc[leveloffset=+1]
+include::../modules/registry-sdk-config.adoc[leveloffset=+1]

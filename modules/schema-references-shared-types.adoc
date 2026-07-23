@@ -1,0 +1,119 @@
+[id="schema-references-shared-types_{context}"]
+:_mod-docs-content-type: CONCEPT
+= schema-references-shared-types_{context}
+
+== Schema references for shared types
+
+[role="_abstract"]
+Shared schema references reduce duplication and improve consistency in event-driven architectures. When multiple schemas use the same data structure, you define that structure once as a stand-alone artifact in {registry} and reference it from every schema that needs it.
+
+**Intra-schema and cross-schema references**
+
+An _intra-schema reference_ points to a type defined within the same artifact file. Avro schemas support intra-schema references natively through nested record definitions.
+
+A _cross-schema reference_ points to a type registered as a separate artifact in {registry}. Cross-schema references maintain a single source of truth for shared types and enable reuse across multiple schemas.
+
+{registry} supports cross-schema references for the following artifact types:
+
+* *Avro*: references by using namespace-qualified type names
+* *JSON Schema*: references by using `$ref` statements
+* *Protobuf*: references by using `import` statements
+* *OpenAPI and AsyncAPI*: references by using `$ref` statements
+
+**Shared type example with Avro**
+
+Consider a `MonetaryAmount` record that represents a monetary value with currency. Trade events, order events, and invoice events all use this type. Rather than duplicating the definition in each schema, you register `MonetaryAmount` as a stand-alone artifact and reference the artifact from every schema that needs it.
+
+The following example shows the shared `MonetaryAmount` artifact:
+
+[source,json]
+----
+{
+  "namespace": "com.example.common",
+  "type": "record",
+  "name": "MonetaryAmount",
+  "fields": [
+    {
+      "name": "amount",
+      "type": {
+        "type": "bytes",
+        "logicalType": "decimal",
+        "precision": 18,
+        "scale": 2
+      }
+    },
+    {
+      "name": "currency",
+      "type": "string"
+    }
+  ]
+}
+----
+
+The following `TradeKey` schema references `MonetaryAmount`:
+
+[source,json]
+----
+{
+  "namespace": "com.example.trade",
+  "type": "record",
+  "name": "TradeKey",
+  "fields": [
+    {
+      "name": "tradeId",
+      "type": "string"
+    },
+    {
+      "name": "price",
+      "type": "com.example.common.MonetaryAmount"
+    },
+    {
+      "name": "exchange",
+      "type": "string"
+    }
+  ]
+}
+----
+
+The following `Order` schema also references `MonetaryAmount`:
+
+[source,json]
+----
+{
+  "namespace": "com.example.order",
+  "type": "record",
+  "name": "Order",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "total",
+      "type": "com.example.common.MonetaryAmount"
+    },
+    {
+      "name": "items",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
+    }
+  ]
+}
+----
+
+When you register `TradeKey` or `Order` in {registry}, you specify the artifact reference. The reference maps the `com.example.common.MonetaryAmount` type name to the group ID, artifact ID, and version of the `MonetaryAmount` artifact. {registry} stores each reference alongside the artifact content.
+
+You can register artifacts with references by using the {registry} REST API or the Maven plug-in. For details, see {managing-registry-artifacts-api} and {managing-registry-artifacts-maven}.
+
+After you establish shared types, choose strategies for evolving schemas safely as requirements change.
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-overview}
+* {managing-registry-artifacts-api}
+* {managing-registry-artifacts-maven}
+* https://github.com/Apicurio/apicurio-registry/tree/main/examples/serdes-with-references[SerDes with references demonstration]
+
+// ref-schema-evolution-strategies

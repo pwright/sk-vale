@@ -1,0 +1,23 @@
+[id="registry-events_{context}"]
+= {registry} change events and the outbox pattern
+
+
+[role="_abstract"]
+{registry} emits change events whenever artifacts, versions, groups, or rules are created, updated, or deleted. These events enable integration with external systems for auditing, automation, and event-driven workflows.
+
+This chapter explains the event system architecture, available event types, and how to configure event delivery for your storage variant:
+
+* xref:registry-events-overview_{context}[]
+* xref:registry-event-types-reference_{context}[]
+* xref:registry-events-architecture_{context}[]
+* xref:configuring-events-sql-debezium_{context}[]
+* xref:configuring-events-kafkasql_{context}[]
+* xref:registry-events-config-reference_{context}[]
+
+
+include::../modules/registry-events-overview.adoc[leveloffset=+1]
+include::../modules/registry-event-types-reference.adoc[leveloffset=+1]
+include::../modules/registry-events-architecture.adoc[leveloffset=+1]
+include::../modules/configuring-events-sql-debezium.adoc[leveloffset=+1]
+include::../modules/configuring-events-kafkasql.adoc[leveloffset=+1]
+include::../modules/registry-events-config-reference.adoc[leveloffset=+1]

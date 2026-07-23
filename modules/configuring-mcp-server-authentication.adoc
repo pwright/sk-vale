@@ -1,0 +1,71 @@
+[id="configuring-mcp-server-authentication_{context}"]
+= Configuring MCP server authentication
+
+
+[role="_abstract"]
+You can configure the {registry} MCP server to authenticate with {registry} by using OAuth2 client credentials. You must configure authentication when {registry} is secured with an OIDC provider such as {keycloak}.
+
+.Prerequisites
+* {registry} is configured with OIDC authentication.
+* An OAuth2 client is configured in your OIDC provider with client credentials grant type.
+* You know the token endpoint URL, client ID, and client secret.
+
+.Procedure
+. Update the Claude Desktop MCP configuration to include OAuth2 credentials.
++
+If you are using the Docker or Podman image, add environment variables to the `args` array:
++
+[source,json]
+----
+{
+  "mcpServers": {
+    "Apicurio Registry (docker)": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-e", "REGISTRY_URL=<registry-url>",
+        "-e", "APICURIO_MCP_AUTH_ENABLED=true",
+        "-e", "APICURIO_MCP_AUTH_TOKEN_ENDPOINT=http://localhost:8090/realms/registry/protocol/openid-connect/token",
+        "-e", "APICURIO_MCP_AUTH_CLIENT_ID=registry-api",
+        "-e", "APICURIO_MCP_AUTH_CLIENT_SECRET=<your-client-secret>",
+        "quay.io/apicurio/apicurio-registry-mcp-server:latest"
+      ]
+    }
+  }
+}
+----
++
+Replace `<your-client-secret>` with the client secret from your OIDC provider.
++
+If you built the MCP server from source, add system properties before the `-jar` argument:
++
+[source,json]
+----
+{
+  "mcpServers": {
+    "Apicurio Registry (jar)": {
+      "command": "java",
+      "args": [
+        "-Dapicurio.mcp.auth.enabled=true",
+        "-Dapicurio.mcp.auth.token-endpoint=http://localhost:8090/realms/registry/protocol/openid-connect/token",
+        "-Dapicurio.mcp.auth.client-id=registry-api",
+        "-Dapicurio.mcp.auth.client-secret=<your-client-secret>",
+        "-jar",
+        "<path-to-repo>/apicurio-registry/mcp/target/apicurio-registry-mcp-server-<version>-runner.jar"
+      ]
+    }
+  }
+}
+----
++
+Replace `<your-client-secret>` with the client secret from your OIDC provider.
+
+. Optional: Add the scope property if your OIDC provider requires a specific scope:
++
+* Docker: `"-e", "APICURIO_MCP_AUTH_SCOPE=openid"`
+* JAR: `"-Dapicurio.mcp.auth.scope=openid"`
+
+. Restart Claude Desktop to apply the changes.
+
+// proc-configuring-mcp-server-tls
+:_mod-docs-content-type: PROCEDURE

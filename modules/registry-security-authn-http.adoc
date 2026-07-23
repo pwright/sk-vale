@@ -1,0 +1,44 @@
+[id="registry-security-authn-http_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} authentication by using HTTP basic
+
+[role="_abstract"]
+By default, {registry} supports authentication by using OpenID Connect. Users or API clients must obtain an access token to make authenticated calls to the {registry} REST API. However, because some tools do not support OpenID Connect, you can also configure {registry} to support HTTP basic authentication by setting the following configuration options to `true`:
+
+.Configuration for {registry} HTTP basic authentication
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+|`QUARKUS_OIDC_TENANT_ENABLED`
+|`quarkus.oidc.tenant-enabled`
+|Boolean
+|`false`
+|`APICURIO_AUTHN_BASIC_CLIENT_CREDENTIALS_ENABLED`
+|`apicurio.authn.basic-client-credentials.enabled`
+|Boolean
+|`false`
+|===
+
+.{registry} HTTP basic client credentials cache expiry
+
+You can also configure the HTTP basic client credentials cache expiry time. By default, when you use HTTP basic authentication, {registry} caches JWT tokens and does not issue a new token when there is no need. You can configure the cache expiry time for JWT tokens, which is set to 10 mins by default.
+
+When you use {keycloak}, set this configuration to your {keycloak} JWT expiry time minus one minute. For example, if you have the expiry time set to `5` mins in {keycloak}, set the following configuration option to `4` mins:
+
+.Configuration for HTTP basic client credentials cache expiry
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+|`APICURIO_AUTHN_BASIC_CLIENT_CREDENTIALS_CACHE_EXPIRATION`
+|`apicurio.authn.basic-client-credentials.cache-expiration`
+|Integer
+|`10`
+|===
+
+

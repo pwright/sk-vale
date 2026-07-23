@@ -1,0 +1,31 @@
+[id="registry-cors-diagnosing_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= registry-cors-diagnosing_{context}
+
+== Diagnosing CORS errors with browser developer tools
+
+:_mod-docs-content-type: PROCEDURE
+
+[role="_abstract"]
+You can use your browser developer tools to identify the cause of CORS errors.
+
+.Prerequisites
+
+* {registry} is installed and running.
+
+.Procedure
+
+. Open your browser developer tools (F12).
+. Go to the *Network* tab.
+. Look for the failed request, which often shows as `(blocked:cors)` or has a red status.
+. Look for a preceding `OPTIONS` request (the preflight) and inspect its response headers.
+. Check whether `Access-Control-Allow-Origin` is present and matches your application's origin.
+. Check whether `Access-Control-Allow-Methods` and `Access-Control-Allow-Headers` include the values your application needs.
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://quarkus.io/guides/http-reference#cors-filter[Quarkus HTTP Reference - CORS Filter]
+* link:https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS[MDN: Cross-Origin Resource Sharing (CORS)]
+* xref:registry-security-settings_{context}[]
+
+

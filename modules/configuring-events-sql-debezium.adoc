@@ -1,0 +1,64 @@
+[id="configuring-events-sql-debezium_{context}"]
+= Configuring events with SQL storage and Debezium
+
+
+[role="_abstract"]
+When using SQL storage with PostgreSQL or MSSQL, you can use Debezium to capture events from the outbox table and publish them to Kafka.
+
+.Prerequisites
+
+* {registry} is deployed with SQL storage using PostgreSQL or MSSQL.
+* A Kafka cluster is available.
+* Debezium is deployed with the Kafka Connect framework.
+
+.Procedure
+
+. Enable logical replication on your PostgreSQL database. Set the following in `postgresql.conf`:
++
+[source]
+----
+wal_level = logical
+----
+
+. Create a Debezium PostgreSQL connector that monitors the outbox table. Use the following connector configuration as a starting point:
++
+[source,json]
+----
+{
+  "name": "registry-outbox-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "<database-host>",
+    "database.port": "5432",
+    "database.user": "<database-user>",
+    "database.password": "<database-password>",
+    "database.dbname": "<database-name>",
+    "topic.prefix": "registry",
+    "schema.include.list": "public",
+    "table.include.list": "public.outbox",
+    "transforms": "outbox",
+    "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter"
+  }
+}
+----
+
+. Deploy the connector to your Kafka Connect cluster:
++
+[source,bash]
+----
+curl -X POST http://<kafka-connect-host>:8083/connectors \
+  -H "Content-Type: application/json" \
+  -d @connector-config.json
+----
+
+. Verify that events are being published by consuming from the output topic:
++
+[source,bash]
+----
+kafka-console-consumer --bootstrap-server <kafka-host>:9092 \
+  --topic outbox.event.registry-events --from-beginning
+----
+
+The Debezium `EventRouter` transformation reads the outbox table columns and routes events to Kafka topics based on the `aggregatetype` column.
+
+

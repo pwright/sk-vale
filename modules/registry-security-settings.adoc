@@ -1,0 +1,27 @@
+[id="registry-security-settings_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-security-settings_{context}
+
+== {registry} authentication and authorization configuration options
+
+:_mod-docs-content-type: REFERENCE
+
+[role="_abstract"]
+{registry} provides authentication options for OpenID Connect with {keycloak} and HTTP basic authentication.
+
+{registry} provides authorization options for role-based and content-based approaches:
+
+* Role-based authorization for default admin, write, and read-only user roles.
+* Content-based authorization for schema or API artifacts, where only the owner of the artifacts or artifact group can update or delete artifacts.
+
+IMPORTANT: All authentication and authorization options in {registry} are disabled by default. Before enabling any of these options, you must first set the `QUARKUS_OIDC_TENANT_ENABLED` option to `true`.
+
+You can configure the following options:
+
+* xref:registry-security-authn-keycloak_{context}[{registry} authentication by using OpenID Connect with {keycloak}]
+* xref:registry-security-authn-http_{context}[{registry} authentication by using HTTP basic]
+* xref:registry-security-rbac-enabled_{context}[{registry} role-based authorization]
+* xref:registry-security-obac-enabled_{context}[{registry} owner-only authorization]
+* xref:registry-security-auth-read_{context}[{registry} authenticated read access]
+* xref:registry-security-anon-read_{context}[{registry} anonymous read-only access]
+

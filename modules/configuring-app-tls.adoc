@@ -1,0 +1,27 @@
+[id="configuring-app-tls_{context}"]
+:_mod-docs-content-type: REFERENCE
+= configuring-app-tls_{context}
+
+== Application TLS configuration
+
+[role="_abstract"]
+To configure TLS certificates for the {registry} application, provide keystore references in the `ApicurioRegistry3` custom resource.
+
+[source,yaml]
+----
+spec:
+  app:
+    tls:
+      keystoreSecretRef:
+        name: registry-tls
+        key: keystore.p12
+      keystorePasswordSecretRef:
+        name: registry-tls
+        key: keystore.password
+----
+
+[role="_additional-resources"]
+.Additional resources
+
+* xref:getting-started/assembly-operator-config-reference.adoc[]
+* {registry-overview}

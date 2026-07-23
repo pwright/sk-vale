@@ -1,0 +1,13 @@
+[id="concept-artifact-reference_{context}"]
+:_mod-docs-content-type: CONCEPT
+= concept-artifact-reference_{context}
+
+== Artifact reference
+
+[role="_abstract"]
+An *artifact reference* is a reference from one artifact to another.
+
+References model relationships such as `$ref` in JSON Schema, `import` in Protobuf, or type references in Avro.
+When an artifact version contains references, {registry} stores them to support referential integrity validation.
+
+// con-concept-labels

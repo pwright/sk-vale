@@ -1,0 +1,32 @@
+[id="intro-to-the-registry_{context}"]
+= Introduction to {registry}
+
+//If the assembly covers a task, start the title with a verb in the gerund form, such as Creating or Configuring.
+
+[role="_abstract"]
+This chapter introduces {registry} concepts and features and provides details on the supported artifact types that are stored in the registry:
+
+* xref:registry-overview_{context}[]
+* xref:registry-artifacts_{context}[]
+* xref:registry-web-console_{context}[]
+* xref:registry-rest-api_{context}[]
+* xref:registry-storage_{context}[]
+* xref:client-serde_{context}[]
+* xref:kafka-connect_{context}[]
+* xref:registry-demo_{context}[]
+* xref:registry-distros_{context}[]
+
+//INCLUDES
+
+
+// Metadata created by nebel
+
+include::../modules/registry-overview.adoc[leveloffset=+1]
+include::../modules/registry-artifacts.adoc[leveloffset=+1]
+include::../modules/registry-web-console.adoc[leveloffset=+1]
+include::../modules/registry-rest-api.adoc[leveloffset=+1]
+include::../modules/registry-storage.adoc[leveloffset=+1]
+include::../modules/client-serde.adoc[leveloffset=+1]
+include::../modules/kafka-connect.adoc[leveloffset=+1]
+include::../modules/registry-demo.adoc[leveloffset=+1]
+include::../modules/registry-distros.adoc[leveloffset=+1]

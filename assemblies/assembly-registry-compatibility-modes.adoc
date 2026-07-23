@@ -1,0 +1,29 @@
+[id="registry-compatibility-modes_{context}"]
+= {registry} schema compatibility modes
+
+
+[role="_abstract"]
+In {registry}, compatibility modes determine which changes are permitted when you upload a new version of an artifact. Because these rules vary depending on the data format (such as Avro, JSON Schema, Protobuf, OpenAPI, or XSD), each artifact type has its own specific criteria for what constitutes a compatible or incompatible change.
+
+* xref:registry-compatibility-overview_{context}[]
+* xref:registry-compatibility-mode-descriptions_{context}[]
+* xref:registry-compatibility-avro_{context}[]
+* xref:registry-compatibility-json-schema_{context}[]
+* xref:registry-compatibility-protobuf_{context}[]
+* xref:registry-compatibility-openapi_{context}[]
+* xref:registry-compatibility-xsd_{context}[]
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-rule-reference}
+
+
+// ref-registry-compatibility-overview
+:_mod-docs-content-type: REFERENCE
+include::../modules/registry-compatibility-overview.adoc[leveloffset=+1]
+include::../modules/registry-compatibility-mode-descriptions.adoc[leveloffset=+1]
+include::../modules/registry-compatibility-avro.adoc[leveloffset=+1]
+include::../modules/registry-compatibility-json-schema.adoc[leveloffset=+1]
+include::../modules/registry-compatibility-protobuf.adoc[leveloffset=+1]
+include::../modules/registry-compatibility-openapi.adoc[leveloffset=+1]
+include::../modules/registry-compatibility-xsd.adoc[leveloffset=+1]

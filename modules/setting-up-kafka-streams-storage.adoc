@@ -1,0 +1,112 @@
+[id="setting-up-kafka-streams-storage_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= setting-up-kafka-streams-storage_{context}
+
+== Configuring {registry} with Kafka storage on OpenShift
+
+[role="_abstract"]
+You can configure Kafka-based storage for {registry} by using {kafka-streams} on OpenShift. The `kafkasql` storage option uses Kafka as the primary data store, with an embedded H2 database as a local SQL store that {registry} rebuilds from the Kafka journal on each startup. This storage option is suitable for production environments when you configure `persistent` storage for the Kafka cluster on OpenShift.
+
+You can install {registry} in an existing Kafka cluster or create a new Kafka cluster, depending on your environment.
+
+.Prerequisites
+* An OpenShift cluster with cluster administrator access is configured.
+* {registry} is installed. See {installing-the-registry-openshift}.
+* {kafka-streams} is installed. See xref:installing-kafka-streams-operatorhub_{context}[].
+
+.Procedure
+
+. In the OpenShift Container Platform web console, log in using an account with cluster administrator privileges.
+
+. If you do not already have a Kafka cluster configured, create a new Kafka cluster using {kafka-streams}. For example, in the OpenShift OperatorHub:
++
+.. Click *Installed Operators* and then *{kafka-streams}*.
+.. Under *Provided APIs* and then *Kafka*, click *Create Instance* to create a new Kafka cluster.
+.. Edit the custom resource definition as appropriate, and click *Create*.
++
+WARNING: The default example creates a cluster with 3 Zookeeper nodes and 3 Kafka nodes with `ephemeral` storage. This temporary storage is suitable for development and testing only, and not for production. For more details, see link:{LinkDeployStreamsOpenShift}[{NameDeployStreamsOpenShift}].
+
+. After the cluster is ready, click *Provided APIs* > *Kafka* > *my-cluster* > *YAML*.
+
+. In the `status` block, make a copy of the `bootstrapServers` value, which you will use later to deploy {registry}. For example:
++
+[source,yaml]
+----
+status:
+  ...
+  conditions:
+  ...
+  listeners:
+    - addresses:
+        - host: my-cluster-kafka-bootstrap.my-project.svc
+          port: 9092
+      bootstrapServers: 'my-cluster-kafka-bootstrap.my-project.svc:9092'
+      type: plain
+  ...
+----
+
+. Click *Installed Operators* > *{registry}* > *ApicurioRegistry3* > *Create ApicurioRegistry3*.
+. Paste in the following custom resource definition, but use your `bootstrapServers` value that you copied earlier:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-apicurioregistry-kafkasql
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: "my-cluster-kafka-bootstrap.my-project.svc:9092"
+    ingress:
+      host: example-apicurioregistry-kafkasql.my-project.my-domain-name.com
+  ui:
+    ingress:
+      host: example-apicurioregistry-kafkasql-ui.my-project.my-domain-name.com
+----
+
+. Click *Create* and wait for the {registry} route to be created on OpenShift.
+
+. Click *Networking* > *Route* to access the new route for the {registry} web console. For example:
++
+[source]
+----
+http://example-apicurioregistry-kafkasql.my-project.my-domain-name.com/
+----
+
+. To configure the Kafka topic that {registry} uses to store data, click *Installed Operators* > *{kafka-streams}* > *Provided APIs* > *Kafka Topic* > *kafkasql-journal* > *YAML*. For example:
++
+[source,yaml]
+----
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kafkasql-journal
+  labels:
+    strimzi.io/cluster: my-cluster
+  namespace: ...
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    cleanup.policy: delete
+    retention.ms: -1
+    retention.bytes: -1
+----
++
+WARNING: The journal topic must use `cleanup.policy: delete` with infinite retention (`retention.ms: -1` and `retention.bytes: -1`) to prevent data loss. {registry} will check these settings on startup and refuse to start if they are not configured correctly.
+
+[role="_additional-resources"]
+.Additional resources
+
+ifdef::apicurio-registry[]
+* https://strimzi.io/docs/overview/latest/[Strimzi documentation]
+endif::[]
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_installing-the-registry.adoc
+
+// ref-registry-kafka-topic-names

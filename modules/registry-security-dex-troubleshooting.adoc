@@ -1,0 +1,32 @@
+[id="registry-security-dex-troubleshooting_{context}"]
+:_mod-docs-content-type: REFERENCE
+= registry-security-dex-troubleshooting_{context}
+
+== Dex troubleshooting
+
+[role="_abstract"]
+* *"Invalid client credentials" on UI login*: The UI (`oidc-client-ts`) runs in the browser and cannot send a client secret. Use a *public* Dex client (`public: true`, no secret) for the UI. A confidential client always fails.
+* *403 Forbidden on API calls after UI login*: Two common causes: (1) *Audience mismatch* — the UI gets tokens with `aud: "apicurio-registry-ui"` but the backend expects `aud: "apicurio-registry"`. Fix: set both `appClientId` and `uiClientId` to the same public client ID. (2) *Missing `groups` scope* — the default UI scope does not include `groups`. Fix: set `APICURIO_UI_AUTH_OIDC_SCOPE` to `openid profile email groups`.
+* *Groups not appearing in the token*: Verify that both `QUARKUS_OIDC_AUTHENTICATION_SCOPES` (backend) and `APICURIO_UI_AUTH_OIDC_SCOPE` (UI) include `groups`. Decode the JWT to inspect: `echo $TOKEN | cut -d. -f2 | base64 -d | jq .`
+* *"Unregistered redirect_uri" on page refresh*: The UI redirects to `/dashboard` after login. Add `\https://<registry-ui-route>/dashboard` to the Dex client's redirect URIs.
+* *Silent token refresh returns 400*: `oidc-client-ts` uses the current page URL (with stale `?code=...&state=...` params) as the redirect URI. Fix: set `redirectUri` explicitly in the {registry} CR auth config.
+* *"No end session endpoint" on logout*: Dex does not implement OIDC RP-Initiated Logout. The local session is still cleared, but `signoutRedirect` fails. The error is a known Dex limitation and is non-blocking.
+* *CORS errors in browser console*: The UI cannot fetch `/.well-known/openid-configuration` from Dex. Add the UI route origin to `web.allowedOrigins` in the Dex config.
+* *`InvalidJwtSignatureException` after Dex restart*: Dex generates new signing keys on restart. Old tokens become invalid. Users must re-authenticate. For production, configure persistent signing keys.
+* *`invalid_client` when exchanging authorization code*: If the client secret contains special characters (`+`, `/`, `=`), use `--data-urlencode` instead of `-d` in curl.
+* *Owner field is empty*: Check that `QUARKUS_OIDC_TOKEN_PRINCIPAL_CLAIM` is set to a claim that Dex populates, such as `email`, `name`, or `sub`.
+* *UI redirects to Dex but gets an error*: Check Dex logs (`{kubernetes-client} logs -n dex deploy/dex`). The cause is usually a redirect URI mismatch or connector misconfiguration.
+* *`client_credentials` returns `unsupported_grant_type`*: Dex added this grant type in link:https://github.com/dexidp/dex/pull/4583[Dex PR #4583] (merged March 3, 2026) but did not include it in v2.45.1 or earlier. You need Dex >= v2.46.0 or a build from `master`.
+* *"OIDC Server is not available"*: The {registry} pod cannot reach Dex. Check DNS resolution, network policies, and TLS trust configuration.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:registry-security-settings_{context}[]
+* link:https://dexidp.io/docs/connectors/[Dex connectors documentation]
+* link:https://dexidp.io/docs/[Dex documentation]
+
+
+
+
+
+// ref-registry-security-settings

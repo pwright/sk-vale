@@ -1,0 +1,81 @@
+[id="deploying-registry-kafkasql_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= deploying-registry-kafkasql_{context}
+
+== Deploying {registry} with KafkaSQL storage
+
+[role="_abstract"]
+You can deploy {registry} with KafkaSQL storage. KafkaSQL uses Apache Kafka as the primary
+data store, with an embedded H2 database as a local SQL store that {registry} rebuilds from the Kafka journal on each startup. This configuration is suitable for production environments
+when you configure persistent Kafka storage.
+
+.Prerequisites
+* You must have cluster administrator access to an {kubernetes} cluster.
+* You must have already installed the {operator}. See {installing-the-registry-openshift}.
+* You must have a Kafka cluster available. For OpenShift, see {installing-the-registry-storage-openshift}.
+
+.Procedure
+
+. Obtain the Kafka bootstrap servers address from your Kafka cluster. For example, with {kafka-streams}:
+`my-cluster-kafka-bootstrap.my-project.svc:9092`
+
+. In the {kubernetes} web console, click *Installed Operators* > *{registry}* > *ApicurioRegistry3* >
+*Create ApicurioRegistry3*.
+
+. Paste in the following custom resource definition, adjusting the `bootstrapServers` value:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry-kafkasql
+spec:
+  app:
+    storage:
+      type: kafkasql
+      kafkasql:
+        bootstrapServers: my-cluster-kafka-bootstrap.my-project.svc:9092
+    ingress:
+      host: registry.example.com
+  ui:
+    ingress:
+      host: registry-ui.example.com
+----
+
+. Click *Create* and wait for the {registry} deployment to be created.
+
+. If using {kafka-streams}, configure the Kafka topic that {registry} uses (named `kafkasql-journal` by default)
+with delete cleanup policy and infinite retention:
++
+[source,yaml]
+----
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kafkasql-journal
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    cleanup.policy: delete
+    retention.ms: -1
+    retention.bytes: -1
+----
++
+WARNING: You must configure the Kafka topic used by {registry} with `cleanup.policy: delete` and infinite retention
+(`retention.ms: -1` and `retention.bytes: -1`), otherwise data loss might occur.
+
+.Verification
+
+* Access the {registry} web console and create a test artifact to verify that data is being persisted to Kafka.
+* Restart the {registry} pod and verify that the artifact still exists after the cache is rebuilt from Kafka.
+
+[role="_additional-resources"]
+.Additional resources
+
+* xref:getting-started/assembly-installing-registry-storage-openshift.adoc#setting-up-kafka-streams-storage_{context}[Configuring {registry} with Kafka storage on OpenShift]
+
+// ref-configuring-kafkasql-tls

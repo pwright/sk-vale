@@ -1,0 +1,124 @@
+[id="validating-data-avro-generated-classes_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= validating-data-avro-generated-classes_{context}
+
+== Validating data with Avro generated classes
+
+[role="_abstract"]
+You can validate data at multiple points in the pipeline when you use Avro generated classes with {registry}. Avro provides two record types, each with different validation behavior:
+
+* *`SpecificRecord`* (Avro-generated classes): generated constructors and builders enforce field types and required fields at construction time.
+* *`GenericRecord`*: Avro validates structural compliance when the `DatumWriter` serializes the record.
+
+Neither approach validates business rules or semantic constraints. To catch invalid data before it reaches consumers, you combine three validation layers:
+
+* *SerDes validation*: the {registry} Kafka SerDes validates schema compatibility at serialization and deserialization time. The serializer resolves the schema from {registry}, and the deserializer verifies that the data matches the reader schema. If the schema versions are incompatible, the SerDes throws an exception.
+* *Maven plug-in pre-registration*: you register schemas before deployment by using the {registry} Maven plug-in. When you configure compatibility rules on the artifact, {registry} rejects any new version that violates the rules. Pre-registration catches breaking changes during the build rather than at runtime.
+* *Application-level validation*: you implement custom validators in your application code to enforce business rules that schema-level validation cannot express. For example, you validate that a `price` field is positive or that a `country` field contains a valid ISO 3166 code.
+
+.Prerequisites
+* You have a running {registry} instance.
+* You have a Maven project that uses Avro generated classes.
+* You have configured compatibility rules on your schema artifact in {registry}.
+
+.Procedure
+. Configure your Maven `pom.xml` to register the Avro schema during the build. The Maven plug-in validates the schema against existing compatibility rules before it registers a new version:
++
+[source,xml]
+----
+<plugin>
+  <groupId>io.apicurio</groupId>
+  <artifactId>apicurio-registry-maven-plugin</artifactId>
+  <version>${apicurio.version}</version>
+  <executions>
+    <execution>
+      <phase>generate-sources</phase>
+      <goals>
+        <goal>register</goal>
+      </goals>
+      <configuration>
+        <registryUrl>http://MY-REGISTRY-URL/apis/registry/v3</registryUrl>
+        <artifacts>
+          <artifact>
+            <groupId>my-group</groupId>
+            <artifactId>UserEvent</artifactId>
+            <artifactType>AVRO</artifactType>
+            <file>${project.basedir}/src/main/resources/schemas/user-event.avsc</file>
+            <ifExists>FIND_OR_CREATE_VERSION</ifExists>
+          </artifact>
+        </artifacts>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+----
++
+When you run `mvn package`, the plug-in attempts to register the schema. If the schema violates the compatibility rules configured on the artifact, the build fails with a compatibility error.
+
+. Configure the {registry} Kafka SerDes in your producer application to validate schema compatibility at runtime:
++
+[source,java]
+----
+import io.apicurio.registry.serde.avro.AvroKafkaSerializer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+
+Properties props = new Properties();
+props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+props.put(ProducerConfig.CLIENT_ID_CONFIG, "my-producer");
+props.put(ProducerConfig.ACKS_CONFIG, "all");
+props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+    org.apache.kafka.common.serialization.StringSerializer.class.getName());
+props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+    AvroKafkaSerializer.class.getName());
+props.put("apicurio.registry.url", "http://MY-REGISTRY-URL/apis/registry/v3");
+props.put("apicurio.registry.auto-register", "true");
+props.put("apicurio.registry.artifact-resolver-strategy",
+    "io.apicurio.registry.serde.strategy.TopicIdStrategy");
+----
++
+The `AvroKafkaSerializer` resolves the writer schema from {registry} and serializes the record. The key properties in this configuration are:
++
+* `artifact-resolver-strategy`: determines how the serializer maps each Kafka message to an artifact in {registry}. The default `TopicIdStrategy` uses the topic name as the artifact ID.
+* `auto-register`: when enabled, the serializer registers new schemas automatically, and {registry} applies the configured compatibility rules.
++
+IMPORTANT: When you set `apicurio.registry.auto-register` to `true`, any producer can register new schemas in {registry}. In production, pre-register schemas during your CI/CD pipeline and set `apicurio.registry.auto-register` to `false`. If you must use auto-registration, configure authentication and role-based access control (RBAC) to restrict write access. For details, see xref:configuring-registry-security_{context}[].
++
+IMPORTANT: The `apicurio.registry.url` property is required. The serializer throws an `IllegalArgumentException` at startup if you omit the property. The serializer caches schemas and retries failed registry requests with a backoff interval. For default values and tuning options, see {registry-client-serdes-config}. To handle registry unavailability, set `apicurio.registry.fault-tolerant-refresh` to `true`.
+
+. Add application-level validation in your producer code to enforce business rules before serialization:
++
+[source,java]
+----
+import com.example.events.UserEvent;
+
+public UserEvent createValidatedEvent(String userId, String action) {
+    // Validate business rules before serialization
+    if (userId == null || userId.isBlank()) {
+        throw new IllegalArgumentException("userId must not be blank");
+    }
+    // VALID_ACTIONS is a Set<String> defined elsewhere, for example: Set.of("LOGIN", "LOGOUT", "PURCHASE")
+    if (action == null || !VALID_ACTIONS.contains(action)) {
+        throw new IllegalArgumentException("action must be one of: " + VALID_ACTIONS);
+    }
+
+    return UserEvent.newBuilder()
+        .setUserId(userId)
+        .setAction(action)
+        .build();
+}
+----
++
+Avro generated classes enforce structural constraints (field types, required fields) at construction time. You add explicit checks for business-level constraints that the schema cannot express.
+
+. Build and test your project to verify that all three validation layers work together:
++
+[source,bash]
+----
+mvn clean package
+----
++
+A successful build confirms that the schema is compatible with the version registered in {registry}. At runtime, the SerDes validates structural compatibility, and your application code enforces business rules.
++
+These validation layers apply to any Kafka producer. If your architecture includes CDC or the outbox pattern, you can extend schema lifecycle management to cover those integration points.
+
+// con-schema-event-driven-integration

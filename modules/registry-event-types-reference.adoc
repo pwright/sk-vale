@@ -1,0 +1,137 @@
+[id="registry-event-types-reference_{context}"]
+= Event types reference
+
+
+[role="_abstract"]
+{registry} defines the following event types. Each event includes a JSON payload with details about the change.
+
+[discrete]
+=== Artifact events
+
+.Artifact event types
+[cols="1,2",options="header"]
+|===
+|Event type
+|Description
+
+|`ARTIFACT_CREATED`
+|A new artifact was registered.
+
+|`ARTIFACT_DELETED`
+|An artifact and all its versions were deleted.
+
+|`ARTIFACT_METADATA_UPDATED`
+|An artifact's name, description, or owner was updated.
+|===
+
+[discrete]
+=== Artifact version events
+
+.Artifact version event types
+[cols="1,2",options="header"]
+|===
+|Event type
+|Description
+
+|`ARTIFACT_VERSION_CREATED`
+|A new version of an artifact was created.
+
+|`ARTIFACT_VERSION_DELETED`
+|An artifact version was deleted.
+
+|`ARTIFACT_VERSION_METADATA_UPDATED`
+|A version's metadata (name, description, labels) was updated.
+
+|`ARTIFACT_VERSION_STATE_CHANGED`
+|A version's lifecycle state changed (for example, from `ENABLED` to `DEPRECATED`).
+|===
+
+[discrete]
+=== Group events
+
+.Group event types
+[cols="1,2",options="header"]
+|===
+|Event type
+|Description
+
+|`GROUP_CREATED`
+|A new group was created.
+
+|`GROUP_DELETED`
+|A group was deleted.
+
+|`GROUP_METADATA_UPDATED`
+|A group's metadata was updated.
+|===
+
+[discrete]
+=== Rule events
+
+.Rule event types
+[cols="1,2",options="header"]
+|===
+|Event type
+|Description
+
+|`GLOBAL_RULE_CONFIGURED`
+|A global compatibility or validity rule was created, updated, or deleted.
+
+|`GROUP_RULE_CONFIGURED`
+|A group-level rule was created, updated, or deleted.
+
+|`ARTIFACT_RULE_CONFIGURED`
+|An artifact-level rule was created, updated, or deleted.
+|===
+
+[discrete]
+=== Event payload structure
+
+All events share a common base structure:
+
+[source,json]
+----
+{
+  "id": "<uuid>",
+  "eventType": "<EVENT_TYPE>",
+  "groupId": "<group-id>",
+  "artifactId": "<artifact-id>"
+}
+----
+
+Additional fields vary by event type:
+
+* *Version events* include a `version` field.
+* *State change events* include `oldState` and `newState` fields.
+* *Metadata update events* include `name`, `description`, and `owner` fields where applicable.
+* *Rule events* include `ruleType` and `rule` (the rule configuration) fields.
+
+.Example: ARTIFACT_VERSION_CREATED payload
+[source,json]
+----
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "eventType": "ARTIFACT_VERSION_CREATED",
+  "groupId": "com.example",
+  "artifactId": "my-schema",
+  "version": "1.2.0",
+  "name": "My Schema",
+  "description": "Updated with new fields"
+}
+----
+
+.Example: ARTIFACT_VERSION_STATE_CHANGED payload
+[source,json]
+----
+{
+  "id": "550e8400-e29b-41d4-a716-446655440001",
+  "eventType": "ARTIFACT_VERSION_STATE_CHANGED",
+  "groupId": "com.example",
+  "artifactId": "my-schema",
+  "version": "1.0.0",
+  "oldState": "ENABLED",
+  "newState": "DEPRECATED"
+}
+----
+
+

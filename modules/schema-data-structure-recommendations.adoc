@@ -1,0 +1,93 @@
+[id="schema-data-structure-recommendations_{context}"]
+:_mod-docs-content-type: REFERENCE
+= schema-data-structure-recommendations_{context}
+
+== Data structure recommendations for evolvability
+
+[role="_abstract"]
+Use the following recommendations to design Avro schemas that are easier to evolve over time. Choosing the right data structures at the start reduces the number of breaking changes you encounter later.
+
+.Data structure recommendations
+[cols="2,3,4",options="header"]
+|===
+|Recommendation
+|When to use
+|Avro example
+
+|Use enums for fixed, closed sets
+|You have a small, well-defined set of values that rarely changes, such as HTTP methods or order statuses.
+a|
+[source,json]
+----
+{
+  "name": "status",
+  "type": {
+    "type": "enum",
+    "name": "OrderStatus",
+    "symbols": ["PENDING", "SHIPPED", "DELIVERED"]
+  }
+}
+----
+
+|Use strings for open-ended values
+|You have values that change frequently or that external systems control, such as region codes or product categories.
+a|
+[source,json]
+----
+{
+  "name": "region",
+  "type": "string"
+}
+----
+
+|Use `["null", "type"]` with `default: null` for optional fields
+|You want to add a field that might not be present in older messages. All new optional fields must follow this pattern.
+a|
+[source,json]
+----
+{
+  "name": "metadata",
+  "type": ["null", "string"],
+  "default": null
+}
+----
+
+|Wrap related fields in nested records
+|You have a group of fields that belong together logically, such as an address or a set of timestamps. When you group them in a nested record, you can evolve that group independently.
+a|
+[source,json]
+----
+{
+  "name": "address",
+  "type": {
+    "type": "record",
+    "name": "Address",
+    "fields": [
+      {"name": "street", "type": "string"},
+      {"name": "city", "type": "string"},
+      {"name": "zip", "type": "string"}
+    ]
+  }
+}
+----
+|===
+
+**Enum versus string tradeoffs**
+
+Enums enforce a closed set of values at the schema level. Producers that send an unrecognized symbol fail during serialization, which catches errors early. However, removing or reordering enum symbols breaks backward compatibility.
+
+Strings accept any value and impose no schema-level constraints. With strings, you avoid breaking changes when new values appear, but you lose compile-time validation. Use strings when the set of valid values changes frequently or when external systems control the values.
+
+**Record wrapping for compartmentalized evolution**
+
+When you wrap related fields in a nested record, you can evolve the nested record independently of the parent schema. For example, if your `Order` schema contains shipping address fields (`street`, `city`, `zip`, `country`), you wrap those fields in an `Address` record. You can then add a `state` field to `Address` without modifying any other part of the `Order` schema.
+
+Consumers that deserialize the parent schema delegate the address portion to the `Address` reader schema. This delegation keeps compatibility evaluation scoped to the nested record.
+
+With shared types, evolution strategies, and data structures in place, you can control which schema versions consumers can access by using {registry} version states to deprecate and retire schema versions.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:registry-rule-reference_{context}[]
+
+// proc-managing-schema-lifecycle-states

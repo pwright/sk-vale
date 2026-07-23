@@ -1,0 +1,46 @@
+[id="secured-kafka-overview_{context}"]
+:_mod-docs-content-type: CONCEPT
+= secured-kafka-overview_{context}
+
+== Secured Kafka overview
+
+[role="_abstract"]
+When you use KafkaSQL storage, {registry} connects to a Kafka cluster as both a producer and a consumer.
+If your Kafka cluster enforces TLS encryption or SASL authentication, you must configure {registry} with the appropriate security settings.
+
+You can configure secured Kafka connections by using these methods:
+
+* The `ApicurioRegistry3` custom resource `tls` and `auth` sections for TLS and OAUTHBEARER authentication
+* Environment variables in the `spec.app.env` section of the custom resource for SCRAM-SHA-512 authentication
+ifndef::service-registry-downstream[]
+* The {kafka-streams} Kafka Access Operator (available starting with {registry} version 3.2.0) for automatic configuration
+endif::[]
+
+The security protocol that {registry} uses depends on which combination of TLS and authentication you configure:
+
+.Security protocol matrix
+[%header,cols="2,2,3"]
+|===
+|TLS configured
+|Authentication configured
+|Security protocol
+
+|No
+|No
+|`PLAINTEXT`
+
+|Yes
+|No
+|`SSL`
+
+|No
+|Yes
+|`SASL_PLAINTEXT`
+
+|Yes
+|Yes
+|`SASL_SSL`
+|===
+
+
+// ref-secured-kafka-prerequisites

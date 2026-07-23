@@ -1,0 +1,63 @@
+[id="registry-events-architecture_{context}"]
+= Event system architecture
+
+
+[role="_abstract"]
+The event system uses CDI (Contexts and Dependency Injection) events internally to decouple the storage layer from event delivery. When a storage operation modifies state, it fires a CDI event. A storage-specific event processor observes the CDI event and routes it to the appropriate delivery mechanism.
+
+[discrete]
+=== Event flow
+
+----
+Storage operation (e.g., createArtifact)
+       |
+       v
+  Fire CDI event
+  (SqlOutboxEvent or KafkaSqlOutboxEvent)
+       |
+       +---------------------------+
+       |                           |
+       v                           v
+  SQL storage                 KafkaSQL storage
+  SqlEventsProcessor          KafkaSqlEventsProcessor
+       |                           |
+       v                           v
+  Insert into outbox table    Publish to Kafka topic
+  (PostgreSQL / MSSQL)        (registry-events)
+       |                           |
+       v                           |
+  Debezium CDC connector           |
+       |                           |
+       +---------------------------+
+       |
+       v
+  External consumers
+  (Kafka topic: registry-events)
+----
+
+[discrete]
+=== SQL storage: outbox pattern with Debezium
+
+With SQL storage, events are written to an `outbox` database table as part of the same database transaction that performs the registry operation. This guarantees that events are only produced for changes that are actually committed.
+
+The outbox table uses an *insert-then-delete* pattern: the event row is inserted and then immediately deleted within the same transaction. Debezium CDC captures the insert before the deletion takes effect, ensuring the event is published to Kafka without the outbox table growing indefinitely.
+
+The outbox table schema:
+
+[source,sql]
+----
+CREATE TABLE outbox (
+    id            VARCHAR(128)  NOT NULL PRIMARY KEY,
+    aggregatetype VARCHAR(255)  NOT NULL,
+    aggregateid   VARCHAR(255)  NOT NULL,
+    type          VARCHAR(255)  NOT NULL,
+    payload       JSONB         NOT NULL
+);
+----
+
+[discrete]
+=== KafkaSQL storage: direct Kafka publishing
+
+With KafkaSQL storage, events bypass the database entirely and are published directly to a dedicated Kafka topic. The events topic uses a single partition to guarantee total ordering of all events. The event's aggregate ID is used as the Kafka message key.
+
+

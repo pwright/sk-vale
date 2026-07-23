@@ -1,0 +1,22 @@
+[id="enabling-resource-deletion_{context}"]
+:_mod-docs-content-type: REFERENCE
+= enabling-resource-deletion_{context}
+
+== Resource deletion configuration
+
+[role="_abstract"]
+By default, artifacts and groups in {registry} are immutable and cannot be deleted. To enable deletion, set the `resourceDeleteEnabled` feature flag.
+
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry
+spec:
+  app:
+    features:
+      resourceDeleteEnabled: true
+----
+
+// ref-enabling-version-mutability

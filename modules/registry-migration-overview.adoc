@@ -1,0 +1,47 @@
+[id="registry-migration-overview_{context}"]
+= Changes in {registry} 3.x
+
+
+[role="_abstract"]
+{registry} 3.x introduces a redesigned data model, a reworked REST API, and a refreshed SDK ecosystem. These changes require you to deploy a new 3.x instance, migrate your persisted content, and update your client applications and automation.
+
+When you migrate to version 3.x, consider the following changes:
+
+Updated data model and governance::
++
+--
+{registry} 3.x separates artifact metadata from version metadata and introduces first-class support for empty artifacts (artifacts without versions). You can prepare governance metadata, rules, and branch structures before you add the first version. Additional highlights include:
+
+* You manage artifact metadata independently from version metadata.
+* Groups and artifacts support custom labels for improved categorization.
+* You can create and manage custom branches. The system manages the `latest` branch automatically.
+--
+
+Core v3 REST API::
++
+--
+The v3 REST API focuses on consistency and discoverability:
+
+* Group management covers descriptions, owners, labels, and hierarchical rules.
+* New search endpoints at `/search/groups` and `/search/versions` expand discovery.
+* Version-focused endpoints streamline content management and require explicit `Content-Type` headers.
+* A `dryRun` query parameter on artifact and version creation endpoints replaces the former `/test` endpoints. When `dryRun=true`, the API validates the request and returns a response without committing changes.
+* A dedicated Branch API enables multitrack artifact development.
+--
+
+
+Re-engineered Kafka storage::
+The KafkaSQL storage implementation optimizes stability and maintainability. The redesigned architecture reduces startup times for large installations.
+
+Architectural changes in v3::
+KafkaSQL storage uses a true event journaling pattern that requires a different Kafka topic than v2, with different configuration settings. The v3 journal format is incompatible with v2.
+
+Separate UI container::
+You deploy the user interface as a separate container, which provides more deployment flexibility and enables independent scaling of UI and API components.
+
+Generated SDKs powered by Kiota::
+{registry} 3.x ships Kiota-generated SDKs that mirror the REST API structure across languages. Updated libraries for Java, TypeScript, Python, and Go provide lightweight, type-safe clients with minimal dependencies and consistent naming.
+
+
+// con-migration-planning
+:_mod-docs-content-type: CONCEPT

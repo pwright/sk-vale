@@ -1,0 +1,30 @@
+[id="configuring-tls-oidc_{context}"]
+:_mod-docs-content-type: REFERENCE
+= configuring-tls-oidc_{context}
+
+== TLS configuration for OIDC connections
+
+[role="_abstract"]
+When your identity provider uses custom certificates, configure TLS verification in your `ApicurioRegistry3` custom resource.
+
+[source,yaml]
+----
+spec:
+  app:
+    auth:
+      enabled: true
+      appClientId: registry-client-api
+      authServerUrl: https://keycloak.example.com/realms/registry
+      tls:
+        tlsVerificationType: all
+        truststoreSecretRef:
+          name: keycloak-ca-cert
+          key: ca.p12
+        truststorePasswordSecretRef:
+          name: keycloak-ca-cert
+          key: ca.password
+----
+
+NOTE: Set `tlsVerificationType` to `none` to disable TLS verification (not recommended for production).
+
+// ref-configuring-ingress-hostname

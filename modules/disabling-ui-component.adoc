@@ -1,0 +1,24 @@
+[id="disabling-ui-component_{context}"]
+:_mod-docs-content-type: REFERENCE
+= disabling-ui-component_{context}
+
+== Disabling the UI component
+
+[role="_abstract"]
+If you only need the REST API and do not want to deploy the UI, disable the UI component.
+
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry
+spec:
+  app:
+    ingress:
+      host: registry.example.com
+  ui:
+    enabled: false
+----
+
+// ref-configuring-ui-env-vars

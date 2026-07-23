@@ -1,0 +1,77 @@
+[id="deploying-registry-postgresql_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= deploying-registry-postgresql_{context}
+
+== Deploying {registry} with PostgreSQL storage
+
+[role="_abstract"]
+Deploy {registry} with PostgreSQL database storage. This configuration is suitable
+for production environments.
+
+.Prerequisites
+* You must have cluster administrator access to an {kubernetes} cluster.
+* You must have already installed the {operator}. See {installing-the-registry-openshift}.
+* You must have a PostgreSQL database available with a database created for {registry}.
+* You must have created a Kubernetes Secret containing the PostgreSQL database password.
+
+.Procedure
+
+. Create a Secret containing the database password:
++
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgresql-credentials
+type: Opaque
+stringData:
+  password: your-database-password
+----
+
+. In the {kubernetes} web console, click *Installed Operators* > *{registry}* > *ApicurioRegistry3* >
+*Create ApicurioRegistry3*.
+
+. Paste in the following custom resource definition, adjusting the values for your environment:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry-postgresql
+spec:
+  app:
+    storage:
+      type: postgresql
+      sql:
+        dataSource:
+          url: jdbc:postgresql://postgresql.my-project.svc:5432/registry
+          username: registry_user
+          password:
+            name: postgresql-credentials
+            key: password
+    ingress:
+      host: registry.example.com
+  ui:
+    ingress:
+      host: registry-ui.example.com
+----
++
+NOTE: Update the `url` to match your PostgreSQL service name, namespace, port, and database name. Update the
+`username` to match your database user.
+
+. Click *Create* and wait for the {registry} deployment to be created.
+
+.Verification
+
+* Access the {registry} web console and create a test artifact to verify that data is being persisted to
+the database.
+* Restart the {registry} pod and verify that the artifact still exists, confirming that data is persisted.
+
+[role="_additional-resources"]
+.Additional resources
+
+* xref:getting-started/assembly-installing-registry-storage-openshift.adoc#installing-postgresql-operatorhub_{context}[Installing a PostgreSQL database from the OpenShift OperatorHub]
+
+// proc-deploying-registry-mysql

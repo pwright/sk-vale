@@ -1,0 +1,25 @@
+[id="registry-artifact-states_{context}"]
+= {registry} artifact version states
+
+
+[role="_abstract"]
+The valid artifact version states in {registry} are `ENABLED`, `DISABLED`, and `DEPRECATED`.
+
+.{registry} artifact version states
+[%header,cols=2*]
+|===
+|State
+|Description
+|`ENABLED`
+|Basic state, all the operations are available.
+|`DISABLED`
+|The artifact version metadata is viewable and searchable using the {registry} web console, but its content cannot be fetched by any client.
+|`DEPRECATED`
+|The artifact version is fully usable but a header is added to the REST API response whenever the artifact version content is fetched.
+|===
+
+
+
+// Metadata created by nebel
+
+// ref-registry-group-metadata

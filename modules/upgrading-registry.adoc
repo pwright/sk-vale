@@ -1,0 +1,46 @@
+[id="upgrading-registry_{context}"]
+= Upgrading {registry}
+
+
+[role="_abstract"]
+{registry} supports forward upgrades.
+Database schema migrations run automatically on startup and do not require manual intervention.
+
+[IMPORTANT]
+====
+Always back up your database before upgrading to a new minor version.
+See xref:backup-before-upgrade_{context}[].
+====
+
+
+=== Patch upgrades (within a minor version)
+
+Patch upgrades (e.g., 3.3.0 -> 3.3.1) are safe and always recommended.
+They contain only CVE fixes and do not introduce behavioral changes.
+
+.Procedure
+. Back up your database.
+. Replace the {registry} container image with the new patch version or use the minor-series floating tag.
+. Start {registry}. Any required schema migrations run automatically.
+
+
+=== Minor upgrades
+
+Minor upgrades (e.g., 3.3.x -> 3.4.0) include new features, enhancements, and bug fixes.
+
+.Procedure
+. Review the release notes for the target version to understand new features and any behavioral changes.
+. Back up your database.
+. Replace the {registry} container image with the new minor version.
+. Start {registry}. Database schema migrations run automatically.
+. Verify that your client applications work correctly with the new version.
+
+
+=== Skipping minor versions
+
+Upgrading across multiple minor versions (e.g., 3.2.x -> 3.4.x) is supported.
+Database migrations are cumulative and applied in order on startup.
+
+Review the release notes for all intermediate versions to understand the full set of changes.
+
+
