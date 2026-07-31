@@ -19,6 +19,31 @@ ANCHOR_PATTERN = re.compile(r'<a id="([^"]+)"></a>')
 HTML_LINK_PATTERN = re.compile(r"link:([^\[\s]+\.html(?:#[^\[\s]+)?)(\[[^\n]*\])")
 
 
+def should_skip_file(md_file):
+    """Check if markdown file has 'skip: true' in YAML frontmatter.
+
+    Returns True if the file contains YAML frontmatter with 'skip: true',
+    False otherwise (including files with no frontmatter or skip: false).
+    """
+    try:
+        content = md_file.read_text(encoding='utf-8')
+    except Exception:
+        return False
+
+    # Match YAML frontmatter at the start of the file
+    frontmatter_match = re.match(r'^---\s*\n(.*?)\n---\s*\n', content, re.DOTALL | re.MULTILINE)
+    if not frontmatter_match:
+        return False
+
+    yaml_content = frontmatter_match.group(1)
+
+    # Check for skip: true (exact match, case-sensitive)
+    if re.search(r'^\s*skip\s*:\s*true\s*$', yaml_content, re.MULTILINE):
+        return True
+
+    return False
+
+
 def warn(message):
     print(f"WARNING: {message}", file=sys.stderr)
 
@@ -252,6 +277,10 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
 
         if not md_file.exists():
             warn(f"Skipping missing Markdown source: {md_link}")
+            continue
+
+        if should_skip_file(md_file):
+            warn(f"Skipping {md_link}: skip: true in YAML frontmatter")
             continue
 
         namespace = md_file.parent.name
