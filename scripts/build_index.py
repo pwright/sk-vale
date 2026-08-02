@@ -263,16 +263,25 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
     source_root = Path(source_dir).resolve() if source_dir else index_file.parent
     assembly_paths = []
     image_registry = {}
-    md_files = []
 
-    for md_link in merge.extract_md_links(str(index_file)):
+    # Detect file type and extract links accordingly
+    index_file_str = str(index_file)
+    if index_file_str.endswith('.yml') or index_file_str.endswith('.yaml'):
+        md_links = merge.extract_mkdocs_nav_links(index_file_str)
+    else:
+        md_links = merge.extract_md_links(index_file_str)
+
+    # Collect all md_files first for anchor data
+    md_files = []
+    for md_link in md_links:
         md_file = (source_root / md_link).resolve()
         if md_file.exists():
             md_files.append(md_file)
 
     page_ids, fragment_ids = collect_anchor_data(md_files, source_root)
 
-    for md_link in merge.extract_md_links(str(index_file)):
+    # Process each markdown source
+    for md_link in md_links:
         md_file = (source_root / md_link).resolve()
 
         if not md_file.exists():
@@ -315,13 +324,13 @@ def shutil_which(command):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Build AsciiDoc outputs for each local Markdown source referenced by an index.html.in file."
+        description="Build AsciiDoc outputs for each local Markdown source referenced by an index file."
     )
     parser.add_argument(
         "index_file",
         nargs="?",
-        default="../docs-vale/input/index.html.in",
-        help="Path to the HTML index file",
+        default="../skupper-docs/mkdocs.yml",
+        help="Path to the index file (mkdocs.yml, skupper.md, or index.html.in)",
     )
     parser.add_argument(
         "-o",

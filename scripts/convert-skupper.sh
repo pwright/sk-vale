@@ -22,7 +22,7 @@ Options:
   --commit            Commit results to the '$SKUPPER_BRANCH' branch.
   -h, --help          Show this help message.
 
-Note: This script uses skupper.md in the repo root to define which files to convert.
+Note: This script uses mkdocs.yml from upstream (or skupper.md fallback) to define which files to convert.
 EOF
     exit 0
 }
@@ -91,7 +91,20 @@ vale sync
 
 # --- Build site using build_index.py ---
 echo "Step 1/2: Building assemblies and modules from Markdown..."
-python3 "$SCRIPT_DIR/build_index.py" "$REPO_ROOT/skupper.md" --output "$REPO_ROOT" --source-dir "$SOURCE_DIR"
+
+# Use mkdocs.yml from upstream or skupper.md as fallback
+if [[ -f "$SOURCE_DIR/../mkdocs.yml" ]]; then
+    MKDOCS_FILE="$SOURCE_DIR/../mkdocs.yml"
+    echo "Using mkdocs.yml from upstream"
+elif [[ -f "$REPO_ROOT/skupper.md" ]]; then
+    MKDOCS_FILE="$REPO_ROOT/skupper.md"
+    echo "Using fallback skupper.md"
+else
+    echo "ERROR: No index file found (looked for mkdocs.yml or skupper.md)"
+    exit 1
+fi
+
+python3 "$SCRIPT_DIR/build_index.py" "$MKDOCS_FILE" --output "$REPO_ROOT" --source-dir "$SOURCE_DIR"
 
 if [[ ! -d "$REPO_ROOT/assemblies" ]] || [[ ! -d "$REPO_ROOT/modules" ]]; then
     echo "ERROR: build_index.py failed to create assemblies/ and modules/"

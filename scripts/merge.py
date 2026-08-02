@@ -127,6 +127,64 @@ def extract_md_links(index_file):
 
     return md_links
 
+def extract_mkdocs_nav_links(mkdocs_file):
+    """Extracts markdown file paths from mkdocs.yml nav structure.
+
+    Recursively traverses the YAML nav structure and collects all .md file references.
+    Handles both flat file references and nested section structures.
+
+    Args:
+        mkdocs_file: Path to mkdocs.yml file
+
+    Returns:
+        List of .md file paths in the order they appear in nav
+    """
+    try:
+        import yaml
+    except ImportError:
+        raise RuntimeError(
+            "PyYAML is required to parse mkdocs.yml files.\n"
+            "Install it with: pip install PyYAML\n"
+            "Or on Fedora/RHEL: sudo dnf install python3-pyyaml"
+        )
+
+    with open(mkdocs_file, 'r', encoding='utf-8') as f:
+        config = yaml.safe_load(f)
+
+    md_links = []
+    seen = set()
+
+    def extract_from_nav(nav_item):
+        """Recursively extract .md paths from nav structure."""
+        if isinstance(nav_item, str):
+            # Direct file reference: "index.md"
+            # Skip root index.md as it's typically a MkDocs landing page
+            if nav_item.endswith('.md') and nav_item not in seen and nav_item != 'index.md':
+                seen.add(nav_item)
+                md_links.append(nav_item)
+        elif isinstance(nav_item, dict):
+            # Dict format: {"Title": "path.md"} or {"Section": [...]}
+            for key, value in nav_item.items():
+                if isinstance(value, str):
+                    # Single file
+                    # Skip root index.md as it's typically a MkDocs landing page
+                    if value.endswith('.md') and value not in seen and value != 'index.md':
+                        seen.add(value)
+                        md_links.append(value)
+                elif isinstance(value, list):
+                    # Nested section
+                    for item in value:
+                        extract_from_nav(item)
+        elif isinstance(nav_item, list):
+            # List of items
+            for item in nav_item:
+                extract_from_nav(item)
+
+    nav = config.get('nav', [])
+    extract_from_nav(nav)
+
+    return md_links
+
 def generate_unique_anchor(md_file):
     """Creates a unique anchor using the file's relative path and filename."""
     relative_path = os.path.splitext(md_file)[0]  # Remove .md extension

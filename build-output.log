@@ -1,0 +1,31 @@
+Using local input: /home/paulwright/repos/sk/vale/skupper-docs/input
+Cleaning previous output...
+Syncing Vale styles...
+[96m[96m[0m[0m [90m[[0m[97m0[0m[90m/[0m[97m1[0m[90m][0m  [38;2;255;0;0m0%[0m | 0s[96m[96mSyncing AsciiDocDITA[0m[0m [90m[[0m[97m0[0m[90m/[0m[97m1[0m[90m][0m  [38;2;255;0;0m0%[0m | 0s[96m[96mSyncing AsciiDocDITA[0m[0m [90m[[0m[97m1[0m[90m/[0m[97m1[0m[90m][0m [36m[36m███████████████████████████████████████████[0m[0m [38;2;0;255;0m100%[0m | 0s
+[30;42m[30;42m SUCCESS [0m[0m [32m[32mSynced 1 package(s) to '/home/paulwright/repos/sk/vale/sk-vale/.vale/styles'.[0m[0m
+Step 1/2: Building assemblies and modules from Markdown...
+Using mkdocs.yml from upstream
+WARNING: index.md: no explicit anchors found for internal xref mapping
+Processing file: source.adoc
+ERROR: No root id in source.adoc
+Prepared Markdown saved to: /tmp/build-index-1cfnhncy/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-1cfnhncy/source.adoc
+Traceback (most recent call last):
+  File "/home/paulwright/repos/sk/vale/sk-vale/scripts/build_index.py", line 363, in <module>
+    main()
+    ~~~~^^
+  File "/home/paulwright/repos/sk/vale/sk-vale/scripts/build_index.py", line 358, in main
+    root_index = build_site(args.index_file, args.output, clean=args.clean, source_dir=args.source_dir, copy_images=args.copy_images)
+  File "/home/paulwright/repos/sk/vale/sk-vale/scripts/build_index.py", line 298, in build_site
+    process_markdown_source(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        md_file,
+        ^^^^^^^^
+    ...<7 lines>...
+        copy_images,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/home/paulwright/repos/sk/vale/sk-vale/scripts/build_index.py", line 191, in process_markdown_source
+    raise RuntimeError(f"{md_file}: expected exactly one assembly, found {len(assembly_files)}")
+RuntimeError: /home/paulwright/repos/sk/skupper-docs/input/index.md: expected exactly one assembly, found 0

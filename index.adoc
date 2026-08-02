@@ -21,6 +21,7 @@ include::assemblies/kube-cli-assembly-kube-exposing-services-cli.adoc[leveloffse
 include::assemblies/kube-yaml-assembly-kube-yaml.adoc[leveloffset=+1]
 include::assemblies/kube-yaml-assembly-kube-creating-site-yaml.adoc[leveloffset=+1]
 include::assemblies/kube-yaml-assembly-kube-yaml-site-linking.adoc[leveloffset=+1]
+include::assemblies/kube-yaml-assembly-kube-yaml-custom-certs.adoc[leveloffset=+1]
 include::assemblies/kube-yaml-assembly-kube-exposing-services-yaml.adoc[leveloffset=+1]
 include::assemblies/system-cli-assembly-system-cli.adoc[leveloffset=+1]
 include::assemblies/system-cli-assembly-system-creating-site-cli.adoc[leveloffset=+1]
