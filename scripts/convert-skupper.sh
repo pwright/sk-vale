@@ -147,6 +147,9 @@ if [[ "$DO_COMMIT" == "true" ]]; then
 Source: skupperproject/skupper-docs
 Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "Nothing to commit."
     echo "Committed to '$SKUPPER_BRANCH' branch."
+    # Exit 0 when --commit succeeds, regardless of Vale warnings
+    # Vale warnings are informational and saved in vale-report.json
+    exit 0
 fi
 
 exit $vale_exit
