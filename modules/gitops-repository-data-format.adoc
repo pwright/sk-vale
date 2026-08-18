@@ -1,0 +1,93 @@
+[id="gitops-repository-data-format_{context}"]
+:_mod-docs-content-type: REFERENCE
+= GitOps repository data format
+
+[role="_abstract"]
+A GitOps repository contains metadata files that describe registry content, and plain schema files that hold the content itself. This section describes the file types, their discovery, and their fields.
+
+No fixed directory structure is required. The registry discovers metadata files anywhere in the repository by file name suffix. By default, files ending in `.registry` or `.ar`, combined with the `.yaml`, `.yml`, or `.json` extensions, are treated as metadata files, for example `order-event.registry.yaml`. You can change the suffixes with the `apicurio.polling-storage.file-suffixes` property.
+
+Each metadata file declares its kind with a `$type` discriminator:
+
+.Metadata file types
+[cols="1,3", options="header"]
+|===
+| Type
+| Purpose and main fields
+
+| `registry-v0`
+| Registry configuration. Fields: `registryId`, `globalRules` (list of `ruleType` and `config` pairs), and `properties`. The `registryId` value must match the `apicurio.polling-storage.id` property of the registry instance.
+
+| `group-v0`
+| An artifact group. Fields: `registryIds` (list), `groupId`, `description`, `rules`, and `createdOn`. Every group that an artifact references must be declared by a `group-v0` file; the registry does not create groups automatically.
+
+| `artifact-v0`
+| An artifact with its versions declared inline. Fields: `registryIds`, `groupId`, `artifactId`, `artifactType`, `name`, `description`, `createdOn`, `rules`, `validatedUpTo`, and `versions`. Each version has `version`, `state`, and `content`, where `content` is a relative path to a schema file.
+
+| `content-v0`
+| Optional content metadata, for explicit content identifiers and references.
+|===
+
+The following example declares a registry configuration, a group, and an artifact. All three files are required: a load that references an undeclared group fails, and the registry does not become ready.
+
+[source,yaml]
+----
+$type: registry-v0
+registryId: main
+globalRules:
+  - ruleType: VALIDITY
+    config: FULL
+----
+
+[source,yaml]
+----
+$type: group-v0
+groupId: my-schemas
+----
+
+[source,yaml]
+----
+$type: artifact-v0
+groupId: my-schemas
+artifactId: order-event
+artifactType: AVRO
+versions:
+  - version: "1.0.0"
+    state: ENABLED
+    content: order-event-1.0.0.avsc
+----
+
+Content files are plain schema files that metadata files reference by a path relative to the directory of the metadata file. The artifact type comes from the `artifactType` field of the artifact metadata, or from automatic content detection when you omit the field. The file extension determines only the media type that the registry stores with the content:
+
+.Content file extensions and stored media types
+[cols="1,2", options="header"]
+|===
+| Extension
+| Stored media type
+
+| `.yaml`, `.yml`
+| YAML
+
+| `.xml`, `.xsd`, `.wsdl`
+| XML
+
+| `.proto`
+| Protobuf
+
+| `.graphql`
+| GraphQL
+
+| `.thrift`
+| Thrift
+
+| All other extensions
+| JSON
+|===
+
+The following additional rules apply:
+
+* If `registryIds` is omitted or empty on a group or artifact, any registry instance loads it.
+* Timestamps such as `createdOn` are optional. When omitted, the Git commit time is used. Supported formats are ISO 8601, with or without a time zone or as a date only, and Unix milliseconds.
+* The optional `validatedUpTo` field on an artifact controls rule validation during a load. When unset, only the latest version is validated, against all preceding versions. When set to a version identifier, versions up to and including that version are not re-validated. When the value matches no version, all versions are validated.
+
+

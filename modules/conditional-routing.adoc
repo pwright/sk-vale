@@ -1,0 +1,16 @@
+[id="conditional-routing_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Conditional routing
+
+[role="_abstract"]
+In conditional routing, you use agent capabilities and skills to decide which agent handles a request. You inspect agent cards to select the best match.
+
+Use conditional routing when:
+
+* Different request types require different agents
+* You want to select agents based on their reported capabilities
+* You need to match input and output modalities
+
+In a typical conditional routing flow, the orchestrator determines the required capability from the incoming request (for example, `streaming:true` for real-time processing), queries `/.well-known/agents` with the appropriate filters, selects an agent from the results based on additional criteria such as version or provider, and sends the A2A task to the selected agent.
+
+// ref-agent-error-handling-and-resilience

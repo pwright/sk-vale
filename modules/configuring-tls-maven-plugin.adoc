@@ -1,0 +1,65 @@
+[id="configuring-tls-maven-plugin_{context}"]
+:_mod-docs-content-type: REFERENCE
+= TLS configuration options for the Maven plug-in
+
+[role="_abstract"]
+When connecting to a TLS-enabled {registry} instance, you can configure the Maven plug-in to use SSL/TLS for secure communication. The plug-in supports various trust store and key store formats, as well as multiple authentication methods.
+
+The following tables describe the TLS-related configuration options available in the Maven plug-in.
+
+.Trust store configuration
+[cols="1,3",options="header"]
+|===
+|Parameter
+|Description
+
+|`trustStorePath`
+|Path to the trust store file containing the CA certificate(s) to trust. Supports JKS, PKCS12, and PEM formats. The format is auto-detected from the file extension (`.jks`, `.p12`/`.pfx`, `.pem`/`.crt`/`.cer`) unless explicitly specified.
+
+|`trustStorePassword`
+|Password for the trust store. Required for JKS and PKCS12 formats.
+
+|`trustStoreType`
+|Explicit trust store type: `JKS`, `PKCS12`, or `PEM`. If not specified, the type is auto-detected from the file extension.
+|===
+
+.Key store configuration for mutual TLS (mTLS)
+[cols="1,3",options="header"]
+|===
+|Parameter
+|Description
+
+|`keyStorePath`
+|Path to the key store file containing the client certificate for mTLS authentication. Supports JKS, PKCS12, and PEM formats.
+
+|`keyStorePassword`
+|Password for the key store. Required for JKS and PKCS12 formats.
+
+|`keyStoreType`
+|Explicit key store type: `JKS`, `PKCS12`, or `PEM`. If not specified, the type is auto-detected from the file extension.
+
+|`keyStorePemKeyPath`
+|Path to the PEM private key file. Required when using PEM format for mTLS, where `keyStorePath` points to the certificate file.
+|===
+
+.Additional SSL options
+[cols="1,1,3",options="header"]
+|===
+|Parameter
+|Default
+|Description
+
+|`trustAll`
+|`false`
+|If set to `true`, trust all SSL/TLS certificates without validation. *WARNING:* This should only be used for development or testing purposes.
+
+|`verifyHostname`
+|`true`
+|If set to `false`, disable hostname verification in SSL/TLS connections. *WARNING:* Disabling this reduces security and should only be used for development or testing.
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://maven.apache.org/index.html[Apache Maven documentation]
+* xref:configuring-tls-maven-plugin-examples_{context}[]
+

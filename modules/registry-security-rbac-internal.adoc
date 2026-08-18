@@ -1,0 +1,27 @@
+[id="registry-security-rbac-internal_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Internal role management in {registry}
+
+[role="_abstract"]
+To use roles managed internally by {registry}, set the following environment variable:
+
+.Configuration for {registry} role-based authorization by using internal role mappings
+[.table-expandable,width="100%",cols="6,6,2,3",options="header"]
+|===
+|Environment variable
+|Description
+|Type
+|Default
+|`APICURIO_AUTH_ROLE_SOURCE`
+| When set to `application`, user roles are managed internally by {registry}.
+|String
+|`token`
+|===
+
+When you use internally managed role mappings, you can assign a role to users by using the `/admin/roleMappings`
+endpoint in the {registry} REST API. For more details, see {registry-rest-api}.
+
+You can grant each user exactly one role: `ADMIN`, `DEVELOPER`, or `READ_ONLY`. Only admin
+users can grant access to other users.
+
+// ref-registry-security-rbac-admin-override

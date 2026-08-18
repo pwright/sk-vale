@@ -1,0 +1,58 @@
+[id="ha-backup-restore-sql_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Backing up and restoring SQL database storage
+
+[role="_abstract"]
+For SQL storage (PostgreSQL or MySQL), backup and restore strategies depend on your database setup.
+
+.Procedure
+. Back up a PostgreSQL database using one of the following options:
++
+* Create a logical backup with `pg_dump`:
++
+[source,bash]
+----
+pg_dump -h postgresql-host -U registry_user -d registry > registry-backup.sql
+----
+* Use continuous archiving with WAL for point-in-time recovery.
+* Use operator-managed backups if you use CloudNativePG or Crunchy PostgreSQL Operator:
++
+[source,yaml]
+----
+spec:
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://my-backups/registry-db
+      s3Credentials:
+        accessKeyId:
+          name: backup-credentials
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: backup-credentials
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+    retentionPolicy: "30d"
+----
+
+. Back up a MySQL database using one of the following options:
++
+* Create a logical backup with `mysqldump`:
++
+[source,bash]
+----
+mysqldump -h mysql-host -u registry_user -p registry > registry-backup.sql
+----
+* Create a binary backup using tools like Percona XtraBackup or MySQL Enterprise Backup.
+
+. Restore from a logical backup:
++
+[source,bash]
+----
+# PostgreSQL
+psql -h postgresql-host -U registry_user -d registry < registry-backup.sql
+
+# MySQL
+mysql -h mysql-host -u registry_user -p registry < registry-backup.sql
+----
+

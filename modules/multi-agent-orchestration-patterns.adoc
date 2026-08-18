@@ -1,0 +1,8 @@
+[id="multi-agent-orchestration-patterns_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Multi-agent orchestration patterns
+
+[role="_abstract"]
+You can orchestrate multi-agent workflows by combining {registry} discovery endpoints with A2A task execution. {registry} provides the discovery layer, and your orchestrator code coordinates the agent interactions.
+
+// con-sequential-pipeline-context-chaining

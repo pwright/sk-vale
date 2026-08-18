@@ -1,0 +1,19 @@
+[id="registry-overview_{context}"]
+:_mod-docs-content-type: REFERENCE
+= What is {registry}?
+
+[role="_abstract"]
+{registry} is a datastore for sharing standard event schemas and API designs across event-driven and API architectures. You can use {registry} to decouple the structure of your data from your client applications, and to share and manage your data types and API descriptions at runtime using a REST interface.
+
+Client applications can dynamically push or pull the latest schema updates to or from {registry} at runtime without needing to redeploy. Developer teams can query {registry} for existing schemas required for services already deployed in production, and can register new schemas required for new services in development.
+
+You can enable client applications to use schemas and API designs stored in {registry} by specifying the {registry} URL in your client application code. {registry} can store schemas used to serialize and deserialize messages, which are referenced from your client applications to ensure that the messages that they send and receive are compatible with those schemas.
+
+Using {registry} to decouple your data structure from your applications reduces costs by decreasing overall message size, and creates efficiencies by increasing consistent reuse of schemas and API designs across your organization. {registry} provides a web console to make it easy for developers and administrators to manage registry content.
+
+You can configure optional rules to govern the evolution of your {registry} content. These include rules to ensure that uploaded content is valid, or is compatible with other versions. Any configured rules must pass before new versions can be uploaded to {registry}, which ensures that time is not wasted on invalid or incompatible schemas or API designs.
+
+ifndef::apicurio-registry[]
+{registry-name-full} is based on the Apicurio Registry open source community project. For details, see https://github.com/apicurio/apicurio-registry.
+endif::[]
+

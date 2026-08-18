@@ -1,0 +1,19 @@
+[id="exporting_registry_kafka_topic_data_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Exporting {registry} Kafka topic data
+
+[role="_abstract"]
+One of the supported {registry} storage options is Apache Kafka, which uses a Kafka topic named `kafkasql-journal` to store data.
+If you encounter a problem when using this storage option and want to report it to {registry} developers, you might need to provide an export of the data present in the `kafkasql-journal` topic for analysis.
+You can create such a topic export by using the `kcat` tool (formerly known as `kafkacat`).
+
+== Prerequisites
+
+* Kafka has been installed and is running in your environment.
+* You have deployed {registry} with data stored in the `kafkasql-journal` topic.
+* The `kafkasql-journal` topic is still present.
+
+include::../modules/setting-up-kcat-work-pod.adoc[leveloffset=+1]
+include::../modules/kcat-usage-examples.adoc[leveloffset=+1]
+include::../modules/copying-topic-export-files.adoc[leveloffset=+1]
+include::../modules/importing-kafkasql-journal-topic-data.adoc[leveloffset=+1]

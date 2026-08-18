@@ -1,0 +1,47 @@
+[id="kubernetesops-rbac-requirements_{context}"]
+:_mod-docs-content-type: REFERENCE
+= RBAC requirements
+
+[role="_abstract"]
+{registry} requires read access to ConfigMaps in the configured namespace. When you deploy {registry} with the {operator}, the {operator} creates the required RBAC resources automatically. For deployments without the {operator}, create the resources manually.
+
+The {operator} automatically creates a ServiceAccount, a Role, and a RoleBinding, each named `<cr-name>-kubeops`, and sets the service account on the registry deployment. The Role is created in the configured ConfigMap namespace, so cross-namespace configurations work without manual steps.
+
+For deployments without the {operator}, create the following RBAC resources:
+
+[source,yaml]
+----
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: apicurio-registry
+  namespace: apicurio
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: apicurio-registry-configmaps
+  namespace: apicurio
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: apicurio-registry-configmaps
+  namespace: apicurio
+subjects:
+  - kind: ServiceAccount
+    name: apicurio-registry
+    namespace: apicurio
+roleRef:
+  kind: Role
+  name: apicurio-registry-configmaps
+  apiGroup: rbac.authorization.k8s.io
+----
+
+For multi-namespace scenarios, create a ClusterRole and ClusterRoleBinding instead.
+
+

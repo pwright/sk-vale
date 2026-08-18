@@ -1,0 +1,35 @@
+[id="configuring-dynamic-log-level_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Changing the {registry} log level at runtime
+
+[role="_abstract"]
+You can change the log level of a running {registry} instance without restarting it by setting the dynamic `apicurio.log.level` configuration property. The setting applies to the {registry} loggers in the `io.apicurio` category.
+
+.Prerequisites
+* You have administrator access to the {registry} instance.
+
+.Procedure
+. Set the log level with the admin configuration REST endpoint. Valid values are `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `OFF`, and `ALL`. The default value is `INFO`:
++
+[source,bash]
+----
+$ curl -X PUT -H "Content-Type: application/json" \
+  -d '{"value": "DEBUG"}' \
+  http://localhost:8080/apis/registry/v3/admin/config/properties/apicurio.log.level
+----
++
+Alternatively, use the CLI:
++
+[source,bash]
+----
+$ acr server-config set apicurio.log.level DEBUG
+----
++
+The registry applies the change within a few seconds. The value is stored in the registry storage, so it persists across restarts.
+. To revert to the original log level, remove the dynamic property. The registry restores the log level that was active at startup:
++
+[source,bash]
+----
+$ acr server-config reset apicurio.log.level
+----
+

@@ -1,0 +1,27 @@
+[id="registry-rest-metrics-distribution_{context}"]
+:_mod-docs-content-type: REFERENCE
+= REST request metrics distribution configuration
+
+[role="_abstract"]
+The following properties control how {registry} publishes distribution statistics for its REST request timer metrics. Change the distribution type when your monitoring system computes percentiles poorly from histogram buckets, for example, Datadog.
+
+.REST metrics distribution properties
+[.table-expandable,width="100%",cols="4,3,4",options="header"]
+|===
+|Property
+|Default
+|Description
+
+|`apicurio.metrics.rest.distribution.type`
+|`histogram`
+|Distribution type for REST request timers. The `histogram` type publishes bucket histograms with service level objective boundaries, and the `summary` type publishes pre-computed percentiles only. An invalid value prevents the application from starting.
+
+|`apicurio.metrics.rest.distribution.percentiles`
+|`0.5,0.95,0.99,0.9995`
+|Percentiles to pre-compute. Each value must be between 0.0 and 1.0.
+
+|`apicurio.metrics.rest.distribution.slo`
+|`0.1,0.25,0.5,1.0,2.0,5.0,10.0`
+|Service level objective boundaries in seconds for the histogram buckets. Only used when the distribution type is `histogram`.
+|===
+

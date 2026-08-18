@@ -1,0 +1,10 @@
+[id="registry-events-kafkasql-publishing_{context}"]
+:_mod-docs-content-type: CONCEPT
+= KafkaSQL storage direct Kafka publishing
+
+[role="_abstract"]
+With KafkaSQL storage, {registry} publishes change events directly to a dedicated Kafka topic without using the outbox table.
+
+With KafkaSQL storage, events bypass the database entirely and are published directly to a dedicated Kafka topic. The events topic uses a single partition to guarantee total ordering of all events. The event's aggregate ID is used as the Kafka message key.
+
+

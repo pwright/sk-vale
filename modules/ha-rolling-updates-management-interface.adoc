@@ -1,0 +1,48 @@
+[id="ha-rolling-updates-management-interface_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Upgrading to the management interface (port 9000)
+
+[role="_abstract"]
+Starting with {registry} 3.x, health check and metrics endpoints are served on a dedicated management port (9000)
+instead of the main application port (8080). This is a *breaking change* that requires updates to your deployment
+configuration when upgrading from earlier versions.
+
+.Procedure
+. Update Kubernetes liveness and readiness probes to target port `9000` instead of port `8080`. The endpoint paths
+(`/health/ready` and `/health/live`) remain the same.
++
+[source,yaml]
+----
+# Before (old configuration)
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 8080
+
+# After (new configuration)
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 9000
+
+# After (with TLS enabled)
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 9000
+    scheme: HTTPS
+----
+
+. Update Prometheus scrape targets: update your Prometheus configuration or `ServiceMonitor` resources to scrape
+metrics from port `9000` at path `/metrics`.
+
+. If you use Kubernetes `NetworkPolicy` resources, ensure that ingress traffic on port `9000` is allowed from your
+monitoring infrastructure and the kubelet (for health probes).
+
+. Review TLS considerations. The management interface inherits the default TLS configuration from the Quarkus TLS
+registry. When TLS is enabled, the management interface on port `9000` also serves HTTPS, and health probes must
+use `scheme: HTTPS`. The {operator} handles this automatically.
+
+. If you are using the {operator}, confirm that no manual changes are required: it automatically configures the
+correct probe ports for operator-managed deployments.
+

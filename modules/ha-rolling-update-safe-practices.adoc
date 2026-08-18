@@ -1,0 +1,14 @@
+[id="ha-rolling-update-safe-practices_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Safe update practices
+
+[role="_abstract"]
+Follow these practices to update your {registry} deployment safely and minimize risk.
+
+Test in non-production first:: Validate the new version in a test environment.
+Monitor during rollout:: Watch metrics and logs during the update.
+Maintain minimum replicas:: Keep at least two replicas to ensure availability during updates.
+Review release notes:: Check for breaking changes or migration steps.
+
+IMPORTANT: For patch releases (for example, 3.1.0 to 3.1.1), rolling updates typically complete without issues. For major or minor version updates, always review the migration guide.
+

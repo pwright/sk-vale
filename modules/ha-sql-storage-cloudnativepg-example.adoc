@@ -1,0 +1,44 @@
+[id="ha-sql-storage-cloudnativepg-example_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Example: PostgreSQL high availability with CloudNativePG
+
+[role="_abstract"]
+When using the CloudNativePG operator for PostgreSQL HA, create a `Cluster` resource and then reference it from
+your `ApicurioRegistry3` custom resource.
+
+[source,yaml]
+----
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: registry-db-cluster
+spec:
+  instances: 3
+  storage:
+    size: 20Gi
+    storageClass: standard
+  postgresql:
+    parameters:
+      max_connections: "200"
+  backup:
+    barmanObjectStore:
+      # Configure backup storage
+----
+
+Then reference the cluster in your `ApicurioRegistry3` CR:
+
+[source,yaml]
+----
+spec:
+  app:
+    storage:
+      type: postgresql
+      sql:
+        dataSource:
+          url: jdbc:postgresql://registry-db-cluster-rw:5432/app
+          username: app
+          password:
+            name: registry-db-cluster-app
+            key: password
+----
+

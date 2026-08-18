@@ -1,0 +1,68 @@
+[id="data-contracts-odcs-example_{context}"]
+:_mod-docs-content-type: REFERENCE
+= ODCS contract example
+
+[role="_abstract"]
+This example shows a complete ODCS v3.1 contract and the projections it produces when submitted to {registry}.
+
+.ODCS v3.1 contract
+[source,yaml]
+----
+apiVersion: v3.1.0
+kind: DataContract
+id: orders-contract
+info:
+  title: Orders Contract
+  version: 1.0.0
+  description: Data contract for order events
+  status: active
+  dataClassification: confidential
+team:
+  name: orders-team
+  domain: commerce
+  contact: orders@company.com
+schemas:
+  - name: OrderEvent
+    type: avro
+    location: orders/OrderEvent:3
+    fields:
+      customerEmail:
+        description: Customer email address
+        pii: true
+        tags:
+          - PII
+          - EMAIL
+      totalAmount:
+        description: Total order amount in cents
+quality:
+  accuracy:
+    - name: positive-amount
+      expression: totalAmount > 0
+      threshold: 1.0
+    - name: valid-email
+      expression: "customerEmail.matches('.*@.*\\\\..*')"
+      threshold: 0.99
+  completeness:
+    - field: orderId
+      threshold: 1.0
+    - field: customerEmail
+      threshold: 0.99
+  freshness:
+    maxStaleness: PT5M
+serviceLevel:
+  availability: 0.999
+  latency:
+    p99: PT1S
+----
+
+When submitted, this contract results in the following projections:
+
+. An `ODCS_CONTRACT` artifact is created to store the YAML.
+. Namespaced labels are set on the `orders/OrderEvent` artifact: `contract.orders-contract.status=STABLE`, `contract.orders-contract.owner.team=orders-team`, and `contract.orders-contract.classification=CONFIDENTIAL`.
+. Two CEL contract rules are created: `odcs:orders-contract:positive-amount` with `onFailure=ERROR`, and `odcs:orders-contract:valid-email` with `onFailure=DLQ`.
+. Completeness thresholds are stored as labels, such as `contract.orders-contract.quality.completeness.orderId=1.0`.
+. Field tags are set: `field-tag.orders-contract:customerEmail|PII=EXTERNAL` and `field-tag.orders-contract:customerEmail|EMAIL=EXTERNAL`.
+. SLA labels are stored for external monitoring tools.
+
+When you update an ODCS contract, only rules prefixed with `odcs:{contractId}:` are replaced. Rules added manually through the contract ruleset API are preserved.
+

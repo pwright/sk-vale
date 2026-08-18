@@ -1,0 +1,28 @@
+[id="docker-image-tags_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Docker image tags
+
+[role="_abstract"]
+{registry} container images use several tag conventions that determine how frequently your deployment receives updates.
+
+[cols="1,3", options="header"]
+|===
+| Tag
+| Description
+
+| `3.3.0`
+| Pinned to an exact release. Never changes.
+
+| `3.3`
+| Floating tag that always points to the latest patch in the 3.3.x series (for example, 3.3.0, then 3.3.1, then 3.3.2).
+
+| `latest` / `latest-release`
+| Always points to the most recent stable release across all minor versions.
+
+| `latest-snapshot`
+| Most recent build from the `main` branch. Unstable and not recommended for production.
+|===
+
+Use the minor-series floating tag (for example, `3.3`) to automatically receive security patches without upgrading to a new minor version.
+
+

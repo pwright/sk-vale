@@ -1,0 +1,15 @@
+[id="minor-upgrades_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Performing minor upgrades
+
+[role="_abstract"]
+You can upgrade to a new minor version (for example, from 3.3.x to the next minor release) to receive new features, enhancements, and bug fixes.
+
+.Procedure
+. Review the release notes for the target version to understand new features and any behavioral changes.
+. Back up your database.
+. Replace the {registry} container image with the new minor version.
+. Start {registry}. Database schema migrations run automatically.
+. Verify that your client applications work correctly with the new version.
+
+

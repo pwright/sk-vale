@@ -1,0 +1,12 @@
+[id="ref-usage-telemetry-example-grafana-query_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Example Grafana query
+
+[role="_abstract"]
+Use the following PromQL query to chart usage classification metrics in Grafana.
+
+[source,promql]
+----
+apicurio_usage_schemas_active or apicurio_usage_schemas_stale or apicurio_usage_schemas_dead
+----
+

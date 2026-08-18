@@ -1,0 +1,17 @@
+[id="deleting-artifact-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Deleting an artifact
+
+[role="_abstract"]
+You can delete an artifact from {registry} by using the web console.
+
+WARNING: Deleting an artifact permanently removes the artifact and all of its versions.
+
+.Procedure
+
+. On the *Explore* tab, browse the list of artifacts stored in {registry}, or enter a search string to find the artifact that you want to delete.
+. Click the artifact to view its details.
+. In the page header, click *Delete*.
+. Confirm the deletion when prompted.
+
+

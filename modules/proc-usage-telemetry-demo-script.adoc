@@ -1,0 +1,25 @@
+[id="proc-usage-telemetry-demo-script_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Running the usage telemetry demo script
+
+[role="_abstract"]
+A demo script is provided to populate realistic usage data for testing.
+
+.Procedure
+. Start the registry with telemetry enabled:
++
+[source,bash]
+----
+./mvnw quarkus:dev -pl :apicurio-registry-app \
+  -Dapicurio.usage.telemetry.enabled=true
+----
+
+. In another terminal, run the demo script:
++
+[source,bash]
+----
+./examples/usage-telemetry-demo/populate-usage-data.sh
+----
+
+.Results
+The script creates three artifacts (UserEvent, OrderEvent, PaymentEvent) with multiple versions and simulates usage from five different client applications by fetching schemas with `X-Registry-Client-Id` headers.

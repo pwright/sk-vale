@@ -1,0 +1,19 @@
+[id="handling-failed-upgrade_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Handling a failed upgrade
+
+[role="_abstract"]
+If an upgrade introduces issues, restore your {registry} deployment from the database backup taken before the upgrade.
+
+.Procedure
+. Stop {registry}.
+. Restore the database from the backup taken before the upgrade.
+. Deploy the previous version of {registry}.
+. Investigate the issue before attempting the upgrade again.
++
+[IMPORTANT]
+====
+Do not attempt to manually revert database schema changes.
+====
+
+

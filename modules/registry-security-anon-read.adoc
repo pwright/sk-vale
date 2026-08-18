@@ -1,0 +1,52 @@
+[id="registry-security-anon-read_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} anonymous read-only access
+
+[role="_abstract"]
+In addition to the two main types of authorization (role-based and owner-based authorization), {registry}
+supports an anonymous read-only access option.
+
+To allow anonymous users, such as REST API calls with no authentication credentials, to make read-only
+calls to the REST API, set the following options to `true`:
+
+.Configuration for anonymous read-only access
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+|`QUARKUS_OIDC_TENANT_ENABLED`
+|`quarkus.oidc.tenant-enabled`
+|Boolean
+|`false`
+|`APICURIO_AUTH_ANONYMOUS_READ_ACCESS_ENABLED`
+|`apicurio.auth.anonymous-read-access.enabled`
+|Boolean
+|`false`
+|===
+
+[IMPORTANT]
+====
+When {registry} uses Kubernetes authentication together with anonymous read-only access, be aware
+of the following availability tradeoff during a Kubernetes API outage. If the Kubernetes API server
+becomes unavailable, {registry} cannot validate service account tokens, and after several
+consecutive failures a circuit breaker suspends further token validation for a short period. While
+token validation is suspended, requests that carry a Kubernetes token are treated as
+unauthenticated and, because anonymous read-only access is enabled, are served as anonymous
+read-only requests instead of being rejected. As a result, authenticated write users are silently
+downgraded to read-only access until the Kubernetes API recovers, with no client-side error.
+{registry} logs a warning when this state is first entered. If this silent downgrade is
+unacceptable for your deployment, disable anonymous read-only access so that token-validation
+failures return an authentication error instead.
+====
+
+
+[role="_additional-resources"]
+.Additional resources
+* xref:configuring-liveness-readiness-probes_{context}[]
+* https://quarkus.io/guides/security-openid-connect-web-authentication[Quarkus Open ID Connect documentation]
+
+
+
+// con-registry-cors-configuration

@@ -1,0 +1,58 @@
+[id="migration-planning_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Migration planning
+
+[role="_abstract"]
+You can choose from two migration approaches depending on your architecture and availability requirements. Review both approaches and select the one that best fits your environment.
+
+[cols="1,2,2", options="header"]
+|===
+| Feature | Minimal downtime migration | Maintenance window migration
+
+| *Primary method*
+| Parallel environments with reverse proxy or load balancer routing
+| Sequential process
+
+| *Complexity*
+| *High*: Requires configuration for dual-routing and traffic management.
+| *Low*: Straightforward, linear execution steps.
+
+| *Read downtime*
+| 10-30 seconds (switchover latency)
+| 1-2 hours (full duration of maintenance)
+
+| *Write downtime*
+| 30-45 minutes (final sync and import phase)
+| 1-2 hours (full duration of maintenance)
+
+| *Infrastructure*
+| Requires Nginx or HAProxy and dual running instances.
+| Single target environment.
+
+| *Best for*
+| High-availability production environments.
+| Development, staging, or systems with flexible SLAs.
+|===
+
+Regardless of the migration path you choose, you must:
+
+* Test the data migration in a staging environment before you migrate production. A dry run helps you estimate timing for export and import phases.
+* Verify that client applications connect to {registry} 3.x after the data migration completes. For minimal downtime migrations, verify that the load balancer routes to 3.x and update any clients that bypass the load balancer. For maintenance window migrations, update client configurations directly.
+* Update configuration properties for the v3 deployment. Combine this step with client updates where possible.
+
+Minimal downtime migration::
+The objective is to keep the service reachable. While data moves between versions, a reverse proxy (such as nginx) manages the cutover.
+
+Maintenance window migration::
+This approach provides the cleanest data integrity. By stopping all client applications first, you ensure that no data is in flight during the move.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:migrating-registry-data_{context}[]
+* xref:migrating-registry-applications_{context}[]
+* xref:migrating-registry-configuration_{context}[]
+* xref:migrating-minimal-downtime_{context}[]
+* xref:migrating-maintenance-window_{context}[]
+
+
+// proc-migrating-minimal-downtime

@@ -1,0 +1,95 @@
+[id="registry-sdk-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} Java SDK configuration
+
+[role="_abstract"]
+The {registry} Java client supports several configuration options, including retry behavior, HTTP proxy settings, TLS trust options, and OpenTelemetry distributed tracing.
+
+You configure the client by calling methods on a `RegistryClientOptions` instance and passing it to `RegistryClientFactory.create`. The following methods are available:
+
+.{registry} Java client configuration methods
+[%header,cols="2,3"]
+|===
+|Method
+|Description
+|`create(registryUrl)`, `create(registryUrl, vertx)`
+|Create client options for a registry URL, optionally with an existing Vert.x instance.
+|`retry()`, `retry(enabled, maxAttempts, initialDelayMs, backoffMultiplier, maxDelayMs)`
+|Enable retry with exponential backoff for transient network failures.
+|`proxy(host, port)`, `proxyAuth(username, password)`
+|Route requests through an HTTP proxy.
+|`trustStoreJks(path, password)`, `trustStorePkcs12(path, password)`, `trustStorePem(path)`
+|Configure TLS trust for a registry served over HTTPS with custom certificates.
+|`enableOpenTelemetry()`
+|Enable OpenTelemetry trace context propagation.
+|===
+
+**Retry configuration**
+
+Retry is disabled by default. The no-argument `retry()` method enables retry with the default settings: 3 attempts, an initial delay of 250 milliseconds, a backoff multiplier of 2.0, and a maximum delay of 10 seconds. The five-argument variant gives you full control:
+
+[source,java]
+----
+RegistryClientOptions options = RegistryClientOptions
+        .create("http://localhost:8080", vertx)
+        .retry(true, 5, 500, 2.0, 15000);
+RegistryClient client = RegistryClientFactory.create(options);
+----
+
+The client retries transient network failures only, such as refused or reset connections, socket timeouts, and closed connections. HTTP error responses from the registry are not retried. The delay grows by the backoff multiplier after each attempt, up to the maximum delay. When all attempts fail, the client throws the original exception.
+
+**HTTP proxy configuration**
+
+To route requests through an HTTP proxy, set the proxy host and port. For proxies that require authentication, also provide credentials:
+
+[source,java]
+----
+RegistryClientOptions options = RegistryClientOptions
+        .create("http://localhost:8080", vertx)
+        .proxy("proxy.example.com", 3128)
+        .proxyAuth("proxyuser", "proxypass");
+RegistryClient client = RegistryClientFactory.create(options);
+----
+
+The proxy configuration applies to registry API calls and to OAuth token endpoint calls. When you supply your own Vert.x `WebClient` with the `customWebClient` option, the client uses that `WebClient` unchanged, so you must configure the proxy on the `WebClient` yourself.
+
+NOTE: The Kafka client SerDes expose the same proxy settings as configuration properties: `apicurio.registry.proxy.host`, `apicurio.registry.proxy.port`, `apicurio.registry.proxy.username`, and `apicurio.registry.proxy.password`. For details, see {registry-client-serdes-config}.
+
+**TLS configuration**
+
+For a registry served over HTTPS with certificates that the default Java trust store does not trust, configure a trust store with the `trustStoreJks`, `trustStorePkcs12`, or `trustStorePem` method. Methods for client certificates (mutual TLS), including `keystoreJks` and `keystorePkcs12`, are also available.
+
+**OpenTelemetry distributed tracing**
+
+The {registry} Java SDK supports optional OpenTelemetry trace context propagation. When enabled, W3C trace context headers (`traceparent` and `tracestate`) are injected into every HTTP request made to {registry}, providing end-to-end distributed tracing across your services and the registry.
+
+Enabling tracing:: Call `enableOpenTelemetry()` when building the client options:
++
+[source,java]
+----
+RegistryClientOptions options = RegistryClientOptions.create()
+        .registryUrl("http://localhost:8080")
+        .enableOpenTelemetry();
+RegistryClient client = RegistryClientFactory.create(options);
+----
+
+Required dependency:: The `opentelemetry-api` library must be on the classpath. Add it to your project if it is not already provided transitively:
++
+[source,xml,subs="+quotes,attributes"]
+----
+<dependency>
+    <groupId>io.opentelemetry</groupId>
+    <artifactId>opentelemetry-api</artifactId>
+    <version>${opentelemetry.version}</version>
+</dependency>
+----
+
+Runtime behavior:: When an OpenTelemetry SDK is initialized in your application (for example, through the OpenTelemetry Java agent or the Quarkus OpenTelemetry extension), the {registry} SDK participates in the active trace. If no OpenTelemetry SDK is configured, the behavior is a no-op and no trace headers are added.
+
+NOTE: This feature also applies to the {registry} Kafka client serializers/deserializers (SerDes), which use the SDK internally to communicate with {registry}. See {kafka-client-serdes} for SerDes-specific configuration.
+
+
+[role="_additional-resources"]
+.Additional resources
+* {kafka-client-serdes}
+

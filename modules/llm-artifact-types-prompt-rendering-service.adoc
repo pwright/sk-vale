@@ -1,0 +1,88 @@
+[id="llm-artifact-types-prompt-rendering-service_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Prompt rendering service
+
+[role="_abstract"]
+{registry} includes a server-side prompt rendering service for PROMPT_TEMPLATE artifacts.
+
+.REST API endpoint
+[source,text]
+----
+POST /apis/registry/v3/groups/{groupId}/artifacts/{artifactId}/versions/{versionExpression}/render
+----
+
+.Request body
+[source,json]
+----
+{
+  "variables": {
+    "variableName": "value",
+    "anotherVariable": 123
+  }
+}
+----
+
+.Response body
+[source,json]
+----
+{
+  "rendered": "The fully rendered template with substituted values",
+  "groupId": "default",
+  "artifactId": "my-prompt",
+  "version": "1.0",
+  "validationErrors": []
+}
+----
+
+The `PromptRenderingService` class (`app/src/main/java/io/apicurio/registry/services/PromptRenderingService.java`) includes the following features:
+
+.Rendering service features
+[%header,cols="2,4"]
+|===
+|Feature
+|Description
+
+|Content parsing
+|Parses YAML or JSON prompt templates
+
+|Variable substitution
+|Replaces `{{variable}}` placeholders with provided values
+
+|Type validation
+|Validates that variable values match their defined types
+
+|Required field checking
+|Reports missing required variables as validation errors
+
+|Enum validation
+|Checks that values are within allowed enum options
+
+|Range validation
+|Validates numeric values against minimum/maximum constraints
+|===
+
+A variable placeholder is a word-character name with optional surrounding whitespace, so `{{name}}` and `{{ name }}` both resolve to the variable `name`. The render endpoint does not resolve a name that contains any other character, for example `{{user.name}}` or `{{my-var}}`, and leaves it in the rendered output as literal text. Earlier versions of the render endpoint resolved such names. The MCP prompt converter also resolved a placeholder such as `{{user.name}}` when you supplied an argument of the same name. Both now use the same grammar as the prompt template validity rule.
+
+When validation fails, the response includes validation errors:
+
+[source,json]
+----
+{
+  "rendered": "Template with {{missing}} placeholder intact",
+  "groupId": "default",
+  "artifactId": "my-prompt",
+  "version": "1.0",
+  "validationErrors": [
+    {
+      "variableName": "missing",
+      "message": "Required variable is missing"
+    },
+    {
+      "variableName": "count",
+      "message": "Value 200 is greater than maximum 100"
+    }
+  ]
+}
+----
+
+// ref-llm-artifact-types-customization

@@ -1,0 +1,43 @@
+[id="data-contracts-global-rules_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Global contract rules
+
+[role="_abstract"]
+Global contract rulesets provide a baseline set of rules applied to all artifacts. Artifact-level and version-level rules override global rules by name.
+
+You can also manage the global contract ruleset in the {registry} web console. Click the *Contract rules* tab in the console navigation to add, delete, or clear global contract rules without calling the REST API directly.
+
+When rules are executed, they are merged from three scopes:
+
+. Global rules apply to all artifacts and are set through `/admin/contracts/ruleset`.
+. Artifact rules apply to a specific artifact and are set through `/groups/{g}/artifacts/{a}/contract/ruleset`.
+. Version rules apply to a specific version and are set through `.../versions/{v}/contract/ruleset`.
+
+If a rule with the same name exists at multiple levels, the most specific scope wins.
+
+[source,bash]
+----
+# Set global ruleset
+curl -X PUT \
+  http://localhost:8080/apis/registry/v3/admin/contracts/ruleset \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "domainRules": [{
+      "name": "require-non-empty",
+      "kind": "CONDITION",
+      "type": "CEL",
+      "mode": "WRITE",
+      "expr": "size(record) > 0",
+      "onFailure": "ERROR",
+      "disabled": false
+    }],
+    "migrationRules": []
+  }'
+
+# Get global ruleset
+curl http://localhost:8080/apis/registry/v3/admin/contracts/ruleset
+
+# Delete global ruleset
+curl -X DELETE http://localhost:8080/apis/registry/v3/admin/contracts/ruleset
+----
+

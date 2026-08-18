@@ -1,0 +1,76 @@
+[id="llm-artifact-types-mcp-integration_{context}"]
+:_mod-docs-content-type: REFERENCE
+= MCP (Model Context Protocol) integration
+
+[role="_abstract"]
+{registry} supports the Model Context Protocol (MCP) and makes PROMPT_TEMPLATE artifacts available as MCP prompts. AI agents can discover and use prompt templates through MCP.
+
+Prompt templates can include an `mcp` section to enable MCP protocol integration:
+
+[source,yaml]
+----
+templateId: support-chat
+name: Support Chat Prompt
+template: |
+  Answer the question: {{question}}
+
+variables:
+  question:
+    type: string
+    required: true
+
+# MCP integration
+mcp:
+  enabled: true
+  name: support-chat
+  description: Answer customer support questions
+  arguments:
+    - name: question
+      description: The customer question
+      required: true
+----
+
+.MCP configuration fields
+[%header,cols="2,1,4"]
+|===
+|Field
+|Required
+|Description
+
+|`enabled`
+|No
+|Set to `true` to make this prompt available through MCP (default: false)
+
+|`name`
+|No
+|MCP prompt name (defaults to `templateId`)
+
+|`description`
+|No
+|MCP prompt description (defaults to template description)
+
+|`arguments`
+|No
+|MCP arguments (auto-derived from `variables` if not specified)
+|===
+
+The `mcp/` module contains an MCP Server for registry prompts:
+
+.MCP server components
+[%header,cols="2,4"]
+|===
+|Component
+|Description
+
+|`PromptTemplateMCPServer.java`
+|MCP Server that makes prompt templates available as MCP prompts
+
+|`PromptTemplateConverter.java`
+|Parses and renders prompt templates
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://modelcontextprotocol.io/[Model Context Protocol (MCP)]
+
+// ref-llm-artifact-types-mcp-tools-and-prompts

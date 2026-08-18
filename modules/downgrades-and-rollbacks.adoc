@@ -1,0 +1,13 @@
+[id="downgrades-and-rollbacks_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Downgrades and rollbacks
+
+[role="_abstract"]
+{registry} does not support downgrades.
+
+Database schema migrations are forward-only and irreversible.
+Starting an older version of {registry} against a database that has been migrated to a newer schema version fails.
+
+If you deploy {registry} by using the {operator}, switching to an older OLM channel is also not supported.
+
+

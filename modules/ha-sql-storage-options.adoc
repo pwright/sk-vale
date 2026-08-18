@@ -1,0 +1,12 @@
+[id="ha-sql-storage-options_{context}"]
+:_mod-docs-content-type: CONCEPT
+= SQL database high availability options
+
+[role="_abstract"]
+When using SQL database storage, consider these database high availability strategies.
+
+PostgreSQL with streaming replication:: Primary-replica configuration with automatic failover using tools such as Patroni, CloudNativePG, or Crunchy PostgreSQL Operator.
+PostgreSQL with synchronous replication:: Ensures zero data loss but might impact performance.
+MySQL with Group Replication:: Multi-primary or single-primary mode with automatic failover.
+Managed database services:: Cloud provider managed databases (RDS, Cloud SQL, Azure Database) with built-in HA.
+

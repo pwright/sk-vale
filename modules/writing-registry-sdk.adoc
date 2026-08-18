@@ -1,0 +1,67 @@
+[id="writing-registry-sdk_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Writing {registry} SDK applications
+
+[role="_abstract"]
+You can write a client application to manage artifacts stored in {registry} by using one of the {registry} SDKs.
+
+.Prerequisites
+* {registry} is installed and running in your environment.
+* You have created a Maven project for your Java client application. For more details, see https://maven.apache.org/index.html[Apache Maven].
+
+.Procedure
+. Add the following dependency to your Maven project:
++
+[source,xml,subs="+quotes,attributes"]
+----
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-java-sdk</artifactId>
+    <version>${apicurio-registry.version}</version>
+</dependency>
+----
+
+. Create the {registry} client as follows:
++
+[source,java,subs="+quotes,attributes"]
+----
+import io.apicurio.registry.client.RegistryClientFactory;
+import io.apicurio.registry.client.common.RegistryClientOptions;
+import io.apicurio.registry.rest.client.RegistryClient;
+import io.vertx.core.Vertx;
+
+public class ClientExample {
+
+    public static void main(String[] args) throws Exception {
+        // Create a registry client
+        Vertx vertx = Vertx.vertx();
+        RegistryClientOptions options = RegistryClientOptions
+                .create("https://my-registry.my-domain.com", vertx);
+        RegistryClient client = RegistryClientFactory.create(options);
+
+        // Use client here
+
+        vertx.close();
+    }
+}
+----
++
+The registry URL:: If you specify an example {registry} URL of `\https://my-registry.my-domain.com`, the client automatically appends `/apis/registry/v3`.
+The Vertx object:: Create a new Vertx object that the client uses for HTTP requests, so that you control its lifecycle.
+The registry client:: For more options when creating a {registry} client, see xref:registry-sdk-config_registry[].
+Closing the client:: When you are done with the client, close the Vertx object to free its resources.
+
+.Results
+When the client is created, you can use all of the operations available in the {registry} REST API in the client. For more details, see the {registry-rest-api}.
+
+[role="_additional-resources"]
+.Additional resources
+* https://github.com/Apicurio/apicurio-registry/tree/main/examples[Apicurio Registry REST client demonstration]
+* {kafka-client-serdes}
+
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/assembly-using-the-registry-sdk.adoc
+
+// ref-registry-sdk-config

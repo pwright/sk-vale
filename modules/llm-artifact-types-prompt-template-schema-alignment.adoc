@@ -1,0 +1,81 @@
+[id="llm-artifact-types-prompt-template-schema-alignment_{context}"]
+:_mod-docs-content-type: REFERENCE
+= PROMPT_TEMPLATE schema alignment with Prompty
+
+[role="_abstract"]
+The PROMPT_TEMPLATE schema is aligned with the Microsoft Prompty specification for interoperability with the Azure AI ecosystem.
+
+.Prompty field mappings
+[%header,cols="2,2,3"]
+|===
+|Apicurio field
+|Prompty field
+|Notes
+
+|`templateId`
+|`name`
+|Primary identifier
+
+|`variables`
+|`inputs`
+|Both names supported
+
+|`outputSchema`
+|`outputs`
+|Both names supported
+
+|`template`
+|Body content
+|{{variable}} syntax
+
+|`model`
+|`model`
+|Model configuration
+
+|`authors`
+|`authors`
+|Contributors list
+
+|`tags`
+|`tags`
+|Categorization
+|===
+
+.PROMPT_TEMPLATE with Prompty-aligned fields
+[source,yaml]
+----
+templateId: sentiment-analysis
+name: Sentiment Analysis Prompt
+version: "1.0.0"
+description: Analyzes customer sentiment
+
+# Prompty-aligned fields
+authors:
+  - Apicurio Team
+tags:
+  - sentiment
+  - nlp
+
+templateFormat: mustache  # or jinja2, handlebars
+
+# Model configuration (Prompty-aligned)
+model:
+  api: chat
+  parameters:
+    temperature: 0.3
+    max_tokens: 500
+
+template: |
+  Analyze the sentiment of: {{customerMessage}}
+
+variables:
+  customerMessage:
+    type: string
+    required: true
+----
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://prompty.ai/specification/page/[Microsoft Prompty Specification]
+
+// ref-llm-artifact-types-model-schema-alignment

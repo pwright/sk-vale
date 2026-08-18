@@ -1,0 +1,208 @@
+[id="kubernetesops-field-reference_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Field reference
+
+[role="_abstract"]
+Each KubernetesOps entity type (`registry-v0`, `group-v0`, `artifact-v0`, `content-v0`) supports a specific set of YAML fields. Fields marked with `$type` are required for type identification, and unknown fields cause parse errors.
+
+.registry-v0 fields
+[.table-expandable,width="100%",cols="3,2,5",options="header"]
+|===
+|Field
+|Type
+|Description
+
+|`$type`
+|string
+|*Required*. Must be `registry-v0`.
+
+|`registryId`
+|string
+|*Required*. Must match the registry instance ID (`APICURIO_POLLING_STORAGE_ID`).
+
+|`globalRules`
+|list of rules
+|Global validation/compatibility rules. Each rule has `ruleType` (for example, `VALIDITY` or `COMPATIBILITY`) and `config`.
+
+|`properties`
+|list of properties
+|Configuration properties. Each property has `name` and `value`.
+|===
+
+.group-v0 fields
+[.table-expandable,width="100%",cols="3,2,5",options="header"]
+|===
+|Field
+|Type
+|Description
+
+|`$type`
+|string
+|*Required*. Must be `group-v0`.
+
+|`registryIds`
+|list of strings
+|Registry instance IDs this group belongs to. If empty or omitted, the group is loaded by all registry instances.
+
+|`groupId`
+|string
+|*Required*. Unique group identifier.
+
+|`description`
+|string
+|Group description.
+
+|`labels`
+|map (string -> string)
+|Key-value labels for the group.
+
+|`owner`
+|string
+|Owner of the group (for example, a username or team name).
+
+|`artifactsType`
+|string
+|Constrains all artifacts in this group to a specific type (for example, `AVRO` or `PROTOBUF`).
+
+|`rules`
+|list of rules
+|Group-level rules. Each rule has `ruleType` and `config`.
+|===
+
+.artifact-v0 fields
+[.table-expandable,width="100%",cols="3,2,5",options="header"]
+|===
+|Field
+|Type
+|Description
+
+|`$type`
+|string
+|*Required*. Must be `artifact-v0`.
+
+|`registryIds`
+|list of strings
+|Registry instance IDs this artifact belongs to. If empty or omitted, the artifact is loaded by all registry instances.
+
+|`groupId`
+|string
+|*Required*. Parent group ID.
+
+|`artifactId`
+|string
+|*Required*. Unique artifact identifier within the group.
+
+|`artifactType`
+|string
+|*Required*. Artifact type: `AVRO`, `PROTOBUF`, `JSON`, `OPENAPI`, `ASYNCAPI`, `GRAPHQL`, `KCONNECT`, `THRIFT`, `WSDL`, `XSD`, `XML`.
+
+|`name`
+|string
+|Display name for the artifact.
+
+|`description`
+|string
+|Artifact description.
+
+|`labels`
+|map (string -> string)
+|Key-value labels for the artifact.
+
+|`owner`
+|string
+|Owner of the artifact (for example, a username or team name).
+
+|`versions`
+|list of versions
+|*Required*. At least one version. See version fields below.
+
+|`rules`
+|list of rules
+|Artifact-level rules. Each rule has `ruleType` and `config`.
+|===
+
+.Version fields (nested in artifact-v0)
+[.table-expandable,width="100%",cols="3,2,5",options="header"]
+|===
+|Field
+|Type
+|Description
+
+|`version`
+|string
+|*Required*. Version identifier (for example, `"1"` or `"2.0.0"`).
+
+|`state`
+|string
+|Version state: `ENABLED` (default), `DISABLED`, or `DEPRECATED`.
+
+|`name`
+|string
+|Version display name.
+
+|`description`
+|string
+|Version description.
+
+|`labels`
+|map (string -> string)
+|Key-value labels for this version.
+
+|`content`
+|string
+|*Required*. Relative path to the content data key (for example, `my-schema.avsc`).
+
+|`contentMetadata`
+|string
+|Relative path to a `content-v0` metadata entry for advanced content configuration.
+
+|`globalId`
+|long
+|Explicit global ID. Auto-generated if deterministic IDs are enabled (the default).
+
+|`owner`
+|string
+|Owner of this version (for example, a username or team name).
+|===
+
+.content-v0 fields
+[.table-expandable,width="100%",cols="3,2,5",options="header"]
+|===
+|Field
+|Type
+|Description
+
+|`$type`
+|string
+|*Required*. Must be `content-v0`.
+
+|`contentId`
+|long
+|Explicit content ID. Auto-generated if deterministic IDs are enabled (the default).
+
+|`content`
+|string
+|*Required*. Relative path to the actual content data key.
+
+|`references`
+|list of references
+|Content references to other artifacts. Each reference has `groupId`, `artifactId`, `version`, and `name`.
+|===
+
+.Rule fields (nested in registry-v0, group-v0, and artifact-v0)
+[.table-expandable,width="100%",cols="3,2,5",options="header"]
+|===
+|Field
+|Type
+|Description
+
+|`ruleType`
+|string
+|Rule type: `VALIDITY`, `COMPATIBILITY`, or `INTEGRITY`.
+
+|`config`
+|string
+|Rule configuration value (for example, `FULL`, `BACKWARD`, or `FORWARD`).
+|===
+
+

@@ -1,0 +1,55 @@
+[id="registry-event-payload-structure_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Event payload structure
+
+[role="_abstract"]
+All {registry} change events share a common JSON payload structure, with additional fields depending on the event type.
+
+All events share a common base structure:
+
+[source,json]
+----
+{
+  "id": "<uuid>",
+  "eventType": "<EVENT_TYPE>",
+  "groupId": "<group-id>",
+  "artifactId": "<artifact-id>"
+}
+----
+
+Additional fields vary by event type:
+
+* *Version events* include a `version` field.
+* *State change events* include `oldState` and `newState` fields.
+* *Metadata update events* include `name`, `description`, and `owner` fields where applicable.
+* *Rule events* include `ruleType` and `rule` (the rule configuration) fields.
+
+.Example: ARTIFACT_VERSION_CREATED payload
+[source,json]
+----
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "eventType": "ARTIFACT_VERSION_CREATED",
+  "groupId": "com.example",
+  "artifactId": "my-schema",
+  "version": "1.2.0",
+  "name": "My Schema",
+  "description": "Updated with new fields"
+}
+----
+
+.Example: ARTIFACT_VERSION_STATE_CHANGED payload
+[source,json]
+----
+{
+  "id": "550e8400-e29b-41d4-a716-446655440001",
+  "eventType": "ARTIFACT_VERSION_STATE_CHANGED",
+  "groupId": "com.example",
+  "artifactId": "my-schema",
+  "version": "1.0.0",
+  "oldState": "ENABLED",
+  "newState": "DEPRECATED"
+}
+----
+
+

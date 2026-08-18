@@ -1,0 +1,61 @@
+[id="registry-security-rbac-keycloak_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Role-based authorization by using {keycloak} roles
+
+[role="_abstract"]
+To use roles assigned in {keycloak}, set the following environment variables:
+
+.Configuration for {registry} role-based authorization by using {keycloak}
+[id="registry-security-rbac-keycloak-settings_{context}",.table-expandable,width="100%",cols="6,6,2,3",options="header"]
+|===
+|Environment variable
+|Description
+|Type
+|Default
+|`APICURIO_AUTH_ROLE_SOURCE`
+| When set to `token`, user roles are taken from the authentication token.
+|String
+|`token`
+|`APICURIO_AUTH_ROLES_ADMIN`
+|The name of the role that indicates a user is an admin.
+|String
+|`sr-admin`
+|`APICURIO_AUTH_ROLES_DEVELOPER`
+|The name of the role that indicates a user is a developer.
+|String
+|`sr-developer`
+|`APICURIO_AUTH_ROLES_READONLY`
+|The name of the role that indicates a user has read-only access.
+|String
+|`sr-readonly`
+|===
+
+When you configure {registry} to use roles from {keycloak}, you must assign {registry} users to at least one
+of the following user roles in {keycloak}. However, you can configure different user role names by using the environment variables shown in the preceding table.
+
+.{registry} roles for authentication and authorization
+[.table-expandable,width="100%",cols="2,2,2,2,4",options="header"]
+|===
+|Role name
+|Read artifacts
+|Write artifacts
+|Global rules
+|Description
+|`sr-admin`
+|Yes
+|Yes
+|Yes
+|Full access to all create, read, update, and delete operations.
+|`sr-developer`
+|Yes
+|Yes
+|No
+|Access to create, read, update, and delete operations, except configuring global rules and import/export. This role can configure artifact-specific rules only.
+|`sr-readonly`
+|Yes
+|No
+|No
+|Access to read and search operations only. This role cannot configure any rules.
+|===
+
+// ref-registry-security-rbac-internal

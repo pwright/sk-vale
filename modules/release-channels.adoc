@@ -1,0 +1,10 @@
+[id="release-channels_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Release channels
+
+[role="_abstract"]
+{registry} provides multiple release channels so that you can choose the update cadence that suits your deployment.
+
+Choose the channel type that matches how you deploy {registry}: container images or the {operator}.
+
+

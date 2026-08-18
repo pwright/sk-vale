@@ -1,0 +1,106 @@
+[id="data-contracts-api-examples_{context}"]
+:_mod-docs-content-type: REFERENCE
+= REST API examples
+
+[role="_abstract"]
+Common `curl` examples for the Data Contracts REST API, including submitting, listing, exporting, and promoting contracts.
+
+.Submitting an ODCS contract
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/contracts \
+  -H 'Content-Type: application/x-yaml' \
+  --data-binary @my-contract.yaml
+----
+
+.Response
+[source,json]
+----
+{
+  "contractId": "orders-contract",
+  "version": "1.0.0",
+  "projection": {
+    "rulesApplied": 2,
+    "labelsApplied": 8,
+    "tagsApplied": 3,
+    "warnings": []
+  }
+}
+----
+
+.Listing contracts
+[source,bash]
+----
+curl "http://localhost:8080/apis/registry/v3/groups/my-group/contracts?limit=10&offset=0"
+----
+
+.Exporting as ODCS
+[source,bash]
+----
+curl http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/export
+----
+
+Returns the reconstructed ODCS v3.1 YAML from the artifact's current contract labels, rules, and field tags.
+
+.Promoting a contract
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/promote \
+  -H 'Content-Type: application/json' \
+  -d '{"contractId": "orders-contract", "targetStage": "STAGE"}'
+----
+
+.Getting quality score
+[source,bash]
+----
+curl "http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/quality?contractId=orders-contract"
+----
+
+.Response
+[source,json]
+----
+{"overall": 0.85, "completeness": 0.83, "compliance": 1.0, "stability": 0.67}
+----
+
+.Executing contract rules
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/versions/1/contract/execute \
+  -H 'Content-Type: application/json' \
+  -d '{"mode": "WRITE", "record": {"message": {"totalAmount": 100, "status": "active"}}}'
+----
+
+.Response
+[source,json]
+----
+{"passed": true, "violations": [], "executedRules": 2, "failedRules": 0}
+----
+
+.Setting contract metadata directly
+[source,bash]
+----
+curl -X PUT \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/metadata \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "status": "DRAFT",
+    "ownerTeam": "Platform Team",
+    "ownerDomain": "payments",
+    "supportContact": "platform@example.com",
+    "classification": "CONFIDENTIAL",
+    "stage": "DEV"
+  }'
+----
+
+.Transitioning contract status
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/status \
+  -H 'Content-Type: application/json' \
+  -d '{ "status": "STABLE" }'
+----
+

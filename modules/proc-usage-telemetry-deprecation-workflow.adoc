@@ -1,0 +1,43 @@
+[id="proc-usage-telemetry-deprecation-workflow_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Transitioning a version through the deprecation workflow
+
+[role="_abstract"]
+Apicurio Registry supports a version lifecycle state machine for controlled deprecation.
+
+[source,text]
+----
+  ENABLED ──────▶ DEPRECATED ──────▶ SUNSET ──────▶ (delete)
+     ▲                │                  │
+     │                ▼                  │
+     └──────── DISABLED                  │
+     ◀───────────────────────────────────┘
+----
+
+`ENABLED`:: Version is active and available for use.
+`DEPRECATED`:: Version still works but consumers should migrate. A warning is logged on access.
+`SUNSET`:: Migration deadline has passed. The version will be removed soon. Requires transitioning through `DEPRECATED` first.
+`DISABLED`:: Version is blocked from use.
+
+.Prerequisites
+* No active consumers depend on the version, verified by using the deprecation readiness endpoint.
+
+.Procedure
+. Deprecate the version:
++
+[source,bash]
+----
+curl -X PUT http://localhost:8080/apis/registry/v3/groups/default/artifacts/UserEvent/versions/1.0.0/state \
+  -H "Content-Type: application/json" \
+  -d '{"state":"DEPRECATED"}'
+----
+
+. Sunset the version:
++
+[source,bash]
+----
+curl -X PUT http://localhost:8080/apis/registry/v3/groups/default/artifacts/UserEvent/versions/1.0.0/state \
+  -H "Content-Type: application/json" \
+  -d '{"state":"SUNSET"}'
+----
+

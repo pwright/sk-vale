@@ -1,0 +1,74 @@
+[id="gitops-management-api_{context}"]
+:_mod-docs-content-type: REFERENCE
+= GitOps management API
+
+[role="_abstract"]
+The registry provides administrative REST endpoints for GitOps storage under the `/apis/registry/v3/admin/gitops` path. The endpoints return an HTTP `409` response when a different storage variant is active.
+
+.GitOps management endpoints
+[cols="3,1,3", options="header"]
+|===
+| Path
+| Method
+| Description
+
+| `/admin/gitops/status`
+| `GET`
+| Return the synchronization status.
+
+| `/admin/gitops/sync`
+| `POST`
+| Trigger an immediate synchronization. Returns an HTTP `204` response.
+
+| `/admin/gitops/validate`
+| `POST`
+| Create a dry-run validation task for a Git reference.
+
+| `/admin/gitops/validate`
+| `GET`
+| List validation tasks.
+
+| `/admin/gitops/validate/\{taskId}`
+| `GET`
+| Return the status and results of a validation task.
+
+| `/admin/gitops/validate/\{taskId}`
+| `DELETE`
+| Delete a validation task and clean up its files.
+|===
+
+The status response contains the following fields:
+
+.GitOps status fields
+[cols="1,3", options="header"]
+|===
+| Field
+| Description
+
+| `syncState`
+| Current state: `INITIALIZING`, `IDLE`, `LOADING`, `SWITCHING`, or `ERROR`.
+
+| `lastSuccessfulSync`
+| Timestamp of the last successful load.
+
+| `lastSyncAttempt`
+| Timestamp of the last poll attempt, successful or not.
+
+| `groupCount`, `artifactCount`, `versionCount`
+| Counts of the currently loaded data.
+
+| `errors`
+| Structured load errors. Each error has a `detail` message and, where available, a `source` repository identifier and a `context` file path.
+
+| `sources`
+| Map of repository identifiers to the abbreviated commit currently loaded from each repository.
+|===
+
+If a load fails because of a data error, for example malformed metadata, a missing content file, or a rule violation, the registry does not retry the same commit. Push a new commit that fixes the problem to trigger a fresh load. Transient errors are retried on the next poll.
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-rules}
+ifndef::service-registry-downstream[]
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/distro/gitops[GitOps sync container README]
+endif::[]

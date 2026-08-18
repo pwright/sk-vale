@@ -1,0 +1,21 @@
+[id="intro-to-registry-rules_{context}"]
+= {registry} content rules
+
+//If the assembly covers a task, start the title with a verb in the gerund form, such as Creating or Configuring.
+
+:_mod-docs-content-type: ASSEMBLY
+
+[role="_abstract"]
+{registry} supports optional rules that govern the evolution of artifact content, with configuration options at the global, group, and artifact level.
+
+//INCLUDES
+
+
+// Metadata created by nebel
+
+include::../modules/registry-rules.adoc[leveloffset=+1]
+include::../modules/registry-rules-apply.adoc[leveloffset=+1]
+include::../modules/registry-rules-precedence.adoc[leveloffset=+1]
+include::../modules/registry-rules-work.adoc[leveloffset=+1]
+include::../modules/registry-rules-config.adoc[leveloffset=+1]
+include::../modules/registry-rules-config-global.adoc[leveloffset=+1]

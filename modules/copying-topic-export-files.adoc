@@ -1,0 +1,16 @@
+[id="copying-topic-export-files_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Copying topic export files from the work pod
+
+[role="_abstract"]
+After the topic export files have been created, you can copy the files from the work pod to your local machine.
+
+.Procedure
+* Run the following command on your local machine:
++
+[subs="attributes"]
+[source,bash]
+----
+{kubernetes-client} cp work-pod:/kcat/dump .
+----
+

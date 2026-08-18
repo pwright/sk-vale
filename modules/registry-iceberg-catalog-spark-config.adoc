@@ -1,0 +1,36 @@
+[id="registry-iceberg-catalog-spark-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Apache Spark catalog configuration
+
+[role="_abstract"]
+Configure Apache Spark to use {registry} as the Iceberg catalog.
+
+[source,scala]
+----
+spark.conf.set("spark.sql.catalog.apicurio", "org.apache.iceberg.spark.SparkCatalog")
+spark.conf.set("spark.sql.catalog.apicurio.type", "rest")
+spark.conf.set("spark.sql.catalog.apicurio.uri", "http://localhost:8080/apis/iceberg/v1")
+spark.conf.set("spark.sql.catalog.apicurio.prefix", "default")
+----
+
+.Using the catalog in Spark SQL
+[source,sql]
+----
+-- Switch to the Apicurio catalog
+USE apicurio;
+
+-- Create a namespace
+CREATE NAMESPACE my_database;
+
+-- Create a table
+CREATE TABLE apicurio.my_database.events (
+  id BIGINT,
+  event_type STRING,
+  event_time TIMESTAMP
+) USING iceberg;
+
+-- Query the table
+SELECT * FROM apicurio.my_database.events;
+----
+
+// ref-registry-iceberg-catalog-trino-config

@@ -1,0 +1,37 @@
+[id="registry-events-architecture_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Event system architecture
+
+[role="_abstract"]
+The event system uses CDI (Contexts and Dependency Injection) events internally to decouple the storage layer from event delivery. When a storage operation modifies state, it fires a CDI event. A storage-specific event processor observes the CDI event and routes it to the appropriate delivery mechanism.
+
+The following diagram shows the event flow from a storage operation to external consumers:
+
+----
+Storage operation (for example, createArtifact)
+       |
+       v
+  Fire CDI event
+  (SqlOutboxEvent or KafkaSqlOutboxEvent)
+       |
+       +---------------------------+
+       |                           |
+       v                           v
+  SQL storage                 KafkaSQL storage
+  SqlEventsProcessor          KafkaSqlEventsProcessor
+       |                           |
+       v                           v
+  Insert into outbox table    Publish to Kafka topic
+  (PostgreSQL / MSSQL)        (registry-events)
+       |                           |
+       v                           |
+  Debezium CDC connector           |
+       |                           |
+       +---------------------------+
+       |
+       v
+  External consumers
+  (Kafka topic: registry-events)
+----
+
+

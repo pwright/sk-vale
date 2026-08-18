@@ -1,0 +1,57 @@
+[id="registry-security-dex-m2m_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Machine-to-machine access and Kafka SerDes with Dex
+
+[role="_abstract"]
+The preceding configuration covers the browser-based UI flow. For CI/CD pipelines, Kafka SerDes, and services that need to interact with the {registry} API without a browser, additional considerations apply.
+
+.M2M access with Dex `client_credentials`
+[.table-expandable,width="100%",cols="4,2,6",options="header"]
+|===
+|Scenario
+|Works?
+|Why
+
+|SerDes reading schemas (with `anonymousReadsEnabled: true`)
+|Yes
+|Anonymous reads bypass authentication entirely.
+
+|SerDes registering schemas
+|No
+|No role in token means write access is denied.
+
+|CI/CD creating artifacts
+|No
+|No role in token means write access is denied.
+|===
+
+*Recommended approach for Kafka SerDes.* For the most common Kafka use case, *consumers fetching schemas*, you do not need `client_credentials` at all. Set `anonymousReadsEnabled: true` in the {registry} CR and the SerDes can read schemas without any token. Anonymous reads are the recommended approach for read-heavy workloads.
+
+For *schema registration* (typically done by developers or CI/CD, not by Kafka producers at runtime), use the authorization code flow with the confidential client and a service user that has the right groups.
+
+*Upcoming fix: groups on static clients.* The Dex project tracks the lack of groups in `client_credentials` tokens in link:https://github.com/dexidp/dex/issues/4690[dexidp/dex#4690], and a proposed fix exists in link:https://github.com/dexidp/dex/pull/4691[dexidp/dex#4691]. The fix adds a `clientCredentialsClaims` sub-struct to static client definitions, keeping identity attributes separate from core client fields:
+
+[source,yaml]
+----
+staticClients:
+  - id: apicurio-registry
+    secret: "..."
+    clientCredentialsClaims:
+      groups: ["registry-admins"]   # included in client_credentials tokens
+----
+
+Track the PR for when this lands in a stable Dex release.
+
+*When to use {keycloak} instead.* If your deployment requires M2M *write access* with proper RBAC, for example, if Kafka producers register schemas at runtime or if you have many CI/CD pipelines that need different permission levels, use {keycloak} (or Auth0, Azure AD) instead of Dex. These providers support service account roles natively, so `client_credentials` tokens include all the claims {registry} needs.
+
+Dex is the right choice when:
+
+* Your upstream IdP is non-OIDC-compliant (OpenShift OAuth, LDAP, SAML)
+* You primarily need user-facing auth (UI login, principal identity, owner-based authz)
+* M2M workloads are read-only (SerDes consumers with anonymous reads)
+
+[role="_additional-resources"]
+.Additional resources
+* xref:registry-security-dex-m2m-client-credentials_{context}[]
+
+// ref-registry-security-dex-m2m-client-credentials

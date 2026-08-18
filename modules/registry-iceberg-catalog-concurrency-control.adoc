@@ -1,0 +1,20 @@
+[id="registry-iceberg-catalog-concurrency-control_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Optimistic concurrency control for table commits
+
+[role="_abstract"]
+{registry} uses optimistic concurrency control to detect conflicting Iceberg table commits and prevent concurrent writers from silently overwriting each other's changes.
+
+When a commit is processed:
+
+. The current table metadata is loaded and its version is recorded.
+. All requirements are validated against the current metadata.
+. All updates are applied in-memory to produce new metadata.
+. The new metadata is stored as a new artifact version.
+. If another commit is interleaved between steps 1 and 4, the conflict is detected and the commit fails with a `409 Conflict` response.
+
+Concurrent writers cannot silently overwrite each other's changes. Clients that receive a `409` response must reload the current table metadata, revalidate their changes, and retry the commit.
+
+All changes within a single commit, including the new version and any artifact-level label updates, are applied atomically within a single storage transaction. If any part of the commit fails, the entire operation is rolled back and no partial state is persisted.
+
+// proc-registry-iceberg-catalog-retry-commit

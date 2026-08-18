@@ -1,0 +1,21 @@
+[id="configuring-console-plugin_{context}"]
+:_mod-docs-content-type: REFERENCE
+= OpenShift Console plugin configuration
+
+[role="_abstract"]
+On OpenShift, the {operator} can deploy a console plugin that adds an *Apicurio* section to the OpenShift Console administrator perspective, with pages for listing and inspecting `ApicurioRegistry3` instances.
+
+To deploy the console plugin, both of the following conditions must be met:
+
+* The top-level `spec.consolePlugin.enabled` field is set to `true` in the custom resource. The field defaults to `false`.
+* The console plugin image is configured on the {operator}, by using the `REGISTRY_CONSOLE_PLUGIN_IMAGE` environment variable on the operator deployment.
+
+[source,yaml]
+----
+spec:
+  consolePlugin:
+    enabled: true
+----
+
+The {operator} then creates a console plugin Deployment and Service secured with OpenShift service serving certificates, and registers a cluster-scoped `ConsolePlugin` resource named `<cr-name>-console-plugin`. The plugin backend forwards the logged-in user's OpenShift bearer token to the registry API. On clusters that are not OpenShift, the console plugin is not deployed.
+

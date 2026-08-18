@@ -1,0 +1,12 @@
+[id="ha-rolling-update-strategy_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Operator rolling update strategy
+
+[role="_abstract"]
+The operator performs rolling updates automatically when you update the `ApicurioRegistry3` CR. The default
+strategy ensures the following.
+
+* Pods are updated one at a time
+* Each new pod must pass readiness checks before the next pod is updated
+* PodDisruptionBudget prevents too many pods being unavailable
+
