@@ -8,4 +8,5 @@ merged.adoc
 vale-report.json
 metrics-*.json
 *.html
+!docs/*.html
 images/

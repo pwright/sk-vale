@@ -45,16 +45,18 @@ done
 
 # --- Check prerequisites ---
 missing=()
-for cmd in python3 kramdoc vale; do
+for cmd in python3 kramdoc vale npm asciidoc-comments; do
     if ! command -v "$cmd" &>/dev/null; then
         missing+=("$cmd")
     fi
 done
 if [[ ${#missing[@]} -gt 0 ]]; then
     echo "ERROR: Missing required tools: ${missing[*]}"
-    echo "  python3   - system Python 3"
-    echo "  kramdoc   - gem install kramdown-asciidoc"
-    echo "  vale      - https://vale.sh/docs/install/"
+    echo "  python3             - system Python 3"
+    echo "  kramdoc             - gem install kramdown-asciidoc"
+    echo "  vale                - https://vale.sh/docs/install/"
+    echo "  npm                 - Node.js package manager"
+    echo "  asciidoc-comments   - npm install -g @techwriter/asciidoc-comments"
     exit 1
 fi
 
@@ -80,7 +82,7 @@ fi
 
 # --- Clean previous output ---
 echo "Cleaning previous output..."
-rm -rf "$REPO_ROOT/assemblies" "$REPO_ROOT/modules"
+rm -rf "$REPO_ROOT/assemblies" "$REPO_ROOT/modules" "$REPO_ROOT/docs"
 rm -f "$REPO_ROOT/index.adoc" "$REPO_ROOT/merged.md" "$REPO_ROOT/merged.adoc"
 mkdir -p "$REPO_ROOT/output"
 
@@ -90,7 +92,7 @@ cd "$REPO_ROOT"
 vale sync
 
 # --- Build site using build_index.py ---
-echo "Step 1/2: Building assemblies and modules from Markdown..."
+echo "Step 1/3: Building assemblies and modules from Markdown..."
 
 # Use mkdocs.yml from upstream or skupper.md as fallback
 if [[ -f "$SOURCE_DIR/../mkdocs.yml" ]]; then
@@ -114,7 +116,7 @@ fi
 echo "Generated index.adoc with $(ls -1 "$REPO_ROOT/assemblies"/*.adoc 2>/dev/null | wc -l) assemblies and $(ls -1 "$REPO_ROOT/modules"/*.adoc 2>/dev/null | wc -l) modules"
 
 # --- Step 2: Run Vale ---
-echo "Step 2/2: Running Vale..."
+echo "Step 2/3: Running Vale..."
 cd "$REPO_ROOT"
 vale_exit=0
 vale --output=JSON assemblies/ modules/ 2>&1 | tee "$REPO_ROOT/vale-report.json" || vale_exit=${PIPESTATUS[0]}
@@ -123,6 +125,27 @@ if [[ $vale_exit -eq 0 ]]; then
     echo "Vale: all checks passed."
 else
     echo "Vale: finished with warnings/errors (exit code $vale_exit)."
+fi
+
+# --- Step 3: Generate HTML documentation ---
+echo "Step 3/3: Generating HTML documentation..."
+cd "$REPO_ROOT"
+mkdir -p "$REPO_ROOT/docs"
+
+if [[ ! -f "$REPO_ROOT/index.adoc" ]]; then
+    echo "ERROR: index.adoc not found, cannot generate HTML"
+    exit 1
+fi
+
+html_exit=0
+asciidoc-comments "$REPO_ROOT/index.adoc" > "$REPO_ROOT/docs/index.html" || html_exit=$?
+
+if [[ $html_exit -eq 0 ]]; then
+    echo "HTML generation: completed successfully."
+    echo "Generated: $REPO_ROOT/docs/index.html"
+else
+    echo "ERROR: HTML generation failed (exit code $html_exit)"
+    exit 1
 fi
 
 # --- Commit to skupper branch ---
@@ -134,12 +157,12 @@ if [[ "$DO_COMMIT" == "true" ]]; then
     WORKTREE_DIR="${WORKTREE_DIR/#\~/$HOME}"
 
     if [[ -n "$WORKTREE_DIR" && "$WORKTREE_DIR" != "$REPO_ROOT" ]]; then
-        cp -a index.adoc assemblies/ modules/ vale-report.json "$WORKTREE_DIR/"
+        cp -a index.adoc assemblies/ modules/ docs/ vale-report.json "$WORKTREE_DIR/"
         cd "$WORKTREE_DIR"
-        git add -f index.adoc assemblies/ modules/ vale-report.json
+        git add -f index.adoc assemblies/ modules/ docs/ vale-report.json
     else
         git checkout -B "$SKUPPER_BRANCH"
-        git add -f index.adoc assemblies/ modules/ vale-report.json
+        git add -f index.adoc assemblies/ modules/ docs/ vale-report.json
     fi
 
     git commit -m "Update skupper-docs vale results

@@ -28,6 +28,14 @@ jobs:
           gem install --user-install kramdown-asciidoc asciidoctor
           echo "$(ruby -e 'puts Gem.user_dir')/bin" >> "$GITHUB_PATH"
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install asciidoc-comments
+        run: npm install -g @techwriter/asciidoc-comments
+
       - name: Install Vale
         run: |
           VALE_VERSION=3.9.5
