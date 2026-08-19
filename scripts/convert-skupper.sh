@@ -115,6 +115,26 @@ fi
 
 echo "Generated index.adoc with $(ls -1 "$REPO_ROOT/assemblies"/*.adoc 2>/dev/null | wc -l) assemblies and $(ls -1 "$REPO_ROOT/modules"/*.adoc 2>/dev/null | wc -l) modules"
 
+# --- Generate subset index (master.adoc) ---
+echo "Generating subset documentation (master.adoc)..."
+if [[ -f "$REPO_ROOT/subset.yml" ]]; then
+    python3 "$SCRIPT_DIR/build_index.py" \
+        "$REPO_ROOT/subset.yml" \
+        --output "$REPO_ROOT" \
+        --source-dir "$SOURCE_DIR" \
+        --index-only \
+        --title "User Guide" \
+        --output-name "master.adoc"
+
+    if [[ -f "$REPO_ROOT/master.adoc" ]]; then
+        echo "Generated master.adoc with $(grep -c '^include::' "$REPO_ROOT/master.adoc") assemblies"
+    else
+        echo "WARNING: master.adoc generation failed"
+    fi
+else
+    echo "INFO: subset.yml not found, skipping master.adoc generation"
+fi
+
 # --- Step 2: Run Vale ---
 echo "Step 2/3: Running Vale..."
 cd "$REPO_ROOT"
@@ -158,11 +178,14 @@ if [[ "$DO_COMMIT" == "true" ]]; then
 
     if [[ -n "$WORKTREE_DIR" && "$WORKTREE_DIR" != "$REPO_ROOT" ]]; then
         cp -a index.adoc assemblies/ modules/ docs/ vale-report.json "$WORKTREE_DIR/"
+        [[ -f "$REPO_ROOT/master.adoc" ]] && cp -a master.adoc "$WORKTREE_DIR/"
         cd "$WORKTREE_DIR"
         git add -f index.adoc assemblies/ modules/ docs/ vale-report.json
+        [[ -f master.adoc ]] && git add -f master.adoc
     else
         git checkout -B "$SKUPPER_BRANCH"
         git add -f index.adoc assemblies/ modules/ docs/ vale-report.json
+        [[ -f master.adoc ]] && git add -f master.adoc
     fi
 
     git commit -m "Update skupper-docs vale results
