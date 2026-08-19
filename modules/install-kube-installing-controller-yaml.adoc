@@ -1,0 +1,28 @@
+[id="kube-installing-controller-yaml"]
+:_mod-docs-content-type: PROCEDURE
+= Installing the Skupper controller using YAML
+
+[role="_abstract"]
+
+Install the Skupper controller on Kubernetes directly from the published YAML manifests.
+
+*Prerequisites*
+
+* cluster-admin access to cluster
+
+.Procedure
+
+Install a cluster-scoped controller using the following commands:
+
+[,bash]
+----
+kubectl apply -f https://github.com/skupperproject/skupper/releases/download/{{skupper_cli_version}}/skupper-cluster-scope.yaml
+----
+
+Install a namespace-scoped controller using the following commands:
+
+[,bash]
+----
+kubectl apply -f https://github.com/skupperproject/skupper/releases/download/{{skupper_cli_version}}/skupper-namespace-scope.yaml
+----
+

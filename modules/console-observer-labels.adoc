@@ -1,0 +1,55 @@
+[id="observer-labels"]
+= Labels and Annotations
+
+
+|===
+| Path | Type | Default | Description
+
+| `commonLabels`
+| map
+| `{}`
+| Labels on all resources
+
+| `commonAnnotations`
+| map
+| `{}`
+| Annotations on all resources
+
+| `podLabels`
+| map
+| `{}`
+| Labels on Pod resources only
+
+| `podAnnotations`
+| map
+| `{}`
+| Annotations on Pod resources only
+|===
+
+*Standard labels (always present):*
+
+* `app.kubernetes.io/name: network-observer`
+* `app.kubernetes.io/instance: <name>`
+* `app.kubernetes.io/version: <version>`
+* `app.kubernetes.io/managed-by: Helm` or `network-observer-operator`
+
+*Example:*
+
+[,yaml]
+----
+commonLabels:
+  environment: production
+  team: platform-engineering
+  cost-center: "12345"
+
+commonAnnotations:
+  owner: "platform-team@company.com"
+  docs: "https://wiki.company.com/network-observer"
+
+podLabels:
+  app.kubernetes.io/tier: monitoring
+
+podAnnotations:
+  prometheus.io/scrape: "false"
+----
+

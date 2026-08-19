@@ -1,0 +1,29 @@
+[id="observer-router"]
+= Router Connection
+
+
+|===
+| Path | Type | Default | Description
+
+| `router.endpoint`
+| string
+| `"amqps://skupper-router-local"`
+| AMQP endpoint URL
+
+| `router.certificate.create`
+| bool
+| `true`
+| Auto-create client certificate
+
+| `router.certificate.nameOverride`
+| string
+| `""`
+| Custom certificate name
+|===
+
+*Notes:*
+
+* Endpoint must use `amqps://` scheme
+* Client certificate provisioned by Skupper controller
+* Certificate mounted at `/etc/messaging/`
+

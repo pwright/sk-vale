@@ -1,0 +1,16 @@
+[id="kube-resources-sa"]
+:_mod-docs-content-type: REFERENCE
+= Service accounts, roles and role bindings
+
+[role="_abstract"]
+
+When you install the Skupper controller, the following resources are created:
+
+* *skupper-controller*
+A service account, role and role binding with this name are created to manage the Skupper  controller.
+
+When you create a Skupper site, the following resources are created:
+
+* *skupper-router*
+A service account, role and role binding with this name are created to manage the Skupper router.
+

@@ -1,0 +1,23 @@
+[id="observer-service"]
+= Service
+
+
+|===
+| Path | Type | Default | Description
+
+| `service.type`
+| string
+| `ClusterIP`
+| Service type: `ClusterIP`, `LoadBalancer`, `NodePort`
+
+| `service.port`
+| int
+| `443`
+| External port
+|===
+
+*Notes:*
+
+* `targetPort` always `https` (8443)
+* Metrics service always `ClusterIP` on port `9000`
+

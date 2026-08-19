@@ -1,0 +1,80 @@
+[id="observer-persistence"]
+= Data Persistence
+
+
+By default, Prometheus uses ephemeral storage (`emptyDir`). For persistent time-series data, enable a PersistentVolumeClaim.
+
+=== Persistence Options
+
+|===
+| Path | Type | Default | Description
+
+| `prometheus.persistence.enabled`
+| bool
+| `false`
+| Enable persistent storage
+
+| `prometheus.persistence.storageClass`
+| string
+| `""`
+| StorageClass name (empty = default)
+
+| `prometheus.persistence.size`
+| string
+| `8Gi`
+| PVC size
+
+| `prometheus.persistence.accessModes`
+| array
+| `["ReadWriteOnce"]`
+| PVC access modes
+|===
+
+*Behavior:*
+
+* Disabled: Uses `emptyDir` (ephemeral)
+* Enabled: Creates PVC, uses `Recreate` deployment strategy
+
+*Prerequisites*
+
+* A StorageClass that can provision PersistentVolumes, or a default StorageClass configured in your cluster
+
+*Procedure*
+
+. Configure persistence in your values file:
++
+[,yaml]
+----
+prometheus:
+  persistence:
+    enabled: true
+    storageClass: ""   # Use default StorageClass
+    size: 8Gi
+    accessModes:
+      - ReadWriteOnce
+----
+
+. Install or upgrade the chart with your values:
++
+[,bash]
+----
+helm upgrade --install skupper-network-observer oci://quay.io/skupper/helm/network-observer --version {{skupper_cli_version}} -f values.yaml
+----
+
+. Verify the PersistentVolumeClaim is bound:
++
+[,bash]
+----
+kubectl get pvc
+----
++
+Example output:
++
+[,text]
+----
+NAME                                    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1234567890   8Gi        RWO            standard       2m
+----
+
+IMPORTANT: When persistence is enabled, the Deployment uses a *Recreate* update strategy to ensure the single read-write volume can attach cleanly during pod updates.
+

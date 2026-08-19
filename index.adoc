@@ -4,7 +4,7 @@
 :sectnums:
 
 [id="generated-index"]
-= Documentation
+= Skupper Documentation
 
 include::assemblies/overview-assembly-skupper-overview.adoc[leveloffset=+1]
 include::assemblies/overview-assembly-overview-connectivity.adoc[leveloffset=+1]

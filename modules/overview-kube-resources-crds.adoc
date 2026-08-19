@@ -1,0 +1,15 @@
+[id="kube-resources-crds"]
+:_mod-docs-content-type: REFERENCE
+= Custom resource definitions
+
+[role="_abstract"]
+
+To get start creating application networks, you create the following custom resources:
+
+* Sites
+* Links
+* Connectors
+* Listeners
+
+See https://skupperproject.github.io/refdog/resources/index.html[Resource Reference] for explanations of all the custom resources.
+

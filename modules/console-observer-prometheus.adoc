@@ -1,0 +1,84 @@
+[id="observer-prometheus"]
+= Prometheus Configuration
+
+
+The Prometheus container supports custom configuration and tuning options.
+
+=== Configuration File
+
+|===
+| Path | Type | Default | Description
+
+| `prometheus.config`
+| string
+| embedded
+| Complete `prometheus.yml` content
+|===
+
+*Default scrape config:*
+
+[,yaml]
+----
+scrape_configs:
+  - job_name: 'network-observer'
+    static_configs:
+      - targets: ['localhost:8080']
+----
+
+=== Command-Line Flags
+
+|===
+| Path | Type | Default | Description
+
+| `prometheus.extraArgs`
+| array
+| `[]`
+| Additional Prometheus flags
+|===
+
+*Common flags:*
+
+* `--storage.tsdb.retention.time=<duration>`
+* `--storage.tsdb.retention.size=<bytes>`
+* `--query.max-samples=<int>`
+
+*Example:*
+
+[,yaml]
+----
+prometheus:
+  extraArgs:
+    - --storage.tsdb.retention.time=15d
+    - --storage.tsdb.retention.size=10GB
+----
+
+=== Extra Volumes and Mounts
+
+|===
+| Path | Type | Default | Description
+
+| `prometheus.extraVolumes`
+| array
+| `[]`
+| Additional volumes (Kubernetes volume spec)
+
+| `prometheus.extraVolumeMounts`
+| array
+| `[]`
+| Volume mount points (Kubernetes volumeMount spec)
+|===
+
+*Example:*
+
+[,yaml]
+----
+prometheus:
+  extraVolumes:
+    - name: extra-config
+      configMap:
+        name: prometheus-rules
+  extraVolumeMounts:
+    - name: extra-config
+      mountPath: /etc/prometheus/rules
+----
+

@@ -1,0 +1,57 @@
+[id="kube-yaml-custom-certs"]
+:_mod-docs-content-type: ASSEMBLY
+= Linking sites using custom certificates
+
+[role="_abstract"]
+
+By default, the Skupper controller generates internal Certificate Authorities (CAs) and self-signed certificates. +
+For example, it creates certificates to authenticate incoming Skupper links from external Skupper sites.
+
+The CA and server certificate used for this authentication are named `skupper-site-ca` (default signing `Certificate` resource for a Skupper Site) and `skupper-site-server`, respectively.
+
+Although this behavior is automatic, you can override it by providing your own custom server certificate or even your own CA.
+
+This document describes two approaches for using custom certificates:
+
+* *Using a custom `RouterAccess` and custom certificates* - Manually define the `RouterAccess` CR with your own certificate (`linkAccess` is not enabled)
+* *Using `Link` resources and custom certificates* - Override the default `skupper-site-server` certificate before `linkAccess` is enabled
+
+*Key differences between approaches*
+
+|===
+|  | `linkAccess` | `RouterAccess`
+
+| Who creates `RouterAccess`
+| Skupper controller (auto)
+| You (manually)
+
+| `generateTlsCredentials`
+| `true`
+| `false`
+
+| Secret name
+| Must be `skupper-site-server`
+| Any name you choose
+
+| Site delete/recreate needed
+| Yes, to prevent overwrite
+| No
+
+| Skupper overwrites your cert
+| Yes, unless pre-created
+| Never
+|===
+
+*Site-specific context*
+
+* `RouterAccess` is a *listening site* concern - it controls how your site accepts incoming link connections
+* `Certificate` CR can be used on *both sites*, but only if the referenced CA secret exists in the namespace:
+ ** On the *listening site* - the Certificate CR can reference a CA secret to sign the server certificate
+ ** On the *connecting site* - it generates client credentials for outgoing links, but the CA that signs those credentials must also be present in the namespace
+
+NOTE: If a `RouterAccess` references a custom secret signed by an external CA (where no CA secret exists in the namespace), then `Certificate` CRs cannot be used to generate client credentials automatically.
+
+In both approaches, the listening site provides server certificates and the connecting site uses client certificates to establish the link.
+
+include::../modules/kube-yaml-kube-router-access-custom-certs-yaml.adoc[leveloffset=+1]
+include::../modules/kube-yaml-kube-link-custom-certs-yaml.adoc[leveloffset=+1]

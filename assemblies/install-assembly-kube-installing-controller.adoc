@@ -1,0 +1,29 @@
+[id="kube-installing-controller"]
+:_mod-docs-content-type: ASSEMBLY
+= Installing the Skupper controller
+
+[role="_abstract"]
+
+If you are using Skupper on local systems (Podman, Docker, Linux), you must <<installing-cli,install the CLI>>.
+
+Before you can create a site on Kubernetes, you must install the Skupper controller.
+You can install the controller using the following methods:
+
+* Directly using YAML
+* Helm charts
+* Operator
+
+After installing the Skupper controller, you can create sites using the CLI or YAML:
+
+* xref:kube-creating-site-cli[Creating a site using the CLI]
+* xref:kube-creating-site-yaml[Creating a site using YAML]
+
+*NOTE*: If you install the controller scoped to cluster, you can create sites in any namespace.
+If you scope the controller to a namespace, you can only create sites in that namespace.
+
+include::../modules/install-kube-installing-controller-yaml.adoc[leveloffset=+1]
+include::../modules/install-kube-installing-controller-helm.adoc[leveloffset=+1]
+include::../modules/install-installing-cli.adoc[leveloffset=+1]
+include::../modules/install-skupper-upgrading-sites.adoc[leveloffset=+1]
+include::../modules/install-skupper-upgrading-local-sites.adoc[leveloffset=+2]
+include::../modules/install-skupper-upgrading-local-controller.adoc[leveloffset=+2]

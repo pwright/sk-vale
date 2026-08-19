@@ -1,0 +1,17 @@
+[id="kube-yaml-site-linking"]
+:_mod-docs-content-type: ASSEMBLY
+= Linking sites on Kubernetes using YAML
+
+[role="_abstract"]
+
+Once sites are linked, services can be exposed and consumed across the application network without the need to open ports or manage inter-site connectivity.
+
+Terminology:
+
+* Connecting site: The site that initiates the link connection.
+* Listening site: The site receives the link connection.
+
+The link direction is not significant, and is typically determined by ease of connectivity. For example, if `east` is behind a firewall and `west` is a cluster on the public cloud, linking from `east` to `west` is the easiest option.
+
+include::../modules/kube-yaml-kube-access-yaml.adoc[leveloffset=+1]
+include::../modules/kube-yaml-kube-link-cost-yaml.adoc[leveloffset=+1]

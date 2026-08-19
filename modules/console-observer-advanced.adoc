@@ -1,0 +1,31 @@
+[id="observer-advanced"]
+= Advanced Options
+
+
+=== Name Overrides
+
+|===
+| Path | Type | Default | Description
+
+| `nameOverride`
+| string
+| `""`
+| Override chart name
+
+| `fullnameOverride`
+| string
+| `""`
+| Override full resource name
+|===
+
+=== Skip Management Labels
+
+|===
+| Path | Type | Default | Description
+
+| `skipManagementLabels`
+| bool
+| `false`
+| Skip Skupper management labels
+|===
+

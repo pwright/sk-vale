@@ -1,0 +1,31 @@
+[id="observer-tls"]
+= TLS Certificates
+
+
+|===
+| Path | Type | Default | Description
+
+| `tls.skupperIssued`
+| bool
+| `true`
+| Use Skupper controller CA (default)
+
+| `tls.openshiftIssued`
+| bool
+| `false`
+| Use OpenShift Service CA
+
+| `tls.secretName`
+| string
+| `""`
+| Existing TLS Secret name
+|===
+
+*Priority:* `secretName` > `openshiftIssued` > `skupperIssued`
+
+*Methods:*
+
+* *Skupper-issued:* Auto-provisioned by controller, uses same CA as inter-site links
+* *OpenShift Service CA:* Platform-issued, automatic rotation
+* *External:* Manual management, Secret type `kubernetes.io/tls`
+

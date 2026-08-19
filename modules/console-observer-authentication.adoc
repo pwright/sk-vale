@@ -1,0 +1,65 @@
+[id="observer-authentication"]
+= Authentication
+
+
+|===
+| Path | Type | Default | Description
+
+| `auth.strategy`
+| string
+| `"basic"`
+| Authentication strategy: `basic`, `openshift`, `none`
+|===
+
+=== Basic Authentication
+
+|===
+| Path | Type | Default | Description
+
+| `auth.basic.create`
+| bool
+| `true`
+| Auto-generate htpasswd Secret with random password
+
+| `auth.basic.secretName`
+| string
+| `""`
+| Existing htpasswd Secret name (requires `htpasswd` key)
+|===
+
+*Generated credentials:*
+
+* Username: `skupper`
+* Password: Random 16-character string (stored in Secret)
+
+=== OpenShift OAuth
+
+|===
+| Path | Type | Default | Description
+
+| `auth.openshift.createCookieSecret`
+| bool
+| `true`
+| Auto-generate session cookie secret
+
+| `auth.openshift.cookieSecretName`
+| string
+| `""`
+| Existing cookie Secret name
+
+| `auth.openshift.serviceAccount.create`
+| bool
+| `true`
+| Create ServiceAccount for OAuth
+
+| `auth.openshift.serviceAccount.nameOverride`
+| string
+| `""`
+| Custom ServiceAccount name
+|===
+
+*Requirements:*
+
+* OpenShift cluster
+* RBAC permissions for delegated authentication
+

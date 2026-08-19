@@ -1,0 +1,36 @@
+[id="skupper-upgrading-local-controller"]
+:_mod-docs-content-type: PROCEDURE
+= Upgrading the Skupper controller
+
+Currently, `skupper system uninstall` protects active sites by refusing to run if a site is detected. However, if you need to force an update to the *controller* itself (to pick up a new controller version) without deleting your sites, follow this manual workaround:
+
+*Prerequisites*
+
+* Ensure your CLI is updated to the target version.
+
+.Procedure
+
+. Stop and remove the controller container. The container is named `<user>-skupper-controller`.
++
+*Podman*
++
+----
+ podman rm -f <user>-skupper-controller
+----
++
+*Docker*
++
+----
+ docker rm -f <user>-skupper-controller
+----
++
+_Note: Replace `<user>` with the specific username under which Skupper is running._
+
+. Re-install the controller.
+ Run the install command to recreate the controller using the new CLI version.
++
+----
+ skupper system install
+----
+
+. Verify the controller is recreated with the updated version.

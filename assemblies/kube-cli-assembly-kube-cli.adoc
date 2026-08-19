@@ -1,0 +1,14 @@
+[id="kube-cli"]
+:_mod-docs-content-type: REFERENCE
+= Overview of Skupper CLI on Kubernetes
+
+[role="_abstract"]
+
+You can use the `skupper` CLI on Kubernetes after installing the Skupper controller to configure sites, links and services.
+
+The Skupper CLI is designed to generate and consume standard resources, ensuring that a sites, links and services configured using the CLI are identical to those configured directly through YAML.
+
+* xref:kube-creating-site-cli[Create sites]
+* xref:kube-linking-cli[Link sites] (requires that one site has link access enabled)
+* xref:kube-link-cost-cli[Configure link cost]
+* xref:kube-exposing-services-cli[Expose and consume services]
