@@ -168,6 +168,17 @@ else
     exit 1
 fi
 
+# Generate HTML from master.adoc if it exists
+if [[ -f "$REPO_ROOT/master.adoc" ]]; then
+    echo "Generating HTML from master.adoc..."
+    asciidoc-comments "$REPO_ROOT/master.adoc" > "$REPO_ROOT/docs/master.html" || html_exit=$?
+    if [[ $html_exit -eq 0 ]]; then
+        echo "Generated: $REPO_ROOT/docs/master.html"
+    else
+        echo "WARNING: master.html generation failed (exit code $html_exit)"
+    fi
+fi
+
 # --- Commit to skupper branch ---
 if [[ "$DO_COMMIT" == "true" ]]; then
     echo "Committing to '$SKUPPER_BRANCH' branch..."
