@@ -1,0 +1,86 @@
+[id="kube-creating-multikeylistener-yaml"]
+:_mod-docs-content-type: PROCEDURE
+= Creating a multi-key listener using YAML
+
+[role="_abstract"]
+
+A multi-key listener binds a single local host and port to multiple routing keys in remote sites.
+Use a multi-key listener when you want one service endpoint to aggregate traffic from multiple connectors.
+
+With multi-key listeners, you must choose a strategy which determines how the traffic is distributed:
+
+* priority - Uses the first routing key in list that is available for traffic. If the connectors for that routing key become unavailable, the listener matches with the next routing key in list.
+* weighted - Uses the routing keys in proportion to the assigned weights. For example, if `backend1` is assigned 25 and `backend2` is assigned 75, then only a quarter of the TCP connections are directed to `backend1`.
+
+*📌 NOTE*
+Multi-key listeners select between routing keys using the configured strategy. Each routing key may have multiple connectors, and link cost determines which connector is used within each routing key. The two mechanisms are independent.
+
+For configuration details, see https://skupperproject.github.io/refdog/resources/multi-key-listener.html[MultiKeyListener resource].
+
+*Prerequisites*
+
+* Multiple connectors created with different routing keys. See <<kube-creating-connector-yaml,Creating a connector using YAML>>.
+
+.Procedure
+
+. Identify the connectors that you want to aggregate.
+Note the routing keys for each connector.
+. Determine which strategy is best for your use case. For example, failover is best achieved using the `priority` strategy.
+. Create a multi-key listener resource YAML file.
+For example:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: MultiKeyListener
+metadata:
+  name: mkl-backend
+spec:
+  host: mkl-backend
+  port: 9092
+  strategy:
+    weighted:
+      routingKeys:
+        east-backend: 1
+        west-backend: 1
+----
++
+This creates a listener named `mkl-backend` that exposes a single endpoint on port 9092 and distributes traffic evenly between the `east-backend` and `west-backend` routing keys. Each routing key may have multiple connectors; link cost determines which connector is used within each routing key.
++
+To prefer one routing key first and fall back to another, use the `priority` strategy:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: MultiKeyListener
+metadata:
+  name: mkl-backend-priority
+spec:
+  host: mkl-backend-priority
+  port: 9095
+  strategy:
+    priority:
+      routingKeys:
+        - east-backend-http
+        - west-backend-http
+----
++
+To create the multi-key listener resource:
++
+[,bash]
+----
+kubectl apply -f <filename>
+----
++
+where `<filename>` is the name of a YAML file that is saved on your local filesystem.
+
+. Check the multi-key listener status:
++
+[,bash]
+----
+kubectl get multikeylistener
+----
++
+*📌 NOTE*
+If you need to change strategy after you created a multi-key listener, you must delete and recreate the resource. This does not affect changing routing keys or weights.
+

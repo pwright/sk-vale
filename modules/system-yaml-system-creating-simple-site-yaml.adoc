@@ -1,0 +1,64 @@
+[id="system-creating-simple-site-yaml"]
+:_mod-docs-content-type: PROCEDURE
+= Creating a simple site on local systems using YAML
+
+[role="_abstract"]
+
+You can use YAML to create and manage Skupper sites.
+
+*Prerequisites*
+
+* The `skupper` CLI is installed.
+
+There are many options to consider when creating sites using YAML, see https://skupperproject.github.io/refdog/resources/index.html[YAML Reference], including _frequently used_ options.
+
+.Procedure
+
+. Create a site CR YAML file named `my-site.yaml` in an empty directory, for example, `local`:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Site
+metadata:
+  name: my-site
+----
++
+This YAML creates a site named `my-site` in the `default` namespace.
+
+. Create the site:
++
+[,bash]
+----
+skupper system setup --path ./local
+----
++
+Skupper attempts to process any files in the `local` directory.
+Typically, you create all resources you require for a site before running `skupper system setup`.
++
+*Optional:* Enable the Dynamic System Controller to automatically process YAML resources:
++
+[,bash]
+----
+export SKUPPER_SYSTEM_RELOAD_TYPE=auto
+skupper system install
+----
++
+With this feature enabled, you can create sites, links, connectors and listeners without needing a system reload to apply your configuration.
+
+. Check the status of the site:
++
+[,bash]
+----
+skupper site status
+----
++
+You might need to issue the command multiple times before the site is ready:
++
+[,text]
+----
+NAME    STATUS  MESSAGE
+default Ready   OK
+----
++
+You can now link this site to another site to create an application network.

@@ -1,0 +1,17 @@
+[id="system-yaml-site-linking"]
+:_mod-docs-content-type: ASSEMBLY
+= Linking sites on local systems using YAML
+
+[role="_abstract"]
+
+Use a `link` resource YAML file to create links between local system and Kubernetes sites.
+
+Using a `link` resource YAML file allows you to create links between sites.
+The link direction is not significant, and is typically determined by ease of connectivity. For example, if east is behind a firewall, linking from east to west is the easiest option.
+
+Once sites are linked, services can be exposed and consumed across the application network without the need to open ports or manage inter-site connectivity.
+
+The procedures below describe linking an existing site.
+Typically, it is easier to configure a site, links, and services in a set of files and then create a configured site by placing all the YAML files in a directory such as `local` before running `skupper system setup`.
+
+include::../modules/system-yaml-system-link-yaml.adoc[leveloffset=+1]

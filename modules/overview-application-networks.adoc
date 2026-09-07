@@ -1,0 +1,22 @@
+[id="application-networks"]
+:_mod-docs-content-type: CONCEPT
+= Application Networks
+
+[role="_abstract"]
+
+An application network connects services across sites as if they were running together.
+
+Skupper solves multi-cluster communication challenges through something called a Virtual Application Network or just application network.
+To understand the value of Skupper, it is helpful to first understand what an application network is.
+
+An application network connects the applications and services in your hybrid cloud into a virtual network so that they can communicate with each other as if they were all running in the same site.
+In this diagram, an application network connects three services, each of which is running in a different cloud:
+
+image::../images/overview-clouds.png[overview-clouds]
+
+In essence, the application network connects the services in a distributed application with a microservice architecture.
+
+image::../images/overview-application.png[overview-application]
+
+Application networks are able to provide connectivity across the hybrid cloud by using Skupper routers.
+

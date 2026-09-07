@@ -1,0 +1,112 @@
+[id="observer-resources"]
+= Container Resources
+
+
+Resource requests and limits can be configured for each container in the Pod.
+
+=== Network Observer Container
+
+|===
+| Path | Type | Default | Description
+
+| `containerResources.networkObserver.requests.cpu`
+| string
+| -
+| CPU request
+
+| `containerResources.networkObserver.requests.memory`
+| string
+| -
+| Memory request
+
+| `containerResources.networkObserver.limits.cpu`
+| string
+| -
+| CPU limit
+
+| `containerResources.networkObserver.limits.memory`
+| string
+| -
+| Memory limit
+|===
+
+=== Prometheus Container
+
+|===
+| Path | Type | Default | Description
+
+| `containerResources.prometheus.requests.cpu`
+| string
+| -
+| CPU request
+
+| `containerResources.prometheus.requests.memory`
+| string
+| -
+| Memory request
+
+| `containerResources.prometheus.limits.cpu`
+| string
+| -
+| CPU limit
+
+| `containerResources.prometheus.limits.memory`
+| string
+| -
+| Memory limit
+|===
+
+=== Proxy Container
+
+|===
+| Path | Type | Default | Description
+
+| `containerResources.proxy.requests.cpu`
+| string
+| -
+| CPU request
+
+| `containerResources.proxy.requests.memory`
+| string
+| -
+| Memory request
+
+| `containerResources.proxy.limits.cpu`
+| string
+| -
+| CPU limit
+
+| `containerResources.proxy.limits.memory`
+| string
+| -
+| Memory limit
+|===
+
+*Example:*
+
+[,yaml]
+----
+containerResources:
+  networkObserver:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  prometheus:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+  proxy:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+----
+

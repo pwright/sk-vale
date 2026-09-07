@@ -1,0 +1,18 @@
+[id="skupper-upgrading-sites"]
+:_mod-docs-content-type: PROCEDURE
+= Upgrading sites
+
+[role="_abstract"]
+
+To upgrade a site, you need to upgrade the controller using the same method you used to install Skupper, for example, one of the following:
+
+* Applying the latest Helm chart
+* Applying the latest YAML
+
+To update the Skupper CLI:
+
+[,bash]
+----
+curl https://skupper.io/v2/install.sh | sh
+----
+

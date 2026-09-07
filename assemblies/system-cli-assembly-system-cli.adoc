@@ -1,0 +1,11 @@
+[id="system-cli"]
+:_mod-docs-content-type: REFERENCE
+= Overview of Skupper CLI on local systems
+
+[role="_abstract"]
+
+Use the Skupper CLI on local systems to create sites, link them to other sites, and expose or consume services.
+
+* xref:system-creating-site-cli[Create sites]
+* xref:system-linking-cli[Link sites] (requires that one site has link access enabled)
+* xref:system-exposing-services-cli[Expose and consume services]
