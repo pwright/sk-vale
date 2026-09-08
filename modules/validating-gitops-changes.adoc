@@ -1,0 +1,48 @@
+[id="validating-gitops-changes_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Validating repository changes before merging
+
+[role="_abstract"]
+You can validate a Git reference, such as a pull request branch, against the full registry validation pipeline without affecting the data that the registry serves. This enables CI checks that reject invalid schema changes before they merge.
+
+.Prerequisites
+* Validation is enabled on the registry (`apicurio.gitops.validate.enabled`, default `true`). When validation is disabled, the validation endpoints return an HTTP `503` response.
+* The sync container is running, because it fetches the reference to validate.
+* The workspace volume is writable by the registry, because the registry writes validation request files under the workspace directory.
+
+.Procedure
+. Create a validation task for the reference:
++
+[source,bash]
+----
+$ curl -X POST -H "Content-Type: application/json" \
+  -d '{"type": "pull", "repoId": "platform", "ref": "refs/pull/42/head"}' \
+  http://localhost:8080/apis/registry/v3/admin/gitops/validate
+----
++
+The `repoId` value must match the directory name of a configured repository; identifiers that you assign with `APICURIO_GITOPS_REPOS_N_ID` are not recognized by the sync container. An unknown value fails the created task instead of rejecting the request. The response contains a `taskId`.
+. Poll the task until it completes:
++
+[source,bash,subs="+quotes"]
+----
+$ curl http://localhost:8080/apis/registry/v3/admin/gitops/validate/_TASK_ID_
+----
++
+The task moves through the states `pending`, `submitted`, `fetching`, and `validating` to `completed` or `failed`.
+. Check the outcome of a completed task in the `result` field, which is `success` or `failure`. A successful task reports group, artifact, and version counts. A failed validation reports structured errors with a `detail` message and, where available, the `source` repository and the `context` file path.
+. Optional: Delete a task that you no longer need:
++
+[source,bash,subs="+quotes"]
+----
+$ curl -X DELETE http://localhost:8080/apis/registry/v3/admin/gitops/validate/_TASK_ID_
+----
++
+Tasks are removed automatically after a time to live, which is one hour by default. To limit disk usage, at most five tasks hold disk resources at the same time by default; further requests are queued.
+
+ifndef::service-registry-downstream[]
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/Apicurio/apicurio-registry-gitops-example[Example GitOps repository with a CI validation workflow]
+endif::[]
+
+

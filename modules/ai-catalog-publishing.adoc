@@ -1,0 +1,48 @@
+[id="ai-catalog-publishing_{context}"]
+:_mod-docs-content-type: REFERENCE
+= AI Catalog publishing
+
+[role="_abstract"]
+When `apicurio.ai-catalog.enabled=true`, {registry} serves an AI Catalog document at two equivalent paths.
+
+GET /.well-known/ai-catalog.json::
+Returns the AI Catalog document. This is the predecessor path, retained for AI-Catalog-only consumers.
+
+GET /.well-known/ard.json::
+Returns the identical document. This is the path a strictly-conformant ARD crawler resolves per the ARD specification; a consumer that only fetches `ard.json` is fully conformant, so publish here if you can serve only one path.
+
+.Example response
+[source,json]
+----
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Apicurio Registry",
+    "identifier": "registry.example.com:8080"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:registry.example.com:8080:ai-agents:translator-agent",
+      "displayName": "Translation Agent",
+      "type": "application/a2a-agent-card+json",
+      "url": "http://registry.example.com:8080/.well-known/agents/ai-agents/translator-agent",
+      "description": "Translates text between languages",
+      "capabilities": ["translation"],
+      "version": "1.0.0"
+    },
+    {
+      "identifier": "urn:air:registry.example.com:8080:system:registry",
+      "displayName": "Apicurio Registry",
+      "type": "application/ai-registry+json",
+      "url": "http://registry.example.com:8080/.well-known/ard/search",
+      "description": "ARD search API for this registry."
+    }
+  ]
+}
+----
+
+Every entry's `identifier` follows the `urn:air:<publisher>:<namespace>:<name>` form. Entries backed by `AGENT_CARD` artifacts use `application/a2a-agent-card+json`; entries backed by `MCP_TOOL` artifacts use `application/mcp-server-card+json`. When `apicurio.ard.enabled=true`, the catalog also includes a self-describing entry of type `application/ai-registry+json` pointing at this registry's own `/.well-known/ard/search` endpoint, so a crawler that only ingests the static catalog can still discover the live search API, per the ARD specification.
+
+Only artifacts visible under the caller's visibility (`public`/`entitled`/`private`, the same model used by `/.well-known/agents`) are included.
+
+// ref-ard-search-api

@@ -1,0 +1,18 @@
+[id="ai-catalog-ard-scope_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Scope and limitations
+
+[role="_abstract"]
+This implementation is a read-only projection over existing artifacts, consistent with {registry}'s role as a metadata store and governance tool, not a runtime platform.
+
+* No Trust Manifest support (optional in the specification; not yet implemented).
+* No federation — {registry} always searches only its own index (`federation: none`).
+* No catalog importer — {registry} does not crawl external `ai-catalog.json`/`ard.json` documents to register their entries as artifacts.
+* Relevance ranking is not yet semantic; `score` is always `100` for matching results. Full-text search (tracked separately) is expected to enable real relevance scoring in a future release.
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://ai-catalog.io/[AI Catalog specification]
+* link:https://agenticresourcediscovery.org/[ARD specification]
+* xref:getting-started/assembly-a2a-features.adoc[A2A protocol features]
+* xref:getting-started/assembly-agent-discovery-patterns.adoc[Agent discovery and multi-agent orchestration]

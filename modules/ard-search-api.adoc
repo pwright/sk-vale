@@ -1,0 +1,71 @@
+[id="ard-search-api_{context}"]
+:_mod-docs-content-type: REFERENCE
+= ARD search API
+
+[role="_abstract"]
+When `apicurio.ard.enabled=true`, {registry} exposes the ARD REST search surface, mirrored under both `/.well-known/ard/*` and `/apis/registry/v3/well-known/ard/*`.
+
+POST /ard/search::
+The ARD-mandated search endpoint. Accepts a `query` object with a required `text` field and an optional structured `filter` (supported keys: `type`, `tags`, `capabilities`, `publisher`). Values within a filter key are OR-ed together; different keys are AND-ed.
++
+.Example request
+[source,json]
+----
+{
+  "query": {
+    "text": "translation",
+    "filter": {
+      "type": ["application/a2a-agent-card+json"]
+    }
+  },
+  "pageSize": 10
+}
+----
++
+.Example response
+[source,json]
+----
+{
+  "results": [
+    {
+      "identifier": "urn:air:registry.example.com:8080:ai-agents:translator-agent",
+      "displayName": "Translation Agent",
+      "type": "application/a2a-agent-card+json",
+      "url": "http://registry.example.com:8080/.well-known/agents/ai-agents/translator-agent",
+      "score": 100,
+      "source": "http://registry.example.com:8080"
+    }
+  ],
+  "pageToken": null
+}
+----
++
+NOTE: Because only entries satisfying every requested criterion are returned at all, every result's `score` is a deterministic `100` in this release — there is no fuzzy or semantic ranking yet. Only `federation: none` semantics are implemented; other `federation` values are accepted for forward compatibility but do not change behavior.
+
+GET /ard/agents::
+Optional, deterministic browsing endpoint. Accepts a `filter` query parameter using the form `key=value[ AND key=value]*` (supported keys: `type`, `tags`, `capabilities`, `publisher`), plus `orderBy`, `pageSize`, and `pageToken`. Returns an AI Catalog document; when more results remain, `nextPageToken` is populated so you can request the next page.
++
+.Example request
+[source,bash]
+----
+curl -G "http://localhost:8080/.well-known/ard/agents" \
+  --data-urlencode "filter=type=application/a2a-agent-card+json" \
+  --data-urlencode "pageSize=10"
+----
+
+POST /ard/explore::
+Optional facet-aggregation endpoint. Accepts the same `query` as `POST /search` plus a required `resultType.facets` array naming the fields to aggregate (supported: `type`, `publisher`). Returns bucketed counts, not ranked entries.
++
+.Example request
+[source,json]
+----
+{
+  "resultType": {
+    "facets": [
+      { "field": "type" }
+    ]
+  }
+}
+----
+
+// ref-ai-catalog-ard-scope

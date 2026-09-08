@@ -1,0 +1,26 @@
+[id="registry-flink-catalog-overview_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Overview of the {registry} Flink Catalog
+
+[role="_abstract"]
+The {registry} Flink Catalog provides seamless integration between {registry} and Apache Flink, enabling you to manage and discover schemas directly from your Flink SQL and Table API applications.
+
+The catalog maps {registry} concepts to Flink concepts as follows:
+
+.Mapping between {registry} and Flink concepts
+[.table-expandable,width="100%",cols="3,3,5",options="header"]
+|===
+|{registry} Concept
+|Flink Concept
+|Description
+|Group
+|Database
+|A logical namespace for organizing artifacts. Each group in {registry} appears as a database in Flink.
+|Artifact
+|Table
+|A schema registered in {registry}. Each artifact appears as a table in Flink with columns derived from the schema.
+|Schema Content
+|Table Schema
+|The schema content (Avro, JSON Schema) is automatically converted to Flink's type system.
+|===
+

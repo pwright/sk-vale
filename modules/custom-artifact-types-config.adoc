@@ -1,0 +1,96 @@
+[id="custom-artifact-types-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Artifact type configuration file
+
+[role="_abstract"]
+The list of artifact types supported by a {registry} instance is read from a JSON file at startup. The file is configured with the `apicurio.artifact-types.config-file` property (environment variable `APICURIO_ARTIFACT_TYPES_CONFIG_FILE`). When the file does not exist, only the built-in artifact types are available.
+
+.Example configuration file
+[source,json]
+----
+{
+  "includeStandardArtifactTypes": true,
+  "artifactTypes": [
+    {
+      "artifactType": "MARKDOWN",
+      "name": "Markdown",
+      "description": "Markdown documents with a level-1 title and level-2 sections.",
+      "contentTypes": ["text/markdown", "text/plain"],
+      "contentAccepter": {
+        "type": "java",
+        "classname": "io.apicurio.registry.examples.customtypes.MarkdownContentAccepter"
+      },
+      "contentValidator": {
+        "type": "java",
+        "classname": "io.apicurio.registry.examples.customtypes.MarkdownContentValidator"
+      },
+      "compatibilityChecker": {
+        "type": "webhook",
+        "url": "https://markdown-service.example.com/compatibility",
+        "headers": { "Authorization": "Bearer YOUR_SECRET_TOKEN" }
+      }
+    }
+  ]
+}
+----
+
+.Top-level properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`includeStandardArtifactTypes`
+|Whether the built-in artifact types (AVRO, JSON, OPENAPI, ...) remain available. When `false`, only the types listed in `artifactTypes` are supported.
+
+|`artifactTypes`
+|The list of custom artifact types.
+|===
+
+.Artifact type properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`artifactType`
+|The identifier of the type, used in the REST API and the UI (for example `MARKDOWN`). Must be unique.
+
+|`name`, `description`
+|Display name and description of the type.
+
+|`contentTypes`
+|The content types (media types) accepted for this artifact type.
+
+|`contentAccepter`
+|Provider that decides whether a piece of content belongs to this type. Used to detect the artifact type when a client does not specify one.
+
+|`contentValidator`
+|Provider that backs the `VALIDITY` rule (`SYNTAX_ONLY` and `FULL` levels).
+
+|`compatibilityChecker`
+|Provider that backs the `COMPATIBILITY` rule (`BACKWARD`, `FORWARD`, `FULL` and their transitive variants).
+
+|`contentCanonicalizer`
+|Provider that produces the canonical form of the content, used to recognize equivalent content (for example canonical search and de-duplication).
+
+|`contentDereferencer`
+|Provider that inlines or rewrites references to other artifacts when content is retrieved with `references=DEREFERENCE` or `references=REWRITE`.
+
+|`referenceFinder`
+|Provider that finds external references in the content. Used by the Maven plug-in to register references automatically.
+|===
+
+Every provider property is optional. When a provider is not configured, the corresponding feature is a no-op for the type (for example, the artifact type is never auto-detected and every content is considered valid and compatible).
+
+.Provider types
+[cols="1,3"]
+|===
+|Provider |Description
+
+|`{"type": "java", "classname": "..."}`
+|A Java class implementing the corresponding interface of the `io.apicurio:apicurio-registry-schema-util-common` module (`io.apicurio.registry.content.ContentAccepter`, `io.apicurio.registry.rules.validity.ContentValidator`, `io.apicurio.registry.rules.compatibility.CompatibilityChecker`, `io.apicurio.registry.content.canon.ContentCanonicalizer`, `io.apicurio.registry.content.dereference.ContentDereferencer`, `io.apicurio.registry.content.refs.ReferenceFinder`). The class must have a public no-argument constructor and must be available on the class path of {registry}, see xref:custom-artifact-types-mutable-image_{context}[].
+
+|`{"type": "webhook", "url": "...", "headers": {...}}`
+|An HTTP endpoint that {registry} calls with a JSON request describing the operation (content, resolved references, rule level) and that returns a JSON response. The optional `headers` are sent with every request, for example for authentication. Webhooks work with the standard container image but add a network round trip to every operation.
+|===
+
+// proc-custom-artifact-types-mutable-image

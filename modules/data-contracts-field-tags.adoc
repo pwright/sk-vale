@@ -1,0 +1,38 @@
+[id="data-contracts-field-tags_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Field-level tags
+
+[role="_abstract"]
+Field tags provide semantic annotation of schema fields, enabling you to identify sensitive data and apply tag-based governance.
+
+Tags come from two sources:
+
+Inline tags:: Extracted automatically from schema content during registration by tag extractors.
+External tags:: Projected from ODCS contracts or set manually by using the version labels API.
+
+{registry} recognizes the following common tags:
+
+.Common field tags
+[cols="1,3", options="header"]
+|===
+|Tag |Meaning
+
+|`PII`
+|Personally Identifiable Information
+
+|`SENSITIVE`
+|Sensitive data requiring special handling
+
+|`EMAIL`
+|Email address fields
+
+|`PHONE`
+|Phone number fields
+
+|`FINANCIAL`
+|Financial data
+
+|`HEALTH`
+|Health-related data (PHI)
+|===
+

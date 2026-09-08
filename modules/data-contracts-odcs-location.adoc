@@ -1,0 +1,23 @@
+[id="data-contracts-odcs-location_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Schema location format
+
+[role="_abstract"]
+The `schemas[].location` field in an ODCS contract references an artifact in the registry.
+
+----
+groupId/artifactId:version
+----
+
+The following examples show the supported location forms:
+
+`orders/OrderEvent:3`:: Group `orders`, artifact `OrderEvent`, version 3.
+`OrderEvent:latest`:: Default group, artifact `OrderEvent`, latest version.
+`OrderEvent`:: Default group, artifact `OrderEvent`, latest version.
+
+IMPORTANT: Each entry under `schemas[]` is independent. Projection and field metadata (PII, tags, classifications) apply only to the artifact named in that entry's `location`. Cross-artifact schema references inside the Avro/JSON Schema/Protobuf content are not followed during projection. If a nested type lives in another artifact, either add a separate `schemas[]` entry for that artifact or give it its own contract. For more information, see the artifact references concept in the additional resources.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:data-contracts-artifact-references_{context}[]
+

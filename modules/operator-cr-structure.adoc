@@ -1,0 +1,22 @@
+[id="operator-cr-structure_{context}"]
+:_mod-docs-content-type: REFERENCE
+= ApicurioRegistry3 custom resource structure
+
+[role="_abstract"]
+The `ApicurioRegistry3` custom resource defines the desired state of a {registry} instance. The resource is
+organized into two main sections under `spec`:
+
+[source,yaml,subs="attributes"]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry
+spec:
+  app:
+    # Configuration for the {registry-app}.
+  ui:
+    # Configuration for the {registry-ui}.
+----
+
+// ref-operator-app-spec-reference

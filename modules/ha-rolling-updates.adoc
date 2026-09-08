@@ -1,0 +1,28 @@
+[id="ha-rolling-updates_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Performing rolling updates
+
+[role="_abstract"]
+When updating {registry} to a new version, use rolling updates to minimize downtime.
+
+.Procedure
+* Update {operator} to update {registry} to a new version. {registry} and {operator} are versioned together, so
+updating {operator} automatically updates the application. For production environments, we strongly recommend
+using Operator Lifecycle Manager (OLM) with manual install plan confirmation enabled, so you have time to review
+release notes and prepare for the update.
++
+NOTE: If you need to update the application without updating {operator} (*not recommended* except as a workaround
+for critical issues), you can override the application image in your pod template, as shown in the following
+example.
++
+[source,yaml,subs="+attributes"]
+----
+spec:
+  app:
+    podTemplateSpec:
+      spec:
+        containers:
+          - name: apicurio-registry-app
+            image: quay.io/apicurio/apicurio-registry:{registry-release}
+----
+

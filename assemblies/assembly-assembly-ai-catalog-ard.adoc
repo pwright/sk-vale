@@ -1,0 +1,17 @@
+[id="assembly-ai-catalog-ard_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= AI Catalog and ARD discovery
+
+[role="_abstract"]
+{registry} can publish a spec-compliant AI Catalog document and expose the ARD (Agentic Resource Discovery) search API, so registered `AGENT_CARD` and `MCP_TOOL` artifacts are discoverable by any AI Catalog- or ARD-aware client, not just {registry}'s own well-known endpoints.
+
+ifdef::service-registry-downstream[]
+WARNING: This section describes Developer Preview features. Developer Preview features are not supported by Red Hat in any way and are not functionally complete or production-ready. Do not use Developer Preview features for production or business-critical workloads. Developer Preview features provide early access to functionality in advance of possible inclusion in a Red Hat product offering. Customers can use these features to test functionality and provide feedback during the development process. Developer Preview features might not have any documentation, are subject to change or removal at any time, and have received limited testing. Red Hat might provide ways to submit feedback on Developer Preview features without an associated SLA. For more information about the support scope of Red Hat Developer Preview features, see {dp-support-scope}.
+endif::[]
+
+// con-ai-catalog-ard-overview
+include::../modules/ai-catalog-ard-overview.adoc[leveloffset=+1]
+include::../modules/ai-catalog-ard-configuration.adoc[leveloffset=+1]
+include::../modules/ai-catalog-publishing.adoc[leveloffset=+1]
+include::../modules/ard-search-api.adoc[leveloffset=+1]
+include::../modules/ai-catalog-ard-scope.adoc[leveloffset=+1]

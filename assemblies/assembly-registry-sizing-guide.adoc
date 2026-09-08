@@ -1,0 +1,28 @@
+[id="registry-sizing-guide_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= {registry} capacity planning and sizing guide
+
+[role="_abstract"]
+This chapter provides guidance on sizing a {registry} deployment: how the storage backend
+choice, network latency to that storage, and traffic pattern affect the number of concurrent
+clients a single {registry} replica can serve, and when to scale horizontally instead of vertically.
+
+The numbers in this chapter come from the automated performance test suite in the `perf-tests`
+Maven module, run against a topology intended to resemble a real deployment (registry installed
+via the {operator}, PostgreSQL or KafkaSQL storage placed behind an injected-latency proxy to
+approximate a managed/remote datastore, Keycloak securing the registry). They are a data point
+from one specific test environment, not a universal guarantee for your environment - see
+<<registry-sizing-methodology_{context}>> for how to reproduce or extend this testing against
+your own infrastructure and workload shape.
+
+== Prerequisites
+
+* {installing-the-registry-openshift}
+* xref:getting-started/assembly-registry-high-availability.adoc[]
+
+//INCLUDES
+
+include::../modules/registry-sizing-methodology.adoc[leveloffset=+1]
+include::../modules/registry-sizing-sql-storage.adoc[leveloffset=+1]
+include::../modules/registry-sizing-kafkasql-storage.adoc[leveloffset=+1]
+include::../modules/registry-sizing-recommendations.adoc[leveloffset=+1]

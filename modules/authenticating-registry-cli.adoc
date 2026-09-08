@@ -1,0 +1,42 @@
+[id="authenticating-registry-cli_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Authenticating the {registry} CLI
+
+[role="_abstract"]
+You can log in to the {registry} instance of your current CLI context by using basic authentication or OAuth2 client credentials. The CLI stores secrets in the operating system keychain, and stores non-secret authentication settings in the context.
+
+.Prerequisites
+* You have configured a CLI context for a {registry} instance that requires authentication.
+* On Linux, the `secret-tool` utility (libsecret) is available for keychain storage. On macOS, the CLI uses the built-in keychain. On Windows, the CLI uses the built-in Credential Manager, which stores a secret of up to 2560 bytes.
+
+.Procedure
+. To log in with basic authentication, provide a user name. The CLI prompts for the password:
++
+[source,bash]
+----
+$ acr login --username my-user
+----
++
+Alternatively, provide the password with the `--password` (`-p`) option.
+. To log in with OAuth2 client credentials, provide the token endpoint and client ID. The CLI prompts for the client secret:
++
+[source,bash]
+----
+$ acr login --token-endpoint https://auth.example.com/realms/registry/protocol/openid-connect/token --client-id registry-client
+----
++
+Optional: Provide an OAuth2 scope with the `--scope` option.
+. Optional: On systems without a keychain, for example in headless environments, use the `--allow-unsafe-credential-storage` option. The CLI stores secrets in a `credentials.json` file and prints a warning. The file is restricted to its owner, by `0600` permissions on Linux and macOS and by an owner-only access control list on Windows. This preference persists per context.
+. To log out of the current context, run the following command. The CLI removes the stored secrets and clears the authentication settings of the context:
++
+[source,bash]
+----
+$ acr logout
+----
++
+[NOTE]
+====
+Authentication is configured per context. Secret values are stored in the operating system keychain or in the `credentials.json` file, never in the `config.json` configuration file.
+====
+
+

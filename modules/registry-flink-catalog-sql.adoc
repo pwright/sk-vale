@@ -1,0 +1,50 @@
+[id="registry-flink-catalog-sql_{context}"]
+:_mod-docs-content-type: REFERENCE
+= The {registry} Flink Catalog in Flink SQL
+
+[role="_abstract"]
+You can register and use the {registry} Flink Catalog directly in Flink SQL.
+
+.Registering the catalog in Flink SQL
+[source,sql]
+----
+CREATE CATALOG apicurio WITH (
+  'type' = 'apicurio',
+  'registry.url' = 'http://localhost:8080/apis/registry/v3'
+);
+
+USE CATALOG apicurio;
+----
+
+.Listing databases (groups)
+[source,sql]
+----
+SHOW DATABASES;
+----
+
+.Using a specific database
+[source,sql]
+----
+USE my_group;
+SHOW TABLES;
+----
+
+.Querying a table
+[source,sql]
+----
+SELECT * FROM my_artifact;
+----
+
+.Example with authentication
+[source,sql]
+----
+CREATE CATALOG apicurio_secure WITH (
+  'type' = 'apicurio',
+  'registry.url' = 'http://localhost:8080/apis/registry/v3',
+  'registry.auth.type' = 'oauth2',
+  'registry.auth.token-endpoint' = 'http://keycloak:8080/realms/registry/protocol/openid-connect/token',
+  'registry.auth.client-id' = 'registry-client',
+  'registry.auth.client-secret' = 'my-secret'
+);
+----
+

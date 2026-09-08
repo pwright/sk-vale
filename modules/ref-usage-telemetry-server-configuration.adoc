@@ -1,0 +1,47 @@
+[id="ref-usage-telemetry-server-configuration_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Server configuration
+
+[role="_abstract"]
+The registry server exposes the following properties to configure usage telemetry.
+
+[cols="3,1,1,4"]
+|===
+|Property |Type |Default |Description
+
+|`apicurio.usage.telemetry.enabled`
+|boolean
+|`false`
+|Primary switch for usage telemetry. Must be `true` for the server to record usage events.
+
+|`apicurio.usage.active-threshold-days`
+|int
+|`7`
+|A schema version fetched within this many days is classified as **Active**.
+
+|`apicurio.usage.stale-threshold-days`
+|int
+|`30`
+|A schema version not fetched for this many days is classified as **Stale**.
+
+|`apicurio.usage.dead-threshold-days`
+|int
+|`90`
+|A schema version not fetched for this many days (or never fetched) is classified as **Dead**.
+
+|`apicurio.usage.drift-alert-threshold`
+|int
+|`2`
+|Number of versions behind latest before a consumer is flagged with a drift alert.
+
+|`apicurio.usage.retention-days`
+|int
+|`180`
+|Number of days to retain raw usage events. Older events are cleaned up automatically.
+
+|`apicurio.usage.aggregation.every`
+|duration
+|`1h`
+|How often the usage metrics are refreshed and old events are cleaned up. Uses Quarkus scheduler expression syntax (for example, `1h`, `30m`, or `10s`).
+|===
+

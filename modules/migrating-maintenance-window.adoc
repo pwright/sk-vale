@@ -1,0 +1,36 @@
+[id="migrating-maintenance-window_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Migrating within a maintenance window
+
+[role="_abstract"]
+For environments where downtime is acceptable, you can follow this simpler sequential process to migrate from {registry} {registry-v2} to 3.x.
+
+.Prerequisites
+
+* You performed a dry run migration in a staging environment to estimate the timing of the data export and import phases accurately.
+
+.Procedure
+
+. Stop all client applications that connect to {registry} {registry-v2}.
+. Export data from {registry} {registry-v2} by using the export script.
+. Shut down {registry} {registry-v2}.
+. Deploy {registry} 3.x with updated configuration.
+. Import data into {registry} 3.x by using the import script.
+. Validate the import by using the verification scripts.
+. Update client application configurations to point to {registry} 3.x.
+. Start client applications.
+
+.Verification
+
+* Verify that all client applications connect to {registry} 3.x successfully.
+* Verify that artifact counts match the pre-migration baseline.
+* Verify that no increase in error rates occurs.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:migrating-registry-configuration_{context}[]
+* xref:migrating-registry-applications_{context}[]
+* xref:migration-scripts_{context}[]
+
+
+// proc-migrating-registry-data

@@ -1,0 +1,56 @@
+[id="managing-artifacts-using-registry-cli_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Managing artifacts using the CLI
+
+[role="_abstract"]
+You can use the CLI to create, list, get, update, and delete artifacts in {registry}. When you omit the group option, the CLI uses the default group of the current context, or the `default` group.
+
+.Prerequisites
+* You have configured at least one CLI context.
+
+.Procedure
+. List the artifacts in a group:
++
+[source,bash]
+----
+$ acr artifact --group my-schemas
+----
+. Create a new artifact from a file:
++
+[source,bash]
+----
+$ acr artifact create my-artifact --group my-schemas --type AVRO --file schema.avsc
+----
++
+The `--type` option accepts the following values: `AVRO`, `PROTOBUF`, `JSON`, `OPENAPI`, `ASYNCAPI`, `GRAPHQL`, `KCONNECT`, `WSDL`, `XSD`, and `XML`. To read content from standard input, use `--file -`.
++
+Optional: Provide metadata with the `--name`, `--description`, and `--label` options, and set the identifier of the first version with the `--version` option.
+. Get the metadata of an artifact:
++
+[source,bash]
+----
+$ acr artifact get my-artifact --group my-schemas
+----
++
+To retrieve the content of the latest version instead of the metadata, use the `--content` (`-c`) option. The `--content` and `--output-type` options are mutually exclusive.
+. Update the metadata of an artifact:
++
+[source,bash]
+----
+$ acr artifact update my-artifact --group my-schemas --description "Order event schema"
+----
++
+Optional: Manage labels with the `--set-label` and `--delete-label` options.
+. Delete an artifact:
++
+[source,bash]
+----
+$ acr artifact delete my-artifact --group my-schemas
+----
++
+[NOTE]
+====
+You must configure {registry} with `apicurio.rest.deletion.artifact.enabled=true` to allow artifact deletions.
+====
+
+

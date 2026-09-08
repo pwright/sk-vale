@@ -1,0 +1,31 @@
+[id="proc-usage-telemetry-enabling-telemetry-example_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Enabling usage telemetry
+
+[role="_abstract"]
+You can enable usage telemetry on the registry server and configure a client to report its schema fetches.
+
+.Prerequisites
+* Experimental features are enabled (`apicurio.features.experimental.enabled=true`), because usage telemetry is an experimental feature.
+
+.Procedure
+. Enable usage telemetry on the server by adding the following properties to its `application.properties`:
++
+[source,properties]
+----
+apicurio.features.experimental.enabled=true
+apicurio.usage.telemetry.enabled=true
+----
+
+. Configure the Kafka SerDes client with the registry URL and a client identifier:
++
+[source,properties]
+----
+apicurio.registry.url=http://registry:8080/apis/registry/v3
+apicurio.registry.usage-telemetry.client-id=payments-svc
+----
++
+No additional endpoints to call and no buffers to configure are required.
++
+All usage endpoints are under `/admin/usage/` and require `apicurio.usage.telemetry.enabled=true`. Endpoints return HTTP 409 (Conflict) when telemetry is not enabled.
+

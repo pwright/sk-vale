@@ -1,0 +1,23 @@
+[id="assembly-llm-artifact-types-implementation_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= LLM artifact types implementation guide
+
+[role="_abstract"]
+{registry} includes built-in AI/ML artifact types (MODEL_SCHEMA and PROMPT_TEMPLATE). You can learn about the architecture, JSON Schema backing, MCP integration, and implementation details for these types.
+
+ifdef::service-registry-downstream[]
+WARNING: This section describes Developer Preview features. Developer Preview features are not supported by Red Hat in any way and are not functionally complete or production-ready. Do not use Developer Preview features for production or business-critical workloads. Developer Preview features provide early access to functionality in advance of possible inclusion in a Red Hat product offering. Customers can use these features to test functionality and provide feedback during the development process. Developer Preview features might not have any documentation, are subject to change or removal at any time, and have received limited testing. Red Hat might provide ways to submit feedback on Developer Preview features without an associated SLA. For more information about the support scope of Red Hat Developer Preview features, see {dp-support-scope}.
+endif::[]
+
+// ref-llm-artifact-types-architecture
+include::../modules/llm-artifact-types-architecture.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-json-schema-backing.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-prompt-template-schema-alignment.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-model-schema-alignment.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-mcp-integration.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-mcp-tools-and-prompts.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-mcp-server-usage.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-prompt-template-implementation.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-model-schema-implementation.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-prompt-rendering-service.adoc[leveloffset=+1]
+include::../modules/llm-artifact-types-customization.adoc[leveloffset=+1]

@@ -1,0 +1,167 @@
+[id="operator-app-spec-reference_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry-app} configuration reference
+
+[role="_abstract"]
+The `spec.app` section configures the backend component, which provides the REST API.
+
+The following fields are available for both `spec.app` and `spec.ui` components:
+
+.Common component fields
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`replicas`
+|Number of pod replicas for the component
+|Integer
+|`1`
+
+|`env`
+|List of environment variables to pass to the component's container
+|Array of EnvVar
+|`[]`
+
+|`ingress`
+|Ingress configuration for the component
+|xref:ingress-spec_{context}[IngressSpec]
+|See Ingress configuration reference
+
+|`podTemplateSpec`
+|Custom PodTemplateSpec for advanced pod configuration
+|PodTemplateSpec
+|Operator-generated defaults
+
+|`podDisruptionBudget`
+|PodDisruptionBudget configuration
+|PodDisruptionSpec
+|`{ enabled: true }`
+
+|`autoscaling`
+|Horizontal pod autoscaling configuration for the component
+|AutoscalingSpec
+|`{ enabled: false }`
+
+|`networkPolicy`
+|NetworkPolicy configuration
+|NetworkPolicySpec
+|`{ enabled: true }`
+
+|`host` _(deprecated)_
+|Use `ingress.host` instead
+|String
+|`""`
+|===
+
+The top-level `spec.consolePlugin.enabled` field (Boolean, default `false`) controls whether the {operator} deploys the OpenShift Console plugin component.
+
+The following fields are specific to `spec.app`:
+
+.Application-specific fields
+
+[cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`storage`
+|Storage configuration for the backend
+|xref:storage-spec_{context}[StorageSpec]
+|See Storage configuration reference
+
+|`features`
+|Feature flags for the backend
+|xref:app-features-spec_{context}[AppFeaturesSpec]
+|See below
+
+|`auth`
+|Authentication and authorization configuration
+|xref:auth-spec_{context}[AuthSpec]
+|See Authentication and authorization configuration reference
+
+|`tls`
+|TLS configuration for the application
+|xref:tls-spec_{context}[TLSSpec]
+|See below
+|===
+
+Configure optional features for {registry}:
+
+.AppFeaturesSpec
+[id="app-features-spec_{context}",cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`resourceDeleteEnabled`
+|Allow deletion of groups, artifacts, and artifact versions. By default, resources in {registry} are
+immutable.
+|Boolean
+|`false`
+
+|`versionMutabilityEnabled`
+|Allow artifact versions in DRAFT state to be mutable. Enabling this also unlocks Studio functionality in the UI.
+|Boolean
+|`false`
+|===
+
+Example:
+[source,yaml]
+----
+spec:
+  app:
+    features:
+      resourceDeleteEnabled: true
+      versionMutabilityEnabled: true
+----
+
+Configure TLS certificates for the application:
+
+.TLSSpec
+[id="tls-spec_{context}",cols="1,2,1,2",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`keystoreSecretRef`
+|Reference to a Secret containing the keystore (PKCS12 format). Default key: `keystore.p12`
+|xref:secret-key-ref_{context}[SecretKeyRef]
+|None
+
+|`keystorePasswordSecretRef`
+|Reference to a Secret containing the keystore password. Default key: `password`
+|xref:secret-key-ref_{context}[SecretKeyRef]
+|None
+|===
+
+Example:
+[source,yaml]
+----
+spec:
+  app:
+    tls:
+      keystoreSecretRef:
+        name: registry-tls
+        key: keystore.p12
+      keystorePasswordSecretRef:
+        name: registry-tls
+        key: keystore.password
+----
+
+[role="_additional-resources"]
+.Additional resources
+* xref:operator-storage-reference_{context}[]
+* xref:operator-auth-reference_{context}[]
+* xref:operator-ingress-reference_{context}[]
+
+// ref-operator-ui-spec-reference

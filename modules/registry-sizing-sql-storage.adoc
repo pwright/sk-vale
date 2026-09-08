@@ -1,0 +1,82 @@
+[id="registry-sizing-sql-storage_{context}"]
+:_mod-docs-content-type: REFERENCE
+= SQL storage sizing
+
+[role="_abstract"]
+SQL storage (PostgreSQL, MySQL, or Microsoft SQL Server) processes every read and write as a
+synchronous database round-trip. Read and write throughput are governed by different, unrelated
+bottlenecks, so this section reports them separately rather than as one blended number.
+
+=== Read throughput
+
+A single replica's read path (resolving an existing schema by ID) sustains, at 200 concurrent
+clients:
+
+[cols="1,1",options="header"]
+|===
+| Metric | Value
+
+| Sustained throughput
+| ~1,680 requests/sec
+
+| Failed requests
+| under 0.02%
+
+| 99th percentile latency
+| ~210ms
+|===
+
+[IMPORTANT]
+====
+This figure depends heavily on giving the replica enough memory: at the {operator}'s default 1Gi
+memory limit, sustained load at this concurrency causes rising garbage-collection pressure that
+eventually cascades into database connection-acquisition timeouts and pod restarts. Size for at
+least 2Gi if you expect sustained concurrency in this range.
+
+At 200 concurrent clients, CPU utilization consistently saturates the 2 CPU limit - this is a
+genuine CPU-bound ceiling at this concurrency, not primarily a network/database-latency or
+memory limit (given enough memory). More CPU is likely to raise this ceiling further; this
+chapter does not yet have data on by how much.
+====
+
+=== Write throughput
+
+Write throughput does *not* scale with concurrency or resources the way reads do. Every artifact
+or version creation allocates a global ID by executing an atomic increment against a single shared
+row in the SQL storage `sequences` table. Under concurrent writes, that row's lock serializes all
+writers:
+
+[cols="1,1,1",options="header"]
+|===
+| Concurrent writers | Sustained throughput (writes/sec) | 99th percentile latency
+
+| 5
+| ~6-9
+| ~1s
+
+| 20
+| ~6-9
+| ~11s
+|===
+
+Throughput is essentially flat regardless of concurrency (~6-9 writes/sec in this test
+environment, consistently reproduced both in-cluster and via the external load generator) -
+adding more concurrent writers does not increase it, it only queues additional writers behind the
+same row lock and drives up tail latency. This is a database-level serialization point, not a
+CPU, memory, or connection-pool limit, so it will not improve by giving the replica more resources
+or by adding more replicas (all replicas contend for the same row). See
+link:https://github.com/Apicurio/apicurio-registry/issues/9847[issue #9847] for details and
+tracking.
+
+[IMPORTANT]
+====
+Blending reads and writes in the same test amplifies this: at just a 5% write ratio, 150
+concurrent clients drove sustained throughput down to ~110-130 requests/sec with 99th-percentile
+latencies of 30+ seconds - not because the read path or the container's resources were
+exhausted, but because a modest number of concurrent writers was enough to saturate the
+`sequences` row lock, and the resulting slow responses were severe enough to occasionally trip the
+registry's built-in `ResponseTimeoutReadinessCheck` and pull the replica out of service rotation.
+If your workload has more than an incidental write rate, budget for the write-throughput ceiling
+above, independently of how much read capacity you provision.
+====
+

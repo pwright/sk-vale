@@ -1,0 +1,182 @@
+{
+  "assemblies/assembly-registry-sizing-guide.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        40
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "\u003c\u003cregistry-sizing-methodology_{context}\u003e",
+      "Line": 15
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        3,
+        64
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-registry-high-availability.adoc[",
+      "Line": 21
+    }
+  ],
+  "modules/ai-catalog-ard-overview.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        26
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "link:https://ai-catalog.io",
+      "Line": 6
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        45,
+        85
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "link:https://agenticresourcediscovery.org",
+      "Line": 6
+    }
+  ],
+  "modules/custom-artifact-types-mutable-image.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        317
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "Re-augmentation takes about ten seconds and requires roughly 1 GB of memory during the image build (tune it with the `JAVA_OPTS_APPEND` environment variable). It must be repeated, by rebuilding the derived image, whenever the provider jars change. The startup time and runtime behavior of {registry} are not affected.",
+      "Line": 46
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        182
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/custom-artifact-types[Custom artifact types example] (a complete `MARKDOWN` artifact type with Java providers)",
+      "Line": 72
+    }
+  ],
+  "modules/registry-sizing-kafkasql-storage.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        19
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Read throughput",
+      "Line": 12
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        20
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Write throughput",
+      "Line": 38
+    }
+  ],
+  "modules/registry-sizing-sql-storage.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        19
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Read throughput",
+      "Line": 10
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        1,
+        20
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Write throughput",
+      "Line": 42
+    }
+  ]
+}

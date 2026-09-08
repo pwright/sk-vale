@@ -1,0 +1,36 @@
+[id="registry-sizing-methodology_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Test methodology
+
+[role="_abstract"]
+The results in this chapter were produced by the `perf-tests` module (see
+`perf-tests/README.md` and `perf-tests/k8s/README.md` in the {registry} source repository), using:
+
+* A single {registry} application replica with a 2 CPU / 2Gi memory resource limit (both
+  scenarios' `registry-cr.yaml` set this explicitly - higher than the {operator}'s own default of
+  1 CPU / 1Gi, which does not provide enough memory headroom to stay stable under the sustained
+  concurrency this chapter tests).
+* A JDBC connection pool sized to 400 (`APICURIO_DATASOURCE_JDBC_MAX_SIZE`), up from the default
+  100, so the connection pool isn't the limiting factor at this concurrency.
+* A *closed* (concurrent-user) load model: `N` virtual clients are held continuously active for
+  the full test duration, each immediately starting a new operation as soon as its previous one
+  completes - this measures genuine sustained concurrency, not an arrival-rate model.
+* A **warmed-up, steady-state measurement**: each figure comes from a 3-minute sustained run, with
+  the first ~30-40 seconds (JVM/JIT warm-up) excluded from the reported average, since throughput
+  is still climbing during that window.
+* The load generator running as a separate process *outside* the cluster
+  (`perf-tests/k8s/common/run-external-load.sh`), against the registry exposed via a NodePort
+  Service, so the load generator's own resource usage doesn't compete with the registry under
+  test for the same node's capacity.
+* Reads and writes are measured *separately* (see <<registry-sizing-sql-storage_{context}>> for
+  why), by setting the traffic mix to 100% reads or 100% writes rather than a blended ratio -
+  resolving an already-registered schema by ID is representative of how producers/consumers use a
+  schema registry on close to every message, while registering a new schema is comparatively rare.
+* Storage backends placed behind an injected-latency network proxy (~15ms +/- 5ms round-trip),
+  approximating a managed database or remote Kafka cluster on a different node or availability
+  zone, rather than a co-located, near-zero-latency connection.
+
+You can reproduce this testing, or adapt it to your own resource limits, traffic mix, or latency
+profile, using `perf-tests/k8s/postgresql/deploy.sh` or `perf-tests/k8s/kafkasql/deploy.sh`
+against your own Kubernetes cluster.
+

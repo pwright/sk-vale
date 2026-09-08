@@ -1,0 +1,74 @@
+[id="custom-artifact-types-mutable-image_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Adding Java providers with the mutable container image
+
+[role="_abstract"]
+The standard {registry} container image is a Quarkus _fast-jar_: its class path is indexed when the image is built, so a jar copied into the image is not visible to the application. Every release is therefore also published as a `VERSION-mutable` image, a Quarkus _mutable-jar_ that can be _re-augmented_ to include additional jars. Build a derived image that copies your provider jar into the providers directory and runs the re-augmentation once, at image build time.
+
+.Prerequisites
+
+* A jar containing your provider classes, compiled against the `io.apicurio:apicurio-registry-schema-util-common` module of the same {registry} minor version. The jar must not bundle the {registry} or Quarkus classes; other dependencies must either be already present in the image or be copied into the providers directory as well.
+* An artifact type configuration file, see xref:custom-artifact-types-config_{context}[].
+
+.Procedure
+
+. Create a `Dockerfile` that derives from the mutable image:
++
+[source,dockerfile,subs="attributes+"]
+----
+FROM apicurio/apicurio-registry:{registry-docker-version}-mutable
+
+COPY --chown=1001:0 my-artifact-type.jar /deployments/quarkus-app/providers/
+COPY --chown=1001:0 artifact-types.json /deployments/artifact-types.json
+
+RUN /deployments/build.sh --prune
+
+ENV APICURIO_ARTIFACT_TYPES_CONFIG_FILE=/deployments/artifact-types.json
+----
++
+`/deployments/build.sh` re-augments the application with the jars found in `/deployments/quarkus-app/providers` and adds only the regenerated class-path index (a few MB) to the derived image. The `--prune` option removes the `lib/deployment` directory (the Quarkus deployment jars) from the file system of the derived image afterwards; omit it if you want to re-augment the derived image again later.
+
+. Build and run the image:
++
+[source,bash]
+----
+$ docker build -t my-registry .
+$ docker run -it -p 8080:8080 my-registry
+----
+
+. Verify that the custom type is available:
++
+[source,bash]
+----
+$ curl http://localhost:8080/apis/registry/v3/admin/config/artifactTypes
+----
+
+Re-augmentation takes about ten seconds and requires roughly 1 GB of memory during the image build (tune it with the `JAVA_OPTS_APPEND` environment variable). It must be repeated, by rebuilding the derived image, whenever the provider jars change. The startup time and runtime behavior of {registry} are not affected.
+
+.Trade-offs
+[cols="1,1,1"]
+|===
+| |Standard image |`-mutable` image
+
+|Packaging
+|Quarkus fast-jar (`/deployments`)
+|Quarkus mutable-jar (`/deployments/quarkus-app`)
+
+|Size
+|Reference
+|About 47 MB (150 jars) of additional files in `lib/deployment` (roughly 100 MB of image size with the current image layering). A derived image adds only a few MB; `build.sh --prune` removes the deployment jars from the file system but, as with any container image, does not shrink the layers inherited from the base image.
+
+|Java providers
+|Not supported (use webhooks)
+|Supported through `/deployments/build.sh`
+
+|Runtime behavior
+|Reference
+|Identical
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/custom-artifact-types[Custom artifact types example] (a complete `MARKDOWN` artifact type with Java providers)
+* link:https://quarkus.io/guides/reaugmentation[Quarkus re-augmentation guide]
+* xref:assembly-artifact-reference.adoc[]

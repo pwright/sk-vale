@@ -1,0 +1,14 @@
+[id="ref-usage-telemetry-privacy-and-data-collection_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Privacy and data collection
+
+[role="_abstract"]
+Usage telemetry is designed to minimize data collection and give operators and clients control over what is recorded.
+
+Opt-in only:: Disabled by default on both server and client.
+No message content:: Only schema coordinates and the client identifier are recorded.
+No user identity:: The `clientId` is a configured application name, not a user or personal identifier.
+Client-controlled:: Each client application decides whether to set the `X-Registry-Client-Id` header.
+Zero overhead when disabled:: No headers are sent, no events are recorded, and no database writes occur.
+Automatic cleanup:: Events older than the retention period are deleted automatically.
+

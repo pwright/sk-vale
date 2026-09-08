@@ -1,0 +1,40 @@
+[id="gitops-storage-overview_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Overview of GitOps storage
+
+[role="_abstract"]
+GitOps storage is a read-only storage variant that loads registry data from a Git repository. You declare the desired state of the registry in files, and the registry serves that state, so all changes flow through your Git workflow with reviews, history, and rollbacks.
+
+IMPORTANT: GitOps storage is an *experimental* feature. You must enable the experimental features gate (`APICURIO_FEATURES_EXPERIMENTAL_ENABLED=true`) to use it. The data format (`*-v0`) might change in future releases.
+
+*Architecture*
+
+GitOps storage uses a polling-based architecture with blue-green database switching:
+
+. The registry reads a local Git clone on a mounted volume. The registry never fetches from remote repositories itself; a sync container or an external process updates the clone.
+. The registry periodically checks the current commit of the clone. A debounce mechanism absorbs rapid sequences of pushes before a load starts.
+. When the commit changes, the registry loads all data into an inactive in-memory database and validates it.
+. After a successful load, the active and inactive databases switch atomically. If the load fails, the registry keeps serving the last successfully loaded data.
+
+Data flows in one direction only: from Git to the registry. REST API calls that would modify data are rejected with an HTTP `409` response. The registry requires no external database, because data is loaded into in-memory storage from Git.
+
+*Relationship of repositories and registry instances*
+
+One repository can serve multiple registry instances, and one registry instance can aggregate multiple repositories. Each metadata file can declare which registry instances load it, and the registry loads only the data that references its own identifier.
+
+*When to use GitOps storage*
+
+GitOps storage is a good fit when:
+
+* You want schema and API changes to go through pull requests, reviews, and CI checks
+* You need a read-only registry where all changes flow through a Git workflow
+* You want to avoid operating an external database
+* You already manage configuration as code and want registry content to follow the same model
+
+ifndef::service-registry-downstream[]
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/Apicurio/apicurio-registry-gitops-example[Example GitOps repository]
+endif::[]
+
+

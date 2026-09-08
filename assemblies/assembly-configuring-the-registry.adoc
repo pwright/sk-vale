@@ -1,0 +1,19 @@
+[id="configuring-the-registry_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Configuring your {registry} deployment
+
+[role="_abstract"]
+You can set important configuration options for your {registry} deployment, including the {registry} web console, logging, health checks, and observability.
+
+NOTE: For a list of all available configuration options, see {registry-config-reference}.
+
+
+// proc-configuring-registry-ui
+include::../modules/configuring-registry-ui.adoc[leveloffset=+1]
+include::../modules/configuring-registry-observability.adoc[leveloffset=+1]
+include::../modules/otel-features.adoc[leveloffset=+1]
+include::../modules/otel-performance.adoc[leveloffset=+1]
+include::../modules/configuring-dynamic-log-level.adoc[leveloffset=+1]
+include::../modules/registry-rest-metrics-distribution.adoc[leveloffset=+1]
+include::../modules/configuring-liveness-readiness-probes.adoc[leveloffset=+1]
+include::../modules/registry-liveness-env-vars.adoc[leveloffset=+1]

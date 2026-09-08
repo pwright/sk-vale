@@ -1,0 +1,22 @@
+[id="assembly-usage-telemetry_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Usage Telemetry and API Lifecycle Governance
+
+[role="_abstract"]
+Apicurio Registry provides usage telemetry capabilities that track which client applications fetch which schema versions. This enables API lifecycle governance features including dead schema detection, consumer version drift alerts, and deprecation readiness analysis.
+
+include::../modules/con-usage-telemetry-overview.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-server-configuration.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-client-configuration.adoc[leveloffset=+1]
+include::../modules/proc-usage-telemetry-enabling-telemetry-example.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-get-usage-summary.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-get-artifact-usage-metrics.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-get-consumer-version-heatmap.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-get-deprecation-readiness.adoc[leveloffset=+1]
+include::../modules/proc-usage-telemetry-deprecation-workflow.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-ui-features.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-opentelemetry-metrics-export.adoc[leveloffset=+1]
+include::../modules/proc-usage-telemetry-enabling-otel-export.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-example-grafana-query.adoc[leveloffset=+1]
+include::../modules/ref-usage-telemetry-privacy-and-data-collection.adoc[leveloffset=+1]
+include::../modules/proc-usage-telemetry-demo-script.adoc[leveloffset=+1]

@@ -1,0 +1,45 @@
+[id="registry-artifacts_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Schema and API artifacts in {registry}
+
+[role="_abstract"]
+The items stored in {registry}, such as event schemas and API designs, are known as registry _artifacts_. The following shows an example of an Apache Avro schema artifact in JSON format for a simple share price application:
+
+.Example Avro schema
+[source,json]
+----
+{
+   "type": "record",
+   "name": "price",
+   "namespace": "com.example",
+   "fields": [
+       {
+           "name": "symbol",
+           "type": "string"
+       },
+       {
+           "name": "price",
+           "type": "string"
+       }
+   ]
+}
+----
+
+When a schema or API design is added as an artifact in {registry}, client applications can then use that schema or API design to validate that the client messages conform to the correct data structure at runtime.
+
+Artifacts have metadata, both generated and editable. Standard metadata for an artifact includes (but may not be limited to) the following generated or immutable properties:
+
+* groupId
+* artifactId
+* artifactType
+* createdOn
+* modifiedBy
+* modifiedOn
+
+And the following editable properties:
+
+* name
+* description
+* labels
+* owner
+

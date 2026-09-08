@@ -1,0 +1,32 @@
+[id="ref-usage-telemetry-get-consumer-version-heatmap_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Get consumer version heatmap
+
+[role="_abstract"]
+Returns a consumer version adoption grid showing which clients use which versions, with version drift detection.
+
+`GET /admin/usage/artifacts/{groupId}/{artifactId}/heatmap`
+
+[source,json]
+----
+{
+  "groupId": "default",
+  "artifactId": "UserEvent",
+  "versions": ["1.0.0", "2.0.0", "3.0.0"],
+  "consumers": [
+    {
+      "clientId": "payments-svc",
+      "versions": {"3.0.0": 523},
+      "versionsBehind": 0,
+      "driftAlert": false
+    },
+    {
+      "clientId": "analytics",
+      "versions": {"1.0.0": 102},
+      "versionsBehind": 2,
+      "driftAlert": true
+    }
+  ]
+}
+----
+

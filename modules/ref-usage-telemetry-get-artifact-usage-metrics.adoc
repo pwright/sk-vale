@@ -1,0 +1,29 @@
+[id="ref-usage-telemetry-get-artifact-usage-metrics_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Get artifact usage metrics
+
+[role="_abstract"]
+Returns per-version usage metrics for a specific artifact, including fetch counts, client lists, and classification.
+
+`GET /admin/usage/artifacts/{groupId}/{artifactId}`
+
+[source,json]
+----
+{
+  "groupId": "default",
+  "artifactId": "UserEvent",
+  "versions": [
+    {
+      "version": "3.0.0",
+      "globalId": 42,
+      "totalFetches": 1523,
+      "uniqueClients": 3,
+      "firstFetchedOn": 1710000000000,
+      "lastFetchedOn": 1714400000000,
+      "clients": ["payments-svc", "analytics", "fraud-detector"],
+      "classification": "ACTIVE"
+    }
+  ]
+}
+----
+

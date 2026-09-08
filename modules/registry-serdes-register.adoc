@@ -1,0 +1,79 @@
+[id="registry-serdes-register_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Schema registration in {registry}
+
+[role="_abstract"]
+After you have defined a schema in the appropriate format, such as Apache Avro, you can add the schema to {registry}.
+
+You can add the schema using the following approaches:
+
+* {registry} web console
+* curl command using the {registry} REST API
+* Maven plug-in supplied with {registry}
+* Schema configuration added to your client code
+
+Client applications cannot use {registry} until you have registered your schemas.
+
+*{registry} web console*
+
+When {registry} is installed, you can connect to the web console from the `ui` endpoint:
+
+`\http://MY-REGISTRY-URL/ui`
+
+From the console, you can add, view and configure schemas. You can also create the rules that prevent invalid content being added to the registry.
+
+.Curl command example
+[source,shell,subs="+quotes,attributes"]
+----
+ curl -X POST -H "Content-type: application/json; artifactType=AVRO" \
+   -H "X-Registry-ArtifactId: share-price" \
+   --data '{
+     "type":"record",
+     "name":"price",
+     "namespace":"com.example",
+     "fields":[{"name":"symbol","type":"string"},
+     {"name":"price","type":"string"}]}'
+   https://my-cluster-my-registry-my-project.example.com/apis/registry/v3/groups/my-group/artifacts -s
+----
+
+The `X-Registry-ArtifactId` header names the Avro schema artifact, and the request URL uses the OpenShift route name that exposes {registry}.
+
+.Maven plug-in example
+[source,xml,subs="+quotes,attributes"]
+----
+<plugin>
+  <groupId>io.apicurio</groupId>
+  <artifactId>apicurio-registry-maven-plugin</artifactId>
+  <version>${apicurio.version}</version>
+  <executions>
+      <execution>
+        <phase>generate-sources</phase>
+        <goals>
+            <goal>register</goal>
+        </goals>
+        <configuration>
+            <registryUrl>http://REGISTRY-URL/apis/registry/v3</registryUrl>
+            <artifacts>
+                <artifact>
+                    <groupId>TestGroup</groupId>
+                    <artifactId>FullNameRecord</artifactId>
+                    <file>${project.basedir}/src/main/resources/schemas/record.avsc</file>
+                    <ifExists>FAIL</ifExists>
+                </artifact>
+                <artifact>
+                    <groupId>TestGroup</groupId>
+                    <artifactId>ExampleAPI</artifactId>
+                    <artifactType>GRAPHQL</artifactType>
+                    <file>${project.basedir}/src/main/resources/apis/example.graphql</file>
+                    <ifExists>FIND_OR_CREATE_VERSION</ifExists>
+                    <canonicalize>true</canonicalize>
+                </artifact>
+            </artifacts>
+        </configuration>
+    </execution>
+  </executions>
+ </plugin>
+----
+
+The `register` goal uploads the schema artifact to the registry, using the `registryUrl` element to specify the {registry} URL with the `../apis/registry/v3` endpoint. Each `artifact` entry's `groupId` sets the {registry} artifact group ID; you can upload multiple artifacts by specifying additional `artifact` entries with their own group ID, artifact ID, and file location.
+

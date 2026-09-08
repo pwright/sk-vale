@@ -1,0 +1,94 @@
+[id="setting-up-kcat-work-pod_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Setting up kcat on {kubernetes-with-article} work pod
+
+[role="_abstract"]
+You can build the `kcat` executable from source on an ephemeral work pod so that the topic export includes JSON output with base64 encoded keys and values.
+
+[NOTE]
+====
+If you do not require JSON support, you can use the following commands to install `kcat` using `dnf`:
+[source,bash]
+----
+dnf install -y "dnf-command(copr)"
+dnf copr enable bvn13/kcat
+dnf update
+dnf install -y kafkacat
+----
+====
+
+.Prerequisites
+* Your environment is {kubernetes}.
+* You have logged in to the cluster using the `{kubernetes-client}` command line interface.
+
+.Procedure
+. Select a {kubernetes-namespace} where an ephemeral work pod will be started. This can be the same or a different {kubernetes-namespace} from where the Kafka cluster is deployed:
++
+ifndef::service-registry-downstream[]
+[source,bash]
+----
+kubectl config set-context --current --namespace=default
+----
+endif::[]
+ifdef::service-registry-downstream[]
+[source,bash]
+----
+oc project default
+----
+endif::[]
+
+. Create an ephemeral work pod using the latest Fedora image, and connect to the pod using your terminal:
++
+[subs="attributes"]
+[source,bash]
+----
+{kubernetes-client} run work-pod -it --rm --image=fedora --restart=Never
+----
++
+If you keep the `--rm` flag, the work pod will be deleted when you disconnect from the remote terminal.
+
+. You can install `kcat` using the `dnf` package manager. However, that version does not have JSON support enabled.
+Because you want to export the topic data in a JSON format with additional metadata, you must build the `kcat` executable from source.
++
+In addition, while the `kcat` project is widely used for this use case, the project appears to be hibernated, and you require an additional feature for the `kafkasql-journal` topic export to work properly.
+This feature is support for base64 encoded keys and values, and is important because the topic includes raw binary data, which might not be correctly encoded in the JSON output. Therefore, you must build `kcat` from source that includes base64 support, which has not been merged into the main project yet. For the relevant project links, see the additional resources.
++
+Install `git`, and check out the `kcat` repository:
++
+[source,bash]
+----
+dnf install -y git
+git clone https://github.com/edenhill/kcat.git
+git remote add jjlin https://github.com/jjlin/kcat.git
+cd kcat
+git checkout jjlin/base64
+----
+
+. Install the dependencies and build `kcat`:
++
+[source,bash]
+----
+dnf install -y gcc librdkafka-devel yajl-devel
+./configure
+make
+----
+
+. Copy the executable to `/usr/bin` so that it is available in `$PATH`:
++
+[source,bash]
+----
+cp kcat /usr/bin
+----
+
+. Configure environment variables that will be used in subsequent examples:
++
+[source,bash]
+----
+export KAFKA_BOOTSTRAP_SERVER="my-kafka-cluster-kafka-bootstrap.default.svc:9092"
+----
+
+[role="_additional-resources"]
+.Additional resources
+* https://github.com/edenhill/kcat/issues/424[kcat project hibernation discussion]
+* https://github.com/edenhill/kcat/pull/206[kcat support for base64 encoded keys and values]
+

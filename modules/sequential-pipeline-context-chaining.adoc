@@ -1,0 +1,36 @@
+[id="sequential-pipeline-context-chaining_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Sequential pipeline with context chaining
+
+[role="_abstract"]
+In a sequential pipeline, each agent receives the original message and the accumulated outputs from all previous agents. Each agent builds on the work of the agents that ran before it.
+
+Use a sequential pipeline when:
+
+* Each processing step depends on results from previous steps
+* You need to accumulate context across a multi-step workflow
+* Agent outputs serve as inputs to subsequent agents
+
+The `examples/a2a-real-world-integration` example in the {registry} repository shows context chaining with four agents that process a customer complaint:
+
+. **Sentiment agent**: analyzes the original message and produces a sentiment score
+. **Issue analyzer**: receives the original message and the sentiment output, then identifies specific issues
+. **Response generator**: receives the original message, sentiment, and analysis, then generates a response
+. **Translation agent**: receives the generated response and translates it
+
+Each step stores its output under a context key. Subsequent steps reference previous outputs by using `\{{variable}}` template placeholders. A `WorkflowContext` object tracks the original message and all agent outputs:
+
+[source,java]
+----
+WorkflowContext context = new WorkflowContext();
+context.originalMessage = customerMessage;
+
+// After each step completes:
+context.agentOutputs.put("sentiment", sentimentResult);
+context.agentOutputs.put("analysis", analysisResult);
+
+// Build prompt for the next step:
+String prompt = context.buildPrompt("Original: {{original}}\nSentiment: {{sentiment}}");
+----
+
+// con-parallel-fan-out

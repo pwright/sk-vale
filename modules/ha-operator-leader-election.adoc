@@ -1,0 +1,29 @@
+[id="ha-operator-leader-election_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Operator leader election
+
+[role="_abstract"]
+When you run more than one replica of the {operator}, Kubernetes Lease-based leader election ensures that only one replica reconciles resources at a time. Leader election is enabled by default.
+
+You can configure leader election with the following environment variables on the operator deployment:
+
+.Operator leader election environment variables
+[cols="3,2,3",options="header"]
+|===
+|Environment variable
+|Default
+|Description
+
+|`APICURIO_OPERATOR_LEADER_ELECTION_ENABLED`
+|`true`
+|Enables Lease-based leader election. When the lease namespace cannot be resolved, leader election is disabled automatically.
+
+|`APICURIO_OPERATOR_LEADER_ELECTION_LEASE_NAME`
+|`apicurio-registry-operator-lease`
+|Name of the Lease resource.
+
+|`APICURIO_OPERATOR_LEADER_ELECTION_LEASE_NAMESPACE`
+|The operator pod namespace
+|Namespace of the Lease resource.
+|===
+

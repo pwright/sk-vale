@@ -1,0 +1,16 @@
+[id="parallel-fan-out_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Parallel fan-out
+
+[role="_abstract"]
+In a parallel fan-out, you send the same input to multiple agents simultaneously and aggregate the results. You discover the agents by using `/.well-known/agents` with appropriate filters.
+
+Use parallel fan-out when:
+
+* Multiple independent agents can process the same input
+* You want to reduce total processing time
+* You need to compare or merge results from different agents
+
+In a typical parallel fan-out, the orchestrator discovers agents with a specific skill by querying `/.well-known/agents?skill=<skill-id>`, sends the same A2A task to each discovered agent in parallel, and then collects the responses to merge or compare them.
+
+// con-conditional-routing

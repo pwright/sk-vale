@@ -1,0 +1,174 @@
+[id="registry-cli-reference_{context}"]
+:_mod-docs-content-type: REFERENCE
+= CLI reference
+
+[role="_abstract"]
+The following tables describe CLI global options, exit codes, available commands, rule types, and CLI configuration properties.
+
+The following options are available for most CLI commands:
+
+.Global options
+[cols="2,3", options="header"]
+|===
+| Option
+| Description
+
+| `--verbose`
+| Enable verbose output for debugging. This option has no short form.
+
+| `--help`, `-h`
+| Display help information for the command.
+
+| `--output-type`, `-o`
+| Set the output format. Valid values are `table` (default) and `json`. The `acr content` command uses `raw` (default) and `json`.
+|===
+
+The CLI uses the following exit codes:
+
+.Exit codes
+[cols="1,3", options="header"]
+|===
+| Code
+| Description
+
+| 0
+| Successful execution.
+
+| 1
+| Application error.
+
+| 2
+| Input validation error.
+
+| 3
+| {registry} server error.
+|===
+
+The following commands are available. Running a parent command, such as `acr group`, without a subcommand lists the corresponding records.
+
+.Command summary
+[cols="2,3", options="header"]
+|===
+| Command
+| Description
+
+| `acr context`
+| List contexts. Subcommands: `create`, `update`, `use`, `delete`. Aliases: `contexts`, `ctx`.
+
+| `acr config`
+| List CLI configuration properties. Subcommands: `get`, `set`, `delete`. Alias: `cfg`.
+
+| `acr login`
+| Log in to the current context by using basic authentication or OAuth2 client credentials.
+
+| `acr logout`
+| Log out of the current context and remove stored credentials.
+
+| `acr group`
+| List groups. Subcommands: `create`, `get`, `update`, `delete`. Alias: `groups`.
+
+| `acr group rule`
+| List the rules of a group. Subcommands: `create`, `get`, `update`, `delete`. Alias: `rules`.
+
+| `acr artifact`
+| List the artifacts of a group. Subcommands: `create`, `get`, `update`, `delete`. Alias: `artifacts`.
+
+| `acr artifact rule`
+| List the rules of an artifact. Subcommands: `create`, `get`, `update`, `delete`. Alias: `rules`.
+
+| `acr artifact version`
+| List the versions of an artifact. Subcommands: `create`, `get`, `update`, `delete`. Alias: `versions`.
+
+| `acr artifact version comment`
+| Work with version comments. Subcommands: `list`, `create`, `update`, `delete`. Alias: `comments`.
+
+| `acr reference list`
+| List the outbound references of a version. Use the `--inbound` option to list inbound references instead. Aliases: `references`, `ref`.
+
+| `acr rule`
+| List global rules. Subcommands: `create`, `get`, `update`, `delete`. Alias: `rules`.
+
+| `acr role`
+| List role mappings. Subcommands: `create`, `get`, `update`, `delete`. Alias: `roles`.
+
+| `acr search group`
+| Search groups by identifier, description, or labels. Alias: `groups`.
+
+| `acr search artifact`
+| Search artifacts by name, description, group, type, labels, or identifiers. Alias: `artifacts`.
+
+| `acr search version`
+| Search versions, with additional version and state filters. Alias: `versions`.
+
+| `acr search content`
+| Search artifacts by content from a file or standard input. Supports canonical content matching with the `--canonical` option. Alias: `contents`.
+
+| `acr content`
+| Retrieve content by global ID, content ID, or SHA-256 hash.
+
+| `acr server-config`
+| List the dynamic configuration properties of the {registry} server. Subcommands: `get`, `set`, `reset`. Alias: `server-configs`.
+
+| `acr admin export`
+| Export registry data to a .zip file, optionally limited to one group.
+
+| `acr admin import`
+| Import registry data from a .zip file.
+
+| `acr install`
+| Install the CLI for the current user.
+
+| `acr update`
+| Update the CLI to a newer version.
+
+| `acr version`
+| Display CLI version information and, if the server is reachable, server version information.
+|===
+
+The rule commands accept the following rule types and configuration values:
+
+.Rule types and configuration values
+[cols="1,3", options="header"]
+|===
+| Rule type
+| Configuration values
+
+| `VALIDITY`
+| `NONE`, `SYNTAX_ONLY`, `FULL`
+
+| `COMPATIBILITY`
+| `NONE`, `BACKWARD`, `BACKWARD_TRANSITIVE`, `FORWARD`, `FORWARD_TRANSITIVE`, `FULL`, `FULL_TRANSITIVE`
+
+| `INTEGRITY`
+| `NONE`, `REFS_EXIST`, `ALL_REFS_MAPPED`, `NO_DUPLICATES`, `NO_CIRCULAR_REFERENCES`, `FULL`
+|===
+
+You can adjust the behavior of the CLI itself with the `acr config set` command. The following CLI configuration properties are available:
+
+.CLI configuration properties
+[cols="2,1,3", options="header"]
+|===
+| Property
+| Default
+| Description
+
+| `update.check-enabled`
+| `true`
+| Check for CLI updates once per day.
+
+| `update.timeout-seconds`
+| `60`
+| Timeout for update operations, in seconds.
+
+| `update.skip-checksum-verification`
+| `false`
+| Skip checksum verification when updating the CLI.
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* {managing-registry-artifacts-api}
+* {rest-client}
+ifndef::service-registry-downstream[]
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/cli[CLI README]
+endif::[]
