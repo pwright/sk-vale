@@ -1,0 +1,22 @@
+[id="assembly-configuring-gitops-storage_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Configuring {registry} with GitOps storage
+
+[role="_abstract"]
+Configure {registry} to use a Git repository as the source of registry data. With GitOps storage, you manage schemas and API designs declaratively in Git, and all changes flow through Git commits instead of REST API calls.
+
+== Prerequisites
+
+* You have a way to run the {registry} container image, for example Docker, Podman, or a {kubernetes} cluster.
+* You have a Git repository for registry data.
+
+//INCLUDES
+
+include::../modules/gitops-storage-overview.adoc[leveloffset=+1]
+include::../modules/gitops-repository-data-format.adoc[leveloffset=+1]
+include::../modules/configuring-gitops-storage-single-repository.adoc[leveloffset=+1]
+include::../modules/configuring-gitops-sync-container.adoc[leveloffset=+1]
+include::../modules/configuring-gitops-multiple-repositories.adoc[leveloffset=+1]
+include::../modules/validating-gitops-changes.adoc[leveloffset=+1]
+include::../modules/gitops-storage-configuration-properties.adoc[leveloffset=+1]
+include::../modules/gitops-management-api.adoc[leveloffset=+1]

@@ -1,0 +1,38 @@
+[id="data-contracts-rules_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Contract rules
+
+[role="_abstract"]
+Contract rules define validation and transformation logic associated with artifacts or specific versions. Rules are organized into *domain rules* (business logic) and *migration rules* (schema evolution).
+
+When you submit an ODCS contract, its `quality.accuracy` rules are automatically projected as CEL domain rules on the referenced schema artifact.
+
+Contract rules are enforced both server-side, via the rule execution REST endpoint, and client-side, via Java Kafka SerDes integration.
+
+Rules are classified by kind:
+
+`CONDITION`:: Validates a condition and either passes or fails.
+`TRANSFORM`:: Modifies data.
+
+Rules run in one of the following modes:
+
+`WRITE`:: Executes on serialize (producer side).
+`READ`:: Executes on deserialize (consumer side).
+`WRITEREAD`:: Executes on both.
+`UPGRADE` / `DOWNGRADE`:: Executes during schema migration.
+
+{registry} supports the following rule types:
+
+`CEL`:: Common Expression Language for validation conditions and simple transforms, implemented with the `cel-standalone` library. Supports the full CEL specification, including `has()`, `size()`, `contains()`, `startsWith()`, parenthesized grouping, and ternary expressions.
+`JSONATA`:: JSONata expressions for data transformation. Supports both `CONDITION` (truthy check) and `TRANSFORM` (returns transformed data) kinds. Useful for schema migration transforms.
+
+When a rule fails, one of the following actions occurs:
+
+`NONE`:: Processing continues and the violation is logged only.
+`ERROR`:: An exception is thrown and the operation is rejected.
+`DLQ`:: The message is routed to a dead letter queue.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:data-contracts-serdes_{context}[]
+

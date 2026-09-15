@@ -1,0 +1,17 @@
+[id="deleting-group-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Deleting a group
+
+[role="_abstract"]
+You can delete a group from {registry} by using the web console.
+
+WARNING: Deleting a group permanently removes the group and all of its artifacts, including all versions. The operation cannot be undone.
+
+.Procedure
+
+. On the *Explore* tab, select *Groups* from the "Search for" menu to browse the list of groups stored in {registry}, or enter a search string to find the group that you want to delete.
+. Click the group to view its details.
+. In the page header, click *Delete*.
+. Confirm the deletion when prompted.
+
+

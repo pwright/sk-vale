@@ -1,0 +1,21 @@
+{
+  "assemblies/assembly-registry-sizing-guide.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        21,
+        82
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-registry-high-availability.adoc[",
+      "Line": 22
+    }
+  ]
+}

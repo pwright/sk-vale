@@ -1,0 +1,84 @@
+[id="registry-sizing-kafkasql-storage_{context}"]
+:_mod-docs-content-type: REFERENCE
+= KafkaSQL storage sizing
+
+[role="_abstract"]
+KafkaSQL storage applies writes asynchronously through a Kafka topic. Reads use a local,
+materialized copy of the data in an embedded database that replays the Kafka journal to stay
+current. Reads do not require a network round trip to a remote database.
+The separate measurements show how read and write throughput differ from SQL storage:
+
+Read throughput::
+The tests use the same conditions and methodology as the SQL storage tests: 200 concurrent
+clients, a CPU limit of 2, and a memory limit of `2Gi`.
+The injected storage latency is approximately 15 ms ± 5 ms. The 3-minute run excludes the first
+30–40 seconds for Java virtual machine (JVM) warm-up.
++
+--
+.KafkaSQL storage read measurements
+[id="_read_throughput_2",cols="1,1",options="header"]
+|===
+| Metric | Value
+
+| Sustained throughput
+| Approximately 3,000 requests per second
+
+| Failed requests
+| Less than 0.01%
+
+| 99th-percentile latency
+| Approximately 210 ms
+|===
+
+KafkaSQL read throughput is nearly double SQL read throughput at the same concurrency.
+This difference is consistent with the architecture: KafkaSQL avoids the round trip to a
+separate database server that SQL storage requires for every read, even over a fast connection.
+Both storage types reach the CPU limit of 2 CPUs at this concurrency. More CPU capacity is
+likely to increase read throughput further.
+--
+
+Write throughput::
+Each write produces a message to a Kafka topic. Unlike
+<<registry-sizing-sql-storage_{context}>>, KafkaSQL storage does not serialize writes behind a
+single database row lock, and throughput increases with concurrency.
++
+--
+.KafkaSQL storage write measurements
+[id="_write_throughput_2",cols="1,1,1",options="header"]
+|===
+| Concurrent writers | Sustained throughput (writes per second) | 99th-percentile latency
+
+| 5
+| Approximately 50
+| Approximately 110 ms
+
+| 20
+| Approximately 185
+| Approximately 110 ms
+
+| 100
+| Approximately 930
+| Approximately 150 ms
+
+| 200
+| Approximately 1,200
+| Approximately 1,100 ms
+|===
+
+Throughput increases through 100 concurrent writers with latency staying low.
+Increasing concurrency by a factor of 2 to 200 writers increases throughput by approximately 30%,
+with a substantial increase in 99th-percentile latency.
+These diminishing returns suggest that throughput is approaching a limit, but the tests did not
+exceed 200 concurrent writers. Failure rates stayed below 0.02% throughout this range.
+
+[IMPORTANT]
+====
+At 200 concurrent writers, CPU usage reaches the limit of 2 CPUs. The underlying journal topic
+has a single partition. The consumer that replays the topic to update the local materialized view
+is single-threaded and can use only one CPU core, regardless of how many cores the replica has.
+Unlike read throughput, write throughput might not increase proportionally with additional CPU
+capacity beyond a certain point. Part of the write path depends on single-threaded replay rather
+than total CPU capacity.
+====
+--
+

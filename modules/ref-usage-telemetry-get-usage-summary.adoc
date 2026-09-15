@@ -1,0 +1,18 @@
+[id="ref-usage-telemetry-get-usage-summary_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Get usage summary
+
+[role="_abstract"]
+Returns global Active, Stale, and Dead counts across all tracked schema versions.
+
+`GET /admin/usage/summary`
+
+[source,json]
+----
+{
+  "active": 12,
+  "stale": 3,
+  "dead": 5
+}
+----
+

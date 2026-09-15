@@ -1,0 +1,166 @@
+[id="gitops-storage-configuration-properties_{context}"]
+:_mod-docs-content-type: REFERENCE
+= GitOps storage configuration properties
+
+[role="_abstract"]
+The following tables describe the configuration properties of the registry for GitOps storage, and the environment variables of the GitOps sync container.
+
+All GitOps storage properties are experimental and require `apicurio.features.experimental.enabled=true`.
+
+.Registry configuration properties
+[cols="3,2,3", options="header"]
+|===
+| Property (environment variable)
+| Default
+| Description
+
+| `apicurio.storage.kind` (`APICURIO_STORAGE_KIND`)
+| `sql`
+| Set to `gitops` to enable GitOps storage.
+
+| `apicurio.gitops.workspace` (`APICURIO_GITOPS_WORKSPACE`)
+| `/repos`
+| Base directory where Git repositories are mounted. Repository directories are resolved relative to this path.
+
+| `apicurio.gitops.repo.dir` (`APICURIO_GITOPS_REPO_DIR`)
+| `default`
+| Directory name of the Git repository, relative to the workspace. Single-repository configuration.
+
+| `apicurio.gitops.repo.branch` (`APICURIO_GITOPS_REPO_BRANCH`)
+| `main`
+| Branch to read from. Single-repository configuration.
+
+| `apicurio.gitops.repos.N.dir` (`APICURIO_GITOPS_REPOS_N_DIR`)
+| No default
+| Directory name for repository `N`. Multi-repository configuration; indexes must start at 0 and be consecutive.
+
+| `apicurio.gitops.repos.N.branch` (`APICURIO_GITOPS_REPOS_N_BRANCH`)
+| `main`
+| Branch for repository `N`.
+
+| `apicurio.gitops.repos.N.id` (`APICURIO_GITOPS_REPOS_N_ID`)
+| Directory name
+| Identifier for repository `N`, used in status reporting and source labels.
+
+| `apicurio.gitops.validate.enabled` (`APICURIO_GITOPS_VALIDATE_ENABLED`)
+| `true`
+| Enable the dry-run validation endpoints. When disabled, the validation endpoints return an HTTP `503` response.
+
+| `apicurio.gitops.validate.task.ttl.seconds` (`APICURIO_GITOPS_VALIDATE_TASK_TTL_SECONDS`)
+| `3600`
+| Time to live for validation tasks. Tasks are removed automatically after this period.
+
+| `apicurio.gitops.validate.max-tasks` (`APICURIO_GITOPS_VALIDATE_MAX_TASKS`)
+| `5`
+| Maximum number of validation tasks that hold disk resources at the same time. Further requests are queued.
+
+| `apicurio.polling-storage.id` (`APICURIO_POLLING_STORAGE_ID`)
+| `main`
+| Identifier of this registry instance. Only data referencing this identifier is loaded. Must match the `registryId` value in the registry configuration file.
+
+| `apicurio.polling-storage.deterministic-ids-enabled` (`APICURIO_POLLING_STORAGE_DETERMINISTIC_IDS_ENABLED`)
+| `true`
+| Generate content and global identifiers deterministically from content hashes and coordinates when they are not specified in the data.
+
+| `apicurio.polling-storage.poll-period` (`APICURIO_POLLING_STORAGE_POLL_PERIOD`)
+| `PT10S`
+| Minimum period between checks of the data source.
+
+| `apicurio.polling-storage.debounce.quiet-period` (`APICURIO_POLLING_STORAGE_DEBOUNCE_QUIET_PERIOD`)
+| `PT3S`
+| Wait until no new changes arrive for this duration before loading. `PT0S` disables debouncing.
+
+| `apicurio.polling-storage.debounce.max-wait-period` (`APICURIO_POLLING_STORAGE_DEBOUNCE_MAX_WAIT_PERIOD`)
+| `PT90S`
+| Maximum time to wait for changes to settle before a load is forced. `PT0S` means no maximum.
+
+| `apicurio.polling-storage.file-suffixes` (`APICURIO_POLLING_STORAGE_FILE_SUFFIXES`)
+| `registry,ar`
+| Suffixes that identify metadata files, combined with the `.yaml`, `.yml`, and `.json` extensions.
+
+| `apicurio.polling-storage.require-registry-config` (`APICURIO_POLLING_STORAGE_REQUIRE_REGISTRY_CONFIG`)
+| `true`
+| Reject a load when no registry configuration file matches the configured registry identifier. This guards against accidental data loss from force pushes or empty branches.
+
+| `apicurio.polling-storage.source-label-key` (`APICURIO_POLLING_STORAGE_SOURCE_LABEL_KEY`)
+| `system:source`
+| Label key used to tag loaded groups and artifacts with the identifier of their source repository. An empty value disables source labels.
+|===
+
+.Sync container environment variables
+[cols="3,2,3", options="header"]
+|===
+| Environment variable
+| Default
+| Description
+
+| `APICURIO_GITOPS_MODE`
+| `pull`
+| Global synchronization mode: `pull` or `push`.
+
+| `APICURIO_GITOPS_REPO_URL`
+| No default
+| Remote repository URL for pull mode. Single-repository configuration.
+
+| `APICURIO_GITOPS_REPOS_N_URL`
+| No default
+| Remote repository URL for repository `N`.
+
+| `APICURIO_GITOPS_REPOS_N_MODE`
+| Global mode
+| Per-repository mode override: `pull` or `push`.
+
+| `APICURIO_GITOPS_REPOS_N_SSH_KEYS`
+| No default
+| Per-repository SSH private keys, added alongside the global keys.
+
+| `APICURIO_GITOPS_PULL_INTERVAL`
+| `30`
+| Interval between remote updates, in seconds.
+
+| `APICURIO_GITOPS_PULL_DEPTH`
+| `1`
+| Clone depth. `0` means a full clone.
+
+| `APICURIO_GITOPS_PULL_SSH_KEYS`
+| No default
+| Path to one or more SSH private keys for pull mode, comma-separated. The keys are tried in order.
+
+| `APICURIO_GITOPS_PULL_SSH_KNOWN_HOSTS`
+| No default
+| Path to a known hosts file for pull mode.
+
+| `APICURIO_GITOPS_PUSH_PORT`
+| `2222`
+| SSH server port for push mode.
+
+| `APICURIO_GITOPS_PUSH_SSH_AUTHORIZED_KEYS`
+| No default
+| Path to the authorized keys file for push mode.
+
+| `APICURIO_GITOPS_PUSH_SSH_HOST_KEY`
+| No default
+| Path to the SSH host key for push mode.
+
+| `APICURIO_GITOPS_SECURITY`
+| `strict`
+| Security level: `strict` or `dev`. Plaintext `http://` URLs are rejected at both levels.
+
+| `APICURIO_GITOPS_VALIDATE_ENABLED`
+| `true`
+| Enable the validation watch loop in the sync container.
+
+| `APICURIO_GITOPS_VALIDATE_POLL_INTERVAL_SECONDS`
+| `2`
+| Interval at which the sync container checks for validation requests.
+
+| `APICURIO_GITOPS_VALIDATE_CLEANUP_AGE_SECONDS`
+| `7200`
+| Age after which stale validation checkouts are removed.
+
+| `APICURIO_GITOPS_VALIDATE_FETCH_TIMEOUT_SECONDS`
+| `120`
+| Timeout for fetching a Git reference during validation.
+|===
+
+

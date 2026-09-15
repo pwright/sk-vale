@@ -1,0 +1,61 @@
+[id="registry-flink-catalog-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Configuration options for the {registry} Flink Catalog
+
+[role="_abstract"]
+The {registry} Flink Catalog provides configuration options for connecting to and authenticating with your {registry} instance.
+
+.Required configuration properties
+[.table-expandable,width="100%",cols="4,4,3,5",options="header"]
+|===
+|Property
+|Type
+|Default
+|Description
+|`registry.url`
+|String
+|None (required)
+|Base URL of the {registry} API, for example `\http://localhost:8080/apis/registry/v3`.
+|===
+
+.Optional configuration properties
+[.table-expandable,width="100%",cols="4,4,3,5",options="header"]
+|===
+|Property
+|Type
+|Default
+|Description
+|`default-database`
+|String
+|`default`
+|The default database (group) to use when none is specified.
+|`registry.auth.type`
+|String
+|`none`
+|Authentication type: `none`, `basic`, or `oauth2`.
+|`registry.auth.username`
+|String
+|None
+|Username for basic authentication.
+|`registry.auth.password`
+|String
+|None
+|Password for basic authentication.
+|`registry.auth.token-endpoint`
+|String
+|None
+|OAuth2 token endpoint URL.
+|`registry.auth.client-id`
+|String
+|None
+|OAuth2 client ID.
+|`registry.auth.client-secret`
+|String
+|None
+|OAuth2 client secret.
+|`cache.ttl.ms`
+|Long
+|`300000` (5 minutes)
+|Cache time-to-live in milliseconds for schema caching.
+|===
+

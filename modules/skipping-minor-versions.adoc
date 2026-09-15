@@ -1,0 +1,10 @@
+[id="skipping-minor-versions_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Upgrades across multiple minor versions
+
+[role="_abstract"]
+You can upgrade across multiple minor versions in one step (for example, from 3.2.x directly to a later minor version). Database migrations are cumulative, and {registry} applies them in order on startup.
+
+Review the release notes for all intermediate versions to understand the full set of changes.
+
+

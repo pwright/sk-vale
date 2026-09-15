@@ -1,0 +1,21 @@
+[id="registry-iceberg-catalog-clickhouse-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= ClickHouse catalog configuration
+
+[role="_abstract"]
+Configure ClickHouse to use {registry} as the Iceberg catalog.
+
+[source,sql]
+----
+-- Create a database using the Iceberg engine
+CREATE DATABASE apicurio_db ENGINE = Iceberg(
+  'http://localhost:8080/apis/iceberg/v1',
+  'default',
+  'my_database'
+);
+
+-- Query tables from the catalog
+SELECT * FROM apicurio_db.users;
+----
+
+// ref-registry-iceberg-catalog-api-reference

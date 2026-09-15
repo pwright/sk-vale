@@ -1,0 +1,29 @@
+[id="canonicalizing-content-using-rest-api_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Canonicalizing content using the {registry} REST API
+
+[role="_abstract"]
+You can use the {registry} REST API to convert schema or API content to its canonical form without storing it. Canonical content is useful for comparing schemas independently of formatting differences.
+
+.Procedure
+. Send the content to the canonicalization endpoint. The `artifactType` query parameter is required:
++
+[source,bash]
+----
+$ curl -X POST -H "Content-Type: application/json" --data @schema.json \
+  "http://localhost:8080/apis/registry/v3/content/canonicalize?artifactType=AVRO"
+----
++
+The response body contains the canonicalized content. An empty request body or an unknown artifact type produces a `400` error response.
+. To retrieve the canonical form of a stored artifact version with its references resolved, use the `canonical` parameter on the version content endpoint instead:
++
+[source,bash]
+----
+$ curl "http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/versions/1.0.0/content?canonical=true"
+----
++
+[NOTE]
+====
+The canonicalization endpoint operates on the content exactly as provided and does not resolve external references. To canonicalize content that uses references, store the content first and use the `canonical` parameter.
+====
+

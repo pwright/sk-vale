@@ -1,0 +1,41 @@
+[id="llm-artifact-types-customization_{context}"]
+:_mod-docs-content-type: REFERENCE
+= LLM artifact type customization
+
+[role="_abstract"]
+You can modify the built-in LLM artifact types or use them as templates for custom types.
+
+.Source files
+[%header,cols="2,4"]
+|===
+|File
+|Purpose
+
+|`schema-util/common/.../content/ModelSchemaContentAccepter.java`
+|MODEL_SCHEMA content type detection
+
+|`schema-util/common/.../rules/validity/ModelSchemaContentValidator.java`
+|MODEL_SCHEMA validation
+
+|`schema-util/common/.../rules/compatibility/ModelSchemaCompatibilityChecker.java`
+|MODEL_SCHEMA backward compatibility checking
+
+|`schema-util/common/.../content/PromptTemplateContentAccepter.java`
+|PROMPT_TEMPLATE content type detection
+
+|`schema-util/common/.../rules/validity/PromptTemplateContentValidator.java`
+|PROMPT_TEMPLATE validation (including template variable cross-checking)
+
+|`schema-util/common/.../rules/compatibility/PromptTemplateCompatibilityChecker.java`
+|PROMPT_TEMPLATE backward compatibility checking
+
+|`schema-util/util-provider/.../StandardArtifactTypeProviderRegistry.java`
+|MODEL_SCHEMA and PROMPT_TEMPLATE provider wiring (along with all other built-in types)
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-artifact-reference.adoc[{registry} artifact reference]
+* link:https://prompty.ai/specification/page/[Microsoft Prompty Specification]
+* link:https://github.com/tensorflow/model-card-toolkit[Google Model Card Toolkit]
+* link:https://modelcontextprotocol.io/specification/2025-06-18/server/prompts[MCP Prompts Specification]

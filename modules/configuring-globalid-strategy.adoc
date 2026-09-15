@@ -1,0 +1,38 @@
+[id="configuring-globalid-strategy_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Configuration for registry lookup options
+
+[role="_abstract"]
+When using the `DefaultSchemaResolver`, you can configure its behavior using application properties. The following table shows some commonly used examples:
+
+.{registry} lookup configuration options
+[%header,cols="5,3,5,2"]
+
+|===
+|Property
+|Type
+|Description
+|Default
+
+|`apicurio.registry.find-latest`
+|`boolean`
+|Specify whether the serializer tries to find the latest artifact in the registry for the corresponding group ID and artifact ID.
+|`false`
+
+|`apicurio.registry.use-id`
+|`String`
+|Instructs the serializer to write the specified ID to Kafka and instructs the deserializer to use this ID to find the schema.
+|None
+
+|`apicurio.registry.auto-register`
+|`boolean`
+|Specify whether the serializer tries to create an artifact in the registry. The JSON Schema serializer does not support this.
+|`false`
+
+|`apicurio.registry.check-period-ms`
+|`String`
+|Specify how long to cache the global ID in milliseconds. If not configured, the global ID is fetched every time.
+|None
+
+|===
+

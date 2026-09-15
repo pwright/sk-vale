@@ -1,0 +1,31 @@
+[id="managing-registry-artifacts-api_{context}"]
+= Managing {registry} content using the REST API
+
+//If the assembly covers a task, start the title with a verb in the gerund form, such as Creating or Configuring.
+
+:_mod-docs-content-type: ASSEMBLY
+
+[role="_abstract"]
+Client applications can use {registry} REST API operations to manage schema and API artifacts in {registry}, for example, in a CI/CD pipeline deployed in production. The Core Registry API v3 provides operations for artifacts, versions, metadata, and rules stored in {registry}. For detailed information, see the {registry-rest-api}.
+
+**Prerequisites**
+
+* {registry-overview}
+
+[role="_additional-resources"]
+.Additional resources
+* link:{attachmentsdir}/registry-rest-api.htm[Apicurio Registry REST API documentation]
+
+//INCLUDES
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_managing-registry-artifacts-api.adoc
+
+// proc-managing-artifacts-using-rest-api
+include::../modules/managing-artifacts-using-rest-api.adoc[leveloffset=+1]
+include::../modules/managing-artifact-versions-using-rest-api.adoc[leveloffset=+1]
+include::../modules/managing-artifact-references-using-rest-api.adoc[leveloffset=+1]
+include::../modules/searching-artifacts-using-rest-api.adoc[leveloffset=+1]
+include::../modules/canonicalizing-content-using-rest-api.adoc[leveloffset=+1]
+include::../modules/exporting-importing-using-rest-api.adoc[leveloffset=+1]

@@ -1,0 +1,33 @@
+[id="kcat-usage-examples_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Examples of using kcat
+
+[role="_abstract"]
+The following examples show how to use `kcat` to list topics and create topic exports.
+
+* List Kafka topics:
++
+[source,bash]
+----
+kcat -b $KAFKA_BOOTSTRAP_SERVER -L | grep "topic " | sed 's#\([^"]*"\)\([^"]*\)\(".*\)#\2#'
+----
+The `sed` command filters out extra information in this example.
+
+* Export data from the `kafkasql-journal` topic in JSON format, with envelope, and base64 encoded keys and values:
++
+[source,bash]
+----
+kcat -b $KAFKA_BOOTSTRAP_SERVER -C -t kafkasql-journal -S base64 -Z -D \\n -e -J \
+  > kafkasql-journal.topicdump
+----
+
+* Create an export file for each listed topic by combining the preceding commands:
++
+[source,bash]
+----
+mkdir dump
+for t in $(kcat -b $KAFKA_BOOTSTRAP_SERVER -L | grep "topic " | sed 's#\([^"]*"\)\([^"]*\)\(".*\)#\2#'); do \
+  kcat -b $KAFKA_BOOTSTRAP_SERVER -C -t $t -S base64 -Z -D \\n -e -J > dump/$t.topicdump; \
+done
+----
+

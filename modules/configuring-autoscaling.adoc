@@ -1,0 +1,59 @@
+[id="configuring-autoscaling_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Autoscaling configuration
+
+[role="_abstract"]
+You can configure the {operator} to manage a horizontal pod autoscaler (HPA) for the app and UI components. When autoscaling is enabled, the {operator} creates an HPA that targets the component's Deployment, and the static `replicas` field is ignored.
+
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: example-registry
+spec:
+  app:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 5
+      targetCPUUtilizationPercentage: 70
+----
+
+.Autoscaling fields
+[cols="2,3,1,1",options="header"]
+|===
+|Field
+|Description
+|Type
+|Default
+
+|`enabled`
+|Whether the {operator} manages a HorizontalPodAutoscaler for the component.
+|Boolean
+|`false`
+
+|`minReplicas`
+|Minimum number of replicas.
+|Integer
+|`1`
+
+|`maxReplicas`
+|Maximum number of replicas. Set this field when you enable autoscaling; when omitted, it falls back to the `minReplicas` value.
+|Integer
+|`minReplicas`
+
+|`targetCPUUtilizationPercentage`
+|Target average CPU utilization percentage across all pods.
+|Integer
+|`80`
+
+|`targetMemoryUtilizationPercentage`
+|Target average memory utilization percentage across all pods. When not set, memory-based scaling is not configured.
+|Integer
+|Not set
+|===
+
+The autoscaling configuration is available on both `spec.app.autoscaling` and `spec.ui.autoscaling`. If you set both `replicas` and `autoscaling` on a component, the {operator} reports a validation error condition and ignores the `replicas` field. The {operator} also manages a PodDisruptionBudget when autoscaling is enabled with `maxReplicas` greater than 1.
+
+// ref-configuring-poddisruptionbudget

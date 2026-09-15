@@ -1,0 +1,18 @@
+[id="upgrading-registry_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Upgrade overview
+
+[role="_abstract"]
+{registry} supports forward upgrades.
+Database schema migrations run automatically on startup and do not require manual intervention.
+
+[IMPORTANT]
+====
+Always back up your database before upgrading to a new minor version.
+====
+
+[role="_additional-resources"]
+.Additional resources
+* xref:backup-before-upgrade_{context}[]
+
+

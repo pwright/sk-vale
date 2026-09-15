@@ -1,0 +1,40 @@
+[id="configuring-gitops-multiple-repositories_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring multiple GitOps repositories
+
+[role="_abstract"]
+You can configure one registry instance to aggregate data from multiple Git repositories, for example one repository per team. The registry detects conflicting artifact definitions across repositories and rejects them.
+
+.Prerequisites
+* You have configured the registry for GitOps storage.
+
+.Procedure
+. Configure the repositories on the registry with indexed environment variables. Indexes must start at 0 and be consecutive:
++
+[source,bash]
+----
+APICURIO_GITOPS_REPOS_0_DIR=platform
+APICURIO_GITOPS_REPOS_1_DIR=fulfillment
+APICURIO_GITOPS_REPOS_1_BRANCH=fulfillment
+----
++
+Optional: Assign an identifier for status reporting with `APICURIO_GITOPS_REPOS_N_ID`. The default identifier is the directory name.
++
+[NOTE]
+====
+Do not combine the single-repository variables (`APICURIO_GITOPS_REPO_DIR`, `APICURIO_GITOPS_REPO_BRANCH`) with indexed variables. The registry rejects mixed configuration, index gaps, duplicate repository identifiers, and duplicate directory and branch combinations at startup.
+====
+. If you use the sync container, configure the remote URL for each repository with `APICURIO_GITOPS_REPOS_N_URL`, and optionally per-repository SSH keys with `APICURIO_GITOPS_REPOS_N_SSH_KEYS`.
+. Ensure that each artifact is defined in exactly one repository. If the same `groupId` and `artifactId` combination is defined in more than one repository, the registry reports all conflicts and rejects the entire load.
+. Verify the aggregated state:
++
+[source,bash]
+----
+$ curl http://localhost:8080/apis/registry/v3/admin/gitops/status
+----
++
+The `sources` field maps each repository identifier to the currently loaded commit.
++
+By default, the registry labels each loaded group and artifact with the identifier of its source repository, using the `system:source` label key. You can change or disable this with the `apicurio.polling-storage.source-label-key` property.
+
+

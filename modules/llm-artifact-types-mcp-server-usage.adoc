@@ -1,0 +1,41 @@
+[id="llm-artifact-types-mcp-server-usage_{context}"]
+:_mod-docs-content-type: REFERENCE
+= MCP server usage
+
+[role="_abstract"]
+You can run the MCP Server to make {registry} prompt templates available to AI agents through the MCP protocol.
+
+To run the MCP Server:
+
+[source,bash]
+----
+cd mcp
+../mvnw quarkus:dev
+----
+
+The MCP Server communicates with the registry and makes prompts available through the MCP protocol. AI agents such as Claude and ChatGPT can discover and use registry-stored prompts.
+
+.MCP architecture data flow
+[cols="1,3",options="header"]
+|===
+|Layer
+|Description
+
+|{registry} (PROMPT_TEMPLATE artifacts)
+|Stores prompt templates with `mcp.enabled: true` in the MCP configuration section.
+
+|MCP server module
+a|Connects {registry} to AI agents by using the MCP protocol. Provides the following tools:
+
+* `list_mcp_prompts()`: lists MCP-enabled templates
+* `get_mcp_prompt()`: renders a template with arguments
+* `render_prompt_template()`: renders any template
+
+|AI agent or LLM (such as Claude or ChatGPT)
+a|Communicates with the MCP server by using the MCP protocol:
+
+* `prompts/list`: discovers available prompts
+* `prompts/get`: retrieves prompt content with arguments
+|===
+
+// ref-llm-artifact-types-prompt-template-implementation

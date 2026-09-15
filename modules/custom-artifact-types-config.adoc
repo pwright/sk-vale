@@ -1,0 +1,110 @@
+[id="custom-artifact-types-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Artifact type configuration file
+
+[role="_abstract"]
+At startup, {registry} reads the list of supported artifact types from a JSON file.
+The `apicurio.artifact-types.config-file` property specifies the file location, with `APICURIO_ARTIFACT_TYPES_CONFIG_FILE` as the corresponding environment variable.
+When the file does not exist, only the built-in artifact types are available.
+
+.Example configuration file
+[source,json]
+----
+{
+  "includeStandardArtifactTypes": true,
+  "artifactTypes": [
+    {
+      "artifactType": "MARKDOWN",
+      "name": "Markdown",
+      "description": "Markdown documents with a level-1 title and level-2 sections.",
+      "contentTypes": ["text/markdown", "text/plain"],
+      "contentAccepter": {
+        "type": "java",
+        "classname": "io.apicurio.registry.examples.customtypes.MarkdownContentAccepter"
+      },
+      "contentValidator": {
+        "type": "java",
+        "classname": "io.apicurio.registry.examples.customtypes.MarkdownContentValidator"
+      },
+      "compatibilityChecker": {
+        "type": "webhook",
+        "url": "https://markdown-service.example.com/compatibility",
+        "headers": { "Authorization": "Bearer YOUR_SECRET_TOKEN" }
+      }
+    }
+  ]
+}
+----
+
+.Top-level properties
+[cols="1,3",options="header"]
+|===
+|Property |Description
+
+|`includeStandardArtifactTypes`
+|Whether the built-in artifact types, such as `AVRO`, `JSON`, and `OPENAPI`, remain available. When this property is `false`, {registry} supports only the types listed in `artifactTypes`.
+
+|`artifactTypes`
+|The list of custom artifact types.
+|===
+
+.Artifact type properties
+[cols="1,3",options="header"]
+|===
+|Property |Description
+
+|`artifactType`
+|The unique identifier of the type, such as `MARKDOWN`, in the REST API and the user interface.
+
+|`name`, `description`
+|Display name and description of the type.
+
+|`contentTypes`
+|The content types (media types) accepted for this artifact type.
+
+|`contentAccepter`
+|Provider that determines whether content belongs to this type. {registry} uses this provider to detect the artifact type when a client does not specify one.
+
+|`contentValidator`
+|Provider that implements the `VALIDITY` rule (`SYNTAX_ONLY` and `FULL` levels).
+
+|`compatibilityChecker`
+|Provider that implements the `COMPATIBILITY` rule (`BACKWARD`, `FORWARD`, `FULL`, and their transitive variants).
+
+|`contentCanonicalizer`
+|Provider that produces the canonical form of the content. {registry} uses this form to recognize equivalent content, for example, in canonical search and deduplication.
+
+|`contentDereferencer`
+|Provider that inlines or rewrites references to other artifacts when content is retrieved with `references=DEREFERENCE` or `references=REWRITE`.
+
+|`referenceFinder`
+|Provider that finds external references in the content. The Maven plug-in uses this provider to register references automatically.
+|===
+
+Every provider property is optional.
+When you omit a provider, {registry} skips the corresponding operation for the type.
+For example, without a `contentAccepter`, {registry} does not detect the type automatically.
+Without a `contentValidator`, {registry} treats all content as valid.
+Without a `compatibilityChecker`, {registry} treats all content as compatible.
+
+.Provider types
+[cols="1,3",options="header"]
+|===
+|Provider |Description
+
+|`{"type": "java", "classname": "..."}`
+|A Java class that implements the corresponding interface of the `io.apicurio:apicurio-registry-schema-util-common` module: `io.apicurio.registry.content.ContentAccepter`, `io.apicurio.registry.rules.validity.ContentValidator`, `io.apicurio.registry.rules.compatibility.CompatibilityChecker`, `io.apicurio.registry.content.canon.ContentCanonicalizer`, `io.apicurio.registry.content.dereference.ContentDereferencer`, or `io.apicurio.registry.content.refs.ReferenceFinder`.
+The class must have a public no-argument constructor and must be available on the class path of {registry}.
+
+|`{"type": "webhook", "url": "...", "headers": {...}}`
+|An HTTP endpoint that {registry} calls with a JSON request that describes the operation, including the content, resolved references, and rule level. The endpoint returns a JSON response.
+{registry} sends the optional `headers` with every request, for example, for authentication.
+Webhooks work with the standard container image but add a network round trip to every operation.
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* xref:custom-artifact-types-mutable-image_{context}[]
+* xref:getting-started/assembly-artifact-reference.adoc[]
+
+// ref-custom-artifact-types-container-images

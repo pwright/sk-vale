@@ -1,0 +1,25 @@
+[id="registry-events-sql-outbox_{context}"]
+:_mod-docs-content-type: CONCEPT
+= SQL storage outbox pattern with Debezium
+
+[role="_abstract"]
+With SQL storage, {registry} writes change events to an outbox database table that Debezium reads using Change Data Capture (CDC).
+
+With SQL storage, events are written to an `outbox` database table as part of the same database transaction that performs the registry operation. This guarantees that events are only produced for changes that are actually committed.
+
+The outbox table uses an *insert-then-delete* pattern: the event row is inserted and then immediately deleted within the same transaction. Debezium CDC captures the insert before the deletion takes effect, ensuring the event is published to Kafka without the outbox table growing indefinitely.
+
+The outbox table schema:
+
+[source,sql]
+----
+CREATE TABLE outbox (
+    id            VARCHAR(128)  NOT NULL PRIMARY KEY,
+    aggregatetype VARCHAR(255)  NOT NULL,
+    aggregateid   VARCHAR(255)  NOT NULL,
+    type          VARCHAR(255)  NOT NULL,
+    payload       JSONB         NOT NULL
+);
+----
+
+

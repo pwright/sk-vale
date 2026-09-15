@@ -1,0 +1,23 @@
+[id="deleting-artifact-version-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Deleting an artifact version
+
+[role="_abstract"]
+You can delete a specific artifact version from {registry} by using the web console.
+
+WARNING: Deleting an artifact version is permanent and cannot be undone. If you delete the only remaining version, {registry} also deletes the artifact.
+
+.Procedure
+
+. On the *Explore* tab, browse the list of artifacts stored in {registry}, or enter a search string to find the artifact that contains the version you want to delete.
+. Click the artifact to view its details.
+. Click the *Versions* tab to view a list of all artifact versions.
+. Find the version that you want to delete, and select *Delete version* from the Action menu (three vertical dots) for that version.
+. Confirm the deletion when prompted.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:configuring-settings-using-console_{context}[]
+* xref:adding-artifacts-using-console_{context}[]
+* xref:browsing-artifacts-using-console_{context}[]
+

@@ -1,0 +1,28 @@
+[id="configuring-registry-ui_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring the {registry} web console
+
+[role="_abstract"]
+You can set optional environment variables to configure the {registry} web console for your deployment environment or to customize its behavior.
+
+.Prerequisites
+* You have installed {registry}.
+
+.Procedure
+. To override the default REST API v3 URL, set the following environment variable in the UI component deployment configuration:
++
+`REGISTRY_API_URL`: URL for the core {registry} server REST API v3. For example, `\https://registry-api.my-domain.com/apis/registry/v3`
++
+NOTE: The {operator} automatically configures the UI component with the REST API v3 URL by default. Set this variable only to override the default value.
+
+. Optional: To enable read-only mode, set the following environment variable:
++
+`REGISTRY_FEATURE_READ_ONLY`: Set to `true` to enable read-only mode. Defaults to `false`.
++
+NOTE: Read-only mode disables all write operations in the {registry} web console. When enabled, users cannot create groups, create artifacts, upload new artifact versions, update artifact metadata, or delete artifacts.
+
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_managing-registry-artifacts.adoc
+

@@ -1,0 +1,52 @@
+[id="changing-artifact-owner-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Changing an artifact owner using the {registry} web console
+
+[role="_abstract"]
+As an administrator or as an artifact owner, you can use the {registry} web console to change the artifact owner to another user account.
+
+If the *Artifact owner-only authorization* option is enabled on the *Settings* tab, only artifact owners or administrators can modify artifacts. You might need to change the owner if the owner user leaves the organization, the owner account no longer exists, or you need to transfer modification access to another user.
+
+NOTE: {registry} displays the *Artifact owner-only authorization* setting and the artifact *Owner* field only when authentication was enabled during deployment. For more information, see
+
+ifdef::apicurio-registry[]
+xref:getting-started/assembly-configuring-the-registry.adoc[].
+endif::[] 
+ifdef::rh-service-registry[]
+link:{LinkServiceRegistryInstall}[{NameServiceRegistryInstall}].
+endif::[] 
+
+.Prerequisites
+
+* {registry} is running and the artifact exists.
+* You are logged in to the {registry} web console as the artifact's current owner or as an administrator:
++
+`{registry-url}`
+
+.Procedure
+
+
+. On the *Explore* tab, browse the list of artifacts stored in {registry}, or enter a search string to find the artifact. You can select from the list to search by criteria such as name, group, labels, or global ID.
+
+. Click the artifact that you want to reassign.
+
+. In the *Overview* section, click the pencil icon next to the *Owner* field.
+
+. In the *New owner* field, select or enter an account name.
+
+. Click *Change owner*.
+
+
+[role="_additional-resources"]
+.Additional resources
+ifdef::apicurio-registry[]
+* xref:getting-started/assembly-configuring-the-registry.adoc[]
+endif::[] 
+ifdef::rh-service-registry[]
+* link:{LinkServiceRegistryInstall}[{NameServiceRegistryInstall}]
+endif::[] 
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_managing-registry-artifacts.adoc
+

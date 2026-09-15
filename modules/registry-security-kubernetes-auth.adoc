@@ -1,0 +1,68 @@
+[id="registry-security-kubernetes-auth_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring {registry} Kubernetes-native authentication
+
+[role="_abstract"]
+You can configure {registry} to authenticate clients by validating their Kubernetes service account tokens with the Kubernetes TokenReview API. Clients send their service account token as a bearer token, and no external identity provider is required.
+
+IMPORTANT: Kubernetes-native authentication is an *experimental* feature. You must enable the experimental features gate (`APICURIO_FEATURES_EXPERIMENTAL_ENABLED=true`) to use it; otherwise, the application fails at startup. You cannot enable Kubernetes-native authentication and OpenID Connect at the same time, because both use bearer tokens.
+
+NOTE: When you deploy {registry} with the Operator, you can configure this feature with the `spec.app.auth.kubernetesAuth` fields of the `ApicurioRegistry3` custom resource: `enabled`, `apiAudiences`, `cacheExpiration`, and `groupMapping` with `adminGroups`, `developerGroups`, and `readOnlyGroups`. The Operator adds the `kubernetes` mechanism to the priority list and sets the role source automatically.
+
+.Prerequisites
+* {registry} is deployed on a Kubernetes cluster.
+* You have permission to create cluster role bindings.
+
+.Procedure
+. Grant the {registry} service account permission to call the TokenReview API by binding it to the `system:auth-delegator` cluster role:
++
+[source,yaml]
+----
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: apicurio-registry-token-review
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+  - kind: ServiceAccount
+    name: apicurio-registry
+    namespace: my-namespace
+----
+. Configure {registry} with the following environment variables. The `kubernetes` mechanism is not part of the default priority list, so you must add it:
++
+[source,properties]
+----
+APICURIO_FEATURES_EXPERIMENTAL_ENABLED=true
+APICURIO_AUTHN_KUBERNETES_ENABLED=true
+APICURIO_AUTHN_MECHANISM_PRIORITY=kubernetes,basic,proxy-header
+----
+. Optional: Restrict which tokens are accepted by configuring the expected API audiences as a comma-separated list. When the value is empty, the audience is not validated:
++
+[source,properties]
+----
+APICURIO_AUTHN_KUBERNETES_API_AUDIENCES=https://kubernetes.default.svc
+----
+. To enable role-based authorization, map Kubernetes groups to {registry} roles. The groups of the authenticated service account or user are matched against the comma-separated mapping lists:
++
+[source,properties]
+----
+APICURIO_AUTH_ROLE_BASED_AUTHORIZATION=true
+APICURIO_AUTH_ROLE_SOURCE=kubernetes
+APICURIO_AUTH_ROLE_SOURCE_KUBERNETES_GROUP_MAPPING_ADMIN=cluster-admins
+APICURIO_AUTH_ROLE_SOURCE_KUBERNETES_GROUP_MAPPING_DEVELOPER=developers
+APICURIO_AUTH_ROLE_SOURCE_KUBERNETES_GROUP_MAPPING_READONLY=viewers
+----
+. Optional: Adjust how long TokenReview results are cached, in minutes. The default is `5`:
++
+[source,properties]
+----
+APICURIO_AUTHN_KUBERNETES_CACHE_EXPIRATION=5
+----
+
+.Verification
+* A request that sends a valid service account token as a bearer token is authenticated, and receives the {registry} role that the group mapping assigns to its Kubernetes groups.
+
+// ref-registry-security-rbac-enabled

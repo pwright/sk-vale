@@ -1,0 +1,16 @@
+[id="ha-kafkasql-startup-verification_{context}"]
+:_mod-docs-content-type: REFERENCE
+= KafkaSQL startup verification
+
+[role="_abstract"]
+At startup, {registry} verifies the KafkaSQL topic configuration and the contents of the journal topic before it serves requests. Verification protects against accidental data loss from misconfigured topics or from data that an earlier major version wrote.
+
+{registry} performs the following checks:
+
+* Topic configuration: every KafkaSQL topic must use the `delete` cleanup policy, and the journal and snapshots topics must use unlimited retention (`retention.ms=-1` and `retention.bytes=-1`). When a check fails, {registry} refuses to start, and the error message names the topic, the effective value, and where the value was configured.
+* Journal contents: {registry} inspects recent messages in the journal topic. When the journal contains only {registry} version 2.x records, {registry} refuses to start to prevent data loss. When the journal contains a mix of version 2.x and 3.x records, {registry} logs an error and continues.
+
+The journal inspection is bounded: {registry} captures the topic end offsets before it reads, so messages that other replicas produce concurrently do not delay startup.
+
+To relax the retention verification, for example, when you use the snapshotting feature with automatic cleanup, set `apicurio.kafkasql.topic-configuration-verification-override-enabled=true`. With this setting, {registry} does not enforce unlimited retention, so ensure that snapshots are created more frequently than messages are deleted.
+

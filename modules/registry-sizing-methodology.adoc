@@ -1,0 +1,52 @@
+[id="registry-sizing-methodology_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Test methodology
+
+[role="_abstract"]
+The `perf-tests` module produced the results with the following test configuration. The source
+repository contains further details in `perf-tests/README.md` and `perf-tests/k8s/README.md`.
+
+Application resources::
+A single {registry} application replica has a CPU limit of 2 and a memory limit of `2Gi`.
+The `registry-cr.yaml` file for each storage scenario sets these limits explicitly.
+The {operator} defaults to a CPU limit of 1 and a memory limit of `1Gi`.
+The default memory limit does not provide enough capacity for stable operation under the
+sustained concurrency in these tests.
+
+Connection pool::
+The Java Database Connectivity (JDBC) connection pool size is 400
+(`APICURIO_DATASOURCE_JDBC_MAX_SIZE`), increased from the default of 100.
+This setting prevents the connection pool from limiting throughput at the tested concurrency.
+
+Load model::
+A closed, concurrent-user model keeps `N` virtual clients continuously active for the full test
+duration. Each client starts another operation immediately after its previous operation completes.
+This model measures sustained concurrency rather than a fixed arrival rate.
+
+Measurement interval::
+Each figure comes from a 3-minute sustained run. The reported average excludes approximately
+the first 30–40 seconds for Java virtual machine (JVM) and just-in-time (JIT) compiler warm-up,
+because throughput is still increasing during that interval. The measurements represent steady
+state after warm-up.
+
+Load generator::
+The load generator runs as a separate process outside the cluster
+(`perf-tests/k8s/common/run-external-load.sh`) against the registry, which a NodePort service
+exposes. The load generator does not compete with the registry for the same node resources.
+
+Traffic mix::
+The tests measure reads and writes separately, with traffic set to 100% reads or 100% writes.
+Resolving an existing schema by ID represents how producers and consumers use a schema registry
+for nearly every message. Registering a new schema is comparatively rare.
+The <<registry-sizing-sql-storage_{context}>> results explain why a blended traffic ratio can
+obscure the different limits on read and write throughput.
+
+Storage latency::
+A network proxy injects a round-trip latency of approximately 15 ms ± 5 ms between the registry
+and the storage back end. This latency approximates a managed database or remote Kafka cluster
+on a different node or availability zone, rather than a colocated connection with nearly zero latency.
+
+You can reproduce these tests against your own {kubernetes} cluster by using
+`perf-tests/k8s/postgresql/deploy.sh` or `perf-tests/k8s/kafkasql/deploy.sh`.
+You can also adapt the tests to your resource limits, traffic mix, or latency profile.
+

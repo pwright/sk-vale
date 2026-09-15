@@ -1,0 +1,83 @@
+[id="registry-event-types-reference_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Event types reference
+
+[role="_abstract"]
+{registry} defines the following event types. Each event includes a JSON payload with details about the change.
+
+Artifact-level changes produce the following event types:
+
+.Artifact event types
+[cols="1,2",options="header"]
+|===
+|Event type
+|Description
+
+|`ARTIFACT_CREATED`
+|A new artifact was registered.
+
+|`ARTIFACT_DELETED`
+|An artifact and all its versions were deleted.
+
+|`ARTIFACT_METADATA_UPDATED`
+|An artifact's name, description, or owner was updated.
+|===
+
+Artifact version changes produce the following event types:
+
+.Artifact version event types
+[cols="1,2",options="header"]
+|===
+|Event type
+|Description
+
+|`ARTIFACT_VERSION_CREATED`
+|A new version of an artifact was created.
+
+|`ARTIFACT_VERSION_DELETED`
+|An artifact version was deleted.
+
+|`ARTIFACT_VERSION_METADATA_UPDATED`
+|A version's metadata (name, description, labels) was updated.
+
+|`ARTIFACT_VERSION_STATE_CHANGED`
+|A version's lifecycle state changed (for example, from `ENABLED` to `DEPRECATED`).
+|===
+
+Group changes produce the following event types:
+
+.Group event types
+[cols="1,2",options="header"]
+|===
+|Event type
+|Description
+
+|`GROUP_CREATED`
+|A new group was created.
+
+|`GROUP_DELETED`
+|A group was deleted.
+
+|`GROUP_METADATA_UPDATED`
+|A group's metadata was updated.
+|===
+
+Rule changes produce the following event types:
+
+.Rule event types
+[cols="1,2",options="header"]
+|===
+|Event type
+|Description
+
+|`GLOBAL_RULE_CONFIGURED`
+|A global compatibility or validity rule was created, updated, or deleted.
+
+|`GROUP_RULE_CONFIGURED`
+|A group-level rule was created, updated, or deleted.
+
+|`ARTIFACT_RULE_CONFIGURED`
+|An artifact-level rule was created, updated, or deleted.
+|===
+
+

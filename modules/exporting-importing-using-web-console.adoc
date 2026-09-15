@@ -1,0 +1,36 @@
+[id="exporting-importing-using-web-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Exporting and importing data using the {registry} web console
+
+[role="_abstract"]
+As an administrator, you can use the {registry} web console to export data from one {registry} instance and import it into another {registry} instance. You can use this to migrate data between {registry} instances.
+
+You export all artifact data from a source {registry} instance to a `.zip` file, then import the file into a target instance.
+
+.Prerequisites
+
+* You have set up the following {registry} instances:
+** The source instance that you are exporting from contains at least one schema or API artifact
+** The target instance that you are importing into is empty to preserve unique IDs
+* You are logged in to the {registry} web console with administrator access:
++
+`{registry-url}`
+
+.Procedure
+
+. In the web console for the source {registry} instance, view the *Explore* tab.
+
+. Click the additional actions icon (three vertical dots) next to *Create artifact* in the toolbar, and select *Export all (as .ZIP)* to export the data for this {registry} instance to a `.zip` download file.
+
+. In the web console for the target {registry} instance, view the *Explore* tab.
+
+. Click the additional actions icon (three vertical dots) next to *Create artifact* in the toolbar, and select *Import from .ZIP*.
+
+. Drag and drop or browse to the `.zip` download file that you exported earlier.
+
+. Click *Import* and wait for {registry} to import the data.
+
+//[role="_additional-resources"]
+//.Additional resources
+
+

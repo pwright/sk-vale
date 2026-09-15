@@ -1,0 +1,17 @@
+[id="using-flink-catalog_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Using {registry} with Apache Flink
+
+[role="_abstract"]
+Use {registry} as a catalog in Apache Flink to manage and discover schemas for your streaming applications.
+
+== Prerequisites
+
+* A running {registry} instance
+* Apache Flink 1.17 or later
+
+include::../modules/registry-flink-catalog-overview.adoc[leveloffset=+1]
+include::../modules/registry-flink-catalog-config.adoc[leveloffset=+1]
+include::../modules/registry-flink-catalog-sql.adoc[leveloffset=+1]
+include::../modules/registry-flink-catalog-table-api.adoc[leveloffset=+1]
+include::../modules/registry-flink-catalog-schema-types.adoc[leveloffset=+1]
