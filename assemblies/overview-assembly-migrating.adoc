@@ -1,0 +1,18 @@
+[id="migrating"]
+:_mod-docs-content-type: REFERENCE
+= Migrating from Skupper v1
+
+[role="_abstract"]
+
+Skupper v1 sites are not compatible with Skupper v2 sites.
+While there are plans to create migration tooling, currently, the only way migrate an application network is to create a new network.
+
+Terminology changes:
+
+* *application network*: Application network or just network
+* *service sync*: Services are not automatically available on other sites. You must create a _connector_ on the site with the server process and a _listener_ on the site with the client process. Also you must match the connector and listener with a _routing key_ to expose a service.
+* *Skupper Custom Resources*: On non-Kubernetes sites, you can now define your network using YAML. The YAML format is similar to Kubernetes YAML.
+
+include::../modules/overview-migrating-sites.adoc[leveloffset=+1]
+include::../modules/overview-migrating-links.adoc[leveloffset=+1]
+include::../modules/overview-migrating-services.adoc[leveloffset=+1]

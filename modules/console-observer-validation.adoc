@@ -1,0 +1,79 @@
+[id="observer-validation"]
+= Validation and Troubleshooting
+
+
+=== Verify Services
+
+Check that both Services are created:
+
+[,bash]
+----
+kubectl get svc -l app.kubernetes.io/name=network-observer
+----
+
+Example output:
+
+[,text]
+----
+NAME                              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+skupper-network-observer          ClusterIP   10.96.123.45    <none>        443/TCP    5m
+skupper-network-observer-metrics  ClusterIP   10.96.123.46    <none>        9000/TCP   5m
+----
+
+=== Test Metrics Endpoint
+
+From a pod in the same namespace:
+
+[,bash]
+----
+kubectl run -it --rm curl --image=curlimages/curl --restart=Never -- curl -sS http://skupper-network-observer-metrics:9000/metrics
+----
+
+Example output:
+
+[,text]
+----
+# HELP skupper_network_observer_info Network Observer build information
+# TYPE skupper_network_observer_info gauge
+skupper_network_observer_info{version="2.2.0"} 1
+...
+----
+
+=== Check Observer Logs
+
+Look for the metrics listener startup message:
+
+[,bash]
+----
+kubectl logs deployment/skupper-network-observer -c network-observer
+----
+
+Example output:
+
+[,text]
+----
+2025/03/15 10:23:45 Starting metrics server on :9000
+2025/03/15 10:23:45 Starting API server on 127.0.0.1:8080
+----
+
+=== Verify Prometheus Configuration
+
+If the embedded Prometheus shows no data, check the ConfigMap:
+
+[,bash]
+----
+kubectl get configmap skupper-network-observer-prometheus-config -o yaml
+----
+
+Ensure the `prometheus.yml` content is valid and the scrape target matches the observer's API listener (`localhost:8080`).
+
+=== PersistentVolumeClaim Issues
+
+If the pod remains in `Pending` state with persistence enabled:
+
+[,bash]
+----
+kubectl describe pvc skupper-network-observer-prometheus-0
+----
+
+Look for events indicating StorageClass issues, volume provisioning failures, or capacity constraints.

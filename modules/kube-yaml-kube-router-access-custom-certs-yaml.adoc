@@ -1,0 +1,219 @@
+[id="kube-router-access-custom-certs-yaml"]
+:_mod-docs-content-type: PROCEDURE
+= Linking sites using a custom `RouterAccess`, and custom certificates
+
+[role="_abstract"]
+
+By default, when you set `spec.linkAccess` on a `Site`, the Skupper controller automatically creates a `RouterAccess` named `skupper-router` with `generateTlsCredentials: true` and `tlsCredentials: skupper-site-server`.
+
+The alternative is to define the `RouterAccess` CR yourself with `generateTlsCredentials: false` and point `tlsCredentials` at a Secret you supply. When `generateTlsCredentials` is false, the Skupper controller recognizes your custom certificate and will not modify it.
+
+*Prerequisites*
+
+* Two sites
+* A server certificate and key for the listening site
+* `jq` and `yq` (mikefarah/yq, the Go-based implementation) installed if using the kubectl method to generate the `Link` resource
+
+.Procedure
+
+. On the listening site, create a `Site` CR *without* `spec.linkAccess` (or with `spec.linkAccess: none`):
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Site
+metadata:
+  name: my-site
+spec: {}
+----
++
+Apply it:
++
+[,shell]
+----
+kubectl apply -f site.yaml
+----
++
+Because `spec.linkAccess` is not set, the controller will not auto-create any `RouterAccess`.
+
+. On the listening site, create a Secret containing your custom server certificate. You can name it anything -- this example uses `my-server-cert`:
++
+[,yaml]
+----
+apiVersion: v1
+kind: Secret
+type: "kubernetes.io/tls"
+metadata:
+  name: my-server-cert
+data:
+  ca.crt: LS0tLS1C...redacted
+  tls.crt: LS0tLS1C...redacted
+  tls.key: LS0tLS1C...redacted
+----
++
+Apply it:
++
+[,shell]
+----
+kubectl apply -f my-server-cert.yaml
+----
++
+Make sure the certificate in `tls.crt` is valid for the hostname or IP address that will be referenced in your `Link` resource. In this example, consider it valid for `skupper.public.host`.
+
+. On the listening site, create a `RouterAccess` CR that references your Secret and sets `generateTlsCredentials: false`:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: RouterAccess
+metadata:
+  name: my-router-access
+spec:
+  generateTlsCredentials: false
+  tlsCredentials: my-server-cert
+  accessType: loadbalancer   # or "route", "ingress", etc.
+  roles:
+    - name: inter-router
+      port: 55671
+    - name: edge
+      port: 45671
+----
++
+Apply it:
++
+[,shell]
+----
+kubectl apply -f my-router-access.yaml
+----
++
+Because `generateTlsCredentials: false`, Skupper will use your Secret as-is and will never overwrite it.
+
+. Determine the hostname or IP address for the listening site.
++
+Check the `RouterAccess` status for the resolved endpoints:
++
+[,shell]
+----
+kubectl get routeraccess my-router-access -o json | jq -r '.status.endpoints[0].host'
+----
++
+You should see something like:
++
+----
+skupper.public.host
+----
+
+. On the listening site, create client credentials for the connecting site.
++
+*a)* If your server certificate was signed by `skupper-site-ca`:
++
+Since Skupper creates the `skupper-site-ca` signing `Certificate` resource, you can use it to generate a client secret automatically. Create a `Certificate` resource:
++
+[,yaml]
+----
+apiVersion: skupper.io/v2alpha1
+kind: Certificate
+metadata:
+  name: skupper-link
+spec:
+  ca: skupper-site-ca
+  client: true
+  subject: skupper-client
+----
++
+Apply it:
++
+[,shell]
+----
+kubectl apply -f skupper-link-certificate.yaml
+----
++
+Save the generated Secret for use in the next step:
++
+[,shell]
+----
+kubectl get secret skupper-link -o yaml | yq eval -o=yaml 'del(.metadata.namespace, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.managedFields)' - > client-secret.yaml
+----
++
+*b)* If your server certificate was signed by a different CA:
++
+You must issue a client certificate yourself and create a Secret named `skupper-link` directly. The client certificate must be signed by the same CA that signed your custom server certificate. Create the Secret similarly to how you created the server certificate earlier, ensuring the `ca.crt` field contains the same CA certificate. Save it as `client-secret.yaml`.
+
+. From the listening site, create a `Link` resource YAML file.
++
+*Option A:* Using kubectl with jq and yq
++
+[,shell]
+----
+kubectl get routeraccess my-router-access -o json | jq '{
+  apiVersion: "skupper.io/v2alpha1",
+  kind: "Link",
+  metadata: {name: "skupper-link"},
+  spec: {
+    cost: 1,
+    tlsCredentials: "skupper-link",
+    endpoints: .status.endpoints
+  }
+}' | yq -P > skupper-link.yaml
+echo "---" >> skupper-link.yaml
+cat client-secret.yaml >> skupper-link.yaml
+----
++
+*Option B:* Manual generation
++
+Retrieve the endpoints:
++
+[,shell]
+----
+kubectl get routeraccess my-router-access -o yaml | yq '.status.endpoints'
+----
++
+Then compose the file manually:
++
+[,yaml]
+----
+---
+apiVersion: skupper.io/v2alpha1
+kind: Link
+metadata:
+  name: skupper-link
+spec:
+  cost: 1
+  tlsCredentials: skupper-link
+  endpoints:
+    - group: skupper-router
+      host: skupper.public.host
+      name: inter-router
+      port: '55671'
+    - group: skupper-router
+      host: skupper.public.host
+      name: edge
+      port: '45671'
+---
+apiVersion: v1
+kind: Secret
+type: "kubernetes.io/tls"
+metadata:
+  name: skupper-link
+data:
+  ca.crt: LS0tLS1C...redacted
+  tls.crt: LS0tLS1C...redacted
+  tls.key: LS0tLS1C...redacted
+----
+
+. Securely transfer the `Link` resource YAML file to the connecting site.
++
+*📌 NOTE*
+Access to this file provides access to the application network.
+Protect it appropriately.
+
+. On the connecting site, apply the YAML file and check status:
++
+[,shell]
+----
+kubectl apply -f skupper-link.yaml
+kubectl get link
+NAME            STATUS   REMOTE SITE   MESSAGE
+skupper-link    Ready    my-site       OK
+----
+

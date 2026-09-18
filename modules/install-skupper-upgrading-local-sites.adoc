@@ -1,0 +1,24 @@
+[id="skupper-upgrading-local-sites"]
+:_mod-docs-content-type: PROCEDURE
+= Upgrading local sites
+
+[role="_abstract"]
+
+There are two distinct procedures for updating your Skupper installation: updating the site configuration and manually updating the controller.
+
+*Standard Site Update*
+
+To update an existing site to the latest images or configuration matching your current CLI version:
+
+.Procedure
+
+. Ensure you have the latest version of the Skupper CLI installed.
+. Run the reload command:
++
+[,shell]
+----
+ skupper system reload
+----
++
+_This command refreshes the site definition and pulls the latest images associated with the CLI version._
+

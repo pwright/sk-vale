@@ -1,0 +1,73 @@
+[id="observer-metrics"]
+= Metrics Endpoint
+
+
+The Network Observer serves Prometheus metrics on a dedicated HTTP listener, separate from the main API endpoint.
+
+*Listener Configuration:*
+
+* Address: `:9000` (container-wide)
+* Path: `/metrics`
+* Protocol: HTTP (no TLS/auth)
+
+*Service:*
+
+* Name: `<name>-metrics`
+* Type: `ClusterIP`
+* Port: `9000 → 9000`
+
+*Security:* Cluster-internal only. Do not expose publicly.
+
+=== Metrics Service
+
+The chart creates a second ClusterIP Service named `<release-name>-metrics` that targets the metrics listener on port *9000*.
+
+|===
+| Property | Value
+
+| *Listener address*
+| `:9000`
+
+| *Service name*
+| `<release-name>-metrics`
+
+| *Service port*
+| `9000`
+
+| *Metrics path*
+| `/metrics`
+|===
+
+=== Scraping Metrics
+
+Configure your Prometheus instance or monitoring operator to scrape the metrics endpoint.
+
+*ServiceMonitor example (Prometheus Operator):*
+
+[,yaml]
+----
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: skupper-network-observer
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: network-observer
+  endpoints:
+    - port: metrics
+      path: /metrics
+----
+
+*Static scrape configuration:*
+
+[,yaml]
+----
+scrape_configs:
+  - job_name: 'network-observer'
+    static_configs:
+      - targets: ['skupper-network-observer-metrics.default.svc:9000']
+----
+
+*Security note:* The metrics Service is *ClusterIP* by default and does not include the TLS proxy or authentication that protects the main console endpoint. Do not expose this Service publicly without additional access controls if your metrics contain sensitive data.
+

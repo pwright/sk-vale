@@ -1,0 +1,24 @@
+[id="observer-config"]
+= observer-config
+
+// REFERENCE
+
+= Network Observer Configuration Reference
+
+The following configuration options are for the Skupper Network Observer which enables the network console.
+
+include::../modules/console-observer-external-access.adoc[leveloffset=+1]
+include::../modules/console-observer-authentication.adoc[leveloffset=+1]
+include::../modules/console-observer-tls.adoc[leveloffset=+1]
+include::../modules/console-observer-router.adoc[leveloffset=+1]
+include::../modules/console-observer-tuning.adoc[leveloffset=+1]
+include::../modules/console-observer-prometheus.adoc[leveloffset=+1]
+include::../modules/console-observer-persistence.adoc[leveloffset=+1]
+include::../modules/console-observer-resources.adoc[leveloffset=+1]
+include::../modules/console-observer-images.adoc[leveloffset=+1]
+include::../modules/console-observer-labels.adoc[leveloffset=+1]
+include::../modules/console-observer-service.adoc[leveloffset=+1]
+include::../modules/console-observer-security.adoc[leveloffset=+1]
+include::../modules/console-observer-advanced.adoc[leveloffset=+1]
+include::../modules/console-observer-metrics.adoc[leveloffset=+1]
+include::../modules/console-observer-validation.adoc[leveloffset=+1]

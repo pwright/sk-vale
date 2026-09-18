@@ -1,0 +1,28 @@
+[id="installing-cli"]
+:_mod-docs-content-type: PROCEDURE
+= Installing the Skupper CLI
+
+[role="_abstract"]
+
+You can use the Skupper CLI with Kubernetes or on local systems (Podman, Docker, Linux).
+
+On local systems, the CLI is all you require to create a site.
+
+.Procedure
+
+To download the latest release:
+
+[,bash]
+----
+curl https://skupper.io/v2/install.sh | sh
+----
+
+To download a specific version, download from https://github.com/skupperproject/skupper/releases[Releases] page.
+
+On local systems, you can install the controller using:
+
+[,bash]
+----
+skupper system install -p  [podman, docker, linux]
+----
+

@@ -1,0 +1,97 @@
+[id="observer-images"]
+= Container Images
+
+
+=== Network Observer Image
+
+|===
+| Path | Type | Default | Description
+
+| `image.repository`
+| string
+| `quay.io/skupper/network-observer`
+| Image repository
+
+| `image.tag`
+| string
+| chart appVersion
+| Image tag
+
+| `image.pullPolicy`
+| string
+| `Always`
+| Pull policy
+|===
+
+=== Prometheus Image
+
+|===
+| Path | Type | Default | Description
+
+| `prometheus.repository`
+| string
+| `quay.io/prometheus/prometheus`
+| Image repository
+
+| `prometheus.tag`
+| string
+| `v3.11.3`
+| Image tag
+
+| `prometheus.pullPolicy`
+| string
+| `IfNotPresent`
+| Pull policy
+|===
+
+=== NGINX Proxy Image
+
+Used when `auth.strategy` is `basic` or `none`:
+
+|===
+| Path | Type | Default | Description
+
+| `nginx.repository`
+| string
+| `mirror.gcr.io/nginxinc/nginx-unprivileged`
+| Image repository
+
+| `nginx.tag`
+| string
+| `1.31.0-alpine`
+| Image tag
+
+| `nginx.pullPolicy`
+| string
+| `IfNotPresent`
+| Pull policy
+
+| `nginx.command`
+| array
+| `[]`
+| Override default command
+|===
+
+=== OpenShift OAuth Proxy Image
+
+Used when `auth.strategy` is `openshift`:
+
+|===
+| Path | Type | Default | Description
+
+| `openshiftOauthProxy.repository`
+| string
+| `quay.io/openshift/origin-oauth-proxy`
+| Image repository
+
+| `openshiftOauthProxy.tag`
+| string
+| `4.22.0`
+| Image tag
+
+| `openshiftOauthProxy.pullPolicy`
+| string
+| `IfNotPresent`
+| Pull policy
+|===
+

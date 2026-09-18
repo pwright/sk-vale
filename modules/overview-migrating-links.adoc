@@ -1,0 +1,20 @@
+[id="migrating-links"]
+:_mod-docs-content-type: REFERENCE
+= Linking sites
+
+[role="_abstract"]
+
+These examples show how site-linking commands changed between Skupper v1 and Skupper v2.
+
+[,v1]
+----
+contextA> skupper token create ~/token.yaml
+contextB> skupper link create ~/token.yaml
+----
+
+[,v2]
+----
+contextA> skupper token issue ~/token.yaml
+contextA> skupper token redeem ~/token.yaml
+----
+

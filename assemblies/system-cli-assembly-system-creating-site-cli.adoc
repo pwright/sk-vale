@@ -1,0 +1,18 @@
+[id="system-creating-site-cli"]
+:_mod-docs-content-type: ASSEMBLY
+= Creating a site on a local system using the Skupper CLI
+
+[role="_abstract"]
+
+Using the skupper command-line interface (CLI) allows you to create and manage Skupper sites from the context of the current user.
+
+A typical workflow is to create a site, link sites together, and expose services to the application network.
+
+A _local system_ includes Docker, Podman or Linux system.
+
+If you require more than one site, specify a unique namespace when using  `skupper`, for example `+skupper --namespace second-site ...+`.
+
+include::../modules/system-cli-system-checking-cli.adoc[leveloffset=+1]
+include::../modules/system-cli-system-creating-simple-site-cli.adoc[leveloffset=+1]
+include::../modules/system-cli-system-deleting-site-cli.adoc[leveloffset=+1]
+include::../modules/system-cli-system-creating-site-bundle.adoc[leveloffset=+1]
