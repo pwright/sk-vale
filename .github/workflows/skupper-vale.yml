@@ -56,7 +56,12 @@ jobs:
         run: bash scripts/convert-skupper.sh --input-dir skupper-docs/input --commit
 
       - name: Build hub pages
-        run: bash scripts/build-hub.sh
+        run: bash scripts/build-hub.sh docs/jtbd
+
+      - name: Commit hub pages
+        run: |
+          git add -f docs/jtbd/
+          git commit -m "Add JTBD hub pages" || echo "Nothing to commit."
 
       - name: Push skupper branch
         run: git push origin skupper --force

@@ -2,44 +2,57 @@ title: "Skupper Documentation"
 subtitle: "Red Hat build of Skupper 2"
 categories:
   - name: "Discover"
-    description: "Learn about Skupper concepts and architecture"
+    description: "Understand Skupper's L7 application networking model"
     assemblies:
       - overview-assembly-skupper-overview.adoc
       - overview-assembly-overview-connectivity.adoc
-      - overview-assembly-skupper-security.adoc
+
+  - name: "Plan"
+    description: "Design topology, security model, and infrastructure before installation"
+    assemblies:
       - overview-assembly-skupper-routing.adoc
       - overview-assembly-overview-load-balancing.adoc
       - overview-assembly-kube-resources.adoc
 
   - name: "Migrate"
-    description: "Upgrade from Skupper v1"
+    description: "Transition from Skupper v1 to v2"
     assemblies:
       - overview-assembly-migrating.adoc
 
-  - name: "Creating sites"
-    description: "Create and manage Skupper sites"
+  - name: "Administer"
+    description: "Manage site life cycles and cluster permissions"
     assemblies:
       - assembly-kube-creating-sites.adoc
       - assembly-system-creating-sites.adoc
 
-  - name: "Linking sites"
-    description: "Link sites to form an application network"
+  - name: "Configure"
+    description: "Establish inter-site links and make workloads reachable"
     assemblies:
       - assembly-kube-linking-sites.adoc
       - assembly-system-linking-sites.adoc
-
-  - name: "Exposing services"
-    description: "Expose and consume services across the application network"
-    assemblies:
       - assembly-kube-exposing-services.adoc
       - assembly-system-exposing-services.adoc
 
+  - name: "Secure"
+    description: "Implement encryption, access controls, and certificate management"
+    assemblies:
+      - overview-assembly-skupper-security.adoc
+      - kube-yaml-assembly-kube-yaml-custom-certs.adoc
+
   - name: "Observe"
-    description: "Monitor your application network"
+    description: "Monitor network health and track application traffic"
     assemblies:
       - console-assembly-observer-config.adoc
 
   - name: "Troubleshoot"
-    description: "Diagnose and resolve issues"
+    description: "Diagnose and resolve connectivity failures and deployment issues"
     assemblies:
       - troubleshooting-assembly-troubleshooting.adoc
+
+  - name: "Reference"
+    description: "CLI syntax, resource schemas, and API definitions"
+    assemblies:
+      - kube-cli-assembly-kube-cli.adoc
+      - kube-yaml-assembly-kube-yaml.adoc
+      - system-cli-assembly-system-cli.adoc
+      - system-yaml-assembly-system-yaml.adoc
