@@ -43,7 +43,7 @@ jobs:
             | tar xz -C /usr/local/bin vale
 
       - name: Clone skupper-docs
-        run: git clone --depth 1 --branch cqa-test https://github.com/skupperproject/skupper-docs.git
+        run: git clone --depth 1 --branch cqa-test https://github.com/pwright/skupper-docs.git
 
       - name: Configure git identity
         run: |
