@@ -1,0 +1,19 @@
+[id="system-exposing-services"]
+:_mod-docs-content-type: ASSEMBLY
+= Exposing services on local systems
+
+[role="_abstract"]
+
+After linking sites, you can expose services to make them available across the application network.
+Connectors bind local workloads to the network, and listeners make remote services available locally.
+
+== Using the CLI
+
+include::../modules/system-cli-system-creating-connector-cli.adoc[leveloffset=+2]
+include::../modules/system-cli-system-creating-listener-cli.adoc[leveloffset=+2]
+
+== Using YAML
+
+include::../modules/system-yaml-system-creating-connector-yaml.adoc[leveloffset=+2]
+include::../modules/system-yaml-system-creating-listener-yaml.adoc[leveloffset=+2]
+include::../modules/system-yaml-system-creating-multikeylistener-yaml.adoc[leveloffset=+2]

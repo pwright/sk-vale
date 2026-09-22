@@ -1,0 +1,17 @@
+[id="system-linking-sites"]
+:_mod-docs-content-type: ASSEMBLY
+= Linking sites on local systems
+
+[role="_abstract"]
+
+After creating sites, you link them to form an application network.
+Linking requires that at least one site has link access enabled.
+
+== Using the CLI
+
+include::../modules/system-cli-system-token-cli.adoc[leveloffset=+2]
+include::../modules/system-cli-system-link-cli.adoc[leveloffset=+2]
+
+== Using YAML
+
+include::../modules/system-yaml-system-link-yaml.adoc[leveloffset=+2]

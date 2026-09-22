@@ -1,0 +1,1 @@
+../../assemblies/system-yaml-assembly-system-yaml.adoc

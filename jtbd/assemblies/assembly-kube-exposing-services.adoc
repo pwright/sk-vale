@@ -1,0 +1,20 @@
+[id="kube-exposing-services"]
+:_mod-docs-content-type: ASSEMBLY
+= Exposing services on Kubernetes
+
+[role="_abstract"]
+
+After linking sites, you can expose services to make them available across the application network.
+Connectors bind local workloads to the network, and listeners make remote services available locally.
+
+== Using the CLI
+
+include::../modules/kube-cli-kube-creating-connector-cli.adoc[leveloffset=+2]
+include::../modules/kube-cli-kube-creating-listener-cli.adoc[leveloffset=+2]
+
+== Using YAML
+
+include::../modules/kube-yaml-kube-creating-connector-yaml.adoc[leveloffset=+2]
+include::../modules/kube-yaml-kube-creating-listener-yaml.adoc[leveloffset=+2]
+include::../modules/kube-yaml-kube-creating-multikeylistener-yaml.adoc[leveloffset=+2]
+include::../modules/kube-yaml-kube-creating-attachedconnector-yaml.adoc[leveloffset=+2]

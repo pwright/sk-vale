@@ -1,0 +1,1 @@
+../../assemblies/kube-cli-assembly-kube-cli.adoc

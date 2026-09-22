@@ -1,0 +1,24 @@
+[id="kube-linking-sites"]
+:_mod-docs-content-type: ASSEMBLY
+= Linking sites on Kubernetes
+
+[role="_abstract"]
+
+After creating sites, you link them to form an application network.
+Linking requires that at least one site has link access enabled.
+
+== Using the CLI
+
+include::../modules/kube-cli-kube-token-cli.adoc[leveloffset=+2]
+include::../modules/kube-cli-kube-link-cli.adoc[leveloffset=+2]
+include::../modules/kube-cli-kube-proxy-cli.adoc[leveloffset=+2]
+include::../modules/kube-cli-kube-custom-certs-cli.adoc[leveloffset=+2]
+include::../modules/kube-cli-kube-link-cost-cli.adoc[leveloffset=+2]
+
+== Using YAML
+
+include::../modules/kube-yaml-kube-access-yaml.adoc[leveloffset=+2]
+include::../modules/kube-yaml-kube-link-cost-yaml.adoc[leveloffset=+2]
+include::../modules/kube-yaml-kube-yaml-custom-certs-info.adoc[leveloffset=+2]
+include::../modules/kube-yaml-kube-router-access-custom-certs-yaml.adoc[leveloffset=+2]
+include::../modules/kube-yaml-kube-link-custom-certs-yaml.adoc[leveloffset=+2]

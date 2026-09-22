@@ -1,13 +1,13 @@
 output/
 skupper-docs/
 apicurio-registry/
-assemblies/
-modules/
+/assemblies/
+/modules/
 merged.md
 merged.adoc
 vale-report.json
 metrics-*.json
 *.html
 !docs/*.html
-images/
+/images/
 jtbd/docs/

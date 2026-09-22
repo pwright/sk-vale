@@ -1,0 +1,1 @@
+../../assemblies/overview-assembly-kube-resources.adoc

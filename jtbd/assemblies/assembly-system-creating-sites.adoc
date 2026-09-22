@@ -1,0 +1,19 @@
+[id="system-creating-sites"]
+:_mod-docs-content-type: ASSEMBLY
+= Creating sites on local systems
+
+[role="_abstract"]
+
+A Skupper site is a location where components of your application network are running.
+You can create sites on local systems using the CLI or YAML.
+
+== Using the CLI
+
+include::../modules/system-cli-system-checking-cli.adoc[leveloffset=+2]
+include::../modules/system-cli-system-creating-simple-site-cli.adoc[leveloffset=+2]
+include::../modules/system-cli-system-deleting-site-cli.adoc[leveloffset=+2]
+include::../modules/system-cli-system-creating-site-bundle.adoc[leveloffset=+2]
+
+== Using YAML
+
+include::../modules/system-yaml-system-creating-simple-site-yaml.adoc[leveloffset=+2]

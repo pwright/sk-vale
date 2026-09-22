@@ -1,0 +1,1 @@
+../../assemblies/system-cli-assembly-system-cli.adoc

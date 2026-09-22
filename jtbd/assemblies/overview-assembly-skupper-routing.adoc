@@ -1,0 +1,1 @@
+../../assemblies/overview-assembly-skupper-routing.adoc

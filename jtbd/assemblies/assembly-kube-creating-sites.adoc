@@ -1,0 +1,21 @@
+[id="kube-creating-sites"]
+:_mod-docs-content-type: ASSEMBLY
+= Creating sites on Kubernetes
+
+[role="_abstract"]
+
+A Skupper site is a location where components of your application network are running.
+You can create sites on Kubernetes using the CLI or YAML.
+
+== Using the CLI
+
+include::../modules/kube-cli-kube-checking-cli.adoc[leveloffset=+2]
+include::../modules/kube-cli-kube-creating-simple-site-cli.adoc[leveloffset=+2]
+include::../modules/kube-cli-kube-ha-cli.adoc[leveloffset=+2]
+include::../modules/kube-cli-kube-deleting-site-cli.adoc[leveloffset=+2]
+
+== Using YAML
+
+include::../modules/kube-yaml-kube-creating-simple-site-yaml.adoc[leveloffset=+2]
+include::../modules/kube-yaml-kube-ha-yaml.adoc[leveloffset=+2]
+include::../modules/kube-yaml-kube-site-resources-yaml.adoc[leveloffset=+2]
