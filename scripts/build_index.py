@@ -259,6 +259,7 @@ def write_root_index(index_file, output_dir, assembly_paths, title_override=None
     root_index = output_dir / filename
 
     lines = [
+        ':_mod-docs-content-type: MAP\n',
         ':doctype: book\n',
         ':toc: left\n',
         ':toclevels: 3\n',

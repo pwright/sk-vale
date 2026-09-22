@@ -1,10 +1,11 @@
+:_mod-docs-content-type: MAP
 :doctype: book
 :toc: left
 :toclevels: 3
 :sectnums:
 
 [id="generated-index"]
-= Skupper Documentation
+= Using Service Interconnect
 
 include::assemblies/overview-assembly-skupper-overview.adoc[leveloffset=+1]
 include::assemblies/overview-assembly-overview-connectivity.adoc[leveloffset=+1]
@@ -13,7 +14,6 @@ include::assemblies/overview-assembly-skupper-routing.adoc[leveloffset=+1]
 include::assemblies/overview-assembly-overview-load-balancing.adoc[leveloffset=+1]
 include::assemblies/overview-assembly-kube-resources.adoc[leveloffset=+1]
 include::assemblies/overview-assembly-migrating.adoc[leveloffset=+1]
-include::assemblies/install-assembly-kube-installing-controller.adoc[leveloffset=+1]
 include::assemblies/kube-cli-assembly-kube-cli.adoc[leveloffset=+1]
 include::assemblies/kube-cli-assembly-kube-creating-site-cli.adoc[leveloffset=+1]
 include::assemblies/kube-cli-assembly-kube-linking-cli.adoc[leveloffset=+1]

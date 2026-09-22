@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor.js 4.0.11">
-<title>Skupper Documentation</title>
+<title>Using Service Interconnect</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CNoto+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -436,7 +436,7 @@ p{margin-bottom:1.25rem}
 </head>
 <body id="generated-index" class="book toc2 toc-left">
 <div id="header">
-<h1>Skupper Documentation</h1>
+<h1>Using Service Interconnect</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -473,136 +473,123 @@ p{margin-bottom:1.25rem}
 <li><a href="#migrating-services">7.3. Exposing services</a></li>
 </ul>
 </li>
-<li><a href="#kube-installing-controller">8. Installing the Skupper controller</a>
+<li><a href="#kube-cli">8. Overview of Skupper CLI on Kubernetes</a></li>
+<li><a href="#kube-creating-site-cli">9. Creating a site on Kubernetes using the Skupper CLI</a>
 <ul class="sectlevel2">
-<li><a href="#kube-installing-controller-yaml">8.1. Installing the Skupper controller using YAML</a></li>
-<li><a href="#kube-installing-controller-helm">8.2. Installing the Skupper controller using the Skupper Helm charts</a></li>
-<li><a href="#installing-cli">8.3. Installing the Skupper CLI</a></li>
-<li><a href="#skupper-upgrading-sites">8.4. Upgrading sites</a>
-<ul class="sectlevel3">
-<li><a href="#skupper-upgrading-local-sites">8.4.1. Upgrading local sites</a></li>
-<li><a href="#skupper-upgrading-local-controller">8.4.2. Upgrading the Skupper controller</a></li>
+<li><a href="#kube-checking-cli">9.1. Checking the Skupper CLI</a></li>
+<li><a href="#kube-creating-simple-site-cli">9.2. Creating a simple site using the CLI on Kubernetes</a></li>
+<li><a href="#kube-ha-cli">9.3. Creating a high availability site using the CLI on Kubernetes</a></li>
+<li><a href="#kube-deleting-site-cli">9.4. Deleting a site using the CLI on Kubernetes</a></li>
 </ul>
 </li>
+<li><a href="#kube-linking-cli">10. Linking sites on Kubernetes using the Skupper CLI</a>
+<ul class="sectlevel2">
+<li><a href="#kube-token-cli">10.1. Linking sites using a token</a></li>
+<li><a href="#kube-link-cli">10.2. Linking sites using a <code>link</code> resource</a></li>
+<li><a href="#kube-proxy-cli">10.3. Linking sites through an HTTP proxy</a></li>
+<li><a href="#kube-custom-certs-cli">10.4. Using custom certificates</a></li>
+<li><a href="#kube-link-cost-cli">10.5. Specifying link cost</a></li>
 </ul>
 </li>
-<li><a href="#kube-cli">9. Overview of Skupper CLI on Kubernetes</a></li>
-<li><a href="#kube-creating-site-cli">10. Creating a site on Kubernetes using the Skupper CLI</a>
+<li><a href="#kube-exposing-services-cli">11. Exposing services on the application network using the CLI</a>
 <ul class="sectlevel2">
-<li><a href="#kube-checking-cli">10.1. Checking the Skupper CLI</a></li>
-<li><a href="#kube-creating-simple-site-cli">10.2. Creating a simple site using the CLI on Kubernetes</a></li>
-<li><a href="#kube-ha-cli">10.3. Creating a high availability site using the CLI on Kubernetes</a></li>
-<li><a href="#kube-deleting-site-cli">10.4. Deleting a site using the CLI on Kubernetes</a></li>
+<li><a href="#kube-creating-connector-cli">11.1. Creating a connector using the CLI</a></li>
+<li><a href="#kube-creating-listener-cli">11.2. Creating a listener using the CLI</a></li>
 </ul>
 </li>
-<li><a href="#kube-linking-cli">11. Linking sites on Kubernetes using the Skupper CLI</a>
+<li><a href="#kube-yaml">12. Overview of using YAML on Kubernetes</a></li>
+<li><a href="#kube-creating-site-yaml">13. Creating a site on Kubernetes using YAML</a>
 <ul class="sectlevel2">
-<li><a href="#kube-token-cli">11.1. Linking sites using a token</a></li>
-<li><a href="#kube-link-cli">11.2. Linking sites using a <code>link</code> resource</a></li>
-<li><a href="#kube-proxy-cli">11.3. Linking sites through an HTTP proxy</a></li>
-<li><a href="#kube-custom-certs-cli">11.4. Using custom certificates</a></li>
-<li><a href="#kube-link-cost-cli">11.5. Specifying link cost</a></li>
+<li><a href="#kube-creating-simple-site-yaml">13.1. Creating a simple site on Kubernetes using YAML</a></li>
+<li><a href="#kube-ha-yaml">13.2. Creating a high availability site using YAML</a></li>
+<li><a href="#kube-site-resources-yaml">13.3. Setting site resources</a></li>
 </ul>
 </li>
-<li><a href="#kube-exposing-services-cli">12. Exposing services on the application network using the CLI</a>
+<li><a href="#kube-yaml-site-linking">14. Linking sites on Kubernetes using YAML</a>
 <ul class="sectlevel2">
-<li><a href="#kube-creating-connector-cli">12.1. Creating a connector using the CLI</a></li>
-<li><a href="#kube-creating-listener-cli">12.2. Creating a listener using the CLI</a></li>
+<li><a href="#kube-access-yaml">14.1. Linking sites using <code>AccessGrant</code> and <code>AccessToken</code> resources</a></li>
+<li><a href="#kube-link-cost-yaml">14.2. Specifying link cost using YAML</a></li>
+<li><a href="#kube-yaml-custom-certs-info">14.3. Using custom certificates</a></li>
 </ul>
 </li>
-<li><a href="#kube-yaml">13. Overview of using YAML on Kubernetes</a></li>
-<li><a href="#kube-creating-site-yaml">14. Creating a site on Kubernetes using YAML</a>
+<li><a href="#kube-yaml-custom-certs">15. Linking sites using custom certificates</a>
 <ul class="sectlevel2">
-<li><a href="#kube-creating-simple-site-yaml">14.1. Creating a simple site on Kubernetes using YAML</a></li>
-<li><a href="#kube-ha-yaml">14.2. Creating a high availability site using YAML</a></li>
-<li><a href="#kube-site-resources-yaml">14.3. Setting site resources</a></li>
+<li><a href="#kube-router-access-custom-certs-yaml">15.1. Linking sites using a custom <code>RouterAccess</code>, and custom certificates</a></li>
+<li><a href="#kube-link-custom-certs-yaml">15.2. Linking sites using <code>Link</code> resources and custom certificates</a></li>
 </ul>
 </li>
-<li><a href="#kube-yaml-site-linking">15. Linking sites on Kubernetes using YAML</a>
+<li><a href="#kube-exposing-services-yaml">16. Exposing services on the application network using YAML</a>
 <ul class="sectlevel2">
-<li><a href="#kube-access-yaml">15.1. Linking sites using <code>AccessGrant</code> and <code>AccessToken</code> resources</a></li>
-<li><a href="#kube-link-cost-yaml">15.2. Specifying link cost using YAML</a></li>
-<li><a href="#kube-yaml-custom-certs-info">15.3. Using custom certificates</a></li>
+<li><a href="#kube-creating-connector-yaml">16.1. Creating a connector using YAML</a></li>
+<li><a href="#kube-creating-listener-yaml">16.2. Creating a listener using YAML</a></li>
+<li><a href="#kube-creating-multikeylistener-yaml">16.3. Creating a multi-key listener using YAML</a></li>
+<li><a href="#kube-creating-attachedconnector-yaml">16.4. Creating a connector for a different namespace using YAML</a></li>
 </ul>
 </li>
-<li><a href="#kube-yaml-custom-certs">16. Linking sites using custom certificates</a>
+<li><a href="#system-cli">17. Overview of Skupper CLI on local systems</a></li>
+<li><a href="#system-creating-site-cli">18. Creating a site on a local system using the Skupper CLI</a>
 <ul class="sectlevel2">
-<li><a href="#kube-router-access-custom-certs-yaml">16.1. Linking sites using a custom <code>RouterAccess</code>, and custom certificates</a></li>
-<li><a href="#kube-link-custom-certs-yaml">16.2. Linking sites using <code>Link</code> resources and custom certificates</a></li>
+<li><a href="#system-checking-cli">18.1. Checking the Skupper CLI and environment</a></li>
+<li><a href="#system-creating-simple-site-cli">18.2. Creating a simple site using the CLI on local systems</a></li>
+<li><a href="#system-deleting-site-cli">18.3. Deleting a site using the CLI on local systems</a></li>
+<li><a href="#system-creating-site-bundle">18.4. Creating a site bundle using the CLI on local systems</a></li>
 </ul>
 </li>
-<li><a href="#kube-exposing-services-yaml">17. Exposing services on the application network using YAML</a>
+<li><a href="#system-linking-cli">19. Linking sites on local systems using the Skupper CLI</a>
 <ul class="sectlevel2">
-<li><a href="#kube-creating-connector-yaml">17.1. Creating a connector using YAML</a></li>
-<li><a href="#kube-creating-listener-yaml">17.2. Creating a listener using YAML</a></li>
-<li><a href="#kube-creating-multikeylistener-yaml">17.3. Creating a multi-key listener using YAML</a></li>
-<li><a href="#kube-creating-attachedconnector-yaml">17.4. Creating a connector for a different namespace using YAML</a></li>
+<li><a href="#system-token-cli">19.1. Linking to Kubernetes sites using a token</a></li>
+<li><a href="#system-link-cli">19.2. Linking sites using a <code>link</code> resource</a></li>
 </ul>
 </li>
-<li><a href="#system-cli">18. Overview of Skupper CLI on local systems</a></li>
-<li><a href="#system-creating-site-cli">19. Creating a site on a local system using the Skupper CLI</a>
+<li><a href="#system-exposing-services-cli">20. Exposing services on the application network using the CLI</a>
 <ul class="sectlevel2">
-<li><a href="#system-checking-cli">19.1. Checking the Skupper CLI and environment</a></li>
-<li><a href="#system-creating-simple-site-cli">19.2. Creating a simple site using the CLI on local systems</a></li>
-<li><a href="#system-deleting-site-cli">19.3. Deleting a site using the CLI on local systems</a></li>
-<li><a href="#system-creating-site-bundle">19.4. Creating a site bundle using the CLI on local systems</a></li>
+<li><a href="#system-creating-connector-cli">20.1. Creating a connector using the CLI</a></li>
+<li><a href="#system-creating-listener-cli">20.2. Creating a listener using the CLI</a></li>
 </ul>
 </li>
-<li><a href="#system-linking-cli">20. Linking sites on local systems using the Skupper CLI</a>
+<li><a href="#system-yaml">21. Overview of using YAML on local systems</a></li>
+<li><a href="#system-yaml-site-configuration">22. Creating a site on local systems using YAML</a>
 <ul class="sectlevel2">
-<li><a href="#system-token-cli">20.1. Linking to Kubernetes sites using a token</a></li>
-<li><a href="#system-link-cli">20.2. Linking sites using a <code>link</code> resource</a></li>
+<li><a href="#system-creating-simple-site-yaml">22.1. Creating a simple site on local systems using YAML</a></li>
 </ul>
 </li>
-<li><a href="#system-exposing-services-cli">21. Exposing services on the application network using the CLI</a>
+<li><a href="#system-yaml-site-linking">23. Linking sites on local systems using YAML</a>
 <ul class="sectlevel2">
-<li><a href="#system-creating-connector-cli">21.1. Creating a connector using the CLI</a></li>
-<li><a href="#system-creating-listener-cli">21.2. Creating a listener using the CLI</a></li>
+<li><a href="#system-link-yaml">23.1. Linking sites using a <code>link</code> resource</a></li>
 </ul>
 </li>
-<li><a href="#system-yaml">22. Overview of using YAML on local systems</a></li>
-<li><a href="#system-yaml-site-configuration">23. Creating a site on local systems using YAML</a>
+<li><a href="#system-yaml-service-exposure">24. Exposing services on the application network using YAML</a>
 <ul class="sectlevel2">
-<li><a href="#system-creating-simple-site-yaml">23.1. Creating a simple site on local systems using YAML</a></li>
+<li><a href="#system-creating-connector-yaml">24.1. Creating a connector using YAML</a></li>
+<li><a href="#system-creating-listener-yaml">24.2. Creating a listener using YAML</a></li>
+<li><a href="#system-creating-multikeylistener-yaml">24.3. Creating a multi-key listener using YAML</a></li>
 </ul>
 </li>
-<li><a href="#system-yaml-site-linking">24. Linking sites on local systems using YAML</a>
+<li><a href="#observer-config">25. Network Observer Configuration Reference</a>
 <ul class="sectlevel2">
-<li><a href="#system-link-yaml">24.1. Linking sites using a <code>link</code> resource</a></li>
+<li><a href="#observer-external-access">25.1. External access</a></li>
+<li><a href="#observer-authentication">25.2. Authentication</a></li>
+<li><a href="#observer-tls">25.3. TLS Certificates</a></li>
+<li><a href="#observer-router">25.4. Router Connection</a></li>
+<li><a href="#observer-tuning">25.5. Network Observer Tuning</a></li>
+<li><a href="#observer-prometheus">25.6. Prometheus Configuration</a></li>
+<li><a href="#observer-persistence">25.7. Data Persistence</a></li>
+<li><a href="#observer-resources">25.8. Container Resources</a></li>
+<li><a href="#observer-images">25.9. Container Images</a></li>
+<li><a href="#observer-labels">25.10. Labels and Annotations</a></li>
+<li><a href="#observer-service">25.11. Service</a></li>
+<li><a href="#observer-security">25.12. Security</a></li>
+<li><a href="#observer-advanced">25.13. Advanced Options</a></li>
+<li><a href="#observer-metrics">25.14. Metrics Endpoint</a></li>
+<li><a href="#observer-validation">25.15. Validation and Troubleshooting</a></li>
 </ul>
 </li>
-<li><a href="#system-yaml-service-exposure">25. Exposing services on the application network using YAML</a>
+<li><a href="#troubleshooting">26. Troubleshooting an application network</a>
 <ul class="sectlevel2">
-<li><a href="#system-creating-connector-yaml">25.1. Creating a connector using YAML</a></li>
-<li><a href="#system-creating-listener-yaml">25.2. Creating a listener using YAML</a></li>
-<li><a href="#system-creating-multikeylistener-yaml">25.3. Creating a multi-key listener using YAML</a></li>
-</ul>
-</li>
-<li><a href="#observer-config">26. Network Observer Configuration Reference</a>
-<ul class="sectlevel2">
-<li><a href="#observer-external-access">26.1. External access</a></li>
-<li><a href="#observer-authentication">26.2. Authentication</a></li>
-<li><a href="#observer-tls">26.3. TLS Certificates</a></li>
-<li><a href="#observer-router">26.4. Router Connection</a></li>
-<li><a href="#observer-tuning">26.5. Network Observer Tuning</a></li>
-<li><a href="#observer-prometheus">26.6. Prometheus Configuration</a></li>
-<li><a href="#observer-persistence">26.7. Data Persistence</a></li>
-<li><a href="#observer-resources">26.8. Container Resources</a></li>
-<li><a href="#observer-images">26.9. Container Images</a></li>
-<li><a href="#observer-labels">26.10. Labels and Annotations</a></li>
-<li><a href="#observer-service">26.11. Service</a></li>
-<li><a href="#observer-security">26.12. Security</a></li>
-<li><a href="#observer-advanced">26.13. Advanced Options</a></li>
-<li><a href="#observer-metrics">26.14. Metrics Endpoint</a></li>
-<li><a href="#observer-validation">26.15. Validation and Troubleshooting</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">27. Troubleshooting an application network</a>
-<ul class="sectlevel2">
-<li><a href="#checking-sites">27.1. Checking sites</a></li>
-<li><a href="#checking-links">27.2. Checking links</a></li>
-<li><a href="#debug-dump">27.3. Creating a Skupper debug tar file</a></li>
-<li><a href="#dynamic-system-controller">27.4. Troubleshooting the Dynamic System Controller</a></li>
+<li><a href="#checking-sites">26.1. Checking sites</a></li>
+<li><a href="#checking-links">26.2. Checking links</a></li>
+<li><a href="#debug-dump">26.3. Creating a Skupper debug tar file</a></li>
+<li><a href="#dynamic-system-controller">26.4. Troubleshooting the Dynamic System Controller</a></li>
 </ul>
 </li>
 </ul>
@@ -1330,298 +1317,12 @@ contextB&gt; skupper listener create backend 8080</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/overview-assembly-migrating.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-20" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/install-assembly-kube-installing-controller.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-20" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-cli-assembly-kube-cli.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kube-installing-controller">8. Installing the Skupper controller</h2>
-<div class="sectionbody">
-<div id="kube-installing-controller--block-1" class="paragraph _abstract">
-<p>If you are using Skupper on local systems (Podman, Docker, Linux), you must install the CLI.</p>
-</div>
-<div id="kube-installing-controller--block-2" class="paragraph">
-<p>Before you can create a site on Kubernetes, you must install the Skupper controller.
-You can install the controller using the following methods:</p>
-</div>
-<div id="kube-installing-controller--block-3" class="ulist">
-<ul>
-<li id="kube-installing-controller--block-4">
-<p>Directly using YAML</p>
-</li>
-<li id="kube-installing-controller--block-5">
-<p>Helm charts</p>
-</li>
-<li id="kube-installing-controller--block-6">
-<p>Operator</p>
-</li>
-</ul>
-</div>
-<div id="kube-installing-controller--block-7" class="paragraph">
-<p>After installing the Skupper controller, you can create sites using the CLI or YAML.</p>
-</div>
-<div id="kube-installing-controller--block-8" class="paragraph">
-<p><strong>NOTE</strong>: If you install the controller scoped to cluster, you can create sites in any namespace.
-If you scope the controller to a namespace, you can only create sites in that namespace.</p>
-</div>
-<div id="kube-installing-controller--block-9" class="ulist">
-<div class="title">Additional resources</div>
-<ul>
-<li id="kube-installing-controller--block-10">
-<p><a href="#installing-cli">Installing the Skupper CLI</a></p>
-</li>
-<li id="kube-installing-controller--block-11">
-<p><a href="#kube-creating-site-cli">Creating a site using the CLI</a></p>
-</li>
-<li id="kube-installing-controller--block-12">
-<p><a href="#kube-creating-site-yaml">Creating a site using YAML</a></p>
-</li>
-</ul>
-</div>
-<hr>
-<div id="&quot;generated-index&quot;--include-21" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/install-kube-installing-controller-yaml.adoc</code></div>
-<div class="sect2">
-<h3 id="kube-installing-controller-yaml">8.1. Installing the Skupper controller using YAML</h3>
-<div id="kube-installing-controller-yaml--block-1" class="paragraph _abstract">
-<p>Install the Skupper controller on Kubernetes directly from the published YAML manifests.</p>
-</div>
-<div id="kube-installing-controller-yaml--block-2" class="ulist">
-<div class="title">Prerequisites</div>
-<ul>
-<li id="kube-installing-controller-yaml--block-3">
-<p>cluster-admin access to cluster</p>
-</li>
-</ul>
-</div>
-<div id="kube-installing-controller-yaml--block-4" class="olist arabic">
-<div class="title">Procedure</div>
-<ol class="arabic">
-<li id="kube-installing-controller-yaml--block-5">
-<p>Install a cluster-scoped controller:</p>
-<div id="kube-installing-controller-yaml--block-6" class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply -f https://github.com/skupperproject/skupper/releases/download/{{skupper_cli_version}}/skupper-cluster-scope.yaml</code></pre>
-</div>
-</div>
-<div id="kube-installing-controller-yaml--block-7" class="paragraph">
-<p>To install a namespace-scoped controller instead:</p>
-</div>
-<div id="kube-installing-controller-yaml--block-8" class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply -f https://github.com/skupperproject/skupper/releases/download/{{skupper_cli_version}}/skupper-namespace-scope.yaml</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-<div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/install-kube-installing-controller-yaml.adoc</code></div>
-<hr>
-<hr>
-<div id="&quot;generated-index&quot;--include-22" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/install-kube-installing-controller-helm.adoc</code></div>
-</div>
-<div class="sect2">
-<h3 id="kube-installing-controller-helm">8.2. Installing the Skupper controller using the Skupper Helm charts</h3>
-<div id="kube-installing-controller-helm--block-1" class="paragraph _abstract">
-<p>Install the Skupper controller on Kubernetes by using the published Helm chart.</p>
-</div>
-<div id="kube-installing-controller-helm--block-2" class="ulist">
-<div class="title">Prerequisites</div>
-<ul>
-<li id="kube-installing-controller-helm--block-3">
-<p>cluster-admin access to cluster</p>
-</li>
-<li id="kube-installing-controller-helm--block-4">
-<p>helm (See <a href="https://helm.sh/docs/intro/install/" class="bare">https://helm.sh/docs/intro/install/</a>)</p>
-</li>
-</ul>
-</div>
-<div id="kube-installing-controller-helm--block-5" class="olist arabic">
-<div class="title">Procedure</div>
-<ol class="arabic">
-<li id="kube-installing-controller-helm--block-6">
-<p>Install a cluster-scoped controller:</p>
-<div id="kube-installing-controller-helm--block-7" class="listingblock">
-<div class="content">
-<pre>helm install skupper oci://quay.io/skupper/helm/skupper --version {{skupper_cli_version}}</pre>
-</div>
-</div>
-<div id="kube-installing-controller-helm--block-8" class="paragraph">
-<p>To install a namespace-scoped controller, add the <code>--set scope=namespace</code> option.</p>
-</div>
-</li>
-</ol>
-</div>
-<div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/install-kube-installing-controller-helm.adoc</code></div>
-<hr>
-<hr>
-<div id="&quot;generated-index&quot;--include-23" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/install-installing-cli.adoc</code></div>
-</div>
-<div class="sect2">
-<h3 id="installing-cli">8.3. Installing the Skupper CLI</h3>
-<div id="installing-cli--block-1" class="paragraph _abstract">
-<p>You can use the Skupper CLI with Kubernetes or on local systems (Podman, Docker, Linux).</p>
-</div>
-<div id="installing-cli--block-2" class="paragraph">
-<p>On local systems, the CLI is all you require to create a site.</p>
-</div>
-<div id="installing-cli--block-3" class="olist arabic">
-<div class="title">Procedure</div>
-<ol class="arabic">
-<li id="installing-cli--block-4">
-<p>Download the latest release:</p>
-<div id="installing-cli--block-5" class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">curl https://skupper.io/v2/install.sh | sh</code></pre>
-</div>
-</div>
-<div id="installing-cli--block-6" class="paragraph">
-<p>To download a specific version, download from the <a href="https://github.com/skupperproject/skupper/releases">Releases</a> page.</p>
-</div>
-</li>
-<li id="installing-cli--block-7">
-<p>On local systems, install the controller:</p>
-<div id="installing-cli--block-8" class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">skupper system install -p  [podman, docker, linux]</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-<div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/install-installing-cli.adoc</code></div>
-<hr>
-<hr>
-<div id="&quot;generated-index&quot;--include-24" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/install-skupper-upgrading-sites.adoc</code></div>
-</div>
-<div class="sect2">
-<h3 id="skupper-upgrading-sites">8.4. Upgrading sites</h3>
-<div id="skupper-upgrading-sites--block-1" class="paragraph _abstract">
-<p>To upgrade a site, you need to upgrade the controller using the same method you used to install Skupper, for example, one of the following:</p>
-</div>
-<div id="skupper-upgrading-sites--block-2" class="ulist">
-<ul>
-<li id="skupper-upgrading-sites--block-3">
-<p>Applying the latest Helm chart</p>
-</li>
-<li id="skupper-upgrading-sites--block-4">
-<p>Applying the latest YAML</p>
-</li>
-</ul>
-</div>
-<div id="skupper-upgrading-sites--block-5" class="paragraph">
-<p>To update the Skupper CLI:</p>
-</div>
-<div id="skupper-upgrading-sites--block-6" class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">curl https://skupper.io/v2/install.sh | sh</code></pre>
-</div>
-</div>
-<div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/install-skupper-upgrading-sites.adoc</code></div>
-<hr>
-<hr>
-<div id="&quot;generated-index&quot;--include-25" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/install-skupper-upgrading-local-sites.adoc</code></div>
-<div class="sect3">
-<h4 id="skupper-upgrading-local-sites">8.4.1. Upgrading local sites</h4>
-<div id="skupper-upgrading-local-sites--block-1" class="paragraph _abstract">
-<p>There are two distinct procedures for updating your Skupper installation: updating the site configuration and manually updating the controller.</p>
-</div>
-<div id="skupper-upgrading-local-sites--block-2" class="paragraph">
-<p><strong>Standard Site Update</strong></p>
-</div>
-<div id="skupper-upgrading-local-sites--block-3" class="paragraph">
-<p>To update an existing site to the latest images or configuration matching your current CLI version:</p>
-</div>
-<div id="skupper-upgrading-local-sites--block-4" class="olist arabic">
-<div class="title">Procedure</div>
-<ol class="arabic">
-<li id="skupper-upgrading-local-sites--block-5">
-<p>Ensure you have the latest version of the Skupper CLI installed.</p>
-</li>
-<li id="skupper-upgrading-local-sites--block-6">
-<p>Run the reload command:</p>
-<div id="skupper-upgrading-local-sites--block-7" class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-shell" data-lang="shell"> skupper system reload</code></pre>
-</div>
-</div>
-<div id="skupper-upgrading-local-sites--block-8" class="paragraph">
-<p><em>This command refreshes the site definition and pulls the latest images associated with the CLI version.</em></p>
-</div>
-</li>
-</ol>
-</div>
-<div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/install-skupper-upgrading-local-sites.adoc</code></div>
-<hr>
-<hr>
-<div id="&quot;generated-index&quot;--include-26" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/install-skupper-upgrading-local-controller.adoc</code></div>
-</div>
-<div class="sect3">
-<h4 id="skupper-upgrading-local-controller">8.4.2. Upgrading the Skupper controller</h4>
-<div id="skupper-upgrading-local-controller--block-1" class="paragraph _abstract">
-<p>Upgrade the local Skupper controller to a new version without deleting your sites.</p>
-</div>
-<div id="skupper-upgrading-local-controller--block-2" class="paragraph">
-<p>Currently, <code>skupper system uninstall</code> protects active sites by refusing to run if a site is detected. If you need to force an update to the <strong>controller</strong> itself (to pick up a new controller version) without deleting your sites, follow this manual workaround:</p>
-</div>
-<div id="skupper-upgrading-local-controller--block-3" class="ulist">
-<div class="title">Prerequisites</div>
-<ul>
-<li id="skupper-upgrading-local-controller--block-4">
-<p>Ensure your CLI is updated to the target version.</p>
-</li>
-</ul>
-</div>
-<div id="skupper-upgrading-local-controller--block-5" class="olist arabic">
-<div class="title">Procedure</div>
-<ol class="arabic">
-<li id="skupper-upgrading-local-controller--block-6">
-<p>Stop and remove the controller container. The container is named <code>&lt;user&gt;-skupper-controller</code>.</p>
-<div id="skupper-upgrading-local-controller--block-7" class="paragraph">
-<p><strong>Podman</strong></p>
-</div>
-<div id="skupper-upgrading-local-controller--block-8" class="listingblock">
-<div class="content">
-<pre> podman rm -f &lt;user&gt;-skupper-controller</pre>
-</div>
-</div>
-<div id="skupper-upgrading-local-controller--block-9" class="paragraph">
-<p><strong>Docker</strong></p>
-</div>
-<div id="skupper-upgrading-local-controller--block-10" class="listingblock">
-<div class="content">
-<pre> docker rm -f &lt;user&gt;-skupper-controller</pre>
-</div>
-</div>
-<div id="skupper-upgrading-local-controller--block-11" class="paragraph">
-<p><em>Note: Replace <code>&lt;user&gt;</code> with the specific username under which Skupper is running.</em></p>
-</div>
-</li>
-<li id="skupper-upgrading-local-controller--block-12">
-<p>Re-install the controller.
-Run the install command to recreate the controller using the new CLI version.</p>
-<div id="skupper-upgrading-local-controller--block-13" class="listingblock">
-<div class="content">
-<pre> skupper system install</pre>
-</div>
-</div>
-</li>
-<li id="skupper-upgrading-local-controller--block-14">
-<p>Verify the controller is recreated with the updated version.</p>
-</li>
-</ol>
-</div>
-<div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/install-skupper-upgrading-local-controller.adoc</code></div>
-<hr>
-<div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/install-assembly-kube-installing-controller.adoc</code></div>
-<hr>
-<hr>
-<div id="&quot;generated-index&quot;--include-27" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-cli-assembly-kube-cli.adoc</code></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="kube-cli">9. Overview of Skupper CLI on Kubernetes</h2>
+<h2 id="kube-cli">8. Overview of Skupper CLI on Kubernetes</h2>
 <div class="sectionbody">
 <div id="kube-cli--block-1" class="paragraph _abstract">
 <p>You can use the <code>skupper</code> CLI on Kubernetes after installing the Skupper controller to configure sites, links and services.</p>
@@ -1648,11 +1349,11 @@ Run the install command to recreate the controller using the new CLI version.</p
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/kube-cli-assembly-kube-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-28" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-cli-assembly-kube-creating-site-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-21" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-cli-assembly-kube-creating-site-cli.adoc</code></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kube-creating-site-cli">10. Creating a site on Kubernetes using the Skupper CLI</h2>
+<h2 id="kube-creating-site-cli">9. Creating a site on Kubernetes using the Skupper CLI</h2>
 <div class="sectionbody">
 <div id="kube-creating-site-cli--block-1" class="paragraph _abstract">
 <p>Using the skupper command-line interface (CLI) allows you to create and manage sites from the context of the current namespace.</p>
@@ -1661,9 +1362,9 @@ Run the install command to recreate the controller using the new CLI version.</p
 <p>A typical workflow is to create a site, link sites together, and expose services to the application network.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-29" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-checking-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-22" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-checking-cli.adoc</code></div>
 <div class="sect2">
-<h3 id="kube-checking-cli">10.1. Checking the Skupper CLI</h3>
+<h3 id="kube-checking-cli">9.1. Checking the Skupper CLI</h3>
 <div id="kube-checking-cli--block-1" class="paragraph _abstract">
 <p>Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.</p>
 </div>
@@ -1689,10 +1390,10 @@ cli                     {{skupper_cli_version}}</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-checking-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-30" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-creating-simple-site-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-23" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-creating-simple-site-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-creating-simple-site-cli">10.2. Creating a simple site using the CLI on Kubernetes</h3>
+<h3 id="kube-creating-simple-site-cli">9.2. Creating a simple site using the CLI on Kubernetes</h3>
 <div id="kube-creating-simple-site-cli--block-1" class="paragraph _abstract">
 <p>Use the Skupper CLI to create a site on Kubernetes from the current namespace context.</p>
 </div>
@@ -1789,10 +1490,10 @@ To configure site resources, see <a href="#kube-site-resources-yaml">Setting sit
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-creating-simple-site-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-31" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-ha-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-24" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-ha-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-ha-cli">10.3. Creating a high availability site using the CLI on Kubernetes</h3>
+<h3 id="kube-ha-cli">9.3. Creating a high availability site using the CLI on Kubernetes</h3>
 <div id="kube-ha-cli--block-1" class="paragraph _abstract">
 <p>Create a highly available Skupper site on Kubernetes by enabling HA mode in the CLI.</p>
 </div>
@@ -1856,10 +1557,10 @@ High availability can also help during a node failure.</p>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-ha-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-32" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-deleting-site-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-25" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-deleting-site-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-deleting-site-cli">10.4. Deleting a site using the CLI on Kubernetes</h3>
+<h3 id="kube-deleting-site-cli">9.4. Deleting a site using the CLI on Kubernetes</h3>
 <div id="kube-deleting-site-cli--block-1" class="paragraph _abstract">
 <p>Delete a Skupper site on Kubernetes by using the CLI from the namespace where the site was created.</p>
 </div>
@@ -1897,12 +1598,12 @@ High availability can also help during a node failure.</p>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/kube-cli-assembly-kube-creating-site-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-33" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-cli-assembly-kube-linking-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-26" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-cli-assembly-kube-linking-cli.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kube-linking-cli">11. Linking sites on Kubernetes using the Skupper CLI</h2>
+<h2 id="kube-linking-cli">10. Linking sites on Kubernetes using the Skupper CLI</h2>
 <div class="sectionbody">
 <div id="kube-linking-cli--block-1" class="paragraph _abstract">
 <p>Create links between sites on Kubernetes by using the CLI.</p>
@@ -1915,9 +1616,9 @@ The link direction is not significant, and is typically determined by ease of co
 <p>Once sites are linked, services can be exposed and consumed across the application network without the need to open ports or manage inter-site connectivity.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-34" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-token-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-27" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-token-cli.adoc</code></div>
 <div class="sect2">
-<h3 id="kube-token-cli">11.1. Linking sites using a token</h3>
+<h3 id="kube-token-cli">10.1. Linking sites using a token</h3>
 <div id="kube-token-cli--block-1" class="paragraph _abstract">
 <p>A token provides a secure method to link sites.
 By default, a token can only be used once and must be used within 15 minutes to link sites.
@@ -2064,10 +1765,10 @@ west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-token-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-35" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-link-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-28" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-link-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-link-cli">11.2. Linking sites using a <code>link</code> resource</h3>
+<h3 id="kube-link-cli">10.2. Linking sites using a <code>link</code> resource</h3>
 <div id="kube-link-cli--block-1" class="paragraph _abstract">
 <p>An alternative approach to linking sites using tokens is to create a <code>link</code> resource YAML file using the CLI, and to apply that resource to another site.</p>
 </div>
@@ -2190,10 +1891,10 @@ west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-link-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-36" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-proxy-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-29" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-proxy-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-proxy-cli">11.3. Linking sites through an HTTP proxy</h3>
+<h3 id="kube-proxy-cli">10.3. Linking sites through an HTTP proxy</h3>
 <div id="kube-proxy-cli--block-1" class="paragraph _abstract">
 <p>If your network requires routing through an HTTP CONNECT proxy to reach remote sites, you can configure Skupper links to use a proxy.
 This feature is only available when using <code>link</code> resources, not tokens.</p>
@@ -2364,10 +2065,10 @@ You can now expose services on the application network.</p>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-proxy-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-37" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-custom-certs-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-30" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-custom-certs-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-custom-certs-cli">11.4. Using custom certificates</h3>
+<h3 id="kube-custom-certs-cli">10.4. Using custom certificates</h3>
 <div id="kube-custom-certs-cli--block-1" class="paragraph _abstract">
 <p>For custom certificate workflows, YAML provides more control over certificate management and integration with existing PKI infrastructure, although you can still use the Skupper CLI to generate links for those workflows.</p>
 </div>
@@ -2382,10 +2083,10 @@ You can now expose services on the application network.</p>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-custom-certs-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-38" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-link-cost-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-31" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-link-cost-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-link-cost-cli">11.5. Specifying link cost</h3>
+<h3 id="kube-link-cost-cli">10.5. Specifying link cost</h3>
 <div id="kube-link-cost-cli--block-1" class="paragraph _abstract">
 <p>Link cost is a configurable integer value that influences how Skupper routes
 traffic across links between sites.
@@ -2514,12 +2215,12 @@ Skupper does not provide orchestrated failover for stateful applications that re
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/kube-cli-assembly-kube-linking-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-39" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-cli-assembly-kube-exposing-services-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-32" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-cli-assembly-kube-exposing-services-cli.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kube-exposing-services-cli">12. Exposing services on the application network using the CLI</h2>
+<h2 id="kube-exposing-services-cli">11. Exposing services on the application network using the CLI</h2>
 <div class="sectionbody">
 <div id="kube-exposing-services-cli--block-1" class="paragraph _abstract">
 <p>Create connectors and listeners to expose services across the application network.</p>
@@ -2533,9 +2234,9 @@ For example, if you create a connector with the routing key <code>backend</code>
 <p>This section assumes you have created and linked at least two sites.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-40" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-creating-connector-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-33" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-creating-connector-cli.adoc</code></div>
 <div class="sect2">
-<h3 id="kube-creating-connector-cli">12.1. Creating a connector using the CLI</h3>
+<h3 id="kube-creating-connector-cli">11.1. Creating a connector using the CLI</h3>
 <div id="kube-creating-connector-cli--block-1" class="paragraph _abstract">
 <p>A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.</p>
@@ -2616,10 +2317,10 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-creating-connector-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-41" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-creating-listener-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-34" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-creating-listener-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-creating-listener-cli">12.2. Creating a listener using the CLI</h3>
+<h3 id="kube-creating-listener-cli">11.2. Creating a listener using the CLI</h3>
 <div id="kube-creating-listener-cli--block-1" class="paragraph _abstract">
 <p>A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.</p>
@@ -2705,12 +2406,12 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/kube-cli-assembly-kube-exposing-services-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-42" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-35" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-yaml.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kube-yaml">13. Overview of using YAML on Kubernetes</h2>
+<h2 id="kube-yaml">12. Overview of using YAML on Kubernetes</h2>
 <div class="sectionbody">
 <div id="kube-yaml--block-1" class="paragraph _abstract">
 <p>You can use YAML on Kubernetes after installing the Skupper controller to create sites, link sites, and expose or consume services.</p>
@@ -2737,11 +2438,11 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/kube-yaml-assembly-kube-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-43" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-creating-site-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-36" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-creating-site-yaml.adoc</code></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kube-creating-site-yaml">14. Creating a site on Kubernetes using YAML</h2>
+<h2 id="kube-creating-site-yaml">13. Creating a site on Kubernetes using YAML</h2>
 <div class="sectionbody">
 <div id="kube-creating-site-yaml--block-1" class="paragraph _abstract">
 <p>Using YAML allows you to create and manage sites from the context of the current namespace.</p>
@@ -2750,9 +2451,9 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <p>A typical workflow is to create a site, link sites together, and expose services to the application network.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-44" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-simple-site-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-37" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-simple-site-yaml.adoc</code></div>
 <div class="sect2">
-<h3 id="kube-creating-simple-site-yaml">14.1. Creating a simple site on Kubernetes using YAML</h3>
+<h3 id="kube-creating-simple-site-yaml">13.1. Creating a simple site on Kubernetes using YAML</h3>
 <div id="kube-creating-simple-site-yaml--block-1" class="paragraph _abstract">
 <p>You can use YAML to create and manage Skupper sites.</p>
 </div>
@@ -2841,10 +2542,10 @@ west   Ready    1                  OK</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-yaml-kube-creating-simple-site-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-45" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-ha-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-38" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-ha-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-ha-yaml">14.2. Creating a high availability site using YAML</h3>
+<h3 id="kube-ha-yaml">13.2. Creating a high availability site using YAML</h3>
 <div id="kube-ha-yaml--block-1" class="paragraph _abstract">
 <p>Use the <code>ha</code> option to create a highly available site on Kubernetes.</p>
 </div>
@@ -2897,10 +2598,10 @@ spec:
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-yaml-kube-ha-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-46" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-site-resources-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-39" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-site-resources-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-site-resources-yaml">14.3. Setting site resources</h3>
+<h3 id="kube-site-resources-yaml">13.3. Setting site resources</h3>
 <div id="kube-site-resources-yaml--block-1" class="paragraph _abstract">
 <p>You can configure the Skupper Router and Kube Adaptor components with minimum and maximum CPU and memory resources by defining sizing models using ConfigMaps.</p>
 </div>
@@ -3101,12 +2802,12 @@ spec:
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/kube-yaml-assembly-kube-creating-site-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-47" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-yaml-site-linking.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-40" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-yaml-site-linking.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kube-yaml-site-linking">15. Linking sites on Kubernetes using YAML</h2>
+<h2 id="kube-yaml-site-linking">14. Linking sites on Kubernetes using YAML</h2>
 <div class="sectionbody">
 <div id="kube-yaml-site-linking--block-1" class="paragraph _abstract">
 <p>Once sites are linked, services can be exposed and consumed across the application network without the need to open ports or manage inter-site connectivity.</p>
@@ -3128,9 +2829,9 @@ spec:
 <p>The link direction is not significant, and is typically determined by ease of connectivity. For example, if <code>east</code> is behind a firewall and <code>west</code> is a cluster on the public cloud, linking from <code>east</code> to <code>west</code> is the easiest option.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-48" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-access-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-41" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-access-yaml.adoc</code></div>
 <div class="sect2">
-<h3 id="kube-access-yaml">15.1. Linking sites using <code>AccessGrant</code> and <code>AccessToken</code> resources</h3>
+<h3 id="kube-access-yaml">14.1. Linking sites using <code>AccessGrant</code> and <code>AccessToken</code> resources</h3>
 <div id="kube-access-yaml--block-1" class="paragraph _abstract">
 <p>Use <code>AccessGrant</code> and <code>AccessToken</code> resources to create a link between two Kubernetes sites using YAML.</p>
 </div>
@@ -3288,10 +2989,10 @@ token-to-west   Ready    my-site       OK</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-yaml-kube-access-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-49" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-link-cost-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-42" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-link-cost-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-link-cost-yaml">15.2. Specifying link cost using YAML</h3>
+<h3 id="kube-link-cost-yaml">14.2. Specifying link cost using YAML</h3>
 <div id="kube-link-cost-yaml--block-1" class="paragraph _abstract">
 <p>Link cost is a configurable integer value that influences how Skupper routes
 traffic across links between sites.
@@ -3470,10 +3171,10 @@ Skupper does not provide orchestrated failover for stateful applications that re
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-yaml-kube-link-cost-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-50" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-yaml-custom-certs-info.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-43" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-yaml-custom-certs-info.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-yaml-custom-certs-info">15.3. Using custom certificates</h3>
+<h3 id="kube-yaml-custom-certs-info">14.3. Using custom certificates</h3>
 <div id="kube-yaml-custom-certs-info--block-1" class="paragraph _abstract">
 <p>You can link sites using custom TLS certificates instead of the default Skupper-generated certificates.
 Custom certificates allow integration with your existing PKI infrastructure.</p>
@@ -3491,12 +3192,12 @@ Custom certificates allow integration with your existing PKI infrastructure.</p>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/kube-yaml-assembly-kube-yaml-site-linking.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-51" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-yaml-custom-certs.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-44" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-yaml-custom-certs.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kube-yaml-custom-certs">16. Linking sites using custom certificates</h2>
+<h2 id="kube-yaml-custom-certs">15. Linking sites using custom certificates</h2>
 <div class="sectionbody">
 <div id="kube-yaml-custom-certs--block-1" class="paragraph _abstract">
 <p>By default, the Skupper controller generates internal Certificate Authorities (CAs) and self-signed certificates.
@@ -3604,9 +3305,9 @@ If a <code>RouterAccess</code> references a custom secret signed by an external 
 <p>In both approaches, the listening site provides server certificates and the connecting site uses client certificates to establish the link.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-52" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-router-access-custom-certs-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-45" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-router-access-custom-certs-yaml.adoc</code></div>
 <div class="sect2">
-<h3 id="kube-router-access-custom-certs-yaml">16.1. Linking sites using a custom <code>RouterAccess</code>, and custom certificates</h3>
+<h3 id="kube-router-access-custom-certs-yaml">15.1. Linking sites using a custom <code>RouterAccess</code>, and custom certificates</h3>
 <div id="kube-router-access-custom-certs-yaml--block-1" class="paragraph _abstract">
 <p>By default, when you set <code>spec.linkAccess</code> on a <code>Site</code>, the Skupper controller automatically creates a <code>RouterAccess</code> named <code>skupper-router</code> with <code>generateTlsCredentials: true</code> and <code>tlsCredentials: skupper-site-server</code>.</p>
 </div>
@@ -3864,10 +3565,10 @@ skupper-link    Ready    my-site       OK</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-yaml-kube-router-access-custom-certs-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-53" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-link-custom-certs-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-46" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-link-custom-certs-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-link-custom-certs-yaml">16.2. Linking sites using <code>Link</code> resources and custom certificates</h3>
+<h3 id="kube-link-custom-certs-yaml">15.2. Linking sites using <code>Link</code> resources and custom certificates</h3>
 <div id="kube-link-custom-certs-yaml--block-1" class="paragraph _abstract">
 <p>Link sites using custom TLS certificates instead of the default Skupper-generated certificates.</p>
 </div>
@@ -4205,12 +3906,12 @@ skupper-link    Ready    my-site       OK</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/kube-yaml-assembly-kube-yaml-custom-certs.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-54" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-exposing-services-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-47" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/kube-yaml-assembly-kube-exposing-services-yaml.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kube-exposing-services-yaml">17. Exposing services on the application network using YAML</h2>
+<h2 id="kube-exposing-services-yaml">16. Exposing services on the application network using YAML</h2>
 <div class="sectionbody">
 <div id="kube-exposing-services-yaml--block-1" class="paragraph _abstract">
 <p>After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners.</p>
@@ -4223,9 +3924,9 @@ For example, if you create a connector with the routing key <code>backend</code>
 <p>This section assumes you have created and linked at least two sites.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-55" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-connector-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-48" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-connector-yaml.adoc</code></div>
 <div class="sect2">
-<h3 id="kube-creating-connector-yaml">17.1. Creating a connector using YAML</h3>
+<h3 id="kube-creating-connector-yaml">16.1. Creating a connector using YAML</h3>
 <div id="kube-creating-connector-yaml--block-1" class="paragraph _abstract">
 <p>A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.</p>
@@ -4302,10 +4003,10 @@ If you want to use a custom routing key, set <code>spec.routingKey</code> to you
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-yaml-kube-creating-connector-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-56" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-listener-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-49" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-listener-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-creating-listener-yaml">17.2. Creating a listener using YAML</h3>
+<h3 id="kube-creating-listener-yaml">16.2. Creating a listener using YAML</h3>
 <div id="kube-creating-listener-yaml--block-1" class="paragraph _abstract">
 <p>A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.</p>
@@ -4380,10 +4081,10 @@ There must be a <code>MATCHING-CONNECTOR</code> for the service to operate.</p>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-yaml-kube-creating-listener-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-57" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-multikeylistener-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-50" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-multikeylistener-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-creating-multikeylistener-yaml">17.3. Creating a multi-key listener using YAML</h3>
+<h3 id="kube-creating-multikeylistener-yaml">16.3. Creating a multi-key listener using YAML</h3>
 <div id="kube-creating-multikeylistener-yaml--block-1" class="paragraph _abstract">
 <p>A multi-key listener binds a single local host and port to multiple routing keys in remote sites.
 Use a multi-key listener when you want one service endpoint to aggregate traffic from multiple connectors.</p>
@@ -4496,10 +4197,10 @@ If you need to change strategy after you created a multi-key listener, you must 
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-yaml-kube-creating-multikeylistener-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-58" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-attachedconnector-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-51" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-creating-attachedconnector-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-creating-attachedconnector-yaml">17.4. Creating a connector for a different namespace using YAML</h3>
+<h3 id="kube-creating-attachedconnector-yaml">16.4. Creating a connector for a different namespace using YAML</h3>
 <div id="kube-creating-attachedconnector-yaml--block-1" class="paragraph _abstract">
 <p>A connector binds a local workload to listeners in remote sites.</p>
 </div>
@@ -4610,12 +4311,12 @@ backend   backend       attached              Ready    true</pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/kube-yaml-assembly-kube-exposing-services-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-59" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-cli-assembly-system-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-52" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-cli-assembly-system-cli.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="system-cli">18. Overview of Skupper CLI on local systems</h2>
+<h2 id="system-cli">17. Overview of Skupper CLI on local systems</h2>
 <div class="sectionbody">
 <div id="system-cli--block-1" class="paragraph _abstract">
 <p>Use the Skupper CLI on local systems to create sites, link them to other sites, and expose or consume services.</p>
@@ -4636,11 +4337,11 @@ backend   backend       attached              Ready    true</pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/system-cli-assembly-system-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-60" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-cli-assembly-system-creating-site-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-53" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-cli-assembly-system-creating-site-cli.adoc</code></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="system-creating-site-cli">19. Creating a site on a local system using the Skupper CLI</h2>
+<h2 id="system-creating-site-cli">18. Creating a site on a local system using the Skupper CLI</h2>
 <div class="sectionbody">
 <div id="system-creating-site-cli--block-1" class="paragraph _abstract">
 <p>Using the skupper command-line interface (CLI) allows you to create and manage Skupper sites from the context of the current user.</p>
@@ -4655,9 +4356,9 @@ backend   backend       attached              Ready    true</pre>
 <p>If you require more than one site, specify a unique namespace when using  <code>skupper</code>, for example <code>skupper --namespace second-site ...</code>.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-61" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-checking-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-54" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-checking-cli.adoc</code></div>
 <div class="sect2">
-<h3 id="system-checking-cli">19.1. Checking the Skupper CLI and environment</h3>
+<h3 id="system-checking-cli">18.1. Checking the Skupper CLI and environment</h3>
 <div id="system-checking-cli--block-1" class="paragraph _abstract">
 <p>Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper.</p>
 </div>
@@ -4702,10 +4403,10 @@ cli                     {{skupper_cli_version}}</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/system-cli-system-checking-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-62" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-creating-simple-site-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-55" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-creating-simple-site-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="system-creating-simple-site-cli">19.2. Creating a simple site using the CLI on local systems</h3>
+<h3 id="system-creating-simple-site-cli">18.2. Creating a simple site using the CLI on local systems</h3>
 <div id="system-creating-simple-site-cli--block-1" class="paragraph _abstract">
 <p>Use the Skupper CLI to create a site on a local system.</p>
 </div>
@@ -4823,10 +4524,10 @@ To run the site:</p>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/system-cli-system-creating-simple-site-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-63" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-deleting-site-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-56" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-deleting-site-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="system-deleting-site-cli">19.3. Deleting a site using the CLI on local systems</h3>
+<h3 id="system-deleting-site-cli">18.3. Deleting a site using the CLI on local systems</h3>
 <div id="system-deleting-site-cli--block-1" class="paragraph _abstract">
 <p>Delete a Skupper site on a local system by using the CLI.</p>
 </div>
@@ -4863,10 +4564,10 @@ skupper system stop</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/system-cli-system-deleting-site-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-64" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-creating-site-bundle.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-57" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-creating-site-bundle.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="system-creating-site-bundle">19.4. Creating a site bundle using the CLI on local systems</h3>
+<h3 id="system-creating-site-bundle">18.4. Creating a site bundle using the CLI on local systems</h3>
 <div id="system-creating-site-bundle--block-1" class="paragraph _abstract">
 <p>Create a site bundle when you want to prepare a site on one system and install it on a remote host.</p>
 </div>
@@ -5004,12 +4705,12 @@ Default platform: podman</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/system-cli-assembly-system-creating-site-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-65" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-cli-assembly-system-linking-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-58" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-cli-assembly-system-linking-cli.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="system-linking-cli">20. Linking sites on local systems using the Skupper CLI</h2>
+<h2 id="system-linking-cli">19. Linking sites on local systems using the Skupper CLI</h2>
 <div class="sectionbody">
 <div id="system-linking-cli--block-1" class="paragraph _abstract">
 <p>Use the Skupper CLI on local systems to create links between sites.</p>
@@ -5029,9 +4730,9 @@ The link direction is not significant, and is typically determined by ease of co
 However, you can redeem tokens on a local system, and you can create and use 'link' resources.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-66" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-token-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-59" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-token-cli.adoc</code></div>
 <div class="sect2">
-<h3 id="system-token-cli">20.1. Linking to Kubernetes sites using a token</h3>
+<h3 id="system-token-cli">19.1. Linking to Kubernetes sites using a token</h3>
 <div id="system-token-cli--block-1" class="paragraph _abstract">
 <p>A token lets a local system site link securely to a Kubernetes site.</p>
 </div>
@@ -5158,10 +4859,10 @@ west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/system-cli-system-token-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-67" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-link-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-60" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-link-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="system-link-cli">20.2. Linking sites using a <code>link</code> resource</h3>
+<h3 id="system-link-cli">19.2. Linking sites using a <code>link</code> resource</h3>
 <div id="system-link-cli--block-1" class="paragraph _abstract">
 <p>An alternative approach to linking sites using tokens is to create a <code>link</code> resource YAML file using the CLI, and to apply that resource to another site.</p>
 </div>
@@ -5247,12 +4948,12 @@ west                                            Ready   1       OK</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/system-cli-assembly-system-linking-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-68" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-cli-assembly-system-exposing-services-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-61" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-cli-assembly-system-exposing-services-cli.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="system-exposing-services-cli">21. Exposing services on the application network using the CLI</h2>
+<h2 id="system-exposing-services-cli">20. Exposing services on the application network using the CLI</h2>
 <div class="sectionbody">
 <div id="system-exposing-services-cli--block-1" class="paragraph _abstract">
 <p>Use the CLI on local systems to create connectors and listeners for services on the application network.</p>
@@ -5266,9 +4967,9 @@ For example, if you create a connector with the routing key <code>backend</code>
 <p>This section assumes you have created and linked at least two sites.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-69" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-creating-connector-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-62" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-creating-connector-cli.adoc</code></div>
 <div class="sect2">
-<h3 id="system-creating-connector-cli">21.1. Creating a connector using the CLI</h3>
+<h3 id="system-creating-connector-cli">20.1. Creating a connector using the CLI</h3>
 <div id="system-creating-connector-cli--block-1" class="paragraph _abstract">
 <p>A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.</p>
@@ -5349,10 +5050,10 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/system-cli-system-creating-connector-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-70" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-creating-listener-cli.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-63" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-creating-listener-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="system-creating-listener-cli">21.2. Creating a listener using the CLI</h3>
+<h3 id="system-creating-listener-cli">20.2. Creating a listener using the CLI</h3>
 <div id="system-creating-listener-cli--block-1" class="paragraph _abstract">
 <p>A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.</p>
@@ -5434,12 +5135,12 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/system-cli-assembly-system-exposing-services-cli.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-71" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-yaml-assembly-system-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-64" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-yaml-assembly-system-yaml.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="system-yaml">22. Overview of using YAML on local systems</h2>
+<h2 id="system-yaml">21. Overview of using YAML on local systems</h2>
 <div class="sectionbody">
 <div id="system-yaml--block-1" class="paragraph _abstract">
 <p>Use YAML on local systems to create sites, link them to other sites, and expose or consume services.</p>
@@ -5460,11 +5161,11 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/system-yaml-assembly-system-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-72" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-yaml-assembly-system-yaml-site-configuration.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-65" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-yaml-assembly-system-yaml-site-configuration.adoc</code></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="system-yaml-site-configuration">23. Creating a site on local systems using YAML</h2>
+<h2 id="system-yaml-site-configuration">22. Creating a site on local systems using YAML</h2>
 <div class="sectionbody">
 <div id="system-yaml-site-configuration--block-1" class="paragraph _abstract">
 <p>Using YAML allows you to create and manage sites on Docker, Podman and Linux.</p>
@@ -5476,9 +5177,9 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <p>If you require more than one site, specify a unique namespace when using  <code>skupper</code>, for example <code>skupper --namespace second-site ...</code>.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-73" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-creating-simple-site-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-66" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-creating-simple-site-yaml.adoc</code></div>
 <div class="sect2">
-<h3 id="system-creating-simple-site-yaml">23.1. Creating a simple site on local systems using YAML</h3>
+<h3 id="system-creating-simple-site-yaml">22.1. Creating a simple site on local systems using YAML</h3>
 <div id="system-creating-simple-site-yaml--block-1" class="paragraph _abstract">
 <p>You can use YAML to create and manage Skupper sites.</p>
 </div>
@@ -5561,12 +5262,12 @@ default Ready   OK</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/system-yaml-assembly-system-yaml-site-configuration.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-74" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-yaml-assembly-system-yaml-site-linking.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-67" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-yaml-assembly-system-yaml-site-linking.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="system-yaml-site-linking">24. Linking sites on local systems using YAML</h2>
+<h2 id="system-yaml-site-linking">23. Linking sites on local systems using YAML</h2>
 <div class="sectionbody">
 <div id="system-yaml-site-linking--block-1" class="paragraph _abstract">
 <p>Use a <code>link</code> resource YAML file to create links between local system and Kubernetes sites.</p>
@@ -5583,9 +5284,9 @@ The link direction is not significant, and is typically determined by ease of co
 Typically, it is easier to configure a site, links, and services in a set of files and then create a configured site by placing all the YAML files in a directory such as <code>local</code> before running <code>skupper system setup</code>.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-75" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-link-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-68" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-link-yaml.adoc</code></div>
 <div class="sect2">
-<h3 id="system-link-yaml">24.1. Linking sites using a <code>link</code> resource</h3>
+<h3 id="system-link-yaml">23.1. Linking sites using a <code>link</code> resource</h3>
 <div id="system-link-yaml--block-1" class="paragraph _abstract">
 <p>Create a <code>link</code> resource YAML file and apply it to the local system site to establish a link.</p>
 </div>
@@ -5689,12 +5390,12 @@ link-west       Ok</code></pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/system-yaml-assembly-system-yaml-site-linking.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-76" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-yaml-assembly-system-yaml-service-exposure.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-69" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/system-yaml-assembly-system-yaml-service-exposure.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="system-yaml-service-exposure">25. Exposing services on the application network using YAML</h2>
+<h2 id="system-yaml-service-exposure">24. Exposing services on the application network using YAML</h2>
 <div class="sectionbody">
 <div id="system-yaml-service-exposure--block-1" class="paragraph _abstract">
 <p>Use YAML to create connectors and listeners for services on the application network.</p>
@@ -5708,9 +5409,9 @@ For example, if you create a connector with the routing key <code>backend</code>
 <p>This section assumes you have created and linked at least two sites.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-77" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-creating-connector-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-70" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-creating-connector-yaml.adoc</code></div>
 <div class="sect2">
-<h3 id="system-creating-connector-yaml">25.1. Creating a connector using YAML</h3>
+<h3 id="system-creating-connector-yaml">24.1. Creating a connector using YAML</h3>
 <div id="system-creating-connector-yaml--block-1" class="paragraph _abstract">
 <p>A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.</p>
@@ -5788,10 +5489,10 @@ If you want to use a custom routing key, set <code>spec.routingKey</code> to you
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/system-yaml-system-creating-connector-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-78" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-creating-listener-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-71" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-creating-listener-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="system-creating-listener-yaml">25.2. Creating a listener using YAML</h3>
+<h3 id="system-creating-listener-yaml">24.2. Creating a listener using YAML</h3>
 <div id="system-creating-listener-yaml--block-1" class="paragraph _abstract">
 <p>A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.</p>
@@ -5864,10 +5565,10 @@ There must be a <code>MATCHING-CONNECTOR</code> for the service to operate.</p>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/system-yaml-system-creating-listener-yaml.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-79" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-creating-multikeylistener-yaml.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-72" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-creating-multikeylistener-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="system-creating-multikeylistener-yaml">25.3. Creating a multi-key listener using YAML</h3>
+<h3 id="system-creating-multikeylistener-yaml">24.3. Creating a multi-key listener using YAML</h3>
 <div id="system-creating-multikeylistener-yaml--block-1" class="paragraph _abstract">
 <p>A multi-key listener binds a single local host and port to multiple routing keys in remote sites.
 Use a multi-key listener when you want one service endpoint to aggregate traffic from multiple connectors.</p>
@@ -5973,20 +5674,20 @@ If you need to change strategy after you created a multi-key listener, you must 
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/system-yaml-assembly-system-yaml-service-exposure.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-80" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/console-assembly-observer-config.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-73" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/console-assembly-observer-config.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="observer-config">26. Network Observer Configuration Reference</h2>
+<h2 id="observer-config">25. Network Observer Configuration Reference</h2>
 <div class="sectionbody">
 <div id="observer-config--block-1" class="paragraph _abstract">
 <p>The following configuration options are for the Skupper Network Observer which enables the network console.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-81" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-external-access.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-74" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-external-access.adoc</code></div>
 <div class="sect2">
-<h3 id="observer-external-access">26.1. External access</h3>
+<h3 id="observer-external-access">25.1. External access</h3>
 <div id="observer-external-access--block-1" class="paragraph _abstract">
 <p>Configure external access to the Network Observer console using Ingress or OpenShift Routes.</p>
 </div>
@@ -6160,10 +5861,10 @@ If you need to change strategy after you created a multi-key listener, you must 
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-external-access.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-82" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-authentication.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-75" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-authentication.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-authentication">26.2. Authentication</h3>
+<h3 id="observer-authentication">25.2. Authentication</h3>
 <div id="observer-authentication--block-1" class="paragraph _abstract">
 <p>Configure the authentication strategy for the Network Observer console.</p>
 </div>
@@ -6298,10 +5999,10 @@ If you need to change strategy after you created a multi-key listener, you must 
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-authentication.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-83" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-tls.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-76" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-tls.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-tls">26.3. TLS Certificates</h3>
+<h3 id="observer-tls">25.3. TLS Certificates</h3>
 <div id="observer-tls--block-1" class="paragraph _abstract">
 <p>Configure how TLS certificates are provisioned for the Network Observer.</p>
 </div>
@@ -6363,10 +6064,10 @@ If you need to change strategy after you created a multi-key listener, you must 
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-tls.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-84" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-router.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-77" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-router.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-router">26.4. Router Connection</h3>
+<h3 id="observer-router">25.4. Router Connection</h3>
 <div id="observer-router--block-1" class="paragraph _abstract">
 <p>Configure how the Network Observer connects to the Skupper router.</p>
 </div>
@@ -6425,10 +6126,10 @@ If you need to change strategy after you created a multi-key listener, you must 
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-router.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-85" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-tuning.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-78" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-tuning.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-tuning">26.5. Network Observer Tuning</h3>
+<h3 id="observer-tuning">25.5. Network Observer Tuning</h3>
 <div id="observer-tuning--block-1" class="paragraph _abstract">
 <p>Configure command-line flags and runtime behavior for the Network Observer container.</p>
 </div>
@@ -6514,10 +6215,10 @@ If you need to change strategy after you created a multi-key listener, you must 
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-tuning.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-86" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-prometheus.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-79" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-prometheus.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-prometheus">26.6. Prometheus Configuration</h3>
+<h3 id="observer-prometheus">25.6. Prometheus Configuration</h3>
 <div id="observer-prometheus--block-1" class="paragraph _abstract">
 <p>The Prometheus container supports custom configuration and tuning options.</p>
 </div>
@@ -6664,10 +6365,10 @@ If you need to change strategy after you created a multi-key listener, you must 
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-prometheus.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-87" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-persistence.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-80" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-persistence.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-persistence">26.7. Data Persistence</h3>
+<h3 id="observer-persistence">25.7. Data Persistence</h3>
 <div id="observer-persistence--block-1" class="paragraph _abstract">
 <p>By default, Prometheus uses ephemeral storage (<code>emptyDir</code>). For persistent time-series data, enable a PersistentVolumeClaim.</p>
 </div>
@@ -6787,10 +6488,10 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-persistence.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-88" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-resources.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-81" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-resources.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-resources">26.8. Container Resources</h3>
+<h3 id="observer-resources">25.8. Container Resources</h3>
 <div id="observer-resources--block-1" class="paragraph _abstract">
 <p>Resource requests and limits can be configured for each container in the Pod.</p>
 </div>
@@ -6961,10 +6662,10 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-resources.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-89" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-images.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-82" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-images.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-images">26.9. Container Images</h3>
+<h3 id="observer-images">25.9. Container Images</h3>
 <div id="observer-images--block-1" class="paragraph _abstract">
 <p>Configure container image repositories, tags, and pull policies for each component.</p>
 </div>
@@ -7139,10 +6840,10 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-images.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-90" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-labels.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-83" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-labels.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-labels">26.10. Labels and Annotations</h3>
+<h3 id="observer-labels">25.10. Labels and Annotations</h3>
 <div id="observer-labels--block-1" class="paragraph _abstract">
 <p>Configure labels and annotations applied to Network Observer resources.</p>
 </div>
@@ -7231,10 +6932,10 @@ podAnnotations:
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-labels.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-91" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-service.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-84" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-service.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-service">26.11. Service</h3>
+<h3 id="observer-service">25.11. Service</h3>
 <div id="observer-service--block-1" class="paragraph _abstract">
 <p>Configure the Kubernetes Service that exposes the Network Observer.</p>
 </div>
@@ -7284,10 +6985,10 @@ podAnnotations:
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-service.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-92" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-security.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-85" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-security.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-security">26.12. Security</h3>
+<h3 id="observer-security">25.12. Security</h3>
 <div id="observer-security--block-1" class="paragraph _abstract">
 <p>Configure pod and container security contexts for the Network Observer.</p>
 </div>
@@ -7357,10 +7058,10 @@ podAnnotations:
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-security.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-93" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-advanced.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-86" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-advanced.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-advanced">26.13. Advanced Options</h3>
+<h3 id="observer-advanced">25.13. Advanced Options</h3>
 <div id="observer-advanced--block-1" class="paragraph _abstract">
 <p>Configure naming and label behavior for the Network Observer chart.</p>
 </div>
@@ -7427,10 +7128,10 @@ podAnnotations:
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-advanced.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-94" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-metrics.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-87" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-metrics.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-metrics">26.14. Metrics Endpoint</h3>
+<h3 id="observer-metrics">25.14. Metrics Endpoint</h3>
 <div id="observer-metrics--block-1" class="paragraph _abstract">
 <p>The Network Observer serves Prometheus metrics on a dedicated HTTP listener, separate from the main API endpoint.</p>
 </div>
@@ -7546,10 +7247,10 @@ spec:
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-metrics.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-95" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-validation.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-88" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/console-observer-validation.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="observer-validation">26.15. Validation and Troubleshooting</h3>
+<h3 id="observer-validation">25.15. Validation and Troubleshooting</h3>
 <div id="observer-validation--block-1" class="paragraph _abstract">
 <p>Use the following steps to verify that the Network Observer is running correctly.</p>
 </div>
@@ -7649,12 +7350,12 @@ skupper_network_observer_info{version="2.2.0"} 1
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/console-assembly-observer-config.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-96" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/troubleshooting-assembly-troubleshooting.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-89" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>assemblies/troubleshooting-assembly-troubleshooting.adoc</code></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="troubleshooting">27. Troubleshooting an application network</h2>
+<h2 id="troubleshooting">26. Troubleshooting an application network</h2>
 <div class="sectionbody">
 <div id="troubleshooting--block-1" class="paragraph _abstract">
 <p>Typically, you can create a network without referencing this troubleshooting guide.
@@ -7667,9 +7368,9 @@ However, this guide provides some tips for situations when the network does not 
 <p>A typical troubleshooting workflow is to check all the sites and create debug tar files.</p>
 </div>
 <hr>
-<div id="&quot;generated-index&quot;--include-97" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/troubleshooting-checking-sites.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-90" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/troubleshooting-checking-sites.adoc</code></div>
 <div class="sect2">
-<h3 id="checking-sites">27.1. Checking sites</h3>
+<h3 id="checking-sites">26.1. Checking sites</h3>
 <div id="checking-sites--block-1" class="paragraph _abstract">
 <p>Check site, connector, listener, and link status to confirm that the application network is operating correctly.</p>
 </div>
@@ -7804,10 +7505,10 @@ backend Ready   backend         app=backend             8080    true            
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/troubleshooting-checking-sites.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-98" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/troubleshooting-checking-links.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-91" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/troubleshooting-checking-links.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="checking-links">27.2. Checking links</h3>
+<h3 id="checking-links">26.2. Checking links</h3>
 <div id="checking-links--block-1" class="paragraph _abstract">
 <p>Check link status to confirm that sites can exchange traffic across the application network.</p>
 </div>
@@ -7861,10 +7562,10 @@ There are no link resources in the namespace</pre>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/troubleshooting-checking-links.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-99" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/troubleshooting-debug-dump.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-92" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/troubleshooting-debug-dump.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="debug-dump">27.3. Creating a Skupper debug tar file</h3>
+<h3 id="debug-dump">26.3. Creating a Skupper debug tar file</h3>
 <div id="debug-dump--block-1" class="paragraph _abstract">
 <p>Create a debug tar file containing diagnostic information about a Skupper site to troubleshoot issues or share with support.</p>
 </div>
@@ -7965,10 +7666,10 @@ Labels prefixed with <code>internal.skupper.io/</code> are <strong>internal-only
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/troubleshooting-debug-dump.adoc</code></div>
 <hr>
 <hr>
-<div id="&quot;generated-index&quot;--include-100" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/troubleshooting-dynamic-system-controller.adoc</code></div>
+<div id="&quot;generated-index&quot;--include-93" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/troubleshooting-dynamic-system-controller.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="dynamic-system-controller">27.4. Troubleshooting the Dynamic System Controller</h3>
+<h3 id="dynamic-system-controller">26.4. Troubleshooting the Dynamic System Controller</h3>
 <div id="dynamic-system-controller--block-1" class="paragraph _abstract">
 <p>The Dynamic System Controller feature (available on Docker and Podman platforms only) enables automatic processing of YAML resources when <code>--reload-type=auto</code> is enabled during installation.</p>
 </div>
@@ -8070,7 +7771,7 @@ docker logs &lt;username&gt;-skupper-controller | grep -i error</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-22 09:20:12 +0100
+Last updated 2026-09-22 11:56:42 +0100
 </div>
 </div>
 

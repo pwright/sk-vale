@@ -106,7 +106,7 @@ else
     exit 1
 fi
 
-python3 "$SCRIPT_DIR/build_index.py" "$MKDOCS_FILE" --output "$REPO_ROOT" --source-dir "$SOURCE_DIR"
+python3 "$SCRIPT_DIR/build_index.py" "$MKDOCS_FILE" --title "Using Service Interconnect" --output "$REPO_ROOT" --source-dir "$SOURCE_DIR"
 
 if [[ ! -d "$REPO_ROOT/assemblies" ]] || [[ ! -d "$REPO_ROOT/modules" ]]; then
     echo "ERROR: build_index.py failed to create assemblies/ and modules/"
@@ -114,6 +114,8 @@ if [[ ! -d "$REPO_ROOT/assemblies" ]] || [[ ! -d "$REPO_ROOT/modules" ]]; then
 fi
 
 echo "Generated index.adoc with $(ls -1 "$REPO_ROOT/assemblies"/*.adoc 2>/dev/null | wc -l) assemblies and $(ls -1 "$REPO_ROOT/modules"/*.adoc 2>/dev/null | wc -l) modules"
+
+
 
 # --- Generate subset index (master.adoc) ---
 echo "Generating subset documentation (master.adoc)..."
