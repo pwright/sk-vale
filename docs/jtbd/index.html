@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skupper Documentation</title>
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body class="hub-page">
+<header class="hub-header">
+  <h1>Skupper Documentation</h1>
+  <p class="hub-subtitle">Red Hat build of Skupper 2</p>
+</header>
+<div class="hub-container">
+  <nav class="hub-nav">
+    <ul>
+      <li><a href="#cat-discover">Discover</a></li>
+      <li><a href="#cat-plan">Plan</a></li>
+      <li><a href="#cat-migrate">Migrate</a></li>
+      <li><a href="#cat-administer">Administer</a></li>
+      <li><a href="#cat-configure">Configure</a></li>
+      <li><a href="#cat-secure">Secure</a></li>
+      <li><a href="#cat-observe">Observe</a></li>
+      <li><a href="#cat-troubleshoot">Troubleshoot</a></li>
+      <li><a href="#cat-reference">Reference</a></li>
+    </ul>
+  </nav>
+  <main class="hub-main">
+  <section class="hub-category" id="cat-discover">
+    <h2>Discover</h2>
+    <p>Understand Skupper&#x27;s L7 application networking model</p>
+    <div class="hub-cards">
+      <a class="hub-card" href="overview-assembly-skupper-overview.html">
+        <h3>Skupper overview</h3>
+        <p>Hybrid clouds enable organizations to combine on-premises, private cloud, and public cloud resources. While such a solution provides many benefits, it also presents a unique challenge: enabling...</p>
+      </a>
+      <a class="hub-card" href="overview-assembly-overview-connectivity.html">
+        <h3>Skupper connectivity</h3>
+        <p>Skupper represents a new approach to connecting services across multiple Kubernetes clusters. See how Skupper can give you the flexibility to deploy your services where you need them.</p>
+      </a>
+    </div>
+  </section>
+  <section class="hub-category" id="cat-plan">
+    <h2>Plan</h2>
+    <p>Design topology, security model, and infrastructure before installation</p>
+    <div class="hub-cards">
+      <a class="hub-card" href="overview-assembly-skupper-routing.html">
+        <h3>Skupper routing</h3>
+        <p>Skupper uses routing keys and ports to connect servers and clients. See how the power of application-layer addressing can bring new capabilities to your applications.</p>
+      </a>
+      <a class="hub-card" href="overview-assembly-overview-load-balancing.html">
+        <h3>Skupper load balancing and failover</h3>
+        <p>Skupper enables load balancing and failover across servers located across the application network. Specifically, Skupper balances new TCP connections across workloads deployed in distinct sites....</p>
+      </a>
+      <a class="hub-card" href="overview-assembly-kube-resources.html">
+        <h3>Skupper resources on Kubernetes</h3>
+        <p></p>
+      </a>
+    </div>
+  </section>
+  <section class="hub-category" id="cat-migrate">
+    <h2>Migrate</h2>
+    <p>Transition from Skupper v1 to v2</p>
+    <div class="hub-cards">
+      <a class="hub-card" href="overview-assembly-migrating.html">
+        <h3>Migrating from Skupper v1</h3>
+        <p>Terminology changes:</p>
+      </a>
+    </div>
+  </section>
+  <section class="hub-category" id="cat-administer">
+    <h2>Administer</h2>
+    <p>Manage site life cycles and cluster permissions</p>
+    <div class="hub-cards">
+      <a class="hub-card" href="assembly-kube-creating-sites.html">
+        <h3>Creating sites on Kubernetes</h3>
+        <p>A Skupper site is a location where components of your application network are running. You can create sites on Kubernetes using the CLI or YAML.</p>
+      </a>
+      <a class="hub-card" href="assembly-system-creating-sites.html">
+        <h3>Creating sites on local systems</h3>
+        <p>A Skupper site is a location where components of your application network are running. You can create sites on local systems using the CLI or YAML.</p>
+      </a>
+    </div>
+  </section>
+  <section class="hub-category" id="cat-configure">
+    <h2>Configure</h2>
+    <p>Establish inter-site links and make workloads reachable</p>
+    <div class="hub-cards">
+      <a class="hub-card" href="assembly-kube-linking-sites.html">
+        <h3>Linking sites on Kubernetes</h3>
+        <p>After creating sites, you link them to form an application network. Linking requires that at least one site has link access enabled.</p>
+      </a>
+      <a class="hub-card" href="assembly-system-linking-sites.html">
+        <h3>Linking sites on local systems</h3>
+        <p>After creating sites, you link them to form an application network. Linking requires that at least one site has link access enabled.</p>
+      </a>
+      <a class="hub-card" href="assembly-kube-exposing-services.html">
+        <h3>Exposing services on Kubernetes</h3>
+        <p>After linking sites, you can expose services to make them available across the application network. Connectors bind local workloads to the network, and listeners make remote services available...</p>
+      </a>
+      <a class="hub-card" href="assembly-system-exposing-services.html">
+        <h3>Exposing services on local systems</h3>
+        <p>After linking sites, you can expose services to make them available across the application network. Connectors bind local workloads to the network, and listeners make remote services available...</p>
+      </a>
+    </div>
+  </section>
+  <section class="hub-category" id="cat-secure">
+    <h2>Secure</h2>
+    <p>Implement encryption, access controls, and certificate management</p>
+    <div class="hub-cards">
+      <a class="hub-card" href="overview-assembly-skupper-security.html">
+        <h3>Skupper security</h3>
+        <p>Skupper securely connects your services with TLS authentication and encryption. See how Skupper enables you to deploy your application securely across Kubernetes clusters.</p>
+      </a>
+      <a class="hub-card" href="kube-yaml-assembly-kube-yaml-custom-certs.html">
+        <h3>Linking sites using custom certificates</h3>
+        <p>The CA and server certificate used for this authentication are named skupper-site-ca (default signing Certificate resource for a Skupper Site) and skupper-site-server, respectively.</p>
+      </a>
+    </div>
+  </section>
+  <section class="hub-category" id="cat-observe">
+    <h2>Observe</h2>
+    <p>Monitor network health and track application traffic</p>
+    <div class="hub-cards">
+      <a class="hub-card" href="console-assembly-observer-config.html">
+        <h3>Network Observer Configuration Reference</h3>
+        <p></p>
+      </a>
+    </div>
+  </section>
+  <section class="hub-category" id="cat-troubleshoot">
+    <h2>Troubleshoot</h2>
+    <p>Diagnose and resolve connectivity failures and deployment issues</p>
+    <div class="hub-cards">
+      <a class="hub-card" href="troubleshooting-assembly-troubleshooting.html">
+        <h3>Troubleshoot an application network</h3>
+        <p>A typical troubleshooting workflow is to check all the sites and create debug tar files.</p>
+      </a>
+    </div>
+  </section>
+  <section class="hub-category" id="cat-reference">
+    <h2>Reference</h2>
+    <p>CLI syntax, resource schemas, and API definitions</p>
+    <div class="hub-cards">
+      <a class="hub-card" href="kube-cli-assembly-kube-cli.html">
+        <h3>Overview of Skupper CLI on Kubernetes</h3>
+        <p>The Skupper CLI is designed to generate and consume standard resources, ensuring that a sites, links and services configured using the CLI are identical to those configured directly through YAML.</p>
+      </a>
+      <a class="hub-card" href="kube-yaml-assembly-kube-yaml.html">
+        <h3>Overview of using YAML on Kubernetes</h3>
+        <p> xref:kube-creating-site-yaml[Create sites]  xref:kube-yaml-site-linking[Link sites] (requires that one site has link access enabled)  xref:kube-link-cost-yaml[Configure link cost] ...</p>
+      </a>
+      <a class="hub-card" href="system-cli-assembly-system-cli.html">
+        <h3>Overview of Skupper CLI on local systems</h3>
+        <p> xref:system-creating-site-cli[Create sites]  xref:system-linking-cli[Link sites] (requires that one site has link access enabled)  xref:system-exposing-services-cli[Expose and consume services]</p>
+      </a>
+      <a class="hub-card" href="system-yaml-assembly-system-yaml.html">
+        <h3>Overview of using YAML on local systems</h3>
+        <p> xref:system-yaml-site-configuration[Create sites]  xref:system-yaml-site-linking[Link sites] (requires that one site has link access enabled)  xref:system-yaml-service-exposure[Expose and consume...</p>
+      </a>
+    </div>
+  </section>
+  </main>
+</div>
+</body>
+</html>
