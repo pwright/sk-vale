@@ -1,0 +1,11 @@
+[id="kube-yaml-custom-certs-info"]
+:_mod-docs-content-type: CONCEPT
+= Use custom certificates
+
+[role="_abstract"]
+You can link sites using custom TLS certificates instead of the default Skupper-generated certificates.
+Custom certificates allow integration with your existing PKI infrastructure.
+
+.Additional resources
+
+* xref:../kube-yaml/custom-certs.adoc[Linking sites using custom certificates]

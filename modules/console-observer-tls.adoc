@@ -1,0 +1,34 @@
+[id="observer-tls"]
+:_mod-docs-content-type: REFERENCE
+= TLS Certificates
+
+[role="_abstract"]
+Configure how TLS certificates are provisioned for the Network Observer.
+
+|===
+| Path | Type | Default | Description
+
+| `tls.skupperIssued`
+| bool
+| `true`
+| Use Skupper controller CA (default)
+
+| `tls.openshiftIssued`
+| bool
+| `false`
+| Use OpenShift Service CA
+
+| `tls.secretName`
+| string
+| `""`
+| Existing TLS Secret name
+|===
+
+*Priority:* `secretName` > `openshiftIssued` > `skupperIssued`
+
+*Methods:*
+
+* *Skupper-issued:* Auto-provisioned by controller, uses same CA as inter-site links
+* *OpenShift Service CA:* Platform-issued, automatic rotation
+* *External:* Manual management, Secret type `kubernetes.io/tls`
+

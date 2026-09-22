@@ -1,0 +1,51 @@
+[id="observer-tuning"]
+:_mod-docs-content-type: REFERENCE
+= Network Observer Tuning
+
+[role="_abstract"]
+Configure command-line flags and runtime behavior for the Network Observer container.
+
+|===
+| Path | Type | Default | Description
+
+| `extraArgs`
+| array
+| `[]`
+| Command-line flags for observer container
+|===
+
+*Available flags:*
+
+|===
+| Flag | Type | Default | Description
+
+| `-enable-console`
+| bool
+| `true`
+| Enable web console UI
+
+| `-flow-record-ttl`
+| duration
+| `15m`
+| Flow record retention time
+
+| `-cors-allow-all`
+| bool
+| `false`
+| Allow all CORS origins (dev only)
+
+| `-vanflow-logging-profile`
+| string
+| `silent`
+| Vanflow logging: `silent`, `minimal`, `moderate`, `all`
+|===
+
+*Example:*
+
+[source,yaml]
+----
+extraArgs:
+  - -flow-record-ttl=1h
+  - -vanflow-logging-profile=minimal
+----
+

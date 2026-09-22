@@ -1,0 +1,40 @@
+[id="observer-security"]
+:_mod-docs-content-type: REFERENCE
+= Security
+
+[role="_abstract"]
+Configure pod and container security contexts for the Network Observer.
+
+
+**Pod Security Context**
+
+
+|===
+| Path | Type | Default | Description
+
+| `podSecurityContext.seccompProfile.type`
+| string
+| `RuntimeDefault`
+| Seccomp profile
+|===
+
+
+**Container Security Contexts**
+
+
+Available for: `securityContext`, `prometheus.securityContext`, `nginx.securityContext`, `openshiftOauthProxy.securityContext`
+
+|===
+| Path | Type | Default | Description
+
+| `.allowPrivilegeEscalation`
+| bool
+| `false`
+| Allow privilege escalation
+
+| `.capabilities.drop`
+| array
+| `["ALL"]`
+| Capabilities to drop
+|===
+
