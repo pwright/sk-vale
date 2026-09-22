@@ -32,6 +32,8 @@ def eprint(*args, **kwargs):
 
 SCRIPT_VERSION = '20221205'
 
+RE_NESTED_SECTION = re.compile(r'^(={3,})\s+(.*)')
+
 class NebelContext:
     def __init__(self):
         self.ASSEMBLIES_DIR = 'assemblies'
@@ -67,6 +69,18 @@ class ModuleFactory:
 
         return attributes, lines[idx:]
 
+    @staticmethod
+    def _flatten_nested_sections(lines):
+        """Convert === and deeper headings to bold paragraphs for DITA compatibility."""
+        result = []
+        for line in lines:
+            m = RE_NESTED_SECTION.match(line)
+            if m:
+                result.append(f"\n**{m.group(2).strip()}**\n\n")
+            else:
+                result.append(line)
+        return result
+
     def name_of_file(self, mid, is_assembly=False):
         core = mid.replace('{context}', '').rstrip('_-').replace('_', '-')
         if is_assembly:
@@ -81,6 +95,8 @@ class ModuleFactory:
         path = os.path.join(dirp, fname)
         eprint(f"Writing {'assembly' if is_assembly else 'module'}: {path}")
         leading_attributes, body_lines = self._split_leading_attributes(lines)
+        if not is_assembly:
+            body_lines = self._flatten_nested_sections(body_lines)
         with open(path, 'w') as f:
             f.write(f"[id=\"{mid}\"]\n")
             f.writelines(leading_attributes)

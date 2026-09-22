@@ -361,6 +361,38 @@ def find_abstract_insertion_point(section_lines):
 
     return None
 
+DITA_SECTION_TITLES = [
+    "Prerequisites", 
+    "Procedure",
+    "Verification",
+    "Results",
+    "Troubleshooting", 
+    "Next steps",
+    "Additional resources",
+]
+
+
+def normalize_dita_section_titles(section_lines):
+    """Converts bold Markdown headings to AsciiDoc block titles for DITA sections."""
+    body = list(section_lines)
+    in_fence = False
+
+    for i, line in enumerate(body):
+        if FENCE_PATTERN.match(line):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+
+        stripped = line.strip()
+        for title in DITA_SECTION_TITLES:
+            if stripped == f"**{title}**":
+                body[i] = line.replace(f"**{title}**", f".{title}", 1)
+                break
+
+    return body
+
+
 def ensure_procedure_block_title(section_lines):
     """Normalizes or inserts a Procedure block title for task sections."""
     body = list(section_lines)
@@ -375,10 +407,6 @@ def ensure_procedure_block_title(section_lines):
             continue
 
         if line.strip() == ".Procedure":
-            return body
-
-        if line.strip() == "**Procedure**":
-            body[i] = line.replace("**Procedure**", ".Procedure", 1)
             return body
 
     in_fence = False
@@ -397,9 +425,10 @@ def prepare_section_body(section_lines, source_name, heading_text):
     """Injects AsciiDocDITA metadata into a Markdown section based on markers."""
     content_type, body = extract_content_type_marker(section_lines)
 
-    if not content_type:
-        return section_lines
+    body = normalize_dita_section_titles(body)
 
+    if not content_type:
+        return body
     body = ensure_procedure_block_title(body) if content_type == "PROCEDURE" else body
 
     prepared = ["\n", f":_mod-docs-content-type: {content_type}\n", "\n"]

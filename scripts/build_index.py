@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import json
 import os
 import re
 import shutil
@@ -315,6 +316,7 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
         # Index-only mode: map markdown files to existing assemblies
         assembly_paths = []
         assemblies_dir = output_dir / "assemblies"
+        map_file = output_dir / "assembly-map.json"
 
         if not assemblies_dir.exists() or not any(assemblies_dir.glob("*.adoc")):
             raise RuntimeError(
@@ -322,12 +324,14 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
                 "Run full build first without --index-only flag."
             )
 
-        # Build mapping of existing assemblies
-        existing_assemblies = {}
-        for asm_file in assemblies_dir.glob("*.adoc"):
-            existing_assemblies[asm_file.name] = asm_file
+        if not map_file.exists():
+            raise RuntimeError(
+                f"No assembly-map.json found in {output_dir}. "
+                "Run full build first to generate the mapping."
+            )
 
-        # Map markdown files to assemblies
+        assembly_map = json.loads(map_file.read_text())
+
         for md_link in md_links:
             md_file = (source_root / md_link).resolve()
 
@@ -339,32 +343,14 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
                 warn(f"Skipping {md_link}: skip: true in YAML frontmatter")
                 continue
 
-            namespace = md_file.parent.name
-            # Find matching assembly by namespace prefix
-            matching_assemblies = [
-                asm for asm_name, asm in existing_assemblies.items()
-                if asm_name.startswith(f"{namespace}-assembly-")
-            ]
-
-            if not matching_assemblies:
-                warn(f"No assembly found for {md_link} (namespace: {namespace})")
-                continue
-
-            # For multiple matches, use filename matching as tiebreaker
-            if len(matching_assemblies) == 1:
-                assembly_paths.append(matching_assemblies[0])
-            else:
-                stem = md_file.stem
-                best_match = None
-                for asm in matching_assemblies:
-                    if stem in asm.name or asm.name.endswith(f"-{stem}.adoc"):
-                        best_match = asm
-                        break
-                if best_match:
-                    assembly_paths.append(best_match)
+            if md_link in assembly_map:
+                asm_file = assemblies_dir / assembly_map[md_link]
+                if asm_file.exists():
+                    assembly_paths.append(asm_file)
                 else:
-                    assembly_paths.append(matching_assemblies[0])
-                    warn(f"Multiple assemblies for {md_link}, using {matching_assemblies[0].name}")
+                    warn(f"Assembly {assembly_map[md_link]} from map not found on disk for {md_link}")
+            else:
+                warn(f"No mapping found for {md_link} in assembly-map.json")
 
         if not assembly_paths:
             raise RuntimeError(f"No assemblies matched markdown files from {index_file}")
@@ -379,6 +365,7 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
     repo_root = Path(__file__).resolve().parent.parent
     leben_script = repo_root / "leben.py"
     assembly_paths = []
+    built_md_links = []
     image_registry = {}
 
     # Collect all md_files first for anchor data
@@ -404,6 +391,7 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
 
         namespace = md_file.parent.name
         relative_md = md_file.relative_to(source_root).as_posix()
+        built_md_links.append(md_link)
         assembly_paths.append(
             process_markdown_source(
                 md_file,
@@ -420,6 +408,13 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
 
     if not assembly_paths:
         raise RuntimeError(f"No Markdown sources were built from {index_file}")
+
+    # Save md -> assembly mapping so --index-only can look it up
+    assembly_map = {}
+    for md_link, asm_path in zip(built_md_links, assembly_paths):
+        assembly_map[md_link] = Path(asm_path).name
+    map_file = output_dir / "assembly-map.json"
+    map_file.write_text(json.dumps(assembly_map, indent=2) + "\n")
 
     return write_root_index(index_file, output_dir, assembly_paths, title_override, output_name)
 
