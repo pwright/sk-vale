@@ -439,7 +439,7 @@ def prepare_section_body(section_lines, source_name, heading_text):
         return prepared + body
 
     prepared.extend(body[:abstract_index])
-    prepared.extend(["[role=\"_abstract\"]\n", "\n"])
+    prepared.extend(["[role=\"_abstract\"]\n"])
     prepared.extend(body[abstract_index:])
 
     return prepared
@@ -489,11 +489,45 @@ def prepare_markdown_file(input_file, output_file):
 
     print(f"Prepared Markdown saved to: {output_file}")
 
+ADOC_SIDEBAR_ADMONITION_PATTERN = re.compile(
+    r"^\[(NOTE|WARNING|IMPORTANT|TIP|CAUTION)\]\n"
+    r"\n?"
+    r"\*{4}\n"
+    r"\n?"
+    r"(.*?)"
+    r"\n?\*{4}\n",
+    re.MULTILINE | re.DOTALL,
+)
+
+ADOC_BLOCKQUOTE_ADMONITION_PATTERN = re.compile(
+    r"^_{4}\n"
+    r"\*(NOTE|WARNING|IMPORTANT|TIP|CAUTION):\*\n"
+    r"(.*?)"
+    r"\n_{4}\n",
+    re.MULTILINE | re.DOTALL,
+)
+
+def convert_blockquote_admonitions(content):
+    """Converts kramdoc sidebar (****) and blockquote (____) admonitions to proper blocks (====)."""
+    def replace_admonition(match):
+        admonition_type = match.group(1)
+        body = match.group(2).strip()
+        return f"[{admonition_type}]\n====\n{body}\n====\n"
+    content = ADOC_SIDEBAR_ADMONITION_PATTERN.sub(replace_admonition, content)
+    content = ADOC_BLOCKQUOTE_ADMONITION_PATTERN.sub(replace_admonition, content)
+    return content
+
+ADOC_BARE_LANGUAGE_PATTERN = re.compile(
+    r"^\[,([\w+-]+)\]$", re.MULTILINE
+)
+
 def normalize_adoc_ids(content):
     """Rewrites kramdoc-style IDs and passthrough HTML anchors as AsciiDoc IDs."""
     content = ADOC_HTML_ANCHOR_PATTERN.sub(r'\1[id="\2"]', content)
     content = ADOC_SECTION_ID_PATTERN.sub(r'\1[id="\2"]', content)
     content = ADOC_ID_HEADING_GAP_PATTERN.sub(r"\1\n\2", content)
+    content = convert_blockquote_admonitions(content)
+    content = ADOC_BARE_LANGUAGE_PATTERN.sub(r"[source,\1]", content)
     return content
 
 def convert_adoc_ids(input_file, output_file):

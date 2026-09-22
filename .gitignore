@@ -10,3 +10,4 @@ metrics-*.json
 *.html
 !docs/*.html
 images/
+jtbd/docs/

@@ -43,7 +43,7 @@ jobs:
             | tar xz -C /usr/local/bin vale
 
       - name: Clone skupper-docs
-        run: git clone --depth 1 https://github.com/skupperproject/skupper-docs.git
+        run: git clone --depth 1 --branch cqa-test https://github.com/skupperproject/skupper-docs.git
 
       - name: Configure git identity
         run: |
@@ -54,6 +54,9 @@ jobs:
         id: lint
         continue-on-error: true
         run: bash scripts/convert-skupper.sh --input-dir skupper-docs/input --commit
+
+      - name: Build hub pages
+        run: bash scripts/build-hub.sh
 
       - name: Push skupper branch
         run: git push origin skupper --force

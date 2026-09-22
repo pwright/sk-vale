@@ -32,7 +32,7 @@ def eprint(*args, **kwargs):
 
 SCRIPT_VERSION = '20221205'
 
-RE_NESTED_SECTION = re.compile(r'^(={3,})\s+(.*)')
+RE_NESTED_SECTION = re.compile(r'^(={3,})[ \t]+(.*)')
 
 class NebelContext:
     def __init__(self):

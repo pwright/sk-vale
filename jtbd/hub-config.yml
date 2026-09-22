@@ -1,0 +1,45 @@
+title: "Skupper Documentation"
+subtitle: "Red Hat build of Skupper 2"
+categories:
+  - name: "Discover"
+    description: "Learn about Skupper concepts and architecture"
+    assemblies:
+      - overview-assembly-skupper-overview.adoc
+      - overview-assembly-overview-connectivity.adoc
+      - overview-assembly-skupper-security.adoc
+      - overview-assembly-skupper-routing.adoc
+      - overview-assembly-overview-load-balancing.adoc
+      - overview-assembly-kube-resources.adoc
+
+  - name: "Migrate"
+    description: "Upgrade from Skupper v1"
+    assemblies:
+      - overview-assembly-migrating.adoc
+
+  - name: "Creating sites"
+    description: "Create and manage Skupper sites"
+    assemblies:
+      - assembly-kube-creating-sites.adoc
+      - assembly-system-creating-sites.adoc
+
+  - name: "Linking sites"
+    description: "Link sites to form an application network"
+    assemblies:
+      - assembly-kube-linking-sites.adoc
+      - assembly-system-linking-sites.adoc
+
+  - name: "Exposing services"
+    description: "Expose and consume services across the application network"
+    assemblies:
+      - assembly-kube-exposing-services.adoc
+      - assembly-system-exposing-services.adoc
+
+  - name: "Observe"
+    description: "Monitor your application network"
+    assemblies:
+      - console-assembly-observer-config.adoc
+
+  - name: "Troubleshoot"
+    description: "Diagnose and resolve issues"
+    assemblies:
+      - troubleshooting-assembly-troubleshooting.adoc
