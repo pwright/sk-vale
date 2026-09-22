@@ -1,0 +1,37 @@
+[id="managing-registry-artifacts-cli_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Managing {registry} content using the command-line interface
+
+[role="_abstract"]
+You can use the {registry} command-line interface (CLI) to manage {registry} content from the command line. The CLI provides commands for managing CLI contexts, authentication, groups, artifacts, artifact versions, rules, role mappings, and export and import of registry data.
+
+ifndef::service-registry-downstream[]
+[NOTE]
+====
+The CLI is currently in *dev-preview* status and is unstable; its arguments and behavior are subject to backwards-incompatible changes. The CLI supports Linux (x86_64, bash), macOS (Apple Silicon, zsh), and Windows (x86_64, command prompt or PowerShell).
+====
+endif::[]
+
+ifdef::service-registry-downstream[]
+[IMPORTANT]
+====
+The CLI is a Technology Preview feature. Technology Preview features are not supported with Red{nbsp}Hat production service level agreements (SLAs) and might not be functionally complete. Red{nbsp}Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+====
+endif::[]
+
+== Prerequisites
+
+* You have installed {registry}.
+* You have access to a bash shell on Linux (x86_64), a zsh shell on macOS (Apple Silicon), or a command prompt or PowerShell on Windows (x86_64).
+
+include::../modules/installing-registry-cli.adoc[leveloffset=+1]
+include::../modules/configuring-registry-cli-contexts.adoc[leveloffset=+1]
+include::../modules/authenticating-registry-cli.adoc[leveloffset=+1]
+include::../modules/managing-groups-using-registry-cli.adoc[leveloffset=+1]
+include::../modules/managing-artifacts-using-registry-cli.adoc[leveloffset=+1]
+include::../modules/managing-artifact-versions-using-registry-cli.adoc[leveloffset=+1]
+include::../modules/managing-rules-using-registry-cli.adoc[leveloffset=+1]
+include::../modules/managing-role-mappings-using-registry-cli.adoc[leveloffset=+1]
+include::../modules/exporting-importing-registry-data-using-registry-cli.adoc[leveloffset=+1]
+include::../modules/registry-cli-output-formats.adoc[leveloffset=+1]
+include::../modules/registry-cli-reference.adoc[leveloffset=+1]

@@ -1,0 +1,31 @@
+[id="data-contracts_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= {registry} data contracts
+
+[role="_abstract"]
+This chapter introduces the Data Contracts framework in {registry}, which uses the Open Data Contract Standard (ODCS) v3.1 as the native contract format for managing schema contracts between data producers and consumers.
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-rules}
+* link:https://bitol.io/[Open Data Contract Standard (ODCS)]
+* link:{attachmentsdir}/registry-rest-api.htm[Apicurio Registry REST API documentation]
+
+include::../modules/data-contracts-overview.adoc[leveloffset=+1]
+include::../modules/data-contracts-odcs.adoc[leveloffset=+1]
+include::../modules/data-contracts-odcs-projection.adoc[leveloffset=+1]
+include::../modules/data-contracts-odcs-example.adoc[leveloffset=+1]
+include::../modules/data-contracts-odcs-location.adoc[leveloffset=+1]
+include::../modules/data-contracts-artifact-references.adoc[leveloffset=+1]
+include::../modules/data-contracts-field-tags.adoc[leveloffset=+1]
+include::../modules/data-contracts-field-tags-formats.adoc[leveloffset=+1]
+include::../modules/data-contracts-rules.adoc[leveloffset=+1]
+include::../modules/data-contracts-lifecycle.adoc[leveloffset=+1]
+include::../modules/data-contracts-migration.adoc[leveloffset=+1]
+include::../modules/data-contracts-serdes.adoc[leveloffset=+1]
+include::../modules/data-contracts-audit.adoc[leveloffset=+1]
+include::../modules/data-contracts-search.adoc[leveloffset=+1]
+include::../modules/data-contracts-global-rules.adoc[leveloffset=+1]
+include::../modules/data-contracts-api.adoc[leveloffset=+1]
+include::../modules/data-contracts-api-examples.adoc[leveloffset=+1]
+include::../modules/data-contracts-configuration.adoc[leveloffset=+1]

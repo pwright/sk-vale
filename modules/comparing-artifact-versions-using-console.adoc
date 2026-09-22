@@ -1,0 +1,27 @@
+[id="comparing-artifact-versions-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Comparing artifact versions using the {registry} web console
+
+[role="_abstract"]
+You can compare the content of two versions of the same artifact to review schema or API changes.
+
+.Prerequisites
+* You have access to the web console of a running {registry} instance.
+* You have an artifact with at least two versions whose content you can retrieve. The web console cannot load the content of a disabled version. If you select one, the *Compare Versions* dialog displays an error.
+
+.Procedure
+. On the *Explore* tab, open the group that contains the artifact.
+. Click the artifact to open its details.
+. On the *Overview* tab, select the check boxes for two versions in the *Versions in artifact* list.
++
+After you select two versions, the web console disables the remaining check boxes and enables the *Compare* button. The button label shows the selection count, for example, *Compare (2/2)*. You can select versions on different pages of the list. The selection persists until you clear a check box or click *Clear selection*.
+. Click *Compare* to open the *Compare Versions* dialog.
++
+The comparison displays the older version on the left and the newer version on the right, based on creation time. The comparison is read-only.
+. Optional: Click *Inline* to display the changes in a single view.
+. Optional: Click *Wrap text* to wrap long lines.
+
+.Verification
+* Verify that the *Older* and *Newer* labels identify the versions that you selected.
+
+

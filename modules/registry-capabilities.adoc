@@ -1,0 +1,21 @@
+[id="registry-capabilities_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} capabilities
+
+[role="_abstract"]
+{registry} provides the following capabilities for managing event schemas and API designs across event-driven and API architectures:
+
+* Multiple payload formats for standard event schema and API specifications such as Apache Avro, JSON Schema, Google Protobuf, AsyncAPI, OpenAPI, OpenRPC, and more.
+* AI/ML artifact types for LLMOps: MODEL_SCHEMA for model input/output contracts and PROMPT_TEMPLATE for version-controlled prompts with variable schemas.
+* Pluggable {registry} storage options for storing content in Apache Kafka or PostgreSQL database.
+* Rules for content validation, compatibility, and integrity to govern how {registry} content evolves over time.
+* {registry} content management using web console, REST API, command line, Maven plug-in, or language SDKs.
+* Full Apache Kafka schema registry support, including integration with Kafka Connect for external systems.
+* Kafka client serializers/deserializers (SerDes) to validate message types at runtime.
+* Compatibility with existing Confluent schema registry client applications.
+* Cloud-native Quarkus Java runtime for low memory footprint and fast deployment times.
+* Operator-based installation of {registry} on OpenShift/Kubernetes.
+* OpenID Connect (OIDC) authentication using {keycloak}.
+
+// Metadata created by nebel
+

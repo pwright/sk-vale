@@ -1,0 +1,32 @@
+[id="ha-monitoring-servicemonitor_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring a ServiceMonitor for Prometheus Operator
+
+[role="_abstract"]
+If you use the Prometheus Operator, create a ServiceMonitor resource to scrape metrics from your {registry}
+deployment.
+
+.Prerequisites
+* The Prometheus Operator is installed in your cluster.
+
+.Procedure
+* Create a `ServiceMonitor` resource that selects your {registry} pods:
++
+[source,yaml]
+----
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: apicurio-registry-metrics
+  labels:
+    app: apicurio-registry
+spec:
+  selector:
+    matchLabels:
+      app: apicurio-registry
+  endpoints:
+    - port: management
+      path: /metrics
+      interval: 30s
+----
+

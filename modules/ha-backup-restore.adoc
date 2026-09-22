@@ -1,0 +1,16 @@
+[id="ha-backup-restore_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Backup and restore procedures
+
+[role="_abstract"]
+Regular backups are essential for disaster recovery and data protection.
+
+{registry} supports backup and restore for both SQL database storage and KafkaSQL storage. {registry} also
+exposes a health endpoint (`/health/ready`) and a metrics endpoint (`/metrics`) on the management port (9000),
+which you can use to monitor deployment health during backup and restore operations.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-deploying-registry-operator.adoc[]
+* link:{LinkDeployStreamsOpenShift}[{NameDeployStreamsOpenShift}]
+

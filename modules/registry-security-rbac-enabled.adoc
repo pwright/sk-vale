@@ -1,0 +1,33 @@
+[id="registry-security-rbac-enabled_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} role-based authorization
+
+[role="_abstract"]
+You can set the following options to `true` to enable role-based authorization in {registry}:
+
+.Configuration for {registry} role-based authorization
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+|`QUARKUS_OIDC_TENANT_ENABLED`
+|`quarkus.oidc.tenant-enabled`
+|Boolean
+|`false`
+|`APICURIO_AUTH_ROLE_BASED_AUTHORIZATION`
+|`apicurio.auth.role-based-authorization`
+|Boolean
+|`false`
+|===
+
+You can then configure role-based authorization to use roles included in the user's authentication token (for example, granted when authenticating by using {keycloak}), or to use role mappings managed internally by {registry}.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:registry-security-rbac-keycloak_{context}[]
+* xref:registry-security-rbac-internal_{context}[]
+* xref:registry-security-rbac-admin-override_{context}[]
+
+// ref-registry-security-rbac-keycloak

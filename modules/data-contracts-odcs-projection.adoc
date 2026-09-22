@@ -1,0 +1,57 @@
+[id="data-contracts-odcs-projection_{context}"]
+:_mod-docs-content-type: REFERENCE
+= ODCS projection mapping
+
+[role="_abstract"]
+When you submit an ODCS contract, {registry} parses the YAML, stores it as an `ODCS_CONTRACT` artifact, and projects its contents onto the referenced schema artifacts. Each projection is namespaced by the contract ID.
+
+.ODCS projection mapping
+[cols="2,3", options="header"]
+|===
+|ODCS section |Projected to
+
+|`info.status`
+|`contract.{contractId}.status` label (draft->DRAFT, active->STABLE, deprecated->DEPRECATED)
+
+|`info.dataClassification`
+|`contract.{contractId}.classification` label
+
+|`team.name` / `team.domain` / `team.contact`
+|`contract.{contractId}.owner.team`, `.owner.domain`, `.support.contact` labels
+
+|`quality.accuracy` rules
+|CEL contract rules prefixed `odcs:{contractId}:` in the contract_rules table
+
+|`quality.completeness` rules
+|`contract.{contractId}.quality.completeness.{field}` labels
+
+|`quality.freshness`
+|`contract.{contractId}.quality.freshness.maxStaleness` label
+
+|`schemas[].fields[].pii` / `.tags`
+|`field-tag.{contractId}:{fieldPath}\|{tagName}` version labels
+
+|`serviceLevel.*`
+|`contract.{contractId}.sla.*` labels (stored, not enforced by registry)
+|===
+
+ODCS accuracy rule thresholds determine what happens when a rule fails:
+
+.Accuracy rule threshold mapping
+[cols="1,1,3", options="header"]
+|===
+|Threshold |Failure action |Behavior
+
+|1.0 (100%)
+|`ERROR`
+|Zero tolerance. Non-compliant data is rejected.
+
+|0.95-0.99
+|`DLQ`
+|Near-100% tolerance. Violations are routed to a dead letter queue.
+
+|Below 0.95
+|`NONE`
+|Soft constraint. Violations are logged only.
+|===
+

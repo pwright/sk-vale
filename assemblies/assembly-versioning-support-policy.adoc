@@ -1,0 +1,20 @@
+[id="versioning-support-policy_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Versioning and support policy
+
+[role="_abstract"]
+{registry} follows a defined versioning scheme and support policy, offers multiple release channels, and supports upgrading between versions with guidance for handling rollbacks.
+
+
+include::../modules/versioning-scheme.adoc[leveloffset=+1]
+include::../modules/support-window.adoc[leveloffset=+1]
+include::../modules/release-channels.adoc[leveloffset=+1]
+include::../modules/docker-image-tags.adoc[leveloffset=+1]
+include::../modules/olm-channels.adoc[leveloffset=+1]
+include::../modules/upgrading-registry.adoc[leveloffset=+1]
+include::../modules/patch-upgrades.adoc[leveloffset=+1]
+include::../modules/minor-upgrades.adoc[leveloffset=+1]
+include::../modules/skipping-minor-versions.adoc[leveloffset=+1]
+include::../modules/downgrades-and-rollbacks.adoc[leveloffset=+1]
+include::../modules/handling-failed-upgrade.adoc[leveloffset=+1]
+include::../modules/backup-before-upgrade.adoc[leveloffset=+1]

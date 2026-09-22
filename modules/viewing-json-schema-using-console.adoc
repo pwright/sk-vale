@@ -1,0 +1,31 @@
+[id="viewing-json-schema-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Viewing a JSON Schema visualization using the {registry} web console
+
+[role="_abstract"]
+You can view the properties, constraints, and generated example for a JSON Schema in the web console to review its structure without reading the source content.
+
+.Prerequisites
+* You have access to the web console of a running {registry} instance.
+* You have stored a JSON Schema artifact with at least one version in {registry}. The *Documentation* tab is not available for disabled versions.
+
+.Procedure
+. On the *Explore* tab, open the group that contains the JSON Schema artifact.
+. Click the artifact to open its details.
+. On the *Overview* tab, click the version in the *Versions in artifact* list.
+. Click the *Documentation* tab.
++
+The left panel displays the schema title, root type, description, and the *Schema* row with the `$schema` value, followed by a *Properties* section. Each property displays its name, a type badge, and a *required* marker when the schema requires the property. The property also displays its description, constraints such as `minLength`, `maxLength`, `min`, `max`, `pattern`, and `format`, enumerated values, and the default value, when the schema defines them.
+. Optional: Click *Show properties* to expand a nested object or array item, or click *Hide properties* to collapse it.
++
+The web console expands top-level properties by default. The web console lists alternatives that the schema defines with `oneOf`, `anyOf`, or `allOf` under *One of*, *Any of*, or *All of*.
+. Review the *Generated Example* panel to see sample JSON content based on the schema.
++
+The web console generates the example from the default values, examples, constants, enumerated values, types, and formats that the schema defines. The generated example is read-only. Viewing it does not change the stored schema.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:browsing-artifacts-using-console_{context}[]
+
+
+

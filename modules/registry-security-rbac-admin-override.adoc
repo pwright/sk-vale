@@ -1,0 +1,45 @@
+[id="registry-security-rbac-admin-override_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} admin-override configuration
+
+[role="_abstract"]
+Because {registry} has no default admin users, you can configure an alternative way to identify admins. Configure the admin-override feature by using the following environment variables:
+
+.Configuration for {registry} admin-override
+[.table-expandable,width="100%",cols="6,6,2,3",options="header"]
+|===
+|Environment variable
+|Description
+|Type
+|Default
+|`APICURIO_AUTH_ADMIN_OVERRIDE_ENABLED`
+| Enables the admin-override feature.
+|String
+|`false`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_FROM`
+|Where to look for admin-override information. Only `token` is currently supported.
+|String
+|`token`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_TYPE`
+|The type of information used to determine whether a user is an admin. Values depend on the value of the FROM variable, for example, `role` or `claim` when FROM is `token`.
+|String
+|`role`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_ROLE`
+|The name of the role that indicates a user is an admin.
+|String
+|`sr-admin`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_CLAIM`
+|The name of a JWT token claim to use for determining admin-override.
+|String
+|`org-admin`
+|`APICURIO_AUTH_ADMIN_OVERRIDE_CLAIM_VALUE`
+|The value that the JWT token claim indicated by the CLAIM variable must be for the user to be granted admin-override.
+|String
+|`true`
+|===
+
+For example, you can use this admin-override feature to assign the `sr-admin` role to a single user
+in {keycloak}, which grants that user the admin role. That user can then use the `/admin/roleMappings`
+REST API (or associated UI) to grant roles to additional users (including additional admins).
+
+// ref-registry-security-obac-enabled

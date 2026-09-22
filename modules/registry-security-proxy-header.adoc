@@ -1,0 +1,47 @@
+[id="registry-security-proxy-header_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring {registry} proxy header authentication
+
+[role="_abstract"]
+You can configure {registry} to authenticate requests based on identity headers set by a reverse proxy. The proxy authenticates users, and forwards the user name, email, and groups to {registry} in HTTP headers.
+
+IMPORTANT: Proxy header authentication is only safe when {registry} is reachable exclusively through a trusted proxy. The proxy must remove the identity headers from all incoming client requests and set them itself after authenticating the user. If clients can reach {registry} directly, or if the proxy forwards client-supplied identity headers, clients can impersonate any user.
+
+.Prerequisites
+* A reverse proxy authenticates users in front of {registry} and sets the identity headers.
+* Network isolation blocks direct client access to {registry}.
+
+.Procedure
+. Configure {registry} with the following environment variables:
++
+[source,properties]
+----
+QUARKUS_OIDC_TENANT_ENABLED=false
+APICURIO_AUTHN_PROXY_HEADER_ENABLED=true
+QUARKUS_HTTP_PROXY_TRUSTED_PROXIES=my-proxy-host
+----
++
+The `QUARKUS_HTTP_PROXY_TRUSTED_PROXIES` value identifies the proxies that {registry} trusts.
+. Optional: Customize the header names. By default, {registry} reads the user name from `X-Forwarded-User`, the email address from `X-Forwarded-Email`, and the groups from `X-Forwarded-Groups`:
++
+[source,properties]
+----
+APICURIO_AUTHN_PROXY_HEADER_USERNAME=X-Forwarded-User
+APICURIO_AUTHN_PROXY_HEADER_EMAIL=X-Forwarded-Email
+APICURIO_AUTHN_PROXY_HEADER_GROUPS=X-Forwarded-Groups
+----
++
+The user name header is required for the mechanism to apply; the email and groups headers are optional. The groups header contains a comma-separated list.
+. If you enable role-based authorization, ensure that the groups header contains the role names that {registry} expects. The groups become the roles of the authenticated identity, so the values must match the configured role names, which are `sr-admin`, `sr-developer`, and `sr-readonly` by default.
+. Optional: To skip authorization checks in {registry} for requests that the proxy authenticated, set `APICURIO_AUTHN_PROXY_HEADER_TRUST_PROXY_AUTHORIZATION=true`. Use this option when the proxy or an external policy engine performs authorization. {registry} then trusts the proxy completely for requests that carry the identity headers.
+
+.Verification
+* A request that includes the user name header is authenticated as that user. A request without the header receives a `401` response with the `WWW-Authenticate: Proxy authentication required` challenge, unless another enabled mechanism authenticates it.
+
+ifndef::service-registry-downstream[]
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/distro/docker-compose/in-memory-with-envoy-opa[Reference deployment with Envoy and Open Policy Agent]
+endif::[]
+
+// proc-registry-security-kubernetes-auth

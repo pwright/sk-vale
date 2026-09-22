@@ -1,0 +1,26 @@
+[id="versioning-scheme_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Version numbering scheme
+
+[role="_abstract"]
+{registry} follows https://semver.org/[Semantic Versioning] with a clear distinction between minor and patch releases.
+
+[cols="1,2,2", options="header"]
+|===
+| Release type
+| Contents
+| Example
+
+| *Minor* (for example, 3.3.0 to 3.4.0)
+| New features, enhancements, and bug fixes
+| Scheduled development milestones
+
+| *Patch* (for example, 3.3.0 to 3.3.1)
+| CVE and security fixes only
+| Dependency upgrades, security patches
+|===
+
+Patch releases do not contain new features or bug fixes.
+They are limited to changes that address known security vulnerabilities.
+
+

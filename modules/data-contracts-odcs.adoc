@@ -1,0 +1,22 @@
+[id="data-contracts-odcs_{context}"]
+:_mod-docs-content-type: CONCEPT
+= ODCS native format
+
+[role="_abstract"]
+{registry} uses the Open Data Contract Standard (ODCS) v3.1 as its native contract format. ODCS is a Linux Foundation standard maintained by the Bitol project. When an ODCS contract is submitted, its contents are *projected* onto the referenced schema artifacts.
+
+{registry} adopts ODCS for the following reasons:
+
+Industry standard:: ODCS is the Linux Foundation standard for data contracts, with ecosystem tooling such as `datacontract-cli`.
+Vendor neutral:: {registry} is the first schema registry to natively support ODCS.
+Interoperable:: ODCS contracts can be imported, exported, and used with external tools without translation.
+
+Multiple ODCS contracts can reference the same schema artifact. Each contract's projections are namespaced by contract ID, so they do not interfere:
+
+----
+Contract "orders-contract" → contract.orders-contract.owner.team = orders-team
+Contract "billing-contract" → contract.billing-contract.owner.team = billing-team
+----
+
+Updating or deleting a contract only affects its own namespaced labels, rules, and tags.
+

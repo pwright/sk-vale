@@ -1,0 +1,48 @@
+[id="configuring-gitops-storage-single-repository_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring GitOps storage with a single repository
+
+[role="_abstract"]
+You can configure {registry} to load its data from a single Git repository that is available as a local clone on a mounted volume.
+
+.Prerequisites
+* You have a Git repository that contains a registry configuration file (`registry-v0`) and registry content.
+* You have a local clone of the repository, or a sync container that maintains one.
+
+.Procedure
+. In your repository, verify that a registry configuration file exists and that its `registryId` value matches the registry instance identifier that you configure in the next step. The default identifier is `main`.
+. Configure the registry with the following environment variables:
++
+[source,bash]
+----
+APICURIO_STORAGE_KIND=gitops
+APICURIO_FEATURES_EXPERIMENTAL_ENABLED=true
+APICURIO_POLLING_STORAGE_ID=main
+----
+. Mount the local clone of the repository into the registry container at `/repos/default`. A read-only mount is sufficient for serving content, because the registry does not write to the repository. If you use dry-run validation, mount the workspace writable instead, because the registry writes validation request files under the workspace directory. The mount path is the workspace directory (`apicurio.gitops.workspace`, default `/repos`) combined with the repository directory name (`apicurio.gitops.repo.dir`, default `default`).
++
+For example, with Docker Compose:
++
+[source,yaml]
+----
+volumes:
+  - ./example-repo:/repos/default:ro
+----
+. Optional: To read from a branch other than `main`, set the `APICURIO_GITOPS_REPO_BRANCH` environment variable. If the configured branch does not exist in the clone, the registry falls back to `HEAD`.
+. Start the registry.
+. Verify the synchronization status:
++
+[source,bash]
+----
+$ curl http://localhost:8080/apis/registry/v3/admin/gitops/status
+----
++
+The registry reports not ready on its readiness probe until the first load succeeds. After the first successful load, it stays ready even if a later load fails, and it keeps serving the last successfully loaded data. With the default poll and debounce settings, expect a new commit to become visible after roughly 20 to 30 seconds.
+
+ifndef::service-registry-downstream[]
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/gitops[GitOps Docker Compose examples]
+endif::[]
+
+

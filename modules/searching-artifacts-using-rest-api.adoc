@@ -1,0 +1,40 @@
+[id="searching-artifacts-using-rest-api_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Searching for schema and API artifacts using {registry} REST API commands
+
+[role="_abstract"]
+You can use the {registry} REST API search endpoints to find artifacts, versions, and groups. Search filters match exactly by default, and you can use the `*` wildcard for pattern matching.
+
+.Procedure
+. Search for artifacts with an exact filter value:
++
+[source,bash]
+----
+$ curl "http://localhost:8080/apis/registry/v3/search/artifacts?artifactId=my-artifact"
+----
+. To match patterns, include the `*` wildcard anywhere in the `groupId`, `artifactId`, or `labels` filter values:
++
+[source,bash]
+----
+$ curl "http://localhost:8080/apis/registry/v3/search/artifacts?artifactId=my-*"
+$ curl "http://localhost:8080/apis/registry/v3/search/artifacts?labels=env*:prod*"
+----
++
+The `*` character is the only supported wildcard.
+. To search by name, use an exact value or a leading or trailing `*` wildcard. The `name` filter matches against the artifact name or the artifact ID, and behaves the same on the artifact and version search endpoints:
++
+[source,bash]
+----
+$ curl "http://localhost:8080/apis/registry/v3/search/versions?name=*payment*"
+----
++
+The `description` filter is different: it always matches substrings.
+. Optional: To improve performance on large result sets, set the `skipCount` parameter to `true`. The registry then skips the expensive total count query, and the `count` field in the response is `0`:
++
+[source,bash]
+----
+$ curl "http://localhost:8080/apis/registry/v3/search/artifacts?limit=50&skipCount=true"
+----
++
+The `skipCount` parameter is available on the artifact and version search endpoints, and on the endpoints that list the artifacts of a group and the versions of an artifact.
+

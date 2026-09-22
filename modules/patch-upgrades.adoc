@@ -1,0 +1,13 @@
+[id="patch-upgrades_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Performing patch upgrades
+
+[role="_abstract"]
+You can apply a patch upgrade (for example, 3.3.0 to 3.3.1) at any time. Patch releases contain only CVE fixes and do not introduce behavioral changes.
+
+.Procedure
+. Back up your database.
+. Replace the {registry} container image with the new patch version or use the minor-series floating tag.
+. Start {registry}. Any required schema migrations run automatically.
+
+

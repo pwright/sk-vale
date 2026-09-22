@@ -1,0 +1,30 @@
+[id="changing-group-owner-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Changing a group owner using the {registry} web console
+
+[role="_abstract"]
+You can transfer ownership of a group to another user account when responsibility for the group changes. Changing a group owner does not change the owners of artifacts in that group.
+
+.Prerequisites
+* You have a running {registry} instance with authentication enabled and write operations enabled in the web console and storage.
+* You have a group other than `default` with an assigned owner. The web console does not provide an owner field for the `default` group.
+* You have logged in to the web console as the current group owner with write access or as an administrator.
+* You have the user name of the account that you want to assign as the group owner.
+
+.Procedure
+. On the *Explore* tab, click the group that you want to reassign.
++
+Alternatively, on the *Search* tab, select *Groups* from the *Search for* menu, find the group, and then click it.
+. On the *Overview* tab, click the pencil icon next to *Owner* in the *Group metadata* panel.
+. In the *Change owner* dialog, enter the user name of the new owner in the *New owner* field.
+. Click *Change owner*.
+
+.Verification
+* Verify that *Owner* in the *Group metadata* panel displays the new user name.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:changing-artifact-owner-using-console_{context}[]
+* xref:configuring-settings-using-console_{context}[]
+
+

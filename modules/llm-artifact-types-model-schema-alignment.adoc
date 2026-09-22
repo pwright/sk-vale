@@ -1,0 +1,77 @@
+[id="llm-artifact-types-model-schema-alignment_{context}"]
+:_mod-docs-content-type: REFERENCE
+= MODEL_SCHEMA schema alignment with Model Card Toolkit
+
+[role="_abstract"]
+The MODEL_SCHEMA is aligned with the Google Model Card Toolkit for governance and compliance use cases.
+
+.Model Card field mappings
+[%header,cols="2,2,3"]
+|===
+|Apicurio field
+|Model Card field
+|Notes
+
+|`modelId`
+|`model_details.name`
+|Model identifier
+
+|`provider`
+|`model_details.owners`
+|Model provider
+
+|`version`
+|`model_details.version`
+|Version info
+
+|`input`
+|`model_parameters.input_format`
+|I/O schema
+
+|`output`
+|`model_parameters.output_format`
+|I/O schema
+
+|`modelDetails`
+|`model_details`
+|Full metadata
+
+|`quantitativeAnalysis`
+|`quantitative_analysis`
+|Metrics
+
+|`considerations`
+|`considerations`
+|Ethics, limitations
+|===
+
+.MODEL_SCHEMA with Model Card-aligned sections
+[source,json]
+----
+{
+  "modelId": "claude-3-opus",
+  "provider": "anthropic",
+  "version": "2024-02",
+  "input": { "type": "object" },
+  "output": { "type": "object" },
+  "modelDetails": {
+    "name": "Claude 3 Opus",
+    "overview": "Advanced multimodal AI assistant",
+    "owners": [{"name": "Anthropic"}],
+    "licenses": [{"identifier": "Proprietary"}]
+  },
+  "considerations": {
+    "users": ["Developers", "Enterprises"],
+    "limitations": ["May produce inaccurate information"],
+    "ethicalConsiderations": [
+      {"name": "Bias", "mitigationStrategy": "Regular auditing"}
+    ]
+  }
+}
+----
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/tensorflow/model-card-toolkit[Google Model Card Toolkit]
+
+// ref-llm-artifact-types-mcp-integration

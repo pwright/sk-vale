@@ -1,0 +1,12 @@
+[id="ha-backup-restore-testing_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Testing backup and restore
+
+[role="_abstract"]
+Regularly test your backup and restore procedures to confirm that they work when you need them.
+
+.Procedure
+. Create a test {registry} deployment in a separate namespace.
+. Restore from backup to the test deployment.
+. Verify that all artifacts and metadata are present.
+. Test API functionality to ensure data integrity.

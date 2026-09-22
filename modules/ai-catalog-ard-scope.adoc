@@ -1,0 +1,19 @@
+[id="ai-catalog-ard-scope_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Scope and limitations
+
+[role="_abstract"]
+AI Catalog and ARD provide a read-only view of existing artifacts in {registry}, which stores and governs metadata.
+They do not provide a runtime platform for those artifacts.
+
+The implementation has the following limitations:
+
+* It does not support Trust Manifest, which is optional in the specification.
+* It searches only the local {registry} index (`federation: none`).
+* It does not import entries from external `ai-catalog.json` or `ard.json` documents as artifacts.
+* It returns a `score` of `100` for matching results without semantic relevance ranking.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-a2a-features.adoc[A2A protocol features]
+* xref:getting-started/assembly-agent-discovery-patterns.adoc[Agent discovery and multi-agent orchestration]

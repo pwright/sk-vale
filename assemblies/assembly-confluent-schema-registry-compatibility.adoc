@@ -1,0 +1,12 @@
+[id="confluent-schema-registry-compatibility_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Confluent Schema Registry compatibility API
+
+[role="_abstract"]
+{registry} provides a compatibility API layer so that applications with Confluent Schema Registry clients can work with {registry}. Review the supported features, behavioral differences, unsupported features, and migration considerations.
+
+include::../modules/ccompat-overview.adoc[leveloffset=+1]
+include::../modules/ccompat-supported-features.adoc[leveloffset=+1]
+include::../modules/ccompat-behavioral-differences.adoc[leveloffset=+1]
+include::../modules/ccompat-unsupported-features.adoc[leveloffset=+1]
+include::../modules/ccompat-migration-considerations.adoc[leveloffset=+1]

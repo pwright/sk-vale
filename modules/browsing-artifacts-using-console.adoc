@@ -1,0 +1,61 @@
+[id="browsing-artifacts-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Viewing artifacts using the {registry} web console
+
+[role="_abstract"]
+You can use the {registry} web console to browse the schema and API artifacts stored in {registry}.
+
+.Prerequisites
+
+* {registry} is installed and running in your environment.
+* You are logged in to the {registry} web console:
++
+`{registry-url}`
+* Artifacts have been added to {registry} using the web console, command line, Maven plug-in, or a client application.
+
+.Procedure
+
+. In the {registry} web console, find the artifact by using one of the following tabs:
++
+** *Explore*: Browse the list of groups, click a group, and then click an artifact in the *Artifacts in group* list.
+** *Search*: Select *Artifacts* from the *Search for* menu to browse artifacts. You can filter the results by criteria such as *Name*, *Group*, *Labels*, or *Global Id*. When you filter by *Type*, select the value from a list instead of typing it. The *State* filter is available when you select *Versions* from *Search for*. For this filter, you also select the value from a list.
+** *Dashboard*: Click an artifact in the *Recent Artifacts* list.
++
+.Artifacts in {registry} web console
+image::images/getting-started/registry-web-console.png[Artifacts in Registry web console]
++
+. Click the artifact to view the following details:
+
+** *Overview*: Displays artifact metadata and the *Versions in artifact* list. The list is empty if the artifact has no versions.
+** *Rules*: Displays the content rules that you can configure for the artifact.
+** *Branches*: Displays a list of branches for the artifact. The tab displays at least the `latest` branch and might display other generated branches depending on your configuration.
+** *Contract*: Displays the data contract metadata, quality score, contract rules, and audit log for the artifact.
+** *Usage*: Displays which client applications fetch each version of the artifact. The tab displays data only to administrators, and only when usage telemetry is enabled.
++
+.Artifact details in {registry} web console
+image::images/getting-started/registry-web-console-artifact.png[Artifacts in Registry web console]
++
+. On the artifact's *Overview* tab, click a version in the *Versions in artifact* list, or select *View version* from the Action menu (three vertical dots) for that version. You can then view the following artifact version details:
+
+** *Overview*: Displays artifact version metadata such as version name, description, status, global ID, content ID, and labels. Also displays any comments created for the artifact version.
+** *Documentation*: Displays a visualization for supported artifact types. For OpenAPI and AsyncAPI, it displays API documentation. For JSON Schema, it displays schema properties and a generated example. The tab is also available for the `AGENT_CARD`, `MCP_TOOL`, `MODEL_SCHEMA`, and `PROMPT_TEMPLATE` artifact types, and is hidden for disabled versions.
+** *Content*: Displays a read-only view of the full artifact version content. For JSON content, you can click *JSON* or *YAML* to display your preferred format.
+** *References*: Displays a read-only view of all artifacts referenced by this artifact version. You can also click *View artifacts that reference this artifact version*. To add references to a new artifact or version, use the *Artifact References* step when you create it.
++
+.Artifact version details in {registry} web console
+image::images/getting-started/registry-web-console-artifact-version.png[Artifacts in Registry web console]
+
+. Click *Download* to save the artifact contents to a local file.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:adding-artifacts-using-console_{context}[]
+* xref:configuring-rules-using-console_{context}[]
+* xref:comparing-artifact-versions-using-console_{context}[]
+* xref:changing-version-state-using-console_{context}[]
+* xref:viewing-json-schema-using-console_{context}[]
+* {registry-rule-reference}
+* xref:getting-started/assembly-data-contracts.adoc[]
+* xref:getting-started/assembly-usage-telemetry.adoc[]
+
+
