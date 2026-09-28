@@ -1,0 +1,13 @@
+[id="troubleshooting"]
+:_mod-docs-content-type: ASSEMBLY
+= Troubleshoot an application network
+
+[role="_abstract"]
+Diagnose and resolve issues with your application network by checking site status, verifying links, and collecting diagnostic data.
+
+A typical troubleshooting workflow is to check all the sites and create debug tar files.
+
+include::../modules/troubleshooting-checking-sites.adoc[leveloffset=+1]
+include::../modules/troubleshooting-checking-links.adoc[leveloffset=+1]
+include::../modules/troubleshooting-debug-dump.adoc[leveloffset=+1]
+include::../modules/troubleshooting-dynamic-system-controller.adoc[leveloffset=+1]
