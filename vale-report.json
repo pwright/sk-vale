@@ -1,0 +1,60 @@
+{
+  "assemblies/assembly-registry-sizing-guide.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        21,
+        82
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-registry-high-availability.adoc[",
+      "Line": 22
+    }
+  ],
+  "modules/a2a-openapi-agent-card.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        27
+      ],
+      "Check": "AsciiDocDITA.BlockTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Block titles can only be assigned to examples, figures, and tables in DITA.",
+      "Severity": "warning",
+      "Match": ".Provenance and sync labels",
+      "Line": 56
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.BlockTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Block titles can only be assigned to examples, figures, and tables in DITA.",
+      "Severity": "warning",
+      "Match": ".Known limitations",
+      "Line": 86
+    }
+  ]
+}

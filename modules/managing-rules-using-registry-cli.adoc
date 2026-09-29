@@ -1,0 +1,43 @@
+[id="managing-rules-using-registry-cli_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Managing rules using the CLI
+
+[role="_abstract"]
+You can use the CLI to manage content rules at the global, group, and artifact levels. Rules at a more specific level override rules at a broader level.
+
+.Prerequisites
+* You have configured at least one CLI context.
+
+.Procedure
+. Manage global rules with the `acr rule` commands:
++
+[source,bash]
+----
+$ acr rule create VALIDITY --config FULL
+$ acr rule
+$ acr rule get VALIDITY
+$ acr rule update VALIDITY --config SYNTAX_ONLY
+$ acr rule delete VALIDITY
+----
+. Manage the rules of a group with the `acr group rule` commands:
++
+[source,bash]
+----
+$ acr group rule create COMPATIBILITY --config BACKWARD --group my-schemas
+----
+. Manage the rules of an artifact with the `acr artifact rule` commands:
++
+[source,bash]
+----
+$ acr artifact rule create INTEGRITY --config FULL --group my-schemas --artifact my-artifact
+----
+. Optional: Delete all rules at a level by using the `--all` option:
++
+[source,bash]
+----
+$ acr rule delete --all
+----
++
+For the valid rule types and configuration values, see the rule types table in the CLI reference section.
+
+

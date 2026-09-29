@@ -1,0 +1,23 @@
+[id="llm-artifact-types-json-schema-backing_{context}"]
+:_mod-docs-content-type: REFERENCE
+= JSON Schema backing and industry standards
+
+[role="_abstract"]
+The PROMPT_TEMPLATE and MODEL_SCHEMA artifact types in {registry} have formal JSON Schemas, aligned with industry standards for interoperability.
+
+You can find the JSON Schemas in `app/src/main/resources/schemas/`:
+
+.JSON Schema files
+[%header,cols="2,3"]
+|===
+|File
+|Description
+
+|`prompt-template-v1.schema.json`
+|Schema for PROMPT_TEMPLATE artifacts, aligned with Microsoft Prompty
+
+|`model-schema-v1.schema.json`
+|Schema for MODEL_SCHEMA artifacts, aligned with Google Model Card Toolkit
+|===
+
+// ref-llm-artifact-types-prompt-template-schema-alignment

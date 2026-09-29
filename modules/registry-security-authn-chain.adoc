@@ -1,0 +1,47 @@
+[id="registry-security-authn-chain_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} authentication mechanism chain
+
+[role="_abstract"]
+{registry} evaluates its enabled authentication mechanisms as an ordered chain. You can control the order with a configuration property, and combine mechanisms so that different clients authenticate in different ways against the same registry instance.
+
+The `apicurio.authn.mechanism.priority` property holds a comma-separated, ordered list of mechanism names. The default value is `basic,proxy-header,oidc`. The chain is built once at startup, and only mechanisms that are also enabled join the chain. Unknown names are skipped with a warning.
+
+For each request, {registry} tries the mechanisms in order, and the first mechanism that produces an identity wins. A mechanism that does not apply to the request, for example because the expected header or bearer token is absent, passes the request to the next mechanism. When no mechanism produces an identity, the request is anonymous. The authentication challenge in `401` responses comes from the last mechanism in the chain.
+
+.Authentication mechanisms
+[.table-expandable,width="100%",cols="2,4,6",options="header"]
+|===
+|Mechanism
+|Enabled by
+|Description
+
+|`basic`
+|`quarkus.http.auth.basic=true`
+|Native HTTP basic authentication. This mechanism is distinct from the `apicurio.authn.basic-client-credentials.enabled` option, which exchanges basic credentials for an OpenID Connect token and is handled by the `oidc` mechanism.
+
+|`proxy-header`
+|`apicurio.authn.proxy-header.enabled=true`
+|Authentication based on identity headers set by a trusted reverse proxy.
+
+|`oidc`
+|`quarkus.oidc.tenant-enabled=true`
+|OpenID Connect bearer token authentication with an identity provider such as {keycloak}.
+
+|`kubernetes`
+|`apicurio.authn.kubernetes.enabled=true`
+|Kubernetes-native authentication by using the TokenReview API. This mechanism is not part of the default priority list; you must add it explicitly.
+|===
+
+The following example configures proxy header authentication for requests coming through a reverse proxy, with OpenID Connect as the fallback for all other requests:
+
+[source,properties]
+----
+apicurio.authn.proxy-header.enabled=true
+quarkus.oidc.tenant-enabled=true
+apicurio.authn.mechanism.priority=proxy-header,oidc
+----
+
+NOTE: You cannot enable OpenID Connect and Kubernetes-native authentication at the same time. Both use bearer tokens, and {registry} fails at startup with an error when both are enabled. If no authentication mechanism is enabled, {registry} does not enforce authentication or authorization.
+
+// proc-registry-security-proxy-header

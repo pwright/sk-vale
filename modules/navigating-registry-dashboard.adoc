@@ -1,0 +1,36 @@
+[id="navigating-registry-dashboard_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Navigating the {registry} dashboard
+
+[role="_abstract"]
+You can use the {registry} dashboard to view registry totals, find recently modified artifacts, and open common tasks.
+
+.Prerequisites
+* You have access to the web console of a running {registry} instance.
+
+.Procedure
+. In the {registry} web console, click the *Dashboard* tab.
++
+The web console also opens the dashboard when you open the root URL of the web console or click the {registry} logo in the masthead.
+. Review the *Groups*, *Artifacts*, and *Versions* cards to view the totals for your registry.
++
+Click a card to open the *Search* tab with the corresponding resource type selected.
++
+NOTE: When usage telemetry is enabled and you are an administrator, the dashboard also displays a *Schema Usage* card with the number of active, stale, and dead schema versions.
+. To open a recently modified artifact, click its name in *Recent Artifacts*.
++
+The list contains up to 10 artifacts, ordered by modification time with the most recent first.
+. In *Quick Actions*, click one of the following actions:
++
+** *Create Artifact*: Opens the *Create Artifact* wizard. This action requires permission to create artifacts and a web console with write operations enabled.
+** *Search Registry*: Opens the *Search* tab.
+** *Explore Groups*: Opens the *Explore* tab, where you can browse groups and their artifacts.
+** *Settings*: Opens the registry settings. This action requires administrator access and a web console with the settings feature enabled.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:adding-artifacts-using-console_{context}[]
+* xref:configuring-settings-using-console_{context}[]
+* xref:getting-started/assembly-usage-telemetry.adoc[]
+
+

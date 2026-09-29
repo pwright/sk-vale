@@ -1,0 +1,51 @@
+[id="configuring-gitops-sync-container_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring the GitOps sync container
+
+[role="_abstract"]
+The registry reads only local Git clones and never contacts remote repositories. You can run the GitOps sync container next to the registry to keep a local clone up to date with a remote repository, or to accept pushes directly.
+
+.Prerequisites
+* You have configured the registry for GitOps storage.
+* For pull mode, you have the URL of a remote Git repository.
+
+.Procedure
+. Run the `quay.io/apicurio/apicurio-registry-gitops-sync` container so that it shares a volume with the registry. Mount the shared volume at `/repos` in both containers, read-only in the registry container.
+. For pull mode, which is the default, set the remote repository URL:
++
+[source,bash]
+----
+APICURIO_GITOPS_REPO_URL=https://github.com/my-org/my-registry-data.git
+----
++
+The sync container clones the repository and then updates it every 30 seconds. You can change the interval with the `APICURIO_GITOPS_PULL_INTERVAL` environment variable.
+. Optional: For SSH remotes, provide the private key and the known hosts file:
++
+[source,bash]
+----
+APICURIO_GITOPS_PULL_SSH_KEYS=/etc/gitops/ssh/id_ed25519
+APICURIO_GITOPS_PULL_SSH_KNOWN_HOSTS=/etc/gitops/ssh/known_hosts
+----
+. Optional: Adjust the security level with the `APICURIO_GITOPS_SECURITY` environment variable. The default level, `strict`, rejects loose key file permissions, and fails at startup when an SSH remote is configured without any SSH keys. When you provide keys without a known hosts file, the container accepts a host key on first connection. The `dev` level relaxes host key checking for development. Plaintext `http://` remote URLs are rejected at both levels.
+. Optional: To accept Git pushes instead of pulling from a remote, set `APICURIO_GITOPS_MODE=push`. The sync container runs a restricted SSH server for the `git` user on port `2222`. Configure the authorized client keys and the host key:
++
+[source,bash]
+----
+APICURIO_GITOPS_PUSH_SSH_AUTHORIZED_KEYS=/etc/gitops/ssh/authorized_keys
+APICURIO_GITOPS_PUSH_SSH_HOST_KEY=/etc/gitops/ssh/host_key
+----
++
+Clients then push to the container directly:
++
+[source,bash]
+----
+$ git push ssh://git@registry-host:2222/repos/default
+----
++
+[NOTE]
+====
+In push mode, any authorized push user can access all Git repositories on the shared volume.
+====
+. Optional: When you configure multiple repositories, set the mode per repository with `APICURIO_GITOPS_REPOS_N_MODE`, which overrides the global `APICURIO_GITOPS_MODE` setting.
+
+

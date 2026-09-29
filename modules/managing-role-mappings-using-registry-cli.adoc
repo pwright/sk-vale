@@ -1,0 +1,46 @@
+[id="managing-role-mappings-using-registry-cli_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Managing role mappings using the CLI
+
+[role="_abstract"]
+You can use the CLI to assign {registry} roles to principals, such as user accounts or service accounts, when role-based authorization is enabled on the registry.
+
+.Prerequisites
+* You have configured a CLI context for a {registry} instance with role-based authorization enabled.
+* You are authenticated as a user with permission to manage role mappings.
+
+.Procedure
+. Create a role mapping for a principal. The role is one of `ADMIN`, `DEVELOPER`, or `READ_ONLY`:
++
+[source,bash]
+----
+$ acr role create service-account-my-app DEVELOPER
+----
++
+Optional: Provide a display name with the `--name` option.
+. List all role mappings:
++
+[source,bash]
+----
+$ acr role
+----
+. Get the role mapping of a principal:
++
+[source,bash]
+----
+$ acr role get service-account-my-app
+----
+. Update the role of a principal:
++
+[source,bash]
+----
+$ acr role update service-account-my-app --role ADMIN
+----
+. Delete a role mapping:
++
+[source,bash]
+----
+$ acr role delete service-account-my-app
+----
+
+

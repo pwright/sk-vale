@@ -1,0 +1,34 @@
+[id="registry-iceberg-catalog-trino-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Trino catalog configuration
+
+[role="_abstract"]
+Configure Trino to use {registry} as the Iceberg catalog by creating a catalog properties file.
+
+.etc/catalog/apicurio.properties
+[source,properties]
+----
+connector.name=iceberg
+iceberg.catalog.type=rest
+iceberg.rest-catalog.uri=http://localhost:8080/apis/iceberg/v1
+iceberg.rest-catalog.prefix=default
+----
+
+.Using the catalog in Trino
+[source,sql]
+----
+-- Create a schema (namespace)
+CREATE SCHEMA apicurio.my_database;
+
+-- Create a table
+CREATE TABLE apicurio.my_database.products (
+  id BIGINT,
+  name VARCHAR,
+  price DECIMAL(10, 2)
+) WITH (format = 'PARQUET');
+
+-- Query the table
+SELECT * FROM apicurio.my_database.products;
+----
+
+// ref-registry-iceberg-catalog-duckdb-config

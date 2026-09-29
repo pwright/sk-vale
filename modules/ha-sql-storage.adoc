@@ -1,0 +1,50 @@
+[id="ha-sql-storage_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring SQL database storage for high availability
+
+[role="_abstract"]
+When using PostgreSQL or MySQL storage, high availability depends on your database configuration. The database
+must be configured with replication and automatic failover.
+
+NOTE: MySQL storage is not yet supported by the operator and requires manual configuration using environment variables.
+
+.Procedure
+* Configure the Agroal connection pool to handle database failover gracefully. Add these environment variables
+to the `app` component:
++
+[source,yaml]
+----
+spec:
+  app:
+    env:
+      # Connection pool sizing
+      - name: APICURIO_DATASOURCE_JDBC_INITIAL-SIZE
+        value: "10"
+      - name: APICURIO_DATASOURCE_JDBC_MIN-SIZE
+        value: "10"
+      - name: APICURIO_DATASOURCE_JDBC_MAX-SIZE
+        value: "50"
+
+      # Connection acquisition timeout (5 seconds)
+      - name: QUARKUS_DATASOURCE_JDBC_ACQUISITION-TIMEOUT
+        value: "5S"
+
+      # Background validation to detect stale connections (every 2 minutes)
+      - name: QUARKUS_DATASOURCE_JDBC_BACKGROUND-VALIDATION-INTERVAL
+        value: "2M"
+
+      # Foreground validation before use (every 1 minute)
+      - name: QUARKUS_DATASOURCE_JDBC_FOREGROUND-VALIDATION-INTERVAL
+        value: "1M"
+
+      # Maximum connection lifetime (30 minutes)
+      - name: QUARKUS_DATASOURCE_JDBC_MAX-LIFETIME
+        value: "30M"
+----
++
+These settings ensure that:
++
+* Connections are validated regularly to detect database failovers
+* Stale connections are removed and recreated
+* Connection acquisition times out rather than hanging indefinitely
+

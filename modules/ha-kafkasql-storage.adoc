@@ -1,0 +1,44 @@
+[id="ha-kafkasql-storage_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring KafkaSQL storage for high availability
+
+[role="_abstract"]
+When using KafkaSQL storage, high availability depends on the Kafka cluster configuration. Each {registry}
+replica independently consumes all messages from the Kafka journal topic.
+
+.Procedure
+* Configure your Kafka cluster for high availability:
++
+[source,yaml]
+----
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: registry-kafka
+spec:
+  kafka:
+    version: 3.5.0
+    replicas: 3
+    config:
+      # Replication settings for HA
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      default.replication.factor: 3
+      min.insync.replicas: 2
+    storage:
+      type: persistent-claim
+      size: 100Gi
+  zookeeper:
+    replicas: 3
+    storage:
+      type: persistent-claim
+      size: 10Gi
+----
++
+Key configuration for HA:
++
+Kafka replicas set to 3:: Provides fault tolerance for broker failures.
+Replication factor set to 3:: Each partition has three copies.
+`min.insync.replicas` set to 2:: Requires at least two replicas to acknowledge writes.
+

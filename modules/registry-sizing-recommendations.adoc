@@ -1,0 +1,56 @@
+[id="registry-sizing-recommendations_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Recommendations
+
+[role="_abstract"]
+Use the measured read and write limits to plan resources and replica counts for your workload.
+Validate capacity in your own environment before relying on a specific throughput figure.
+
+The following factors affect capacity planning:
+
+Separate read and write capacity::
+Size reads and writes separately because SQL storage has different, unrelated bottlenecks for
+each operation type. A blended requests-per-second figure can hide these limits and be misleading.
+See <<registry-sizing-sql-storage_{context}>>.
+If your write rate is more than incidental, treat the SQL write-throughput limit as a fixed budget
+independent of replica count or resources until
+link:https://github.com/Apicurio/apicurio-registry/issues/9847[issue #9847] is resolved.
+
+Read capacity per replica::
+Treat the read measurements as a starting point for a single replica with a CPU limit of 2, a
+memory limit of `2Gi`, and network latency to the database.
+Reproduce the `perf-tests` results against your cluster, resource limits, and network conditions
+before relying on a specific number. The tests measured reads at 200 concurrent clients, the
+highest concurrency tested with this methodology. The figures do not establish an absolute
+throughput limit for {registry}.
+Both storage types consistently reach the CPU limit of 2 CPUs at this concurrency.
+If you need more read throughput, increasing CPU capacity is a reasonable first option to test.
+
+Memory capacity::
+Provide enough memory for sustained concurrent load, rather than only enough for startup.
+The {operator} default memory limit of `1Gi` is insufficient at the tested concurrency.
+Garbage collection pressure can cause connection timeouts and restarts. Set a memory limit of
+at least `2Gi`.
+
+Horizontal scaling::
+For hundreds of concurrent read clients per replica, add replicas behind the application service
+rather than assuming that a single replica scales indefinitely. See
+xref:getting-started/assembly-registry-high-availability.adoc[].
+Additional replicas improve read throughput for both storage types and write throughput for
+KafkaSQL storage. They do not improve SQL write throughput because all replicas contend for a
+single shared database row.
+
+Network latency::
+A database in a different availability zone, region, or network path can have higher latency
+than access within the same zone or through a colocated connection.
+In that case, expect a lower read-throughput limit than the measurements with an approximate
+round-trip latency of 15 ms.
+
+Storage choice::
+High-throughput schema resolution is a common workload for Kafka producers and consumers that
+validate or resolve schemas. In these tests, the local materialized-view read path of KafkaSQL
+storage had substantially higher throughput than SQL storage. See
+<<registry-sizing-kafkasql-storage_{context}>>.
+KafkaSQL write throughput also increased with concurrency, unlike SQL write throughput.
+The tests did not exceed 200 concurrent writers. The figures exclude the time that KafkaSQL
+storage takes to start or catch up by replaying the underlying Kafka topic.

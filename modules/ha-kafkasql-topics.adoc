@@ -1,0 +1,45 @@
+[id="ha-kafkasql-topics_{context}"]
+:_mod-docs-content-type: REFERENCE
+= KafkaSQL topic configuration
+
+[role="_abstract"]
+{registry} uses three Kafka topics for various purposes:
+
+Journal topic:: Stores all changes to the registry data. Named `kafkasql-journal` by default and is the most important topic for data durability.
+Snapshots topic:: Stores periodic snapshots of the registry state for faster startup, if the snapshotting feature is used. It's named `kafkasql-snapshots` by default and should be configured with similar replication settings as the journal topic.
+Events topic:: Stores events to support Kafka-based Registry eventing feature. Named `registry-events` by default, its configuration depends on your event processing needs. *Currently, {registry} sends messages to only 1 partition of this topic.*
+
+Configure the Kafka topics used by {registry} with appropriate replication:
+
+[source,yaml]
+----
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kafkasql-journal
+  labels:
+    strimzi.io/cluster: registry-kafka
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    cleanup.policy: delete
+    min.insync.replicas: 2
+    retention.ms: -1  # Infinite retention
+    retention.bytes: -1  # Infinite retention
+----
+
+WARNING: The journal topic and the snapshots topic must use `cleanup.policy: delete` with infinite retention (`retention.ms: -1` and `retention.bytes: -1`) to prevent accidental data loss. As of the latest version, {registry} will check these settings on startup and refuse to start if they are not configured correctly.
+
+{registry} automatically creates the journal, snapshots, and events topics on startup by default, if they do not exist. While this is not recommended in a high-availability production scenario, if you want the topics to be created automatically, the following environment variables provide the equivalent configuration:
+
+[source,bash]
+----
+APICURIO_KAFKASQL_TOPIC_PARTITIONS=3
+APICURIO_KAFKASQL_TOPIC_REPLICATION_FACTOR=3
+APICURIO_KAFKASQL_TOPIC_MIN_INSYNC_REPLICAS=2
+APICURIO_KAFKASQL_SNAPSHOTS_TOPIC_PARTITIONS=3
+APICURIO_KAFKASQL_SNAPSHOTS_TOPIC_REPLICATION_FACTOR=3
+APICURIO_KAFKASQL_SNAPSHOTS_TOPIC_MIN_INSYNC_REPLICAS=2
+----
+

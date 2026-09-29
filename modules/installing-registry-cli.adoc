@@ -1,0 +1,90 @@
+[id="installing-registry-cli_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Installing the {registry} CLI
+
+[role="_abstract"]
+You can install the {registry} CLI to interact with {registry} from the command line. The CLI is distributed as a native executable in a platform-specific .zip file, so it does not require a Java runtime.
+
+.Prerequisites
+* You have a Linux x86_64 system with a bash shell, a macOS Apple Silicon system with a zsh shell, or a Windows x86_64 system with a command prompt or PowerShell.
+
+.Procedure
+ifndef::service-registry-downstream[]
+. Download the .zip file for your platform, for example `apicurio-registry-cli-VERSION-linux-x86_64.zip` (Linux), `apicurio-registry-cli-VERSION-osx-aarch64.zip` (macOS), or `apicurio-registry-cli-VERSION-windows-x86_64.zip` (Windows), from the https://github.com/Apicurio/apicurio-registry/releases[{registry} GitHub Releases page]. Alternatively, you can download the CLI from the https://search.maven.org/search?q=g:io.apicurio%20AND%20a:apicurio-registry-cli[Maven Central repository] by searching for `apicurio-registry-cli`.
+endif::[]
+ifdef::service-registry-downstream[]
+. Download the CLI .zip file for your platform from the Red{nbsp}Hat Customer Portal.
+endif::[]
+. Extract the downloaded file to a location of your choice:
++
+On Linux and macOS:
++
+[source,bash]
+----
+$ unzip apicurio-registry-cli-VERSION-linux-x86_64.zip -d ~/apicurio-cli
+----
++
+On Windows:
++
+[source,subs="+quotes"]
+----
+> mkdir %USERPROFILE%\apicurio-cli
+> tar -xf apicurio-registry-cli-VERSION-windows-x86_64.zip -C %USERPROFILE%\apicurio-cli
+----
+. Install the CLI for the current user:
++
+On Linux and macOS:
++
+[source,bash]
+----
+$ cd ~/apicurio-cli
+$ ./acr install
+----
++
+On Windows:
++
+[source,subs="+quotes"]
+----
+> cd %USERPROFILE%\apicurio-cli
+> acr.cmd install
+----
++
+This command copies the CLI files to `$HOME/.apicurio/apicurio-registry-cli`, creates symbolic links in `$HOME/bin`, updates your `~/.bashrc` file (Linux) or `~/.zshrc` file (macOS), and configures shell completions.
++
+On Windows, the CLI files are copied to `%USERPROFILE%\.apicurio\apicurio-registry-cli` and the launcher is copied to `%USERPROFILE%\bin`, because creating a symbolic link there requires Developer Mode or an elevated prompt. Windows has no shell configuration file to source, so the command sets the `ACR_HOME` user environment variable and adds the `bin` directory to your user `Path` instead. Shell completions are generated for bash and zsh only.
+. Reload your shell configuration:
++
+On Linux:
++
+[source,bash]
+----
+$ source ~/.bashrc
+----
++
+On macOS:
++
+[source,bash]
+----
+$ source ~/.zshrc
+----
++
+On Windows, open a new command prompt or PowerShell window so that it picks up the updated environment variables. The installed command is `acr`, which the command prompt resolves to `acr.cmd` through `PATHEXT`.
+. Verify the installation:
++
+[source,bash]
+----
+$ acr --help
+----
++
+[NOTE]
+====
+To update an installed CLI to a newer version, use the `acr update` command. The CLI checks for updates once per day. To disable the update check, run `acr config set update.check-enabled=false`.
+====
+
+[role="_additional-resources"]
+.Additional resources
+ifndef::service-registry-downstream[]
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/cli[CLI README]
+endif::[]
+
+

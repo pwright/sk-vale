@@ -1,0 +1,23 @@
+[id="ai-catalog-ard-overview_{context}"]
+:_mod-docs-content-type: CONCEPT
+= AI Catalog and ARD overview
+
+[role="_abstract"]
+AI Catalog and Agentic Resource Discovery (ARD) are related standards for discovering agentic AI artifacts, including Agent2Agent (A2A) agent cards and Model Context Protocol (MCP) servers.
+A Linux Foundation working group maintains these community standards.
+
+AI Catalog:: A static JSON envelope that supports multiple artifact types, typically served at `/.well-known/ai-catalog.json`.
+Each entry identifies an artifact by its Internet Assigned Numbers Authority (IANA) media type and either links to it (`url`) or embeds it (`data`).
+ARD:: A discovery standard that extends AI Catalog with a domain-based identifier scheme (`urn:air:<publisher>:<namespace>:<name>`) and a required `POST /search` REST API for dynamic discovery.
+It also defines optional `GET /agents` and `POST /explore` endpoints.
+The standard path for publishing and retrieving an ARD catalog is `/.well-known/ard.json`.
+
+{registry} provides a read-only view of existing `AGENT_CARD` and `MCP_TOOL` artifacts in both formats.
+This view requires no schema migration or additional artifact types.
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://ai-catalog.io/[AI Catalog specification]
+* link:https://agenticresourcediscovery.org/[ARD specification]
+
+// ref-ai-catalog-ard-configuration

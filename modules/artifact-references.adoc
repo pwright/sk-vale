@@ -1,0 +1,65 @@
+[id="artifact-references_{context}"]
+:_mod-docs-content-type: REFERENCE
+= References to other schemas and APIs
+
+[role="_abstract"]
+Some {registry} artifact types can include _artifact references_ from one artifact file to another. You can create efficiencies by defining reusable schema or API components, and then referencing them from multiple locations. For example, you can specify a reference in JSON Schema or OpenAPI using a `$ref` statement, or in Google Protobuf using an `import` statement, or in Apache Avro using a nested namespace.
+
+The following example shows a simple Avro schema named `TradeKey` that includes a reference to another schema named `Exchange` using a nested namespace:
+
+.Tradekey schema with nested Exchange schema
+[source,json]
+----
+{
+ "namespace": "com.kubetrade.schema.trade",
+ "type": "record",
+ "name": "TradeKey",
+ "fields": [
+   {
+     "name": "exchange",
+     "type": "com.kubetrade.schema.common.Exchange"
+   },
+   {
+     "name": "key",
+     "type": "string"
+   }
+ ]
+}
+----
+
+.Exchange schema
+[source,json]
+----
+{
+ "namespace": "com.kubetrade.schema.common",
+ "type": "enum",
+ "name": "Exchange",
+ "symbols" : ["GEMINI"]
+}
+----
+
+An artifact reference is stored in {registry} as a collection of artifact metadata that maps from an artifact type-specific reference to an internal {registry} reference. Each artifact reference in {registry} is composed of the following:
+
+* Group ID
+* Artifact ID
+* Artifact version
+* Artifact reference name
+
+You can manage artifact references using the {registry} core REST API, Maven plug-in, and Java serializers/deserializers (SerDes). {registry} stores the artifact references along with the artifact content. {registry} also maintains a collection of all artifact references so you can search them or list all references for a specific artifact.
+
+{registry} currently supports artifact references for the following artifact types only:
+
+* Avro
+* Protobuf
+* JSON Schema
+* OpenAPI
+* AsyncAPI
+
+[role="_additional-resources"]
+.Additional resources
+* {managing-registry-artifacts-api}
+* {managing-registry-artifacts-maven}
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/serdes-with-references[Apicurio Registry SerDes with references demonstration]
+
+// Metadata created by nebel
+

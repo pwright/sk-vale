@@ -1,0 +1,24 @@
+[id="importing-kafkasql-journal-topic-data_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Importing the kafkasql-journal topic data
+
+[role="_abstract"]
+You can import `kafkasql-journal` topic data that has been created with `kcat` by using an application from the {registry} examples repository.
+
+.Procedure
+* Clone the examples repository, build the import tool, and run it against your topic dump file:
++
+[source,bash]
+----
+git clone https://github.com/Apicurio/apicurio-registry.git
+cd examples/tools/kafkasql-topic-import
+mvn clean install
+export VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+java -jar target/apicurio-registry-tools-kafkasql-topic-import-$VERSION-jar-with-dependencies.jar -b <optional-kafka-bootstrap-server-url> -f <path-to-topic-dump-file>
+----
+
+[role="_additional-resources"]
+.Additional resources
+* https://github.com/Apicurio/apicurio-registry/tree/main/examples/tools/kafkasql-topic-import[kafkasql-topic-import tool in the Apicurio Registry examples repository]
+* https://github.com/edenhill/kcat[kcat repository]
+* https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md[librdkafka configuration reference]

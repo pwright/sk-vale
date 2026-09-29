@@ -1,0 +1,33 @@
+[id="registry-sizing-guide_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= {registry} capacity planning and sizing guide
+
+[role="_abstract"]
+The storage back end, network latency, and traffic pattern affect how many concurrent clients a
+single {registry} replica can serve. Capacity planning involves sizing each replica and deciding
+when to add replicas instead of increasing the resources of a single replica.
+
+The automated performance test suite in the `perf-tests` Maven module produced these measurements
+in a topology intended to resemble a real deployment. The {operator} installed the registry, and
+{keycloak} secured access to it. PostgreSQL or KafkaSQL storage ran behind a proxy that injected
+network latency to approximate a managed or remote data store.
+
+These measurements reflect one specific test environment and do not guarantee equivalent results
+in your environment. Use the test methodology to reproduce or extend the tests for your
+infrastructure and workload.
+
+== Prerequisites
+
+* You have installed {registry} as described in {installing-the-registry-openshift}.
+* You have reviewed xref:getting-started/assembly-registry-high-availability.adoc[].
+
+[role="_additional-resources"]
+.Additional resources
+* <<registry-sizing-methodology_{context}>>
+
+//INCLUDES
+
+include::../modules/registry-sizing-methodology.adoc[leveloffset=+1]
+include::../modules/registry-sizing-sql-storage.adoc[leveloffset=+1]
+include::../modules/registry-sizing-kafkasql-storage.adoc[leveloffset=+1]
+include::../modules/registry-sizing-recommendations.adoc[leveloffset=+1]

@@ -1,0 +1,26 @@
+[id="ref-usage-telemetry-get-deprecation-readiness_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Get deprecation readiness
+
+[role="_abstract"]
+Returns which consumers are actively using a specific version and whether it is safe to deprecate.
+
+`GET /admin/usage/artifacts/{groupId}/{artifactId}/versions/{version}/deprecation-readiness`
+
+[source,json]
+----
+{
+  "groupId": "default",
+  "artifactId": "UserEvent",
+  "version": "1.0.0",
+  "activeConsumers": [
+    {
+      "clientId": "analytics",
+      "lastFetched": 1714400000000,
+      "fetchCount": 102
+    }
+  ],
+  "safeToDeprecate": false
+}
+----
+

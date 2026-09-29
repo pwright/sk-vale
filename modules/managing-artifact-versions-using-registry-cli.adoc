@@ -1,0 +1,55 @@
+[id="managing-artifact-versions-using-registry-cli_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Managing artifact versions using the CLI
+
+[role="_abstract"]
+You can use the CLI to list, create, get, update, and delete the versions of an artifact, including draft versions. When you omit the artifact option, the CLI uses the default artifact of the current context.
+
+.Prerequisites
+* You have configured at least one CLI context.
+* The artifact exists in the registry.
+
+.Procedure
+. List the versions of an artifact:
++
+[source,bash]
+----
+$ acr artifact version --group my-schemas --artifact my-artifact
+----
+. Create a new version from a file:
++
+[source,bash]
+----
+$ acr artifact version create 2.0.0 --file schema-v2.avsc --group my-schemas --artifact my-artifact
+----
++
+If you omit the version identifier, the server generates one. To create the version in the `DRAFT` state, use the `--draft` option.
+. Get a version. The version expression is an explicit version identifier, such as `2.0.0`, or a branch expression, such as `branch=latest`:
++
+[source,bash]
+----
+$ acr artifact version get 2.0.0 --group my-schemas --artifact my-artifact
+----
++
+To retrieve the version content instead of the metadata, use the `--content` (`-c`) option.
+. Update the metadata or state of a version:
++
+[source,bash]
+----
+$ acr artifact version update 2.0.0 --group my-schemas --artifact my-artifact --state DEPRECATED
+----
++
+The `--state` option accepts the following values: `ENABLED`, `DISABLED`, `DEPRECATED`, and `DRAFT`. To update the content of a version, use the `--file` option. Content updates are only possible for versions in the `DRAFT` state.
+. Delete a version:
++
+[source,bash]
+----
+$ acr artifact version delete 2.0.0 --group my-schemas --artifact my-artifact
+----
++
+[NOTE]
+====
+You must configure {registry} with `apicurio.rest.deletion.artifact-version.enabled=true` to allow version deletions.
+====
+
+

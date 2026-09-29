@@ -1,0 +1,47 @@
+[id="data-contracts-field-tags-formats_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Supported schema formats
+
+[role="_abstract"]
+Tag extractors read field-level tags from schema content for Avro, JSON Schema, and Protobuf.
+
+Avro:: Tags are extracted from `tags` and `confluent:tags` field properties.
++
+[source,json]
+----
+{
+  "type": "record",
+  "name": "User",
+  "fields": [{
+    "name": "email",
+    "type": "string",
+    "tags": ["PII", "EMAIL"]
+  }]
+}
+----
+
+JSON Schema:: Tags are extracted from `x-tags` and `x-confluent-tags` extension properties. Supports nested objects, arrays, `additionalProperties`, and `allOf`/`oneOf`/`anyOf` compositions.
++
+[source,json]
+----
+{
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "x-tags": ["PII", "EMAIL"]
+    }
+  }
+}
+----
+
+Protobuf:: Tags are extracted from documentation comments using the `@tag:` annotation. Also supports Confluent `confluent.field_meta` field options.
++
+[source,protobuf]
+----
+message User {
+  // @tag:PII,EMAIL
+  string email = 1;
+}
+----
+

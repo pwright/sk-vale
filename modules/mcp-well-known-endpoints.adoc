@@ -1,0 +1,77 @@
+[id="mcp-well-known-endpoints_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Well-known endpoints
+
+[role="_abstract"]
+You can search for and retrieve MCP tool definitions by using the following well-known endpoints.
+
+The `GET /.well-known/mcp-tools` endpoint searches for registered MCP tool definitions with filtering support. It accepts the following query parameters:
+
+[cols="1,1,3"]
+|===
+|Parameter |Type |Description
+
+|`name`
+|string
+|Filter by tool name (partial match)
+
+|`parameter`
+|string (repeatable)
+|Filter by input parameter name
+
+|`offset`
+|integer
+|Pagination offset (default: 0)
+
+|`limit`
+|integer
+|Pagination limit (default: 20)
+|===
+
+.Example request
+[source,bash]
+----
+curl "http://localhost:8080/.well-known/mcp-tools?parameter=location"
+----
+
+.Response: `McpToolSearchResults`
+
+[source,json]
+----
+{
+  "count": 1,
+  "tools": [
+    {
+      "groupId": "mcp-tools",
+      "artifactId": "weather-tool",
+      "name": "get_weather",
+      "title": "Weather Information Provider",
+      "description": "Get current weather information",
+      "owner": "admin",
+      "createdOn": 1700000000000,
+      "parameters": ["location"]
+    }
+  ]
+}
+----
+
+The `GET /.well-known/mcp-tools/{groupId}/{artifactId}` endpoint retrieves a specific registered MCP tool definition. It accepts the following path parameters:
+
+`groupId`:: The group containing the tool definition
+`artifactId`:: The artifact ID of the tool definition
+
+You can optionally specify the following query parameter:
+
+`version` (optional):: Specific version (defaults to latest)
+
+The response is the MCP tool definition JSON document.
+
+The `GET /.well-known/schemas/mcp-tool/v1` endpoint retrieves the JSON Schema for MCP tool definitions. You can use the schema for IDE autocompletion and validation.
+
+.Example
+[source,bash]
+----
+curl "http://localhost:8080/.well-known/schemas/mcp-tool/v1"
+----
+
+// proc-creating-mcp-tool-artifact

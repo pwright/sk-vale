@@ -1,0 +1,12 @@
+[id="service-registry-concepts-artifactid_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Strategies to return a reference to an artifact
+
+[role="_abstract"]
+{registry} provides the following strategies to return a reference to an artifact based on an implementation of `ArtifactReferenceResolverStrategy`:
+
+`RecordIdStrategy`:: Avro-specific strategy that uses the full name of the schema.
+`TopicRecordIdStrategy`:: Avro-specific strategy that uses the topic name and the full name of the schema.
+`TopicIdStrategy`:: Default strategy that uses the topic name and `key` or `value` suffix.
+`SimpleTopicIdStrategy`:: Simple strategy that only uses the topic name.
+

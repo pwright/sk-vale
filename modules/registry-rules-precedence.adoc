@@ -1,0 +1,13 @@
+[id="registry-rules-precedence_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Order of precedence of rules
+
+[role="_abstract"]
+The order of precedence for artifact-specific and global rules is as follows:
+
+* Artifact-specific rules have the highest priority
+* Group-specific rules have the next highest priority
+* Global rules have the lowest priority
+
+NOTE: If a rule is configured at a higher level (e.g. at the global level), but you want that rule to be disabled at a lower level, you must configure the same rule (so that it overrides it) at the lower level and set its rules value to `NONE`.
+

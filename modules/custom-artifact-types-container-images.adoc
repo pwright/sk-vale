@@ -1,0 +1,41 @@
+[id="custom-artifact-types-container-images_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Container images for custom artifact types
+
+[role="_abstract"]
+The standard {registry} container image supports webhook providers.
+The `VERSION-mutable` image variant also supports Java providers by using Quarkus re-augmentation, which updates the application class path to include additional Java archive (JAR) files.
+
+The standard image uses Quarkus _fast-jar_ packaging, which indexes the class path when the image is built.
+The application cannot load a JAR file that you copy into the image after that indexing step.
+Each {registry} release also provides a `VERSION-mutable` image with Quarkus _mutable-jar_ packaging for re-augmentation.
+
+.Container image comparison
+[cols="1,1,1",options="header"]
+|===
+|Characteristic |Standard image |`-mutable` image
+
+|Packaging
+|Quarkus fast-jar (`/deployments`)
+|Quarkus mutable-jar (`/deployments/quarkus-app`)
+
+|Size
+|Baseline
+|Approximately 47 MB (150 JAR files) of additional files in `lib/deployment`, or roughly 100 MB of image size with the current image layering.
+A derived image adds only a few MB.
+The `build.sh --prune` command removes the deployment JAR files from the file system but does not shrink the layers inherited from the base image.
+
+|Java providers
+|Not supported; webhook providers are available
+|Supported by `/deployments/build.sh`
+
+|Runtime behavior
+|Baseline
+|Same runtime behavior and startup time as the standard image
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://quarkus.io/guides/reaugmentation[Quarkus re-augmentation guide]
+
+// proc-custom-artifact-types-mutable-image

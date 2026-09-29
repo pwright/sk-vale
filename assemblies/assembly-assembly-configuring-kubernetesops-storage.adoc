@@ -1,0 +1,20 @@
+[id="assembly-configuring-kubernetesops-storage_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Configuring {registry} with KubernetesOps storage
+
+[role="_abstract"]
+Configure {registry} to use Kubernetes ConfigMaps as the data source for registry artifacts. KubernetesOps storage enables Kubernetes-native management of schemas and APIs using standard tools like `kubectl`, ArgoCD, or Flux.
+
+== Prerequisites
+
+* You have installed {registry} on Kubernetes or OpenShift.
+* You have access to create ConfigMaps in your cluster. Deployments without the {operator} also require access to create RBAC resources.
+
+//INCLUDES
+
+include::../modules/kubernetesops-overview.adoc[leveloffset=+1]
+include::../modules/configuring-kubernetesops-storage.adoc[leveloffset=+1]
+include::../modules/kubernetesops-configmap-format.adoc[leveloffset=+1]
+include::../modules/kubernetesops-field-reference.adoc[leveloffset=+1]
+include::../modules/kubernetesops-rbac-requirements.adoc[leveloffset=+1]
+include::../modules/kubernetesops-limitations.adoc[leveloffset=+1]

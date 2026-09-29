@@ -1,0 +1,36 @@
+[id="changing-version-state-using-console_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Changing an artifact version state using the {registry} web console
+
+[role="_abstract"]
+You can change an artifact version's state to publish a draft, deprecate a version, or disable access to its content.
+
+.Prerequisites
+* You have access to the web console of a running {registry} instance, and the web console is not in read-only mode.
+* If authentication is enabled, you have the developer or administrator role. If artifact owner-only authorization is enabled, you are the owner of the artifact or an administrator.
+* You have confirmed that applications no longer need to retrieve the version's content if you plan to disable it.
+
+.Procedure
+. On the *Explore* tab, open the group that contains the artifact.
+. Click the artifact to open its details.
+. On the *Overview* tab, click the version in the *Versions in artifact* list.
+. On the version's *Overview* tab, click *Change* next to *Status*.
+. In the *Change version state* dialog, select a value from the *New state* list.
++
+For a draft version, the only available value is *Enabled*. For other versions, select one of the available *Enabled*, *Disabled*, or *Deprecated* values.
++
+Alternatively, you can publish a draft by selecting *Finalize draft* from the Action menu (three vertical dots) in the version page header, or edit its content by clicking *Edit draft*.
+. Click *Change state*.
++
+When you publish a draft, {registry} applies the configured content rules. If the content violates a rule, the web console displays the *Invalid Content Error* dialog with the rule violations, and the version remains a draft.
+
+.Verification
+* Verify that *Status* on the version's *Overview* tab displays the selected state. In the *Versions in artifact* list, the version displays a *Deprecated* or *Disabled* badge, or no badge if you enabled the version.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:artifact-version-states-using-console_{context}[]
+* xref:configuring-rules-using-console_{context}[]
+* xref:getting-started/assembly-schema-lifecycle-best-practices.adoc[]
+
+

@@ -1,0 +1,75 @@
+[id="registry-flink-catalog-schema-types_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Supported schema types
+
+[role="_abstract"]
+The {registry} Flink Catalog supports automatic conversion of the following schema types to Flink's type system.
+
+.Supported schema types
+[.table-expandable,width="100%",cols="3,3,5",options="header"]
+|===
+|Schema Type
+|Artifact Type
+|Description
+|Apache Avro
+|`AVRO`
+|Full support for Avro schemas. Avro types are mapped to corresponding Flink types.
+|JSON Schema
+|`JSON`
+|Support for JSON Schema. JSON Schema types are mapped to Flink types.
+|===
+
+.Avro to Flink type mapping
+[.table-expandable,width="100%",cols="4,4",options="header"]
+|===
+|Avro Type
+|Flink Type
+|`null`
+|`NULL`
+|`boolean`
+|`BOOLEAN`
+|`int`
+|`INT`
+|`long`
+|`BIGINT`
+|`float`
+|`FLOAT`
+|`double`
+|`DOUBLE`
+|`bytes`
+|`BYTES`
+|`string`
+|`STRING`
+|`array`
+|`ARRAY<...>`
+|`map`
+|`MAP<STRING, ...>`
+|`record`
+|`ROW<...>`
+|===
+
+.JSON Schema to Flink type mapping
+[.table-expandable,width="100%",cols="4,4",options="header"]
+|===
+|JSON Schema Type
+|Flink Type
+|`null`
+|`NULL`
+|`boolean`
+|`BOOLEAN`
+|`integer`
+|`BIGINT`
+|`number`
+|`DOUBLE`
+|`string`
+|`STRING`
+|`array`
+|`ARRAY<...>`
+|`object`
+|`ROW<...>`
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/utils/flink[Flink Catalog source code]
+* {registry-overview}

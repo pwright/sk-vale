@@ -1,0 +1,26 @@
+[id="artifact-versions_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Artifact versions
+
+[role="_abstract"]
+Every artifact is composed of zero or more _artifact version_s. Only artifact versions have actual content (as well as metadata). These versions represent the evolution of the content of an artifact, and are immutable. You can think of an Artifact as an ordered sequence of Versions, typically with the most recent version representing the "current" schema or API design content.
+
+Artifact Versions have metadata, both generated and editable. Standard metadata for an artifact version includes (but may not be limited to) the following generated or immutable properties:
+
+* groupId
+* artifactId
+* version
+* globalId
+* contentId
+* owner
+* createdOn
+* modifiedBy
+* modifiedOn
+
+And the following editable properties:
+
+* name
+* description
+* labels
+* state
+

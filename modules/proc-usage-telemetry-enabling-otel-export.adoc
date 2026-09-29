@@ -1,0 +1,17 @@
+[id="proc-usage-telemetry-enabling-otel-export_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Enabling OTel export
+
+[role="_abstract"]
+You can export usage classification metrics by enabling OpenTelemetry.
+
+.Procedure
+* Set the following properties:
++
+[source,properties]
+----
+quarkus.otel.sdk.disabled=false
+quarkus.otel.exporter.otlp.endpoint=http://otel-collector:4317
+quarkus.otel.metrics.enabled=true
+----
+

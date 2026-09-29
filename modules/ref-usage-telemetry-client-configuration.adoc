@@ -1,0 +1,17 @@
+[id="ref-usage-telemetry-client-configuration_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Client configuration
+
+[role="_abstract"]
+The SerDes client exposes the following property to configure usage telemetry reporting.
+
+[cols="3,1,1,4"]
+|===
+|Property |Type |Default |Description
+
+|`apicurio.registry.usage-telemetry.client-id`
+|string
+|_(empty)_
+|Identifier for this client application. When set, the SerDes SDK sends `X-Registry-Client-Id` and `X-Registry-Operation` headers on schema fetch requests. When empty (default), no headers are sent and the client is not tracked. Must contain only letters, digits, dots, hyphens, and underscores.
+|===
+

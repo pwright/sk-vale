@@ -1,0 +1,23 @@
+[id="intro-to-the-registry_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Introduction to {registry}
+
+[role="_abstract"]
+{registry} is a datastore for sharing event schemas and API designs across event-driven and API architectures, with support for a range of artifact types, storage options, and client tooling.
+
+// Metadata created by nebel
+
+include::../modules/registry-overview.adoc[leveloffset=+1]
+include::../modules/registry-capabilities.adoc[leveloffset=+1]
+include::../modules/registry-artifacts.adoc[leveloffset=+1]
+include::../modules/artifact-versions.adoc[leveloffset=+1]
+include::../modules/artifact-groups.adoc[leveloffset=+1]
+include::../modules/artifact-references.adoc[leveloffset=+1]
+include::../modules/registry-web-console.adoc[leveloffset=+1]
+include::../modules/registry-rest-api.adoc[leveloffset=+1]
+include::../modules/rest-api-compatibility.adoc[leveloffset=+1]
+include::../modules/registry-storage.adoc[leveloffset=+1]
+include::../modules/client-serde.adoc[leveloffset=+1]
+include::../modules/kafka-connect.adoc[leveloffset=+1]
+include::../modules/registry-demo.adoc[leveloffset=+1]
+include::../modules/registry-distros.adoc[leveloffset=+1]

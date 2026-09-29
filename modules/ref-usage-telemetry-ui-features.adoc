@@ -1,0 +1,17 @@
+[id="ref-usage-telemetry-ui-features_{context}"]
+:_mod-docs-content-type: REFERENCE
+= UI features
+
+[role="_abstract"]
+When usage telemetry is enabled, the registry UI displays the following elements.
+
+Dashboard widget:: Shows Active/Stale/Dead counts with colored labels (green/orange/red).
+Version badges:: Each version in the artifact versions table shows its usage classification badge.
+Usage tab:: The artifact detail page has a "Usage" tab with the following panels:
++
+* Consumer version heatmap table with color-coded fetch counts.
+* Version drift alerts for consumers using outdated versions.
+* Deprecation readiness panel (click a version column header to check).
+
+SUNSET badge:: Versions in the `SUNSET` state display a purple badge.
+

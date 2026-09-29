@@ -1,0 +1,33 @@
+[id="exporting-importing-registry-data-using-registry-cli_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Exporting and importing data using the CLI
+
+[role="_abstract"]
+You can use the CLI to export {registry} data to a .zip file and to import previously exported data into a registry instance.
+
+.Prerequisites
+* You have configured at least one CLI context.
+
+.Procedure
+. Export all registry data to a .zip file:
++
+[source,bash]
+----
+$ acr admin export --file registry-export.zip
+----
+. Optional: Export the data of a single group by using the `--group` option:
++
+[source,bash]
+----
+$ acr admin export --file group-export.zip --group my-schemas
+----
+. Import registry data from a .zip file:
++
+[source,bash]
+----
+$ acr admin import --file registry-export.zip
+----
++
+Optional: To import into a registry that already contains data, use the `--no-require-empty` option. To let the server generate new global and content identifiers instead of preserving the exported ones, use the `--no-preserve-ids` option.
+
+

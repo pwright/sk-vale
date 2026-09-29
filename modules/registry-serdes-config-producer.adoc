@@ -1,0 +1,35 @@
+[id="registry-serdes-config-producer_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Using a schema from a Kafka producer client
+
+[role="_abstract"]
+This procedure describes how to configure a Kafka producer client written in Java to use a schema from {registry}.
+
+.Prerequisites
+
+* {registry} is installed
+* The schema is registered with {registry}
+
+.Procedure
+
+. Configure the client with the URL of {registry}. For example:
++
+[source,java,subs="+quotes,attributes"]
+----
+String registryUrl = "https://registry.example.com/apis/registry/v3";
+Properties props = new Properties();
+props.putIfAbsent(SerdeConfig.REGISTRY_URL, registryUrl);
+----
+
+. Configure the client with the serializer, and the strategy to look up the schema in {registry}. For example:
++
+[source,java,subs="+quotes,attributes"]
+----
+props.put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "my-cluster-kafka-bootstrap:9092");
+props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, AvroKafkaSerializer.class.getName());
+props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, AvroKafkaSerializer.class.getName());
+props.put(SerdeConfig.FIND_LATEST_ARTIFACT, Boolean.TRUE);
+----
++
+The `KEY_SERIALIZER_CLASS_CONFIG` and `VALUE_SERIALIZER_CLASS_CONFIG` properties set the {registry} serializer, here `AvroKafkaSerializer`, for the message key and value. The `FIND_LATEST_ARTIFACT` property sets the lookup strategy used to find the global ID for the schema.
+

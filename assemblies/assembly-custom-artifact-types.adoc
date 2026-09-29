@@ -1,0 +1,13 @@
+[id="custom-artifact-types_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Configuring custom artifact types
+
+[role="_abstract"]
+You can configure {registry} with custom artifact types at deployment time, in addition to the built-in types.
+Webhooks or Java classes provide content detection, validation, compatibility checking, canonicalization, and dereferencing for each custom type.
+You can add Java providers to a derived container image without rebuilding {registry}.
+
+// ref-custom-artifact-types-config
+include::../modules/custom-artifact-types-config.adoc[leveloffset=+1]
+include::../modules/custom-artifact-types-container-images.adoc[leveloffset=+1]
+include::../modules/custom-artifact-types-mutable-image.adoc[leveloffset=+1]

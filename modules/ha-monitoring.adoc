@@ -1,0 +1,17 @@
+[id="ha-monitoring_{context}"]
+:_mod-docs-content-type: REFERENCE
+= High availability monitoring
+
+[role="_abstract"]
+{registry} exposes Prometheus metrics for monitoring application health and performance.
+
+Metrics are enabled by default. Access the metrics endpoint at `/metrics` on the management port (default 9000).
+
+*Configure alerts for:*
+
+* Pod restarts or crash loops
+* High error rates (5xx responses)
+* Storage operation timeouts
+* Database connection pool exhaustion
+* Kafka consumer lag (for KafkaSQL storage)
+

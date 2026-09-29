@@ -1,0 +1,76 @@
+[id="registry-distros_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} available distributions
+
+[role="_abstract"]
+{registry} provides the following components as part of its distribution.
+
+ifdef::apicurio-registry[]
+
+.{registry} images
+[%header,cols="2,4"]
+|===
+|Component
+|Container Image
+|Back-end
+|https://hub.docker.com/r/apicurio/apicurio-registry
+|User Interface
+|https://hub.docker.com/r/apicurio/apicurio-registry-ui
+|{operator}
+|https://hub.docker.com/r/apicurio/apicurio-registry-operator
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/Apicurio/apicurio-registry[Building from source code and running Docker images]
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/operator[Using the Operator to deploy]
+
+endif::[]
+
+ifdef::rh-service-registry[]
+
+.{operator} and images
+[%header,cols="3,3,2"]
+|===
+|Distribution
+|Location
+|Release category
+|{operator}
+|OpenShift web console under *Operators* → *OperatorHub*
+|General Availability
+|Container image for {operator}
+|link:{download-url-registry-container-catalog}[{org-name} Ecosystem Catalog]
+|General Availability
+|Container image for Apicurio Registry (Back End)
+|link:{download-url-registry-container-catalog}[{org-name} Ecosystem Catalog]
+|General Availability
+|Container image for Apicurio Registry (User Interface)
+|link:{download-url-registry-container-catalog}[{org-name} Ecosystem Catalog]
+|General Availability
+|===
+
+
+.{registry} zip downloads
+[%header,cols="3,3,2"]
+|===
+|Distribution
+|Location
+|Release category
+|Example custom resource definitions for installation
+|link:{download-url-registry-distribution}[{org-name} Software Downloads]
+|General Availability
+|Maven repository
+|link:{download-url-registry-distribution}[{org-name} Software Downloads]
+|General Availability
+|Source code
+|link:{download-url-registry-distribution}[{org-name} Software Downloads]
+|General Availability
+|Kafka Connect converters
+|link:{download-url-registry-distribution}[{org-name} Software Downloads]
+|General Availability
+|===
+
+NOTE: You must have a subscription for {prodnamefull} and be logged into the {org-name} Customer Portal to access the available {registry} distributions.
+endif::[]
+
+:leveloffset!:

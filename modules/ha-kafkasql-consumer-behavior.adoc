@@ -1,0 +1,27 @@
+[id="ha-kafkasql-consumer-behavior_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Consumer behavior with multiple replicas
+
+[role="_abstract"]
+When running multiple {registry} replicas with KafkaSQL storage, each replica independently consumes the full
+Kafka journal topic to build its own local state.
+
+* Each replica uses a unique consumer group ID (automatically generated using UUID)
+* Each replica independently consumes all messages from the journal topic
+* There is no consumer group rebalancing between replicas
+* All replicas build the same local state from the Kafka topic ({registry} replays data into an embedded H2 database)
+
+This design ensures that:
+
+* New replicas can be added without affecting existing replicas
+* Pod restarts only affect the restarting pod, not others
+* Each replica maintains a consistent view of the data
+
+WARNING: Do not configure a fixed Kafka consumer group ID (for example, by setting
+`APICURIO_KAFKASQL_CONSUMER_GROUP_ID`). KafkaSQL uses an embedded H2 database that is empty on every
+restart, so the full journal topic must be replayed from the beginning each time. A fixed consumer
+group ID causes Kafka to resume from previously committed offsets, skipping the journal replay and
+resulting in the registry appearing empty after a restart. If you need a recognizable consumer group
+name for monitoring, use the `APICURIO_KAFKASQL_CONSUMER_GROUP_PREFIX` environment variable instead,
+which sets a prefix while still generating a unique group ID on each startup.
+

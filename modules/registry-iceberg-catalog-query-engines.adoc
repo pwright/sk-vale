@@ -1,0 +1,8 @@
+[id="registry-iceberg-catalog-query-engines_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Query engine configuration for {registry}
+
+[role="_abstract"]
+You can configure popular query engines that support the Iceberg REST Catalog specification to use {registry} as their catalog.
+
+// ref-registry-iceberg-catalog-spark-config

@@ -1,0 +1,25 @@
+[id="ha-monitoring-key-metrics_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Key metrics to monitor
+
+[role="_abstract"]
+Monitor the following categories of metrics for high availability deployments of {registry}.
+
+* *REST API metrics:*
+** `http_server_requests_seconds` - Request latency
+** `http_server_active_requests` - Concurrent requests
+** `http_server_requests_total` - Total request count
+
+* *Storage metrics:*
+** `apicurio_storage_operation_seconds` - Storage operation latency
+** `apicurio_storage_concurrent_operations` - Concurrent storage operations
+** `apicurio_storage_operation_total` - Total storage operations
+
+* *Health check metrics:*
+** Readiness probe: `/health/ready` (on management port 9000)
+** Liveness probe: `/health/live` (on management port 9000)
+
+* *JVM metrics:*
+** `jvm_memory_used_bytes` - Memory usage
+** `jvm_gc_pause_seconds` - Garbage collection pauses
+

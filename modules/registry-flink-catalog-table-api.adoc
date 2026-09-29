@@ -1,0 +1,59 @@
+[id="registry-flink-catalog-table-api_{context}"]
+:_mod-docs-content-type: REFERENCE
+= The {registry} Flink Catalog in the Flink Table API
+
+[role="_abstract"]
+You can also use the {registry} Flink Catalog programmatically with the Flink Table API in Java.
+
+.Registering the catalog using Java Table API
+[source,java,subs="+quotes,attributes"]
+----
+import io.apicurio.registry.flink.CatalogConfig;
+import io.apicurio.registry.flink.ApicurioCatalog;
+import org.apache.flink.table.api.EnvironmentSettings;
+import org.apache.flink.table.api.TableEnvironment;
+
+// Create Table Environment
+EnvironmentSettings settings = EnvironmentSettings.newInstance()
+    .inStreamingMode()
+    .build();
+TableEnvironment tableEnv = TableEnvironment.create(settings);
+
+// Configure the catalog
+CatalogConfig config = CatalogConfig.builder()
+    .name("apicurio")
+    .url("http://localhost:8080/apis/registry/v3")
+    .defaultDatabase("default")
+    .build();
+
+// Register the catalog
+ApicurioCatalog catalog = new ApicurioCatalog(config);
+tableEnv.registerCatalog("apicurio", catalog);
+tableEnv.useCatalog("apicurio");
+----
+
+.Example with OAuth2 authentication
+[source,java,subs="+quotes,attributes"]
+----
+CatalogConfig config = CatalogConfig.builder()
+    .name("apicurio")
+    .url("http://localhost:8080/apis/registry/v3")
+    .authType("oauth2")
+    .tokenEndpoint("http://keycloak:8080/realms/registry/protocol/openid-connect/token")
+    .clientId("registry-client")
+    .clientSecret("my-secret")
+    .build();
+----
+
+.Example with basic authentication
+[source,java,subs="+quotes,attributes"]
+----
+CatalogConfig config = CatalogConfig.builder()
+    .name("apicurio")
+    .url("http://localhost:8080/apis/registry/v3")
+    .authType("basic")
+    .username("my-user")
+    .password("my-password")
+    .build();
+----
+

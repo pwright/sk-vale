@@ -1,0 +1,23 @@
+[id="ref-usage-telemetry-opentelemetry-metrics-export_{context}"]
+:_mod-docs-content-type: REFERENCE
+= OpenTelemetry metrics export
+
+[role="_abstract"]
+When OpenTelemetry is enabled (`quarkus.otel.sdk.disabled=false`), usage classification counts are exported as metrics.
+
+[cols="2,3"]
+|===
+|Metric |Description
+
+|`apicurio.usage.schemas.active`
+|Number of schema versions classified as Active.
+
+|`apicurio.usage.schemas.stale`
+|Number of schema versions classified as Stale.
+
+|`apicurio.usage.schemas.dead`
+|Number of schema versions classified as Dead.
+|===
+
+These gauges are updated periodically (configured via `apicurio.usage.aggregation.every`). When OTel is disabled (the default), no overhead.
+

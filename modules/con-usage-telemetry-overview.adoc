@@ -1,0 +1,27 @@
+[id="con-usage-telemetry-overview_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Overview
+
+[role="_abstract"]
+Usage telemetry tracks which client applications fetch which schema versions, enabling governance decisions such as dead schema detection, version drift alerts, and deprecation readiness.
+
+Usage telemetry answers key governance questions:
+
+* **Is anyone actually using this schema?** Active/Stale/Dead classification based on actual fetch patterns.
+* **Who uses which version?** Consumer version heatmap showing adoption across client applications.
+* **Is it safe to deprecate this version?** Deprecation readiness reports listing affected consumers.
+* **Are consumers falling behind?** Version drift alerts when clients use outdated versions.
+
+Usage tracking is **server-side** and **zero-configuration for the client**. The registry records usage events automatically when it serves schema content. Clients opt in by setting an HTTP header that identifies the application:
+
+`X-Registry-Client-Id`:: Identifies the client application (for example, `payments-svc`). Must contain only letters, digits, dots, hyphens, and underscores. Maximum 256 characters.
+`X-Registry-Operation`:: Optional. The operation type: `SERIALIZE` or `DESERIALIZE`.
+
+If no `X-Registry-Client-Id` header is present, the request is not tracked.
+
+Both `globalId` and `contentId` based schema fetches are tracked. Clients configured with `IdOption.contentId` are fully supported.
+
+Referenced schemas (shared types, base schemas) automatically inherit liveness from the schemas that reference them. If `UserEvent v3` is Active and references `SharedTypes v1`, then `SharedTypes v1` is also considered Active.
+
+NOTE: Usage telemetry is an **experimental** feature. It requires `apicurio.features.experimental.enabled=true` in addition to the telemetry-specific configuration below.
+

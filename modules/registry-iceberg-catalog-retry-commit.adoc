@@ -1,0 +1,20 @@
+[id="registry-iceberg-catalog-retry-commit_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Retrying a failed commit
+
+[role="_abstract"]
+When a table commit fails with a `409 Conflict` response, follow this procedure to reload the current table metadata and retry the commit.
+
+.Prerequisites
+* A commit request that failed with a `409 Conflict` response.
+
+.Procedure
+. Reload the current table metadata by using the `LoadTable` endpoint.
+. Revalidate the intended changes against the new metadata.
+. Rebuild the commit request with updated requirements.
+. Retry the commit.
+
+.Results
+The commit request is resubmitted against the latest table metadata. Most Iceberg client libraries, such as the Apache Iceberg Java SDK, handle this retry loop automatically.
+
+// ref-registry-iceberg-catalog-error-handling

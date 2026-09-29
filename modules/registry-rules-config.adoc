@@ -1,0 +1,16 @@
+[id="registry-rules-config_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Content rule configuration
+
+[role="_abstract"]
+Administrators can configure {registry} global rules, group-specific rules, and artifact-specific rules. Developers can configure group-specific and artifact-specific rules only.
+
+{registry} applies the rules configured for the specific artifact. If no rules are configured at that level, {registry} applies the group-specific rules. If no rules are configured at the group level, then {registry} applies the globally configured rules. If no global rules are configured, then no rules are applied.
+
+You can configure group-specific and artifact-specific rules using the {registry} web console or REST API.
+
+[role="_additional-resources"]
+.Additional resources
+* {managing-registry-artifacts-ui}
+* link:{attachmentsdir}/registry-rest-api.htm[Apicurio Registry REST API documentation]
+
