@@ -187,7 +187,7 @@ def rewrite_internal_html_links(content, source_html_path, page_ids, fragment_id
             warn(f"{source_html_path.as_posix()}: unable to resolve internal link target {target}")
             return match.group(0)
 
-        return f"xref:{target_id}{attrs}"
+        return f"xref:{target_id}_{{context}}{attrs}"
 
     return HTML_LINK_PATTERN.sub(replace_link, content)
 
@@ -258,14 +258,17 @@ def write_root_index(index_file, output_dir, assembly_paths, title_override=None
     filename = output_name or "index.adoc"
     root_index = output_dir / filename
 
+    context_value = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
+
     lines = [
         ':_mod-docs-content-type: MAP\n',
         ':doctype: book\n',
         ':toc: left\n',
         ':toclevels: 3\n',
         ':sectnums:\n',
+        f':context: {context_value}\n',
         '\n',
-        '[id="generated-index"]\n',
+        '[id="generated-index_{context}"]\n',
         f'= {title}\n',
         '\n',
     ]

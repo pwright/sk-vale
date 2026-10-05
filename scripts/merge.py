@@ -387,7 +387,10 @@ def normalize_dita_section_titles(section_lines):
         stripped = line.strip()
         for title in DITA_SECTION_TITLES:
             if stripped == f"**{title}**":
-                body[i] = line.replace(f"**{title}**", f".{title}", 1)
+                if title == "Additional resources":
+                    body[i] = line.replace(f"**{title}**", f'[role="_additional-resources"]\n.{title}', 1)
+                else:
+                    body[i] = line.replace(f"**{title}**", f".{title}", 1)
                 break
 
     return body
@@ -520,6 +523,9 @@ def convert_blockquote_admonitions(content):
 ADOC_BARE_LANGUAGE_PATTERN = re.compile(
     r"^\[,([\w+-]+)\]$", re.MULTILINE
 )
+JINJA_ATTRIBUTE_PREFIXES = ("skupper_",)
+JINJA_ATTRIBUTE_PATTERN = re.compile(r"\{\{(\w+)\}\}")
+
 
 def normalize_adoc_ids(content):
     """Rewrites kramdoc-style IDs and passthrough HTML anchors as AsciiDoc IDs."""
@@ -528,6 +534,11 @@ def normalize_adoc_ids(content):
     content = ADOC_ID_HEADING_GAP_PATTERN.sub(r"\1\n\2", content)
     content = convert_blockquote_admonitions(content)
     content = ADOC_BARE_LANGUAGE_PATTERN.sub(r"[source,\1]", content)
+    content = JINJA_ATTRIBUTE_PATTERN.sub(
+        lambda m: f"{{{m.group(1)}}}" if m.group(1).startswith(JINJA_ATTRIBUTE_PREFIXES) else m.group(0),
+        content,
+    )
+    content = content.replace("Skupper", "{skupper-name}")
     return content
 
 def convert_adoc_ids(input_file, output_file):

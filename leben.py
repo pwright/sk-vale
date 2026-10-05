@@ -98,7 +98,7 @@ class ModuleFactory:
         if not is_assembly:
             body_lines = self._flatten_nested_sections(body_lines)
         with open(path, 'w') as f:
-            f.write(f"[id=\"{mid}\"]\n")
+            f.write(f'[id="{mid}_{{context}}"]\n')
             f.writelines(leading_attributes)
             f.write(f"= {title}\n\n")
             f.writelines(body_lines)

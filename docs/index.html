@@ -487,8 +487,8 @@ p{margin-bottom:1.25rem}
 <li><a href="#kube-token-cli">10.1. Link sites using a token</a></li>
 <li><a href="#kube-link-cli">10.2. Link sites using a <code>link</code> resource</a></li>
 <li><a href="#kube-proxy-cli">10.3. Link sites through an HTTP proxy</a></li>
-<li><a href="#kube-custom-certs-cli">10.4. Use custom certificates</a></li>
-<li><a href="#kube-link-cost-cli">10.5. Specifying link cost</a></li>
+<li><a href="#kube-custom-certs-cli">10.4. Custom certificates and the Skupper CLI</a></li>
+<li><a href="#kube-link-cost-cli">10.5. Specifying link cost using the CLI</a></li>
 </ul>
 </li>
 <li><a href="#kube-exposing-services-cli">11. Exposing services on the application network using the CLI</a>
@@ -502,14 +502,14 @@ p{margin-bottom:1.25rem}
 <ul class="sectlevel2">
 <li><a href="#kube-creating-simple-site-yaml">13.1. Create a simple site on Kubernetes using YAML</a></li>
 <li><a href="#kube-ha-yaml">13.2. Create a high availability site using YAML</a></li>
-<li><a href="#kube-site-resources-yaml">13.3. Set site resources</a></li>
+<li><a href="#kube-site-resources-yaml">13.3. Set site resources using YAML</a></li>
 </ul>
 </li>
 <li><a href="#kube-yaml-site-linking">14. Linking sites on Kubernetes using YAML</a>
 <ul class="sectlevel2">
 <li><a href="#kube-access-yaml">14.1. Link sites using <code>AccessGrant</code> and <code>AccessToken</code> resources</a></li>
 <li><a href="#kube-link-cost-yaml">14.2. Specifying link cost using YAML</a></li>
-<li><a href="#kube-yaml-custom-certs-info">14.3. Use custom certificates</a></li>
+<li><a href="#kube-yaml-custom-certs-info">14.3. Custom certificates and YAML</a></li>
 </ul>
 </li>
 <li><a href="#kube-yaml-custom-certs">15. Linking sites using custom certificates</a>
@@ -538,7 +538,7 @@ p{margin-bottom:1.25rem}
 <li><a href="#system-linking-cli">19. Linking sites on local systems using the Skupper CLI</a>
 <ul class="sectlevel2">
 <li><a href="#system-token-cli">19.1. Link to Kubernetes sites using a token</a></li>
-<li><a href="#system-link-cli">19.2. Link sites using a <code>link</code> resource</a></li>
+<li><a href="#system-link-cli">19.2. Link sites using a <code>link</code> resource and the CLI</a></li>
 </ul>
 </li>
 <li><a href="#system-exposing-services-cli">20. Exposing services on the application network using the CLI</a>
@@ -555,7 +555,7 @@ p{margin-bottom:1.25rem}
 </li>
 <li><a href="#system-yaml-site-linking">23. Linking sites on local systems using YAML</a>
 <ul class="sectlevel2">
-<li><a href="#system-link-yaml">23.1. Link sites using a <code>link</code> resource</a></li>
+<li><a href="#system-link-yaml">23.1. Link sites using a <code>link</code> resource and YAML</a></li>
 </ul>
 </li>
 <li><a href="#system-yaml-service-exposure">24. Exposing services on the application network using YAML</a>
@@ -2126,7 +2126,7 @@ You can now expose services on the application network.</p>
 <div id="&quot;generated-index&quot;--include-30" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-custom-certs-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-custom-certs-cli">10.4. Use custom certificates</h3>
+<h3 id="kube-custom-certs-cli">10.4. Custom certificates and the Skupper CLI</h3>
 <div id="kube-custom-certs-cli--block-1" class="paragraph _abstract">
 <p>For custom certificate workflows, YAML provides more control over certificate management and PKI integration.
 You can still use the Skupper CLI to generate links for those workflows.</p>
@@ -2145,7 +2145,7 @@ You can still use the Skupper CLI to generate links for those workflows.</p>
 <div id="&quot;generated-index&quot;--include-31" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-cli-kube-link-cost-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-link-cost-cli">10.5. Specifying link cost</h3>
+<h3 id="kube-link-cost-cli">10.5. Specifying link cost using the CLI</h3>
 <div id="kube-link-cost-cli--block-1" class="paragraph _abstract">
 <p>Link cost is a configurable integer value that influences how Skupper routes
 traffic across links between sites.
@@ -2700,7 +2700,7 @@ spec:
 <div id="&quot;generated-index&quot;--include-39" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-site-resources-yaml.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-site-resources-yaml">13.3. Set site resources</h3>
+<h3 id="kube-site-resources-yaml">13.3. Set site resources using YAML</h3>
 <div id="kube-site-resources-yaml--block-1" class="paragraph _abstract">
 <p>You can configure the Skupper Router and Kube Adaptor components with minimum and maximum CPU and memory resources by defining sizing models using ConfigMaps.</p>
 </div>
@@ -3303,7 +3303,7 @@ For the failover pattern, set <code>spec.cost: 99999</code> on the backup site&#
 <div id="&quot;generated-index&quot;--include-43" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/kube-yaml-kube-yaml-custom-certs-info.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="kube-yaml-custom-certs-info">14.3. Use custom certificates</h3>
+<h3 id="kube-yaml-custom-certs-info">14.3. Custom certificates and YAML</h3>
 <div id="kube-yaml-custom-certs-info--block-1" class="paragraph _abstract">
 <p>You can link sites using custom TLS certificates instead of the default Skupper-generated certificates.
 Custom certificates allow integration with your existing PKI infrastructure.</p>
@@ -5069,7 +5069,7 @@ west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK</code></pre>
 <div id="&quot;generated-index&quot;--include-60" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-cli-system-link-cli.adoc</code></div>
 </div>
 <div class="sect2">
-<h3 id="system-link-cli">19.2. Link sites using a <code>link</code> resource</h3>
+<h3 id="system-link-cli">19.2. Link sites using a <code>link</code> resource and the CLI</h3>
 <div id="system-link-cli--block-1" class="paragraph _abstract">
 <p>An alternative approach to linking sites using tokens is to create a <code>link</code> resource YAML file using the CLI, and to apply that resource to another site.</p>
 </div>
@@ -5514,12 +5514,12 @@ Create a configured site by placing all the YAML files in a directory such as <c
 <hr>
 <div id="&quot;generated-index&quot;--include-68" class="include-boundary" style="margin-left: -40px;"><span style="color: red;">Start</span>: <code>../modules/system-yaml-system-link-yaml.adoc</code></div>
 <div class="sect2">
-<h3 id="system-link-yaml">23.1. Link sites using a <code>link</code> resource</h3>
+<h3 id="system-link-yaml">23.1. Link sites using a <code>link</code> resource and YAML</h3>
 <div id="system-link-yaml--block-1" class="paragraph _abstract">
 <p>Create a <code>link</code> resource YAML file and apply it to the local system site to establish a link.</p>
 </div>
 <div id="system-link-yaml--block-2" class="paragraph">
-<p>An alternative approach to linking sites using tokens is to create a <code>link</code> resource YAML file using the CLI, and to apply that resource to another site.</p>
+<p>An alternative approach to linking sites using tokens is to create a <code>link</code> resource YAML file, and to apply that resource to the local system site.</p>
 </div>
 <div id="system-link-yaml--block-3" class="ulist">
 <div class="title">Prerequisites</div>
@@ -8109,7 +8109,7 @@ docker logs &lt;username&gt;-skupper-controller | grep -i error</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-22 16:34:17 +0100
+Last updated 2026-09-28 09:16:27 +0100
 </div>
 </div>
 
