@@ -571,7 +571,7 @@ def normalize_adoc_ids(content):
         lambda m: f"{{{m.group(1)}}}" if m.group(1).startswith(JINJA_ATTRIBUTE_PREFIXES) else m.group(0),
         content,
     )
-    content = content.replace("Skupper", "{skupper-name}")
+    #content = content.replace("Skupper", "{skupper-name}")
     content = add_attribute_subs_to_code_blocks(content)
     return content
 
