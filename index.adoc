@@ -3,8 +3,9 @@
 :toc: left
 :toclevels: 3
 :sectnums:
+:context: using-service-interconnect
 
-[id="generated-index"]
+[id="generated-index_{context}"]
 = Using Service Interconnect
 
 include::assemblies/overview-assembly-skupper-overview.adoc[leveloffset=+1]

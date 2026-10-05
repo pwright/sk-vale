@@ -71,14 +71,26 @@ class ModuleFactory:
 
     @staticmethod
     def _flatten_nested_sections(lines):
-        """Convert === and deeper headings to bold paragraphs for DITA compatibility."""
+        """Convert === and deeper headings to bold paragraphs,
+        or to table titles when immediately followed by a table."""
         result = []
-        for line in lines:
-            m = RE_NESTED_SECTION.match(line)
+        i = 0
+        while i < len(lines):
+            m = RE_NESTED_SECTION.match(lines[i])
             if m:
-                result.append(f"\n**{m.group(2).strip()}**\n\n")
+                title = m.group(2).strip()
+                j = i + 1
+                while j < len(lines) and not lines[j].strip():
+                    j += 1
+                if j < len(lines) and lines[j].strip().startswith('|==='):
+                    result.append(f"\n.{title}\n")
+                    i = j
+                else:
+                    result.append(f"\n**{title}**\n\n")
+                    i += 1
             else:
-                result.append(line)
+                result.append(lines[i])
+                i += 1
         return result
 
     def name_of_file(self, mid, is_assembly=False):

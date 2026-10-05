@@ -526,6 +526,39 @@ ADOC_BARE_LANGUAGE_PATTERN = re.compile(
 JINJA_ATTRIBUTE_PREFIXES = ("skupper_",)
 JINJA_ATTRIBUTE_PATTERN = re.compile(r"\{\{(\w+)\}\}")
 
+ADOC_LISTING_DELIM = re.compile(r"^-{4,}[ \t]*$")
+ADOC_ATTR_LIST = re.compile(r"^\[.*\][ \t]*$")
+ADOC_ATTRIBUTE_REF = re.compile(r"\{[a-zA-Z][\w-]*\}")
+
+
+def add_attribute_subs_to_code_blocks(content):
+    """Add subs="attributes+" to listing blocks whose body contains attribute references."""
+    lines = content.split("\n")
+    result = list(lines)
+    in_block = False
+    block_start = -1
+    attr_list_idx = -1
+
+    for i, line in enumerate(lines):
+        if ADOC_LISTING_DELIM.match(line):
+            if not in_block:
+                in_block = True
+                block_start = i
+                attr_list_idx = -1
+                if i > 0 and ADOC_ATTR_LIST.match(lines[i - 1]):
+                    attr_list_idx = i - 1
+            else:
+                in_block = False
+                body = "\n".join(lines[block_start + 1 : i])
+                if ADOC_ATTRIBUTE_REF.search(body):
+                    if attr_list_idx >= 0:
+                        existing = result[attr_list_idx]
+                        if "subs=" not in existing:
+                            result[attr_list_idx] = existing[:-1] + ',subs="attributes+"]'
+                    else:
+                        result[block_start] = '[subs="attributes+"]\n' + result[block_start]
+    return "\n".join(result)
+
 
 def normalize_adoc_ids(content):
     """Rewrites kramdoc-style IDs and passthrough HTML anchors as AsciiDoc IDs."""
@@ -539,6 +572,7 @@ def normalize_adoc_ids(content):
         content,
     )
     content = content.replace("Skupper", "{skupper-name}")
+    content = add_attribute_subs_to_code_blocks(content)
     return content
 
 def convert_adoc_ids(input_file, output_file):
