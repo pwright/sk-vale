@@ -1,0 +1,36 @@
+[id="installing-registry-cli-system-wide_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Installing the CLI for all users
+
+[role="_abstract"]
+You can install the CLI in shared system directories on Linux or macOS with the `--global` option.
+
+.Prerequisites
+* You have downloaded and extracted the CLI distribution for your platform.
+* You have permission to run commands with `sudo`.
+
+.Procedure
+. In the extracted distribution directory, install the CLI:
++
+[source,bash]
+----
+$ sudo ./acr install --global
+----
++
+The installer copies the CLI to `/usr/local/lib/apicurio-registry-cli` and creates the `acr` and `acr_env` symbolic links in `/usr/local/bin`. It does not change individual shell profiles.
++
+[NOTE]
+====
+A global installation shares one `config.json` file. Separate configuration for each user is not supported. Users without write access to that file cannot change contexts or configuration. Use a per-user installation when you need independent contexts and authentication settings.
+====
+. Optional: Add the following command to your shell profile to load shell completions:
++
+[source,bash]
+----
+source /usr/local/bin/acr_env
+----
+
+.Verification
+* Verify that `/usr/local/bin` is on your `PATH`, and run `/usr/local/bin/acr --help`.
+
+

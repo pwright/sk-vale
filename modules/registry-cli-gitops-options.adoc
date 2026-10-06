@@ -1,0 +1,42 @@
+[id="registry-cli-gitops-options_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= GitOps CLI options
+
+[role="_abstract"]
+The GitOps commands support waiting for results, JSON output, and validation task cleanup.
+
+.GitOps command options
+[cols="1,1,3", options="header"]
+|===
+| Command | Option | Description
+
+| `status`, `sync`, `validate`
+| `--output-type`, `-o`
+| Output format: `table` (default) or `json`. The `sync` command requires `--wait` to return status in either format.
+
+| `sync`
+| `--wait`
+| Wait for a completed synchronization attempt. Disabled by default. A reported `ERROR` state or timeout returns exit code `1`.
+
+| `sync`, `validate`
+| `--timeout`
+| Maximum wait in seconds. Default: `300`. Applies only when the command waits for completion.
+
+| `validate`
+| `--repo`
+| Required repository ID from the server configuration, not a repository URL.
+
+| `validate`
+| `--ref`
+| Required Git branch, tag, or pull request ref to validate.
+
+| `validate`
+| `--no-wait`
+| Return the initial task details without waiting for the result or deleting the task. A successful exit confirms task creation, not successful validation. Retrieve the task result through the REST API using the returned task ID.
+
+| `validate`
+| `--cleanup`, `--no-cleanup`
+| Control task deletion after waiting. Cleanup is enabled by default and does not apply with `--no-wait`.
+|===
+
+

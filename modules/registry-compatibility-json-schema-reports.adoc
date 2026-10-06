@@ -1,0 +1,50 @@
+[id="registry-compatibility-json-schema-reports_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= What the JSON Schema compatibility check reports
+
+[role="_abstract"]
+The compatibility check compares two versions by what they accept, rather than by how they are written, and reports each change that breaks compatibility at the place where it was made.
+
+Every draft::
+All drafts from 4 to 2020-12 are compared, including keywords introduced in 2019-09 and 2020-12, such as `prefixItems`, `unevaluatedProperties`, `dependentRequired`, `$defs`, and `$anchor`.
+A schema without `$schema` is read as draft 7.
+A schema whose `$schema` names no draft, such as a custom meta-schema, cannot be compared yet, and the check fails with HTTP status 422.
+
+Versions in different drafts::
+A version can declare a different `$schema` from the previous one, and the two are compared by meaning.
+For example, a draft 7 tuple (`"items": [{"type": "string"}]`) rewritten in draft 2020-12 as `"prefixItems": [{"type": "string"}]` is compatible, because both accept the same data.
+
+Exact location::
+In a `BACKWARD` check, the `context` of each rule violation is a JSON Pointer into the new version that ends at the keyword that changed, and the `description` is a sentence.
+A change deep inside the schema is reported where it was made, not at the enclosing property.
+For example, decreasing `maxLength` from `10` to `5` on the property `b` of the object property `a` is reported as:
++
+[source,json]
+----
+{
+  "description": "The 'maxLength' string-length limit was decreased.",
+  "context": "/properties/a/properties/b/maxLength"
+}
+----
++
+A `FORWARD` check compares the two versions in the opposite direction, so the `context` points into the previous version, and the `description` reads as if the previous version were the new one.
+
+`oneOf` and boolean schemas::
+`oneOf` accepts a value that matches exactly one of its subschemas, so a new subschema that can match the same values as an existing one is reported, even though it adds alternatives.
+Boolean schemas, `true` and `false`, are compared like any other schema.
+
+References::
+References to other artifacts are resolved from the artifact references that are stored with the version, including references inside the referenced artifacts, and references between artifacts that refer to each other.
+No document is fetched over the network.
+If a reference cannot be resolved, part of the schema cannot be compared, so the check fails with HTTP status 422 instead of returning a result.
+
+Known over-strict verdicts::
+Where the check cannot prove that a change is compatible, it reports it as incompatible, so it never accepts a breaking change. In the following cases, it reports a compatible change as incompatible. Future versions of Apitomy Data Models will handle them:
++
+* Adding a property whose schema accepts every value, for example one with only a `description`, when `additionalProperties` is absent or `true`.
+* Adding a `type` inside `then` or `else`, when an enclosing schema already requires that type.
+
+For a description and examples of every kind of change the check reports, see the link:https://www.apitomy.io/projects/data-models/docs/4.x/user-guide/schema-compatibility.html[Apitomy Data Models schema compatibility guide^].
+
+
+// ref-registry-compatibility-json-schema-changes

@@ -1,0 +1,98 @@
+{
+  "assemblies/assembly-mcp-registry-api.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        33
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"mcp-registry-api_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        38
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= MCP Registry API (Developer Preview)",
+      "Line": 2
+    }
+  ],
+  "assemblies/assembly-registry-sizing-guide.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        21,
+        82
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-registry-high-availability.adoc[",
+      "Line": 22
+    }
+  ],
+  "modules/a2a-openapi-agent-card.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        27
+      ],
+      "Check": "AsciiDocDITA.BlockTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Block titles can only be assigned to examples, figures, and tables in DITA.",
+      "Severity": "warning",
+      "Match": ".Provenance and sync labels",
+      "Line": 56
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.BlockTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Block titles can only be assigned to examples, figures, and tables in DITA.",
+      "Severity": "warning",
+      "Match": ".Known limitations",
+      "Line": 86
+    }
+  ]
+}
