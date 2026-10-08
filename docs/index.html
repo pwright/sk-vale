@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor.js 4.0.11">
+<meta name="generator" content="Asciidoctor.js 4.1.1">
 <title>Using Service Interconnect</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CNoto+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
 /* Uncomment the following line when using as a custom stylesheet */
-/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CNoto+Sans+Mono:400,700"; */
 html{font-family:sans-serif;-webkit-text-size-adjust:100%}
 a{background:none}
 a:focus{outline:thin dotted}
@@ -80,7 +80,7 @@ hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em
 em,i{font-style:italic;line-height:inherit}
 strong,b{font-weight:bold;line-height:inherit}
 small{font-size:60%;line-height:inherit}
-code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+code{font-family:"Noto Sans Mono","Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
 ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
 ul,ol{margin-left:1.5em}
 ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
@@ -114,13 +114,13 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 :not(pre).nowrap{white-space:nowrap}
 :not(pre).pre-wrap{white-space:pre-wrap}
 :not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
-pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Noto Sans Mono","Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
 pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
 pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
 em em{font-style:normal}
 strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
-kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+kbd{font-family:"Noto Sans Mono","Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
 .keyseq kbd:last-child{margin-right:0}
 .menuseq,.menuref{color:#000}
@@ -335,6 +335,7 @@ sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-t
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.page-break{display:none}
 div.unbreakable{page-break-inside:avoid}
 .big{font-size:larger}
 .small{font-size:smaller}
@@ -405,6 +406,7 @@ p{margin-bottom:1.25rem}
   abbr[title]{border-bottom:1px dotted}
   abbr[title]::after{content:" (" attr(title) ")"}
   pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+  div.page-break{display:block;page-break-after:always}
   thead{display:table-header-group}
   svg{max-width:100%}
   p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
@@ -633,7 +635,7 @@ In this diagram, an application network connects three services, each of which i
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/overview-clouds.png" alt="overview-clouds">
+<img src="../images/overview-clouds.png" alt="Three application sites in different clouds" width="each with a service and a Layer 7 router" height="connected by an application network">
 </div>
 </div>
 <div id="application-networks_using-service-interconnect--block-4" class="paragraph">
@@ -641,7 +643,7 @@ In this diagram, an application network connects three services, each of which i
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/overview-application.png" alt="overview-application">
+<img src="../images/overview-application.png" alt="A distributed application composed of three services: Service A" width="Service B" height="and Service C">
 </div>
 </div>
 <div id="application-networks_using-service-interconnect--block-5" class="paragraph">
@@ -675,7 +677,7 @@ The application router routes copies of the message through the application netw
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/overview-routers.png" alt="overview-routers">
+<img src="../images/overview-routers.png" alt="Service B sending a message through skupper-routers to Service A and Service C via application routing">
 </div>
 </div>
 <div id="skupper-routers_using-service-interconnect--block-6" class="paragraph">
@@ -703,7 +705,7 @@ By using Skupper, you can create a distributed application consisting of microse
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/overview-clusters.png" alt="overview-clusters">
+<img src="../images/overview-clusters.png" alt="Three Kubernetes clusters" width="each with a namespace containing a service and a Skupper instance" height="connected by a Skupper network">
 </div>
 </div>
 <div id="skupper_using-service-interconnect--block-4" class="paragraph">
@@ -743,7 +745,7 @@ Service "A" can contact service "B", "B" can contact "C", and so on.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/one-cluster.svg" alt="one-cluster">
+<img src="../images/one-cluster.svg" alt="A single Kubernetes cluster containing six services labeled A through F">
 </div>
 </div>
 <div id="overview-connectivity_using-service-interconnect--block-5" class="paragraph">
@@ -763,7 +765,7 @@ It uses that network to forward local service traffic to remote clusters.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/two-clusters.svg" alt="two-clusters">
+<img src="../images/two-clusters.svg" alt="A public cluster and a private cluster connected by a Skupper link" width="with services distributed across both">
 </div>
 </div>
 <div id="overview-connectivity_using-service-interconnect--block-9" class="paragraph">
@@ -778,7 +780,7 @@ All communication is secured by mutual TLS authentication and encryption.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/five-clusters.svg" alt="five-clusters">
+<img src="../images/five-clusters.svg" alt="A central cluster connected to four edge clusters via Skupper links in a hub-and-spoke topology">
 </div>
 </div>
 <div id="overview-connectivity_using-service-interconnect--block-12" class="paragraph">
@@ -794,7 +796,7 @@ You can add and remove sites on demand.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/many-clusters.svg" alt="many-clusters">
+<img src="../images/many-clusters.svg" alt="A large network of clusters connected by Skupper links in a mesh topology with multiple sites">
 </div>
 </div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>assemblies/overview-assembly-overview-connectivity.adoc</code></div>
@@ -834,7 +836,7 @@ Each router is uniquely identified by its own certificate.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/clusters-tls.svg" alt="clusters-tls">
+<img src="../images/clusters-tls.svg" alt="Three clusters connected by Skupper routers with mutual TLS links between each router">
 </div>
 </div>
 <div id="skupper-security_using-service-interconnect--block-8" class="paragraph">
@@ -2674,11 +2676,12 @@ Only one ConfigMap should be annotated as the default (<code>skupper.io/default-
 <p>The Skupper V2 controller is running in your cluster.</p>
 </li>
 <li id="kube-site-resources-yaml_using-service-interconnect--block-6">
-<p>You have determined the router CPU allocation you require.</p>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-7" class="paragraph">
-<p>Consider the following CPU allocation options:</p>
+<p>You have determined the router CPU allocation you require, as shown in the following table.</p>
+</li>
+</ul>
 </div>
-<table id="kube-site-resources-yaml_using-service-interconnect--block-8" class="tableblock frame-all grid-all stretch">
+<table id="kube-site-resources-yaml_using-service-interconnect--block-7" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Router CPU allocation</caption>
 <colgroup>
 <col width="50%">
 <col width="50%">
@@ -2690,32 +2693,29 @@ Only one ConfigMap should be annotated as the default (<code>skupper.io/default-
 </tr>
 </thead>
 <tbody>
-<tr id="kube-site-resources-yaml_using-service-interconnect--block-8-row-1">
+<tr id="kube-site-resources-yaml_using-service-interconnect--block-7-row-1">
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Helps avoid issues with BestEffort on low resource clusters</p></td>
 </tr>
-<tr id="kube-site-resources-yaml_using-service-interconnect--block-8-row-2">
+<tr id="kube-site-resources-yaml_using-service-interconnect--block-7-row-2">
 <td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Suitable for production environments</p></td>
 </tr>
-<tr id="kube-site-resources-yaml_using-service-interconnect--block-8-row-3">
+<tr id="kube-site-resources-yaml_using-service-interconnect--block-7-row-3">
 <td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum performance</p></td>
 </tr>
 </tbody>
 </table>
-</li>
-</ul>
-</div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-9" class="olist arabic">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-8" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="kube-site-resources-yaml_using-service-interconnect--block-10">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-9">
 <p>Create a sizing ConfigMap in the same namespace where your Skupper V2 controller is running.</p>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-11" class="paragraph">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-10" class="paragraph">
 <p>The following example defines a sizing configuration named <code>medium</code> with 2 CPU cores suitable for production:</p>
 </div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-12" class="listingblock">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-11" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: v1
 kind: ConfigMap
@@ -2730,45 +2730,45 @@ data:
   router-memory-limit: 1024Mi</code></pre>
 </div>
 </div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-13" class="paragraph">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-12" class="paragraph">
 <p>The Skupper controller selects ConfigMaps based on the presence of a <code>skupper.io/site-sizing</code> label.
 The label&#8217;s value serves as an internal identifier for that particular sizing configuration.</p>
 </div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-14" class="paragraph">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-13" class="paragraph">
 <p>To designate a sizing model as the default for all sites managed by your Skupper V2 controller instance, annotate the ConfigMap with <code>skupper.io/default-site-sizing: "true"</code>.</p>
 </div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-15" class="paragraph">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-14" class="paragraph">
 <p>A sizing ConfigMap can define the following fields:</p>
 </div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-16" class="ulist">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-15" class="ulist">
 <ul>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-17">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-16">
 <p><code>router-cpu-request</code></p>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-18">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-17">
 <p><code>router-cpu-limit</code></p>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-19">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-18">
 <p><code>router-memory-request</code></p>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-20">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-19">
 <p><code>router-memory-limit</code></p>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-21">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-20">
 <p><code>adaptor-cpu-request</code></p>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-22">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-21">
 <p><code>adaptor-cpu-limit</code></p>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-23">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-22">
 <p><code>adaptor-memory-request</code></p>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-24">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-23">
 <p><code>adaptor-memory-limit</code></p>
 </li>
 </ul>
 </div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-25" class="admonitionblock note">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-24" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
@@ -2781,30 +2781,30 @@ If only the <code>limit</code> field is defined, Kubernetes will also set the <c
 </table>
 </div>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-26">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-25">
 <p>Determine the controller namespace.
 Depending on your installation method, the controller namespace may be <code>skupper</code>, <code>openshift-operators</code>, or have a different name.
 You can check that you have chosen the correct namespace by running:</p>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-27" class="listingblock">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-26" class="listingblock">
 <div class="content">
 <pre>kubectl get pods</pre>
 </div>
 </div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-28" class="paragraph">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-27" class="paragraph">
 <p>Confirm that the skupper controller pod is running in the namespace.</p>
 </div>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-29">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-28">
 <p>Apply the ConfigMap in the controller namespace:</p>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-30" class="listingblock">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-29" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply -f sizing-medium.yaml</code></pre>
 </div>
 </div>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-31">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-30">
 <p>Assign the sizing configuration to a site by setting the <code>spec.settings.size</code> field in the site resource:</p>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-32" class="listingblock">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-31" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: Site
@@ -2816,17 +2816,17 @@ spec:
 </div>
 </div>
 </li>
-<li id="kube-site-resources-yaml_using-service-interconnect--block-33">
+<li id="kube-site-resources-yaml_using-service-interconnect--block-32">
 <p>Verify the resource limits have been applied by inspecting the <code>skupper-router</code> deployment:</p>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-34" class="listingblock">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-33" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl get deployment skupper-router -o json | jq .spec.template.spec.containers[].resources</code></pre>
 </div>
 </div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-35" class="paragraph">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-34" class="paragraph">
 <p>The output should look like:</p>
 </div>
-<div id="kube-site-resources-yaml_using-service-interconnect--block-36" class="listingblock">
+<div id="kube-site-resources-yaml_using-service-interconnect--block-35" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-json" data-lang="json">{
   "limits": {
@@ -3298,10 +3298,8 @@ For example, it creates certificates to authenticate incoming Skupper links from
 </li>
 </ul>
 </div>
-<div id="kube-yaml-custom-certs_using-service-interconnect--block-8" class="paragraph">
-<p><strong>Key differences between approaches</strong></p>
-</div>
-<table id="kube-yaml-custom-certs_using-service-interconnect--block-9" class="tableblock frame-all grid-all stretch">
+<h4 id="_key_differences_between_approaches" class="discrete">Key differences between approaches</h4>
+<table id="kube-yaml-custom-certs_using-service-interconnect--block-8" class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col width="33.3333%">
 <col width="33.3333%">
@@ -3315,49 +3313,49 @@ For example, it creates certificates to authenticate incoming Skupper links from
 </tr>
 </thead>
 <tbody>
-<tr id="kube-yaml-custom-certs_using-service-interconnect--block-9-row-1">
+<tr id="kube-yaml-custom-certs_using-service-interconnect--block-8-row-1">
 <td class="tableblock halign-left valign-top"><p class="tableblock">Who creates <code>RouterAccess</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Skupper controller (auto)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">You (manually)</p></td>
 </tr>
-<tr id="kube-yaml-custom-certs_using-service-interconnect--block-9-row-2">
+<tr id="kube-yaml-custom-certs_using-service-interconnect--block-8-row-2">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>generateTlsCredentials</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
-<tr id="kube-yaml-custom-certs_using-service-interconnect--block-9-row-3">
+<tr id="kube-yaml-custom-certs_using-service-interconnect--block-8-row-3">
 <td class="tableblock halign-left valign-top"><p class="tableblock">Secret name</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must be <code>skupper-site-server</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any name you choose</p></td>
 </tr>
-<tr id="kube-yaml-custom-certs_using-service-interconnect--block-9-row-4">
+<tr id="kube-yaml-custom-certs_using-service-interconnect--block-8-row-4">
 <td class="tableblock halign-left valign-top"><p class="tableblock">Site delete/recreate needed</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes, to prevent overwrite</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
 </tr>
-<tr id="kube-yaml-custom-certs_using-service-interconnect--block-9-row-5">
+<tr id="kube-yaml-custom-certs_using-service-interconnect--block-8-row-5">
 <td class="tableblock halign-left valign-top"><p class="tableblock">Skupper overwrites your cert</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes, unless pre-created</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Never</p></td>
 </tr>
 </tbody>
 </table>
-<div id="kube-yaml-custom-certs_using-service-interconnect--block-10" class="paragraph">
+<div id="kube-yaml-custom-certs_using-service-interconnect--block-9" class="paragraph">
 <p><strong>Site-specific context</strong></p>
 </div>
-<div id="kube-yaml-custom-certs_using-service-interconnect--block-11" class="ulist">
+<div id="kube-yaml-custom-certs_using-service-interconnect--block-10" class="ulist">
 <ul>
-<li id="kube-yaml-custom-certs_using-service-interconnect--block-12">
+<li id="kube-yaml-custom-certs_using-service-interconnect--block-11">
 <p><code>RouterAccess</code> is a <strong>listening site</strong> concern - it controls how your site accepts incoming link connections</p>
 </li>
-<li id="kube-yaml-custom-certs_using-service-interconnect--block-13">
+<li id="kube-yaml-custom-certs_using-service-interconnect--block-12">
 <p><code>Certificate</code> CR can be used on <strong>both sites</strong>, but only if the referenced CA secret exists in the namespace:</p>
-<div id="kube-yaml-custom-certs_using-service-interconnect--block-14" class="ulist">
+<div id="kube-yaml-custom-certs_using-service-interconnect--block-13" class="ulist">
 <ul>
-<li id="kube-yaml-custom-certs_using-service-interconnect--block-15">
+<li id="kube-yaml-custom-certs_using-service-interconnect--block-14">
 <p>On the <strong>listening site</strong> - the Certificate CR can reference a CA secret to sign the server certificate</p>
 </li>
-<li id="kube-yaml-custom-certs_using-service-interconnect--block-16">
+<li id="kube-yaml-custom-certs_using-service-interconnect--block-15">
 <p>On the <strong>connecting site</strong> - it generates client credentials for outgoing links, but the CA that signs those credentials must also be present in the namespace</p>
 </li>
 </ul>
@@ -3365,7 +3363,7 @@ For example, it creates certificates to authenticate incoming Skupper links from
 </li>
 </ul>
 </div>
-<div id="kube-yaml-custom-certs_using-service-interconnect--block-17" class="admonitionblock note">
+<div id="kube-yaml-custom-certs_using-service-interconnect--block-16" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
@@ -3378,7 +3376,7 @@ In that case, <code>Certificate</code> CRs cannot generate client credentials au
 </tr>
 </table>
 </div>
-<div id="kube-yaml-custom-certs_using-service-interconnect--block-18" class="paragraph">
+<div id="kube-yaml-custom-certs_using-service-interconnect--block-17" class="paragraph">
 <p>In both approaches, the listening site provides server certificates and the connecting site uses client certificates to establish the link.</p>
 </div>
 <hr>
@@ -5859,7 +5857,7 @@ spec:
 <p>Configure external access to the Network Observer console using Ingress or OpenShift Routes.</p>
 </div>
 <table id="observer-external-access_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Ingress</caption>
+<caption class="title">Table 2. Ingress</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -5957,7 +5955,7 @@ spec:
 </ul>
 </div>
 <table id="observer-external-access_using-service-interconnect--block-7" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Route (OpenShift)</caption>
+<caption class="title">Table 3. Route (OpenShift)</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6032,6 +6030,7 @@ spec:
 <p>Configure the authentication strategy for the Network Observer console.</p>
 </div>
 <table id="observer-authentication_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. Authentication strategy</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6056,7 +6055,7 @@ spec:
 </tbody>
 </table>
 <table id="observer-authentication_using-service-interconnect--block-3" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Basic Authentication</caption>
+<caption class="title">Table 5. Basic Authentication</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6100,7 +6099,7 @@ spec:
 </ul>
 </div>
 <table id="observer-authentication_using-service-interconnect--block-8" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. OpenShift OAuth</caption>
+<caption class="title">Table 6. OpenShift OAuth</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6166,6 +6165,7 @@ spec:
 <p>Configure how TLS certificates are provisioned for the Network Observer.</p>
 </div>
 <table id="observer-tls_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. TLS certificate options</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6231,6 +6231,7 @@ spec:
 <p>Configure how the Network Observer connects to the Skupper router.</p>
 </div>
 <table id="observer-router_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. Router connection settings</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6293,6 +6294,7 @@ spec:
 <p>Configure command-line flags and runtime behavior for the Network Observer container.</p>
 </div>
 <table id="observer-tuning_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 9. Extra arguments</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6316,10 +6318,8 @@ spec:
 </tr>
 </tbody>
 </table>
-<div id="observer-tuning_using-service-interconnect--block-3" class="paragraph">
-<p><strong>Available flags:</strong></p>
-</div>
-<table id="observer-tuning_using-service-interconnect--block-4" class="tableblock frame-all grid-all stretch">
+<table id="observer-tuning_using-service-interconnect--block-3" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. Available flags</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6335,25 +6335,25 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="observer-tuning_using-service-interconnect--block-4-row-1">
+<tr id="observer-tuning_using-service-interconnect--block-3-row-1">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>-enable-console</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Enable web console UI</p></td>
 </tr>
-<tr id="observer-tuning_using-service-interconnect--block-4-row-2">
+<tr id="observer-tuning_using-service-interconnect--block-3-row-2">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>-flow-record-ttl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">duration</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>15m</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Flow record retention time</p></td>
 </tr>
-<tr id="observer-tuning_using-service-interconnect--block-4-row-3">
+<tr id="observer-tuning_using-service-interconnect--block-3-row-3">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>-cors-allow-all</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allow all CORS origins (dev only)</p></td>
 </tr>
-<tr id="observer-tuning_using-service-interconnect--block-4-row-4">
+<tr id="observer-tuning_using-service-interconnect--block-3-row-4">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>-vanflow-logging-profile</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>silent</code></p></td>
@@ -6361,10 +6361,10 @@ spec:
 </tr>
 </tbody>
 </table>
-<div id="observer-tuning_using-service-interconnect--block-5" class="paragraph">
+<div id="observer-tuning_using-service-interconnect--block-4" class="paragraph">
 <p><strong>Example:</strong></p>
 </div>
-<div id="observer-tuning_using-service-interconnect--block-6" class="listingblock">
+<div id="observer-tuning_using-service-interconnect--block-5" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">extraArgs:
   - -flow-record-ttl=1h
@@ -6382,7 +6382,7 @@ spec:
 <p>The Prometheus container supports custom configuration and tuning options.</p>
 </div>
 <table id="observer-prometheus_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Configuration File</caption>
+<caption class="title">Table 11. Configuration File</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6418,7 +6418,7 @@ spec:
 </div>
 </div>
 <table id="observer-prometheus_using-service-interconnect--block-5" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Command-Line Flags</caption>
+<caption class="title">Table 12. Command-Line Flags</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6470,7 +6470,7 @@ spec:
 </div>
 </div>
 <table id="observer-prometheus_using-service-interconnect--block-13" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Extra Volumes and Mounts</caption>
+<caption class="title">Table 13. Extra Volumes and Mounts</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6526,7 +6526,7 @@ spec:
 <p>By default, Prometheus uses ephemeral storage (<code>emptyDir</code>). For persistent time-series data, enable a PersistentVolumeClaim.</p>
 </div>
 <table id="observer-persistence_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. Persistence Options</caption>
+<caption class="title">Table 14. Persistence Options</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6647,7 +6647,7 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 <p>Resource requests and limits can be configured for each container in the Pod.</p>
 </div>
 <table id="observer-resources_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. Network Observer Container</caption>
+<caption class="title">Table 15. Network Observer Container</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6690,7 +6690,7 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 </tbody>
 </table>
 <table id="observer-resources_using-service-interconnect--block-3" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. Prometheus Container</caption>
+<caption class="title">Table 16. Prometheus Container</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6733,7 +6733,7 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 </tbody>
 </table>
 <table id="observer-resources_using-service-interconnect--block-4" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. Proxy Container</caption>
+<caption class="title">Table 17. Proxy Container</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6815,7 +6815,7 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 <p>Configure container image repositories, tags, and pull policies for each component.</p>
 </div>
 <table id="observer-images_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. Network Observer Image</caption>
+<caption class="title">Table 18. Network Observer Image</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6852,7 +6852,7 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 </tbody>
 </table>
 <table id="observer-images_using-service-interconnect--block-3" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. Prometheus Image</caption>
+<caption class="title">Table 19. Prometheus Image</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6888,13 +6888,54 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 </tr>
 </tbody>
 </table>
-<div id="observer-images_using-service-interconnect--block-4" class="paragraph">
-<p><strong>NGINX Proxy Image</strong></p>
-</div>
+<table id="observer-images_using-service-interconnect--block-4" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 20. NGINX Proxy Image</caption>
+<colgroup>
+<col width="25%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="observer-images_using-service-interconnect--block-4-row-1">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nginx.repository</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mirror.gcr.io/nginxinc/nginx-unprivileged</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Image repository</p></td>
+</tr>
+<tr id="observer-images_using-service-interconnect--block-4-row-2">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nginx.tag</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1.31.0-alpine</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Image tag</p></td>
+</tr>
+<tr id="observer-images_using-service-interconnect--block-4-row-3">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nginx.pullPolicy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IfNotPresent</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pull policy</p></td>
+</tr>
+<tr id="observer-images_using-service-interconnect--block-4-row-4">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nginx.command</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Override default command</p></td>
+</tr>
+</tbody>
+</table>
 <div id="observer-images_using-service-interconnect--block-5" class="paragraph">
-<p>Used when <code>auth.strategy</code> is <code>basic</code> or <code>none</code>:</p>
+<p>Used when <code>auth.strategy</code> is <code>basic</code> or <code>none</code>.</p>
 </div>
 <table id="observer-images_using-service-interconnect--block-6" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 21. OpenShift OAuth Proxy Image</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -6911,66 +6952,18 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 </thead>
 <tbody>
 <tr id="observer-images_using-service-interconnect--block-6-row-1">
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nginx.repository</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mirror.gcr.io/nginxinc/nginx-unprivileged</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Image repository</p></td>
-</tr>
-<tr id="observer-images_using-service-interconnect--block-6-row-2">
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nginx.tag</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1.31.0-alpine</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Image tag</p></td>
-</tr>
-<tr id="observer-images_using-service-interconnect--block-6-row-3">
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nginx.pullPolicy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IfNotPresent</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Pull policy</p></td>
-</tr>
-<tr id="observer-images_using-service-interconnect--block-6-row-4">
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nginx.command</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">array</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Override default command</p></td>
-</tr>
-</tbody>
-</table>
-<div id="observer-images_using-service-interconnect--block-7" class="paragraph">
-<p><strong>OpenShift OAuth Proxy Image</strong></p>
-</div>
-<div id="observer-images_using-service-interconnect--block-8" class="paragraph">
-<p>Used when <code>auth.strategy</code> is <code>openshift</code>:</p>
-</div>
-<table id="observer-images_using-service-interconnect--block-9" class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col width="25%">
-<col width="25%">
-<col width="25%">
-<col width="25%">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Default</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="observer-images_using-service-interconnect--block-9-row-1">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>openshiftOauthProxy.repository</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quay.io/openshift/origin-oauth-proxy</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Image repository</p></td>
 </tr>
-<tr id="observer-images_using-service-interconnect--block-9-row-2">
+<tr id="observer-images_using-service-interconnect--block-6-row-2">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>openshiftOauthProxy.tag</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.22.0</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Image tag</p></td>
 </tr>
-<tr id="observer-images_using-service-interconnect--block-9-row-3">
+<tr id="observer-images_using-service-interconnect--block-6-row-3">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>openshiftOauthProxy.pullPolicy</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>IfNotPresent</code></p></td>
@@ -6978,6 +6971,9 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 </tr>
 </tbody>
 </table>
+<div id="observer-images_using-service-interconnect--block-7" class="paragraph">
+<p>Used when <code>auth.strategy</code> is <code>openshift</code>.</p>
+</div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-images.adoc</code></div>
 <hr>
 <hr>
@@ -6989,6 +6985,7 @@ skupper-network-observer-prometheus-0   Bound    pvc-a1b2c3d4-e5f6-7890-abcd-ef1
 <p>Configure labels and annotations applied to Network Observer resources.</p>
 </div>
 <table id="observer-labels_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 22. Labels and annotations</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -7081,6 +7078,7 @@ podAnnotations:
 <p>Configure the Kubernetes Service that exposes the Network Observer.</p>
 </div>
 <table id="observer-service_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 23. Service settings</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -7134,7 +7132,7 @@ podAnnotations:
 <p>Configure pod and container security contexts for the Network Observer.</p>
 </div>
 <table id="observer-security_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. Pod Security Context</caption>
+<caption class="title">Table 24. Pod Security Context</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -7158,13 +7156,8 @@ podAnnotations:
 </tr>
 </tbody>
 </table>
-<div id="observer-security_using-service-interconnect--block-3" class="paragraph">
-<p><strong>Container Security Contexts</strong></p>
-</div>
-<div id="observer-security_using-service-interconnect--block-4" class="paragraph">
-<p>Available for: <code>securityContext</code>, <code>prometheus.securityContext</code>, <code>nginx.securityContext</code>, <code>openshiftOauthProxy.securityContext</code></p>
-</div>
-<table id="observer-security_using-service-interconnect--block-5" class="tableblock frame-all grid-all stretch">
+<table id="observer-security_using-service-interconnect--block-3" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 25. Container Security Contexts</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -7180,13 +7173,13 @@ podAnnotations:
 </tr>
 </thead>
 <tbody>
-<tr id="observer-security_using-service-interconnect--block-5-row-1">
+<tr id="observer-security_using-service-interconnect--block-3-row-1">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>.allowPrivilegeEscalation</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allow privilege escalation</p></td>
 </tr>
-<tr id="observer-security_using-service-interconnect--block-5-row-2">
+<tr id="observer-security_using-service-interconnect--block-3-row-2">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>.capabilities.drop</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">array</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>["ALL"]</code></p></td>
@@ -7194,6 +7187,9 @@ podAnnotations:
 </tr>
 </tbody>
 </table>
+<div id="observer-security_using-service-interconnect--block-4" class="paragraph">
+<p>Available for: <code>securityContext</code>, <code>prometheus.securityContext</code>, <code>nginx.securityContext</code>, <code>openshiftOauthProxy.securityContext</code></p>
+</div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-security.adoc</code></div>
 <hr>
 <hr>
@@ -7205,7 +7201,7 @@ podAnnotations:
 <p>Configure naming and label behavior for the Network Observer chart.</p>
 </div>
 <table id="observer-advanced_using-service-interconnect--block-2" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. Name Overrides</caption>
+<caption class="title">Table 26. Name Overrides</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -7236,7 +7232,7 @@ podAnnotations:
 </tbody>
 </table>
 <table id="observer-advanced_using-service-interconnect--block-3" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. Skip Management Labels</caption>
+<caption class="title">Table 27. Skip Management Labels</caption>
 <colgroup>
 <col width="25%">
 <col width="25%">
@@ -7305,13 +7301,8 @@ podAnnotations:
 <div id="observer-metrics_using-service-interconnect--block-12" class="paragraph">
 <p><strong>Security:</strong> Cluster-internal only. Do not expose publicly.</p>
 </div>
-<div id="observer-metrics_using-service-interconnect--block-13" class="paragraph">
-<p><strong>Metrics Service</strong></p>
-</div>
-<div id="observer-metrics_using-service-interconnect--block-14" class="paragraph">
-<p>The chart creates a second ClusterIP Service named <code>&lt;release-name&gt;-metrics</code> that targets the metrics listener on port <strong>9000</strong>.</p>
-</div>
-<table id="observer-metrics_using-service-interconnect--block-15" class="tableblock frame-all grid-all stretch">
+<table id="observer-metrics_using-service-interconnect--block-13" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 28. Metrics Service</caption>
 <colgroup>
 <col width="50%">
 <col width="50%">
@@ -7323,34 +7314,37 @@ podAnnotations:
 </tr>
 </thead>
 <tbody>
-<tr id="observer-metrics_using-service-interconnect--block-15-row-1">
+<tr id="observer-metrics_using-service-interconnect--block-13-row-1">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Listener address</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>:9000</code></p></td>
 </tr>
-<tr id="observer-metrics_using-service-interconnect--block-15-row-2">
+<tr id="observer-metrics_using-service-interconnect--block-13-row-2">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Service name</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;release-name&gt;-metrics</code></p></td>
 </tr>
-<tr id="observer-metrics_using-service-interconnect--block-15-row-3">
+<tr id="observer-metrics_using-service-interconnect--block-13-row-3">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Service port</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>9000</code></p></td>
 </tr>
-<tr id="observer-metrics_using-service-interconnect--block-15-row-4">
+<tr id="observer-metrics_using-service-interconnect--block-13-row-4">
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Metrics path</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>/metrics</code></p></td>
 </tr>
 </tbody>
 </table>
-<div id="observer-metrics_using-service-interconnect--block-16" class="paragraph">
+<div id="observer-metrics_using-service-interconnect--block-14" class="paragraph">
+<p>The chart creates a second ClusterIP Service named <code>&lt;release-name&gt;-metrics</code> that targets the metrics listener on port <strong>9000</strong>.</p>
+</div>
+<div id="observer-metrics_using-service-interconnect--block-15" class="paragraph">
 <p><strong>Scrape metrics</strong></p>
 </div>
-<div id="observer-metrics_using-service-interconnect--block-17" class="paragraph">
+<div id="observer-metrics_using-service-interconnect--block-16" class="paragraph">
 <p>Configure your Prometheus instance or monitoring operator to scrape the metrics endpoint.</p>
 </div>
-<div id="observer-metrics_using-service-interconnect--block-18" class="paragraph">
+<div id="observer-metrics_using-service-interconnect--block-17" class="paragraph">
 <p><strong>ServiceMonitor example (Prometheus Operator):</strong></p>
 </div>
-<div id="observer-metrics_using-service-interconnect--block-19" class="listingblock">
+<div id="observer-metrics_using-service-interconnect--block-18" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -7365,10 +7359,10 @@ spec:
       path: /metrics</code></pre>
 </div>
 </div>
-<div id="observer-metrics_using-service-interconnect--block-20" class="paragraph">
+<div id="observer-metrics_using-service-interconnect--block-19" class="paragraph">
 <p><strong>Static scrape configuration:</strong></p>
 </div>
-<div id="observer-metrics_using-service-interconnect--block-21" class="listingblock">
+<div id="observer-metrics_using-service-interconnect--block-20" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">scrape_configs:
   - job_name: 'network-observer'
@@ -7376,7 +7370,7 @@ spec:
       - targets: ['skupper-network-observer-metrics.default.svc:9000']</code></pre>
 </div>
 </div>
-<div id="observer-metrics_using-service-interconnect--block-22" class="paragraph">
+<div id="observer-metrics_using-service-interconnect--block-21" class="paragraph">
 <p><strong>Security note:</strong> The metrics Service is <strong>ClusterIP</strong> by default and does not include the TLS proxy or authentication that protects the main console endpoint. Do not expose this Service publicly without additional access controls if your metrics contain sensitive data.</p>
 </div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/console-observer-metrics.adoc</code></div>
@@ -7986,7 +7980,7 @@ docker logs &lt;username&gt;-skupper-controller | grep -i error</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-08 14:30:06 +0100
+Last updated 2026-10-08 14:33:04 UTC
 </div>
 </div>
 

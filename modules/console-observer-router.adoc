@@ -1,0 +1,34 @@
+[id="observer-router_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Router connection
+
+[role="_abstract"]
+Configure how the Network Observer connects to the Skupper router.
+
+
+.Router connection settings
+|===
+| Path | Type | Default | Description
+
+| `router.endpoint`
+| string
+| `"amqps://skupper-router-local"`
+| AMQP endpoint URL
+
+| `router.certificate.create`
+| bool
+| `true`
+| Auto-create client certificate
+
+| `router.certificate.nameOverride`
+| string
+| `""`
+| Custom certificate name
+|===
+
+*Notes:*
+
+* Endpoint must use `amqps://` scheme
+* Client certificate provisioned by Skupper controller
+* Certificate mounted at `/etc/messaging/`
+

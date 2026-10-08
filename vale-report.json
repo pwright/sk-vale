@@ -1,0 +1,60 @@
+{
+  "assemblies/kube-yaml-assembly-kube-yaml-custom-certs.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        10
+      ],
+      "Check": "AsciiDocDITA.DiscreteHeading",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Discrete headings are not supported in DITA.",
+      "Severity": "warning",
+      "Match": "[discrete]",
+      "Line": 18
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        38
+      ],
+      "Check": "AsciiDocDITA.NestedSection",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#errors",
+      "Message": "Level 2, 3, 4, and 5 sections (=== and deeper) are not supported in DITA.",
+      "Severity": "error",
+      "Match": "=== Key differences between approaches",
+      "Line": 19
+    }
+  ],
+  "modules/kube-cli-kube-custom-certs-cli.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        3,
+        79
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:kube-yaml-custom-certs_{context}[Linking sites using custom certificates",
+      "Line": 9
+    }
+  ]
+}
