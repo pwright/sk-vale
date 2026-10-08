@@ -146,3 +146,47 @@ bash scripts/convert-skupper.sh --input-dir /path/to/skupper-docs/input
 ```
 
 Always fix the source. Never edit generated output files.
+
+## Bridge skills
+
+Bridge skills in `skills/` orchestrate Markdown-first workflows by converting to AsciiDoc when needed, invoking ccs tooling, and tracing findings back to `.md` source files.
+
+### Available skills
+
+| Skill | Purpose | Requires conversion? |
+|-------|---------|---------------------|
+| `/skupper-convert` | Run the MD→AsciiDoc pipeline | — |
+| `/skupper-lint` | Vale lint with traceback to `.md` sources | Yes (auto) |
+| `/skupper-review` | Full review (Vale + IBM SG + technical) | Yes (auto) |
+| `/skupper-fix` | Apply Vale fixes to `.md` source files | Yes (auto) |
+| `/skupper-write` | Write new MkDocs Markdown content | Validates after |
+| `/skupper-assess` | CQA assessment with traceback | Yes (auto) |
+
+### How traceback works
+
+`skills/shared/scripts/traceback.py` maps AsciiDoc findings back to Markdown:
+
+1. Reads `assembly-map.json` (MD path → assembly filename)
+2. Inverts it to get assembly → MD path
+3. Uses namespace prefixes to map module filenames to their source directory
+4. Matches heading text for approximate line numbers in the MD source
+
+```bash
+python3 -I skills/shared/scripts/traceback.py vale-report.json assembly-map.json
+```
+
+### Composing with ccs plugins
+
+The ccs marketplace plugins (`docs-tools`, `cqa-tools`) work alongside these skills:
+
+```bash
+# Use ccs directly after manual conversion
+/skupper-convert
+/cqa-tools:cqa-assess
+
+# Technical review directly on MD (format-agnostic)
+/docs-tools:docs-review-technical
+
+# Vale on MD natively (no conversion needed)
+/docs-tools:lint-with-vale
+```
