@@ -1068,9 +1068,6 @@ You must implement that orchestration separately.</p>
 </li>
 </ul>
 </div>
-<div id="kube-resources-crds_using-service-interconnect--block-7" class="paragraph">
-<p>See <a href="https://skupperproject.github.io/refdog/resources/index.html">Resource Reference</a> for explanations of all the custom resources.</p>
-</div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/overview-kube-resources-crds.adoc</code></div>
 <hr>
 <hr>
@@ -1473,37 +1470,34 @@ Site "my-site" is ready.</code></pre>
 </div>
 </div>
 <div id="kube-creating-simple-site-cli_using-service-interconnect--block-16" class="paragraph">
-<p>There are many options to consider when creating sites using the CLI, see <a href="https://skupperproject.github.io/refdog/commands/index.html">CLI Reference</a>, including <em>frequently used</em> options.</p>
-</div>
-<div id="kube-creating-simple-site-cli_using-service-interconnect--block-17" class="paragraph">
 <p>For example, <code>--enable-link-access</code> allows you to create tokens and link <em>to</em> this site.
 By default, this option is disabled, but you can change the setting later:</p>
 </div>
-<div id="kube-creating-simple-site-cli_using-service-interconnect--block-18" class="listingblock">
+<div id="kube-creating-simple-site-cli_using-service-interconnect--block-17" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper site update --enable-link-access</code></pre>
 </div>
 </div>
-<div id="kube-creating-simple-site-cli_using-service-interconnect--block-19" class="paragraph">
+<div id="kube-creating-simple-site-cli_using-service-interconnect--block-18" class="paragraph">
 <p>You can use <code>--timeout &lt;time&gt;</code> to specify the maximum time that the CLI waits for the site status to report <code>ready</code>.</p>
 </div>
-<div id="kube-creating-simple-site-cli_using-service-interconnect--block-20" class="listingblock">
+<div id="kube-creating-simple-site-cli_using-service-interconnect--block-19" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper site create my-site --timeout 2m</code></pre>
 </div>
 </div>
-<div id="kube-creating-simple-site-cli_using-service-interconnect--block-21" class="paragraph">
+<div id="kube-creating-simple-site-cli_using-service-interconnect--block-20" class="paragraph">
 <p>The timeout option does not stop the site from being created, but if the site is not ready, the following is output:</p>
 </div>
-<div id="kube-creating-simple-site-cli_using-service-interconnect--block-22" class="listingblock">
+<div id="kube-creating-simple-site-cli_using-service-interconnect--block-21" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">Site "my-site" is not yet ready: Pending</code></pre>
 </div>
 </div>
-<div id="kube-creating-simple-site-cli_using-service-interconnect--block-23" class="paragraph">
+<div id="kube-creating-simple-site-cli_using-service-interconnect--block-22" class="paragraph">
 <p>You can check the status of the site at any time by using <code>skupper site status</code>.</p>
 </div>
-<div id="kube-creating-simple-site-cli_using-service-interconnect--block-24" class="paragraph">
+<div id="kube-creating-simple-site-cli_using-service-interconnect--block-23" class="paragraph">
 <p>By default, the router CPU allocation is BestEffort as described in <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-qos/">Pod Quality of Service Classes</a>, and this might affect performance under network load.
 To configure site resources, see <a href="#kube-site-resources-yaml_using-service-interconnect">Setting site resources</a>.</p>
 </div>
@@ -1789,14 +1783,6 @@ west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK</code></pre>
 </li>
 </ol>
 </div>
-<div id="kube-token-cli_using-service-interconnect--block-37" class="ulist _additional-resources">
-<div class="title">Additional resources</div>
-<ul>
-<li id="kube-token-cli_using-service-interconnect--block-38">
-<p><a href="https://skupperproject.github.io/refdog/commands/index.html">CLI Reference</a></p>
-</li>
-</ul>
-</div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-token-cli.adoc</code></div>
 <hr>
 <hr>
@@ -1914,14 +1900,6 @@ west-12f75bc8-5dda-4256-88f8-9df48150281a       Ready   1       OK</code></pre>
 </div>
 </li>
 </ol>
-</div>
-<div id="kube-link-cli_using-service-interconnect--block-30" class="ulist _additional-resources">
-<div class="title">Additional resources</div>
-<ul>
-<li id="kube-link-cli_using-service-interconnect--block-31">
-<p><a href="https://skupperproject.github.io/refdog/commands/index.html">CLI Reference</a></p>
-</li>
-</ul>
 </div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-link-cli.adoc</code></div>
 <hr>
@@ -2112,14 +2090,6 @@ You can now expose services on the application network.</p>
 </li>
 </ol>
 </div>
-<div id="kube-proxy-cli_using-service-interconnect--block-39" class="ulist _additional-resources">
-<div class="title">Additional resources</div>
-<ul>
-<li id="kube-proxy-cli_using-service-interconnect--block-40">
-<p><a href="https://skupperproject.github.io/refdog/commands/index.html">CLI Reference</a></p>
-</li>
-</ul>
-</div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-proxy-cli.adoc</code></div>
 <hr>
 <hr>
@@ -2131,8 +2101,7 @@ You can now expose services on the application network.</p>
 <p>For custom certificate workflows, YAML provides more control over certificate management and PKI integration.
 You can still use the Skupper CLI to generate links for those workflows.</p>
 </div>
-<div id="kube-custom-certs-cli_using-service-interconnect--block-2" class="ulist _additional-resources">
-<div class="title">Additional resources</div>
+<div id="kube-custom-certs-cli_using-service-interconnect--block-2" class="ulist">
 <ul>
 <li id="kube-custom-certs-cli_using-service-interconnect--block-3">
 <p><a href="#kube-yaml-custom-certs_using-service-interconnect">Linking sites using custom certificates</a></p>
@@ -2278,16 +2247,15 @@ If the local server becomes unavailable, traffic fails over to the remote server
 </tr>
 </table>
 </div>
-</li>
-</ol>
-</div>
-<div id="kube-link-cost-cli_using-service-interconnect--block-29" class="ulist _additional-resources">
-<div class="title">Additional resources</div>
+<div id="kube-link-cost-cli_using-service-interconnect--block-29" class="ulist">
 <ul>
 <li id="kube-link-cost-cli_using-service-interconnect--block-30">
 <p><a href="#kube-creating-multikeylistener-yaml_using-service-interconnect">Multi-key listener</a></p>
 </li>
 </ul>
+</div>
+</li>
+</ol>
 </div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-link-cost-cli.adoc</code></div>
 <hr>
@@ -2320,68 +2288,65 @@ For example, if you create a connector with the routing key <code>backend</code>
 <p>A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.</p>
 </div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-2" class="paragraph">
-<p>For more information about connectors, see <a href="https://skupperproject.github.io/refdog/concepts/connector.html">Connector concept</a>.</p>
-</div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-3" class="olist arabic">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-2" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="kube-creating-connector-cli_using-service-interconnect--block-4">
+<li id="kube-creating-connector-cli_using-service-interconnect--block-3">
 <p>Create a workload that you want to expose on the network, for example:</p>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-5" class="listingblock">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-4" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl create deployment backend --image quay.io/skupper/hello-world-backend --replicas 3</code></pre>
 </div>
 </div>
 </li>
-<li id="kube-creating-connector-cli_using-service-interconnect--block-6">
+<li id="kube-creating-connector-cli_using-service-interconnect--block-5">
 <p>Create a connector:</p>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-7" class="listingblock">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-6" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper connector create &lt;name&gt; &lt;port&gt; [--routing-key &lt;name&gt;]</code></pre>
 </div>
 </div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-8" class="paragraph">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-7" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-9" class="listingblock">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-8" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper connector create backend 8080 --workload deployment/backend</code></pre>
 </div>
 </div>
 </li>
-<li id="kube-creating-connector-cli_using-service-interconnect--block-10">
+<li id="kube-creating-connector-cli_using-service-interconnect--block-9">
 <p>Check the connector status:</p>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-11" class="listingblock">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-10" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper connector status</code></pre>
 </div>
 </div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-12" class="paragraph">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-11" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-13" class="listingblock">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-12" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper connector status</code></pre>
 </div>
 </div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-14" class="paragraph">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-13" class="paragraph">
 <p>Example output:</p>
 </div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-15" class="listingblock">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-14" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">NAME    STATUS  ROUTING-KEY     SELECTOR        HOST    PORT    HAS MATCHING LISTENER    MESSAGE
 backend Pending backend         app=backend             8080    false   No matching listeners</code></pre>
 </div>
 </div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-16" class="admonitionblock note">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-15" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="kube-creating-connector-cli_using-service-interconnect--block-17" class="paragraph">
+<div id="kube-creating-connector-cli_using-service-interconnect--block-16" class="paragraph">
 <p>By default, the routing key name is set to the name of the connector.
 If you want to use a custom routing key, set the <code>--routing-key</code> to your custom name.</p>
 </div>
@@ -2389,19 +2354,15 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 </tr>
 </table>
 </div>
-</li>
-</ol>
-</div>
-<div id="kube-creating-connector-cli_using-service-interconnect--block-18" class="ulist _additional-resources">
-<div class="title">Additional resources</div>
+<div id="kube-creating-connector-cli_using-service-interconnect--block-17" class="ulist">
 <ul>
-<li id="kube-creating-connector-cli_using-service-interconnect--block-19">
-<p><a href="https://skupperproject.github.io/refdog/commands/index.html">CLI Reference</a></p>
-</li>
-<li id="kube-creating-connector-cli_using-service-interconnect--block-20">
+<li id="kube-creating-connector-cli_using-service-interconnect--block-18">
 <p><a href="#kube-creating-attachedconnector-yaml_using-service-interconnect">Creating a connector for a different namespace using YAML</a></p>
 </li>
 </ul>
+</div>
+</li>
+</ol>
 </div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-creating-connector-cli.adoc</code></div>
 <hr>
@@ -2414,73 +2375,70 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <p>A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.</p>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-2" class="paragraph">
-<p>For more information about listeners. see <a href="https://skupperproject.github.io/refdog/concepts/listener.html">Listener concept</a>.</p>
-</div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-3" class="olist arabic">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-2" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="kube-creating-listener-cli_using-service-interconnect--block-4">
+<li id="kube-creating-listener-cli_using-service-interconnect--block-3">
 <p>Identify a connector that you want to use.
 Note the routing key of that connector.</p>
 </li>
-<li id="kube-creating-listener-cli_using-service-interconnect--block-5">
+<li id="kube-creating-listener-cli_using-service-interconnect--block-4">
 <p>Create a listener:</p>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-6" class="listingblock">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-5" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper listener create &lt;name&gt; &lt;port&gt; [--routing-key &lt;name&gt;]</code></pre>
 </div>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-7" class="paragraph">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-6" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-8" class="listingblock">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-7" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper listener create backend 8080</code></pre>
 </div>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-9" class="paragraph">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-8" class="paragraph">
 <p>Example output:</p>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-10" class="listingblock">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-9" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">Waiting for create to complete...
 Listener "backend" is ready</code></pre>
 </div>
 </div>
 </li>
-<li id="kube-creating-listener-cli_using-service-interconnect--block-11">
+<li id="kube-creating-listener-cli_using-service-interconnect--block-10">
 <p>Check the listener status:</p>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-12" class="listingblock">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-11" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper listener status</code></pre>
 </div>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-13" class="paragraph">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-12" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-14" class="listingblock">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-13" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper listener status</code></pre>
 </div>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-15" class="paragraph">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-14" class="paragraph">
 <p>Example output:</p>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-16" class="listingblock">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-15" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">NAME    STATUS  ROUTING-KEY     HOST    PORT    MATCHING-CONNECTOR      MESSAGE
 backend Ready   backend         backend 8080    true                    OK</code></pre>
 </div>
 </div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-17" class="admonitionblock note">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-16" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="kube-creating-listener-cli_using-service-interconnect--block-18" class="paragraph">
+<div id="kube-creating-listener-cli_using-service-interconnect--block-17" class="paragraph">
 <p>There must be a <code>MATCHING-CONNECTOR</code> for the service to operate.
 By default, the routing key name is the listener name.
 If you want to use a custom routing key, set the <code>--routing-key</code> to your custom name.</p>
@@ -2491,14 +2449,6 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 </div>
 </li>
 </ol>
-</div>
-<div id="kube-creating-listener-cli_using-service-interconnect--block-19" class="ulist _additional-resources">
-<div class="title">Additional resources</div>
-<ul>
-<li id="kube-creating-listener-cli_using-service-interconnect--block-20">
-<p><a href="https://skupperproject.github.io/refdog/commands/index.html">CLI Reference</a></p>
-</li>
-</ul>
 </div>
 <div class="include-boundary" style="margin-left: -40px;"><span style="color: red;">End</span>: <code>../modules/kube-cli-kube-creating-listener-cli.adoc</code></div>
 <hr>
@@ -2568,15 +2518,12 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 <p>By default, the router CPU allocation is BestEffort as described in <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-qos/">Pod Quality of Service Classes</a>, and this might affect performance under network load.
 Consider setting resources as described in <a href="#kube-site-resources-yaml">Setting site resources</a>.</p>
 </div>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-5" class="paragraph">
-<p>There are many options to consider when creating sites using YAML, see the <a href="https://skupperproject.github.io/refdog/resources/index.html">YAML Reference</a>, including <em>frequently used</em> options.</p>
-</div>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-6" class="olist arabic">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-5" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="kube-creating-simple-site-yaml_using-service-interconnect--block-7">
+<li id="kube-creating-simple-site-yaml_using-service-interconnect--block-6">
 <p>Create a site CR YAML file named <code>my-site.yaml</code>, for example:</p>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-8" class="listingblock">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-7" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: Site
@@ -2585,14 +2532,14 @@ metadata:
   namespace: west</code></pre>
 </div>
 </div>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-9" class="paragraph">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-8" class="paragraph">
 <p>This YAML creates a site named <code>my-site</code> in the <code>west</code> namespace.
 Specifying the namespace is not required if the context is set to the namespace where you want to create the site.</p>
 </div>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-10" class="paragraph">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-9" class="paragraph">
 <p>If you need to link to this site, enable link access:</p>
 </div>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-11" class="listingblock">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-10" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: Site
@@ -2604,25 +2551,25 @@ spec:
 </div>
 </div>
 </li>
-<li id="kube-creating-simple-site-yaml_using-service-interconnect--block-12">
+<li id="kube-creating-simple-site-yaml_using-service-interconnect--block-11">
 <p>Create the site:</p>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-13" class="listingblock">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-12" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply -f my-site.yaml</code></pre>
 </div>
 </div>
 </li>
-<li id="kube-creating-simple-site-yaml_using-service-interconnect--block-14">
+<li id="kube-creating-simple-site-yaml_using-service-interconnect--block-13">
 <p>Check the status of the site:</p>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-15" class="listingblock">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-14" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl get site</code></pre>
 </div>
 </div>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-16" class="paragraph">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-15" class="paragraph">
 <p>You might need to issue the command multiple times before the site is ready:</p>
 </div>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-17" class="listingblock">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-16" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">$ kubectl get site
 NAME   STATUS    SITES IN NETWORK   MESSAGE
@@ -2632,7 +2579,7 @@ NAME   STATUS   SITES IN NETWORK   MESSAGE
 west   Ready    1                  OK</code></pre>
 </div>
 </div>
-<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-18" class="paragraph">
+<div id="kube-creating-simple-site-yaml_using-service-interconnect--block-17" class="paragraph">
 <p>You can now link this site to another site to create an application network.</p>
 </div>
 </li>
@@ -4085,23 +4032,20 @@ For example, if you create a connector with the routing key <code>backend</code>
 <p>A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.</p>
 </div>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-2" class="paragraph">
-<p>There are many options to consider when creating connectors using YAML, see <a href="https://skupperproject.github.io/refdog/resources/connector.html">Connector resource</a>.</p>
-</div>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-3" class="olist arabic">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-2" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="kube-creating-connector-yaml_using-service-interconnect--block-4">
+<li id="kube-creating-connector-yaml_using-service-interconnect--block-3">
 <p>Create a workload that you want to expose on the network, for example:</p>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-5" class="listingblock">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-4" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl create deployment backend --image quay.io/skupper/hello-world-backend --replicas 3</code></pre>
 </div>
 </div>
 </li>
-<li id="kube-creating-connector-yaml_using-service-interconnect--block-6">
+<li id="kube-creating-connector-yaml_using-service-interconnect--block-5">
 <p>Create a connector resource YAML file:</p>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-7" class="listingblock">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-6" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: Connector
@@ -4114,46 +4058,46 @@ spec:
   port: 8080</code></pre>
 </div>
 </div>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-8" class="paragraph">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-7" class="paragraph">
 <p>This creates a connector in the <code>east</code> site and exposes the <code>backend</code> deployment on the network on port 8080.
 You can create a listener on a different site using the matching routing key <code>backend</code> to address this service.</p>
 </div>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-9" class="paragraph">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-8" class="paragraph">
 <p>To create the connector resource:</p>
 </div>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-10" class="listingblock">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-9" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply -f &lt;filename&gt;</code></pre>
 </div>
 </div>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-11" class="paragraph">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-10" class="paragraph">
 <p>where <code>&lt;filename&gt;</code> is the name of a YAML file that is saved on your local filesystem.</p>
 </div>
 </li>
-<li id="kube-creating-connector-yaml_using-service-interconnect--block-12">
+<li id="kube-creating-connector-yaml_using-service-interconnect--block-11">
 <p>Check the connector status:</p>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-13" class="listingblock">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-12" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl get connector</code></pre>
 </div>
 </div>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-14" class="paragraph">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-13" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-15" class="listingblock">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-14" class="listingblock">
 <div class="content">
 <pre>NAME    STATUS  ROUTING-KEY     SELECTOR        HOST    PORT    HAS MATCHING LISTENER    MESSAGE
 backend Pending backend         app=backend             8080    false   No matching listeners</pre>
 </div>
 </div>
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-16" class="admonitionblock note">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-15" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="kube-creating-connector-yaml_using-service-interconnect--block-17" class="paragraph">
+<div id="kube-creating-connector-yaml_using-service-interconnect--block-16" class="paragraph">
 <p>By default, the routing key name is set to the name of the connector.
 If you want to use a custom routing key, set <code>spec.routingKey</code> to your custom value.</p>
 </div>
@@ -4175,22 +4119,16 @@ If you want to use a custom routing key, set <code>spec.routingKey</code> to you
 <p>A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.</p>
 </div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-2" class="paragraph">
-<p>For more information about listeners. see <a href="https://skupperproject.github.io/refdog/concepts/listener.html">Listener concept</a>.</p>
-</div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-3" class="paragraph">
-<p>For configuration details, see <a href="https://skupperproject.github.io/refdog/resources/listener.html">Listener resource</a>.</p>
-</div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-4" class="olist arabic">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-2" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="kube-creating-listener-yaml_using-service-interconnect--block-5">
+<li id="kube-creating-listener-yaml_using-service-interconnect--block-3">
 <p>Identify a connector that you want to use.
 Note the routing key of that connector.</p>
 </li>
-<li id="kube-creating-listener-yaml_using-service-interconnect--block-6">
+<li id="kube-creating-listener-yaml_using-service-interconnect--block-4">
 <p>Create a listener resource YAML file:</p>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-7" class="listingblock">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-5" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: Listener
@@ -4203,46 +4141,46 @@ spec:
   port: 8080</code></pre>
 </div>
 </div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-8" class="paragraph">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-6" class="paragraph">
 <p>This creates a listener in the <code>west</code> site and matches with the connector that uses the routing key <code>backend</code>.
 It also creates a service named  <code>east-backend</code> exposed on port 8080 in the current namespace.</p>
 </div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-9" class="paragraph">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-7" class="paragraph">
 <p>To create the listener resource:</p>
 </div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-10" class="listingblock">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-8" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply -f &lt;filename&gt;</code></pre>
 </div>
 </div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-11" class="paragraph">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-9" class="paragraph">
 <p>where <code>&lt;filename&gt;</code> is the name of a YAML file that is saved on your local filesystem.</p>
 </div>
 </li>
-<li id="kube-creating-listener-yaml_using-service-interconnect--block-12">
+<li id="kube-creating-listener-yaml_using-service-interconnect--block-10">
 <p>Check the listener status:</p>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-13" class="listingblock">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-11" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl get listener</code></pre>
 </div>
 </div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-14" class="paragraph">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-12" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-15" class="listingblock">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-13" class="listingblock">
 <div class="content">
 <pre>NAME      ROUTING KEY   PORT   HOST           STATUS   HAS MATCHING CONNECTOR   MESSAGE
 backend   backend       8080   east-backend   Ready    true                     OK</pre>
 </div>
 </div>
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-16" class="admonitionblock note">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-14" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="kube-creating-listener-yaml_using-service-interconnect--block-17" class="paragraph">
+<div id="kube-creating-listener-yaml_using-service-interconnect--block-15" class="paragraph">
 <p>There must be a <code>MATCHING-CONNECTOR</code> for the service to operate.</p>
 </div>
 </td>
@@ -4290,31 +4228,28 @@ Use a multi-key listener when you want one service endpoint to aggregate traffic
 </tr>
 </table>
 </div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-8" class="paragraph">
-<p>For configuration details, see <a href="https://skupperproject.github.io/refdog/resources/multi-key-listener.html">MultiKeyListener resource</a>.</p>
-</div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-9" class="ulist">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-8" class="ulist">
 <div class="title">Prerequisites</div>
 <ul>
-<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-10">
+<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-9">
 <p>Multiple connectors created with different routing keys. See <a href="#kube-creating-connector-yaml">Creating a connector using YAML</a>.</p>
 </li>
 </ul>
 </div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-11" class="olist arabic">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-10" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-12">
+<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-11">
 <p>Identify the connectors that you want to aggregate.
 Note the routing keys for each connector.</p>
 </li>
-<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-13">
+<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-12">
 <p>Determine which strategy is best for your use case. For example, failover is best achieved using the <code>priority</code> strategy.</p>
 </li>
-<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-14">
+<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-13">
 <p>Create a multi-key listener resource YAML file.
 For example:</p>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-15" class="listingblock">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-14" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: MultiKeyListener
@@ -4330,13 +4265,13 @@ spec:
         west-backend: 1</code></pre>
 </div>
 </div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-16" class="paragraph">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-15" class="paragraph">
 <p>This creates a listener named <code>mkl-backend</code> that exposes a single endpoint on port 9092 and distributes traffic evenly between the <code>east-backend</code> and <code>west-backend</code> routing keys. Each routing key may have multiple connectors; link cost determines which connector is used within each routing key.</p>
 </div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-17" class="paragraph">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-16" class="paragraph">
 <p>To prefer one routing key first and fall back to another, use the <code>priority</code> strategy:</p>
 </div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-18" class="listingblock">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-17" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: MultiKeyListener
@@ -4352,33 +4287,33 @@ spec:
         - west-backend-http</code></pre>
 </div>
 </div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-19" class="paragraph">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-18" class="paragraph">
 <p>To create the multi-key listener resource:</p>
 </div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-20" class="listingblock">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-19" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply -f &lt;filename&gt;</code></pre>
 </div>
 </div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-21" class="paragraph">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-20" class="paragraph">
 <p>where <code>&lt;filename&gt;</code> is the name of a YAML file that is saved on your local filesystem.</p>
 </div>
 </li>
-<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-22">
+<li id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-21">
 <p>Check the multi-key listener status:</p>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-23" class="listingblock">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-22" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl get multikeylistener</code></pre>
 </div>
 </div>
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-24" class="admonitionblock note">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-23" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-25" class="paragraph">
+<div id="kube-creating-multikeylistener-yaml_using-service-interconnect--block-24" class="paragraph">
 <p>If you need to change strategy after you created a multi-key listener, you must delete and recreate the resource. This does not affect changing routing keys or weights.</p>
 </div>
 </td>
@@ -4415,23 +4350,20 @@ Create the attached connector in the other namespace and an <em>AttachedConnecto
 </li>
 </ul>
 </div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-7" class="paragraph">
-<p>For configuration details, see <a href="https://skupperproject.github.io/refdog/resources/connector.html">Connector resource</a>.</p>
-</div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-8" class="olist arabic">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-7" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-9">
+<li id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-8">
 <p>Create a workload that you want to expose on the network in a non-site namespace, for example:</p>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-10" class="listingblock">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-9" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl create deployment backend --image quay.io/skupper/hello-world-backend --replicas 3 --namespace attached</code></pre>
 </div>
 </div>
 </li>
-<li id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-11">
+<li id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-10">
 <p>Create an AttachedConnector resource YAML file in the same namespace:</p>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-12" class="listingblock">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-11" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: AttachedConnector
@@ -4444,21 +4376,21 @@ spec:
   port: 8080</code></pre>
 </div>
 </div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-13" class="paragraph">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-12" class="paragraph">
 <p>To create the AttachedConnector resource:</p>
 </div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-14" class="listingblock">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-13" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply -f &lt;filename&gt;</code></pre>
 </div>
 </div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-15" class="paragraph">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-14" class="paragraph">
 <p>where <code>&lt;filename&gt;</code> is the name of a YAML file that is saved on your local filesystem.</p>
 </div>
 </li>
-<li id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-16">
+<li id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-15">
 <p>Create an AttachedConnectorBinding resource YAML file in the site namespace:</p>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-17" class="listingblock">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-16" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: AttachedConnectorBinding
@@ -4470,29 +4402,29 @@ spec:
   routingKey: backend</code></pre>
 </div>
 </div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-18" class="paragraph">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-17" class="paragraph">
 <p>To create the AttachedConnectorBinding resource:</p>
 </div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-19" class="listingblock">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-18" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply -f &lt;filename&gt;</code></pre>
 </div>
 </div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-20" class="paragraph">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-19" class="paragraph">
 <p>where <code>&lt;filename&gt;</code> is the name of a YAML file that is saved on your local filesystem.</p>
 </div>
 </li>
-<li id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-21">
+<li id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-20">
 <p>Check the AttachedConnectorBinding status from the context of the site namespace:</p>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-22" class="listingblock">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-21" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl get AttachedConnectorBinding</code></pre>
 </div>
 </div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-23" class="paragraph">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-22" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-24" class="listingblock">
+<div id="kube-creating-attachedconnector-yaml_using-service-interconnect--block-23" class="listingblock">
 <div class="content">
 <pre>NAME      ROUTING KEY   CONNECTOR NAMESPACE   STATUS   HAS MATCHING LISTENER
 backend   backend       attached              Ready    true</pre>
@@ -5181,71 +5113,65 @@ For example, if you create a connector with the routing key <code>backend</code>
 <p>A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.</p>
 </div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-2" class="paragraph">
-<p>For more information about connectors see <a href="https://skupperproject.github.io/refdog/concepts/connector.html">Connector concept</a></p>
-</div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-3" class="ulist">
+<div id="system-creating-connector-cli_using-service-interconnect--block-2" class="ulist">
 <div class="title">Prerequisites</div>
 <ul>
-<li id="system-creating-connector-cli_using-service-interconnect--block-4">
+<li id="system-creating-connector-cli_using-service-interconnect--block-3">
 <p>The <code>skupper</code> CLI is installed.</p>
 </li>
-<li id="system-creating-connector-cli_using-service-interconnect--block-5">
+<li id="system-creating-connector-cli_using-service-interconnect--block-4">
 <p>The <code>SKUPPER_PLATFORM</code> environment variable is set to one of * <code>podman</code>,<code>docker</code> or <code>linux</code>.</p>
 </li>
 </ul>
 </div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-6" class="paragraph">
-<p>There are many options to consider when creating connectors using the CLI, see <a href="https://skupperproject.github.io/refdog/commands/index.html">CLI Reference</a>, including <em>frequently used</em> options.</p>
-</div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-7" class="olist arabic">
+<div id="system-creating-connector-cli_using-service-interconnect--block-5" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="system-creating-connector-cli_using-service-interconnect--block-8">
+<li id="system-creating-connector-cli_using-service-interconnect--block-6">
 <p>Create a server that you want to expose on the network.
 For example, run a HTTP server on port 8080.</p>
 </li>
-<li id="system-creating-connector-cli_using-service-interconnect--block-9">
+<li id="system-creating-connector-cli_using-service-interconnect--block-7">
 <p>Create a connector:</p>
-<div id="system-creating-connector-cli_using-service-interconnect--block-10" class="listingblock">
+<div id="system-creating-connector-cli_using-service-interconnect--block-8" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper connector create &lt;name&gt; &lt;port&gt; [--routing-key &lt;name&gt;]</code></pre>
 </div>
 </div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-11" class="paragraph">
+<div id="system-creating-connector-cli_using-service-interconnect--block-9" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-12" class="listingblock">
+<div id="system-creating-connector-cli_using-service-interconnect--block-10" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper connector create my-server 8080 --host localhost</code></pre>
 </div>
 </div>
 </li>
-<li id="system-creating-connector-cli_using-service-interconnect--block-13">
+<li id="system-creating-connector-cli_using-service-interconnect--block-11">
 <p>Check the connector status:</p>
-<div id="system-creating-connector-cli_using-service-interconnect--block-14" class="listingblock">
+<div id="system-creating-connector-cli_using-service-interconnect--block-12" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper connector status</code></pre>
 </div>
 </div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-15" class="paragraph">
+<div id="system-creating-connector-cli_using-service-interconnect--block-13" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-16" class="listingblock">
+<div id="system-creating-connector-cli_using-service-interconnect--block-14" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">$ skupper connector status
 NAME		STATUS	ROUTING-KEY	HOST		PORT
 my-server	Ok	my-server	localhost	8081</code></pre>
 </div>
 </div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-17" class="admonitionblock note">
+<div id="system-creating-connector-cli_using-service-interconnect--block-15" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="system-creating-connector-cli_using-service-interconnect--block-18" class="paragraph">
+<div id="system-creating-connector-cli_using-service-interconnect--block-16" class="paragraph">
 <p>By default, the routing key name is set to the name of the connector.
 If you want to use a custom routing key, set the <code>--routing-key</code> to your custom name.</p>
 </div>
@@ -5253,10 +5179,10 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 </tr>
 </table>
 </div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-19" class="paragraph">
+<div id="system-creating-connector-cli_using-service-interconnect--block-17" class="paragraph">
 <p>Apply the configuration using:</p>
 </div>
-<div id="system-creating-connector-cli_using-service-interconnect--block-20" class="listingblock">
+<div id="system-creating-connector-cli_using-service-interconnect--block-18" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper system reload</code></pre>
 </div>
@@ -5286,66 +5212,63 @@ Listeners and connectors are matched using routing keys.</p>
 </li>
 </ul>
 </div>
-<div id="system-creating-listener-cli_using-service-interconnect--block-5" class="paragraph">
-<p>There are many options to consider when creating listeners using the CLI, see <a href="https://skupperproject.github.io/refdog/commands/index.html">CLI Reference</a>, including <em>frequently used</em> options.</p>
-</div>
-<div id="system-creating-listener-cli_using-service-interconnect--block-6" class="olist arabic">
+<div id="system-creating-listener-cli_using-service-interconnect--block-5" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="system-creating-listener-cli_using-service-interconnect--block-7">
+<li id="system-creating-listener-cli_using-service-interconnect--block-6">
 <p>Identify a connector that you want to use.
 Note the routing key of that connector.</p>
 </li>
-<li id="system-creating-listener-cli_using-service-interconnect--block-8">
+<li id="system-creating-listener-cli_using-service-interconnect--block-7">
 <p>Create a listener:</p>
-<div id="system-creating-listener-cli_using-service-interconnect--block-9" class="listingblock">
+<div id="system-creating-listener-cli_using-service-interconnect--block-8" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper listener create &lt;name&gt; &lt;port&gt; [--routing-key &lt;name&gt;]</code></pre>
 </div>
 </div>
-<div id="system-creating-listener-cli_using-service-interconnect--block-10" class="paragraph">
+<div id="system-creating-listener-cli_using-service-interconnect--block-9" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="system-creating-listener-cli_using-service-interconnect--block-11" class="listingblock">
+<div id="system-creating-listener-cli_using-service-interconnect--block-10" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">$ skupper listener create my-server 8080
 File written to /home/user/.local/share/skupper/namespaces/default/input/resources/Listener-my-server.yaml</code></pre>
 </div>
 </div>
-<div id="system-creating-listener-cli_using-service-interconnect--block-12" class="paragraph">
+<div id="system-creating-listener-cli_using-service-interconnect--block-11" class="paragraph">
 <p>Apply the configuration using:</p>
 </div>
-<div id="system-creating-listener-cli_using-service-interconnect--block-13" class="listingblock">
+<div id="system-creating-listener-cli_using-service-interconnect--block-12" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper system reload</code></pre>
 </div>
 </div>
 </li>
-<li id="system-creating-listener-cli_using-service-interconnect--block-14">
+<li id="system-creating-listener-cli_using-service-interconnect--block-13">
 <p>Check the listener status:</p>
-<div id="system-creating-listener-cli_using-service-interconnect--block-15" class="listingblock">
+<div id="system-creating-listener-cli_using-service-interconnect--block-14" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper listener status</code></pre>
 </div>
 </div>
-<div id="system-creating-listener-cli_using-service-interconnect--block-16" class="paragraph">
+<div id="system-creating-listener-cli_using-service-interconnect--block-15" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="system-creating-listener-cli_using-service-interconnect--block-17" class="listingblock">
+<div id="system-creating-listener-cli_using-service-interconnect--block-16" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">$ skupper listener status
 NAME      STATUS  ROUTING-KEY  HOST     PORT  MATCHING-CONNECTOR  MESSAGE
 backend   Ready   backend      0.0.0.0  8080  true                OK</code></pre>
 </div>
 </div>
-<div id="system-creating-listener-cli_using-service-interconnect--block-18" class="admonitionblock note">
+<div id="system-creating-listener-cli_using-service-interconnect--block-17" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="system-creating-listener-cli_using-service-interconnect--block-19" class="paragraph">
+<div id="system-creating-listener-cli_using-service-interconnect--block-18" class="paragraph">
 <p>There must be a matching connector for the service to operate.
 By default, the routing key name is the listener name.
 If you want to use a custom routing key, set the <code>--routing-key</code> to your custom name.</p>
@@ -5418,15 +5341,12 @@ If you want to use a custom routing key, set the <code>--routing-key</code> to y
 </li>
 </ul>
 </div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-4" class="paragraph">
-<p>There are many options to consider when creating sites using YAML, see <a href="https://skupperproject.github.io/refdog/resources/index.html">YAML Reference</a>, including <em>frequently used</em> options.</p>
-</div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-5" class="olist arabic">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-4" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="system-creating-simple-site-yaml_using-service-interconnect--block-6">
+<li id="system-creating-simple-site-yaml_using-service-interconnect--block-5">
 <p>Create a site CR YAML file named <code>my-site.yaml</code> in an empty directory, for example, <code>local</code>:</p>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-7" class="listingblock">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-6" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: Site
@@ -5434,51 +5354,51 @@ metadata:
   name: my-site</code></pre>
 </div>
 </div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-8" class="paragraph">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-7" class="paragraph">
 <p>This YAML creates a site named <code>my-site</code> in the <code>default</code> namespace.</p>
 </div>
 </li>
-<li id="system-creating-simple-site-yaml_using-service-interconnect--block-9">
+<li id="system-creating-simple-site-yaml_using-service-interconnect--block-8">
 <p>Create the site:</p>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-10" class="listingblock">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-9" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper system setup --path ./local</code></pre>
 </div>
 </div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-11" class="paragraph">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-10" class="paragraph">
 <p>Skupper attempts to process any files in the <code>local</code> directory.
 Typically, you create all resources you require for a site before running <code>skupper system setup</code>.</p>
 </div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-12" class="paragraph">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-11" class="paragraph">
 <p><strong>Optional:</strong> Enable the Dynamic System Controller to automatically process YAML resources:</p>
 </div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-13" class="listingblock">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-12" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">export SKUPPER_SYSTEM_RELOAD_TYPE=auto
 skupper system install</code></pre>
 </div>
 </div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-14" class="paragraph">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-13" class="paragraph">
 <p>With this feature enabled, you can create sites, links, connectors and listeners without needing a system reload to apply your configuration.</p>
 </div>
 </li>
-<li id="system-creating-simple-site-yaml_using-service-interconnect--block-15">
+<li id="system-creating-simple-site-yaml_using-service-interconnect--block-14">
 <p>Check the status of the site:</p>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-16" class="listingblock">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-15" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper site status</code></pre>
 </div>
 </div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-17" class="paragraph">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-16" class="paragraph">
 <p>You might need to issue the command multiple times before the site is ready:</p>
 </div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-18" class="listingblock">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-17" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">NAME    STATUS  MESSAGE
 default Ready   OK</code></pre>
 </div>
 </div>
-<div id="system-creating-simple-site-yaml_using-service-interconnect--block-19" class="paragraph">
+<div id="system-creating-simple-site-yaml_using-service-interconnect--block-18" class="paragraph">
 <p>You can now link this site to another site to create an application network.</p>
 </div>
 </li>
@@ -5644,24 +5564,20 @@ For example, if you create a connector with the routing key <code>backend</code>
 <p>A connector binds a local workload to listeners in remote sites.
 Listeners and connectors are matched using routing keys.</p>
 </div>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-2" class="paragraph">
-<p>For more information about connectors see <a href="https://skupperproject.github.io/refdog/concepts/connector.html">Connector concept</a>.
-For configuration details, see <a href="https://skupperproject.github.io/refdog/resources/connector.html">Connector resource</a>.</p>
-</div>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-3" class="olist arabic">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-2" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="system-creating-connector-yaml_using-service-interconnect--block-4">
+<li id="system-creating-connector-yaml_using-service-interconnect--block-3">
 <p>Create a workload that you want to expose on the network, for example:</p>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-5" class="listingblock">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-4" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl create deployment backend --image quay.io/skupper/hello-world-backend --replicas 3</code></pre>
 </div>
 </div>
 </li>
-<li id="system-creating-connector-yaml_using-service-interconnect--block-6">
+<li id="system-creating-connector-yaml_using-service-interconnect--block-5">
 <p>Create a connector resource YAML file:</p>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-7" class="listingblock">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-6" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: Connector
@@ -5674,46 +5590,46 @@ spec:
   port: 8080</code></pre>
 </div>
 </div>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-8" class="paragraph">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-7" class="paragraph">
 <p>This creates a connector in the <code>east</code> site and exposes the <code>backend</code> deployment on the network on port 8080.
 You can create a listener on a different site using the matching routing key <code>backend</code> to address this service.</p>
 </div>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-9" class="paragraph">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-8" class="paragraph">
 <p>To create the connector resource:</p>
 </div>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-10" class="listingblock">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-9" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper system apply -f &lt;filename&gt;</code></pre>
 </div>
 </div>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-11" class="paragraph">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-10" class="paragraph">
 <p>where <code>&lt;filename&gt;</code> is the name of a YAML file that is saved on your local filesystem.</p>
 </div>
 </li>
-<li id="system-creating-connector-yaml_using-service-interconnect--block-12">
+<li id="system-creating-connector-yaml_using-service-interconnect--block-11">
 <p>Check the connector status:</p>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-13" class="listingblock">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-12" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper connector status</code></pre>
 </div>
 </div>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-14" class="paragraph">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-13" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-15" class="listingblock">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-14" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">NAME    STATUS  ROUTING-KEY     SELECTOR        HOST    PORT    HAS MATCHING LISTENER    MESSAGE
 backend Pending backend         app=backend             8080    false   No matching listeners</code></pre>
 </div>
 </div>
-<div id="system-creating-connector-yaml_using-service-interconnect--block-16" class="admonitionblock note">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-15" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="system-creating-connector-yaml_using-service-interconnect--block-17" class="paragraph">
+<div id="system-creating-connector-yaml_using-service-interconnect--block-16" class="paragraph">
 <p>By default, the routing key name is set to the name of the connector.
 If you want to use a custom routing key, set <code>spec.routingKey</code> to your custom value.</p>
 </div>
@@ -5735,20 +5651,16 @@ If you want to use a custom routing key, set <code>spec.routingKey</code> to you
 <p>A listener binds a local connection endpoint to connectors in remote sites.
 Listeners and connectors are matched using routing keys.</p>
 </div>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-2" class="paragraph">
-<p>For more information about listeners, see <a href="https://skupperproject.github.io/refdog/concepts/listener.html">Listener concept</a>.
-For configuration details, see <a href="https://skupperproject.github.io/refdog/resources/listener.html">Listener resource</a>.</p>
-</div>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-3" class="olist arabic">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-2" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="system-creating-listener-yaml_using-service-interconnect--block-4">
+<li id="system-creating-listener-yaml_using-service-interconnect--block-3">
 <p>Identify a connector that you want to use.
 Note the routing key of that connector.</p>
 </li>
-<li id="system-creating-listener-yaml_using-service-interconnect--block-5">
+<li id="system-creating-listener-yaml_using-service-interconnect--block-4">
 <p>Create a listener resource YAML file:</p>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-6" class="listingblock">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-5" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: Listener
@@ -5761,46 +5673,46 @@ spec:
   port: 8080</code></pre>
 </div>
 </div>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-7" class="paragraph">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-6" class="paragraph">
 <p>This creates a listener on the local system site and matches it with connectors that use the routing key <code>backend</code>.
 The listener accepts connections on port 8080 using the configured host value.</p>
 </div>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-8" class="paragraph">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-7" class="paragraph">
 <p>To create the listener resource:</p>
 </div>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-9" class="listingblock">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-8" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper system apply -f &lt;filename&gt;</code></pre>
 </div>
 </div>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-10" class="paragraph">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-9" class="paragraph">
 <p>where <code>&lt;filename&gt;</code> is the name of a YAML file that is saved on your local filesystem.</p>
 </div>
 </li>
-<li id="system-creating-listener-yaml_using-service-interconnect--block-11">
+<li id="system-creating-listener-yaml_using-service-interconnect--block-10">
 <p>Check the listener status:</p>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-12" class="listingblock">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-11" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper listener status</code></pre>
 </div>
 </div>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-13" class="paragraph">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-12" class="paragraph">
 <p>For example:</p>
 </div>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-14" class="listingblock">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-13" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">NAME      STATUS  ROUTING-KEY  HOST     PORT  MATCHING-CONNECTOR  MESSAGE
 backend   Ready   backend      0.0.0.0  8080  true                OK</code></pre>
 </div>
 </div>
-<div id="system-creating-listener-yaml_using-service-interconnect--block-15" class="admonitionblock note">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-14" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="system-creating-listener-yaml_using-service-interconnect--block-16" class="paragraph">
+<div id="system-creating-listener-yaml_using-service-interconnect--block-15" class="paragraph">
 <p>There must be a <code>MATCHING-CONNECTOR</code> for the service to operate.</p>
 </div>
 </td>
@@ -5837,31 +5749,28 @@ Use a multi-key listener when you want one service endpoint to aggregate traffic
 <div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-6" class="paragraph">
 <p>Multi-key listeners provide predictable traffic distribution from the client side and typically are not influenced by link costs.</p>
 </div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-7" class="paragraph">
-<p>For configuration details, see <a href="https://skupperproject.github.io/refdog/resources/listener.html">Listener resource</a>.</p>
-</div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-8" class="ulist">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-7" class="ulist">
 <div class="title">Prerequisites</div>
 <ul>
-<li id="system-creating-multikeylistener-yaml_using-service-interconnect--block-9">
+<li id="system-creating-multikeylistener-yaml_using-service-interconnect--block-8">
 <p>Multiple connectors created with different routing keys. See <a href="#system-creating-connector-yaml">Creating a connector using YAML</a>.</p>
 </li>
 </ul>
 </div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-10" class="olist arabic">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-9" class="olist arabic">
 <div class="title">Procedure</div>
 <ol class="arabic">
-<li id="system-creating-multikeylistener-yaml_using-service-interconnect--block-11">
+<li id="system-creating-multikeylistener-yaml_using-service-interconnect--block-10">
 <p>Identify the connectors that you want to aggregate.
 Note the routing keys for each connector.</p>
 </li>
-<li id="system-creating-multikeylistener-yaml_using-service-interconnect--block-12">
+<li id="system-creating-multikeylistener-yaml_using-service-interconnect--block-11">
 <p>Determine which strategy is best for your use case. For example, failover is best achieved using the <code>priority</code> strategy.</p>
 </li>
-<li id="system-creating-multikeylistener-yaml_using-service-interconnect--block-13">
+<li id="system-creating-multikeylistener-yaml_using-service-interconnect--block-12">
 <p>Create a multi-key listener resource YAML file.
 For example:</p>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-14" class="listingblock">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-13" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: MultiKeyListener
@@ -5877,13 +5786,13 @@ spec:
         west-backend: 1</code></pre>
 </div>
 </div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-15" class="paragraph">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-14" class="paragraph">
 <p>This creates a listener named <code>mkl-backend</code> that exposes a single endpoint on port 9092 and distributes traffic evenly across the <code>east-backend</code> and <code>west-backend</code> routing keys.</p>
 </div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-16" class="paragraph">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-15" class="paragraph">
 <p>To prefer one routing key first and fall back to another, use the <code>priority</code> strategy:</p>
 </div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-17" class="listingblock">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-16" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: skupper.io/v2alpha1
 kind: MultiKeyListener
@@ -5899,25 +5808,25 @@ spec:
         - west-backend-http</code></pre>
 </div>
 </div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-18" class="paragraph">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-17" class="paragraph">
 <p>To create the multi-key listener resource:</p>
 </div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-19" class="listingblock">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-18" class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">skupper system apply -f &lt;filename&gt;</code></pre>
 </div>
 </div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-20" class="paragraph">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-19" class="paragraph">
 <p>where <code>&lt;filename&gt;</code> is the name of a YAML file that is saved on your local filesystem.</p>
 </div>
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-21" class="admonitionblock note">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-20" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-22" class="paragraph">
+<div id="system-creating-multikeylistener-yaml_using-service-interconnect--block-21" class="paragraph">
 <p>If you need to change strategy after you created a multi-key listener, you must delete and recreate the resource. This does not affect changing routing keys or weights.</p>
 </div>
 </td>
@@ -8077,7 +7986,7 @@ docker logs &lt;username&gt;-skupper-controller | grep -i error</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-08 13:59:07 +0100
+Last updated 2026-10-08 14:30:06 +0100
 </div>
 </div>
 

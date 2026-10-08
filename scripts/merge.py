@@ -476,11 +476,43 @@ def prepare_markdown_for_kramdoc(content, source_name="<memory>"):
     prepared.extend(lines[pos:])
     return "".join(prepared)
 
+REF_LINK_DEF_PATTERN = re.compile(r"^\[([^\]]+)\]:\s+https?://\S+", re.MULTILINE)
+ADDITIONAL_RESOURCES_PATTERN = re.compile(
+    r"\*\*Additional resources\*\*\s*\n(\s*\n)*(?=\n|$|\*\*|<a |#{1,6} )",
+)
+
+
+def strip_external_link_references(content, domain="github.io"):
+    """Remove reference-style link definitions targeting a domain and all their usages."""
+    labels = set()
+    filtered_lines = []
+    for line in content.splitlines(True):
+        m = REF_LINK_DEF_PATTERN.match(line)
+        if m and domain in line:
+            labels.add(m.group(1))
+        else:
+            filtered_lines.append(line)
+
+    if not labels:
+        return content
+
+    result = []
+    for line in filtered_lines:
+        if any(f"[{label}]" in line for label in labels):
+            continue
+        result.append(line)
+
+    content = "".join(result)
+    content = ADDITIONAL_RESOURCES_PATTERN.sub("", content)
+    return content
+
+
 def prepare_markdown_file(input_file, output_file):
     """Prepares a Markdown file for kramdoc without modifying the source file."""
     with open(input_file, "r", encoding="utf-8") as in_f:
         content = in_f.read()
 
+    content = strip_external_link_references(content)
     prepared = prepare_markdown_for_kramdoc(content, input_file)
 
     output_dir = os.path.dirname(output_file)
