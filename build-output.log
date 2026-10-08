@@ -1,31 +1,190 @@
-Using local input: /home/paulwright/repos/sk/vale/skupper-docs/input
+Using local input: /home/paulwright/repos/sk/skupper-docs/doc-input
 Cleaning previous output...
 Syncing Vale styles...
-[96m[96m[0m[0m [90m[[0m[97m0[0m[90m/[0m[97m1[0m[90m][0m  [38;2;255;0;0m0%[0m | 0s[96m[96mSyncing AsciiDocDITA[0m[0m [90m[[0m[97m0[0m[90m/[0m[97m1[0m[90m][0m  [38;2;255;0;0m0%[0m | 0s[96m[96mSyncing AsciiDocDITA[0m[0m [90m[[0m[97m1[0m[90m/[0m[97m1[0m[90m][0m [36m[36m███████████████████████████████████████████[0m[0m [38;2;0;255;0m100%[0m | 0s
-[30;42m[30;42m SUCCESS [0m[0m [32m[32mSynced 1 package(s) to '/home/paulwright/repos/sk/vale/sk-vale/.vale/styles'.[0m[0m
-Step 1/2: Building assemblies and modules from Markdown...
+ [0/1]  0% | 0sSyncing AsciiDocDITA [0/1]  0% | 0sSyncing AsciiDocDITA [1/1] ███████████████████████████████████████████ 100% | 0s
+ SUCCESS  Synced 1 package(s) to '/home/paulwright/repos/sk/vale/sk-vale/.vale/styles'.
+Step 1/3: Building assemblies and modules from Markdown...
 Using mkdocs.yml from upstream
-WARNING: index.md: no explicit anchors found for internal xref mapping
 Processing file: source.adoc
-ERROR: No root id in source.adoc
-Prepared Markdown saved to: /tmp/build-index-1cfnhncy/prepared.md
-Normalized AsciiDoc IDs saved to: /tmp/build-index-1cfnhncy/source.adoc
-Traceback (most recent call last):
-  File "/home/paulwright/repos/sk/vale/sk-vale/scripts/build_index.py", line 363, in <module>
-    main()
-    ~~~~^^
-  File "/home/paulwright/repos/sk/vale/sk-vale/scripts/build_index.py", line 358, in main
-    root_index = build_site(args.index_file, args.output, clean=args.clean, source_dir=args.source_dir, copy_images=args.copy_images)
-  File "/home/paulwright/repos/sk/vale/sk-vale/scripts/build_index.py", line 298, in build_site
-    process_markdown_source(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        md_file,
-        ^^^^^^^^
-    ...<7 lines>...
-        copy_images,
-        ^^^^^^^^^^^^
-    )
-    ^
-  File "/home/paulwright/repos/sk/vale/sk-vale/scripts/build_index.py", line 191, in process_markdown_source
-    raise RuntimeError(f"{md_file}: expected exactly one assembly, found {len(assembly_files)}")
-RuntimeError: /home/paulwright/repos/sk/skupper-docs/input/index.md: expected exactly one assembly, found 0
+Writing module: modules/application-networks.adoc
+Writing module: modules/skupper-routers.adoc
+Writing module: modules/skupper.adoc
+Writing assembly: assemblies/assembly-skupper-overview.adoc
+Processing file: source.adoc
+Writing assembly: assemblies/assembly-overview-connectivity.adoc
+Processing file: source.adoc
+Writing assembly: assemblies/assembly-skupper-security.adoc
+Processing file: source.adoc
+Writing assembly: assemblies/assembly-skupper-routing.adoc
+Processing file: source.adoc
+Writing assembly: assemblies/assembly-overview-load-balancing.adoc
+Processing file: source.adoc
+Writing module: modules/kube-resources-crds.adoc
+Writing module: modules/kube-resources-sa.adoc
+Writing module: modules/kube-resources-deployments.adoc
+Writing module: modules/kube-resources-cm.adoc
+Writing module: modules/kube-resources-secrets.adoc
+Writing module: modules/kube-resources-svc.adoc
+Writing assembly: assemblies/assembly-kube-resources.adoc
+Processing file: source.adoc
+Writing module: modules/migrating-sites.adoc
+Writing module: modules/migrating-links.adoc
+Writing module: modules/migrating-services.adoc
+Writing assembly: assemblies/assembly-migrating.adoc
+WARNING: Skipping install/index.md: skip: true in YAML frontmatter
+Processing file: source.adoc
+Writing assembly: assemblies/assembly-kube-cli.adoc
+Processing file: source.adoc
+Writing module: modules/kube-checking-cli.adoc
+Writing module: modules/kube-creating-simple-site-cli.adoc
+Writing module: modules/kube-ha-cli.adoc
+Writing module: modules/kube-deleting-site-cli.adoc
+Writing assembly: assemblies/assembly-kube-creating-site-cli.adoc
+Processing file: source.adoc
+Writing module: modules/kube-token-cli.adoc
+Writing module: modules/kube-link-cli.adoc
+Writing module: modules/kube-proxy-cli.adoc
+Writing module: modules/kube-custom-certs-cli.adoc
+Writing module: modules/kube-link-cost-cli.adoc
+Writing assembly: assemblies/assembly-kube-linking-cli.adoc
+Processing file: source.adoc
+Writing module: modules/kube-creating-connector-cli.adoc
+Writing module: modules/kube-creating-listener-cli.adoc
+Writing assembly: assemblies/assembly-kube-exposing-services-cli.adoc
+Processing file: source.adoc
+Writing assembly: assemblies/assembly-kube-yaml.adoc
+Processing file: source.adoc
+Writing module: modules/kube-creating-simple-site-yaml.adoc
+Writing module: modules/kube-ha-yaml.adoc
+Writing module: modules/kube-site-resources-yaml.adoc
+Writing assembly: assemblies/assembly-kube-creating-site-yaml.adoc
+Processing file: source.adoc
+Writing module: modules/kube-access-yaml.adoc
+Writing module: modules/kube-link-cost-yaml.adoc
+Writing module: modules/kube-yaml-custom-certs-info.adoc
+Writing assembly: assemblies/assembly-kube-yaml-site-linking.adoc
+Processing file: source.adoc
+Writing module: modules/kube-router-access-custom-certs-yaml.adoc
+Writing module: modules/kube-link-custom-certs-yaml.adoc
+Writing assembly: assemblies/assembly-kube-yaml-custom-certs.adoc
+Processing file: source.adoc
+Writing module: modules/kube-creating-connector-yaml.adoc
+Writing module: modules/kube-creating-listener-yaml.adoc
+Writing module: modules/kube-creating-multikeylistener-yaml.adoc
+Writing module: modules/kube-creating-attachedconnector-yaml.adoc
+Writing assembly: assemblies/assembly-kube-exposing-services-yaml.adoc
+Processing file: source.adoc
+Writing assembly: assemblies/assembly-system-cli.adoc
+Processing file: source.adoc
+Writing module: modules/system-checking-cli.adoc
+Writing module: modules/system-creating-simple-site-cli.adoc
+Writing module: modules/system-deleting-site-cli.adoc
+Writing module: modules/system-creating-site-bundle.adoc
+Writing assembly: assemblies/assembly-system-creating-site-cli.adoc
+Processing file: source.adoc
+Writing module: modules/system-token-cli.adoc
+Writing module: modules/system-link-cli.adoc
+Writing assembly: assemblies/assembly-system-linking-cli.adoc
+Processing file: source.adoc
+Writing module: modules/system-creating-connector-cli.adoc
+Writing module: modules/system-creating-listener-cli.adoc
+Writing assembly: assemblies/assembly-system-exposing-services-cli.adoc
+Processing file: source.adoc
+Writing assembly: assemblies/assembly-system-yaml.adoc
+Processing file: source.adoc
+Writing module: modules/system-creating-simple-site-yaml.adoc
+Writing assembly: assemblies/assembly-system-yaml-site-configuration.adoc
+Processing file: source.adoc
+Writing module: modules/system-link-yaml.adoc
+Writing assembly: assemblies/assembly-system-yaml-site-linking.adoc
+Processing file: source.adoc
+Writing module: modules/system-creating-connector-yaml.adoc
+Writing module: modules/system-creating-listener-yaml.adoc
+Writing module: modules/system-creating-multikeylistener-yaml.adoc
+Writing assembly: assemblies/assembly-system-yaml-service-exposure.adoc
+WARNING: Skipping console/index.md: skip: true in YAML frontmatter
+Processing file: source.adoc
+Writing module: modules/observer-external-access.adoc
+Writing module: modules/observer-authentication.adoc
+Writing module: modules/observer-tls.adoc
+Writing module: modules/observer-router.adoc
+Writing module: modules/observer-tuning.adoc
+Writing module: modules/observer-prometheus.adoc
+Writing module: modules/observer-persistence.adoc
+Writing module: modules/observer-resources.adoc
+Writing module: modules/observer-images.adoc
+Writing module: modules/observer-labels.adoc
+Writing module: modules/observer-service.adoc
+Writing module: modules/observer-security.adoc
+Writing module: modules/observer-advanced.adoc
+Writing module: modules/observer-metrics.adoc
+Writing module: modules/observer-validation.adoc
+Writing assembly: assemblies/assembly-observer-config.adoc
+Processing file: source.adoc
+Writing module: modules/checking-sites.adoc
+Writing module: modules/checking-links.adoc
+Writing module: modules/debug-dump.adoc
+Writing module: modules/dynamic-system-controller.adoc
+Writing assembly: assemblies/assembly-troubleshooting.adoc
+Prepared Markdown saved to: /tmp/build-index-ta8_5_08/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-ta8_5_08/source.adoc
+Prepared Markdown saved to: /tmp/build-index-5qd8676r/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-5qd8676r/source.adoc
+Prepared Markdown saved to: /tmp/build-index-kqieqm65/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-kqieqm65/source.adoc
+Prepared Markdown saved to: /tmp/build-index-efcmum6k/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-efcmum6k/source.adoc
+Prepared Markdown saved to: /tmp/build-index-5nj8wt53/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-5nj8wt53/source.adoc
+Prepared Markdown saved to: /tmp/build-index-cmpd77yd/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-cmpd77yd/source.adoc
+Prepared Markdown saved to: /tmp/build-index-jgqkjkv0/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-jgqkjkv0/source.adoc
+Prepared Markdown saved to: /tmp/build-index-uq3_oduu/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-uq3_oduu/source.adoc
+Prepared Markdown saved to: /tmp/build-index-dy4wboei/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-dy4wboei/source.adoc
+Prepared Markdown saved to: /tmp/build-index-x6g4ujvb/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-x6g4ujvb/source.adoc
+Prepared Markdown saved to: /tmp/build-index-_ko12qfy/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-_ko12qfy/source.adoc
+Prepared Markdown saved to: /tmp/build-index-7b9r1r6r/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-7b9r1r6r/source.adoc
+Prepared Markdown saved to: /tmp/build-index-j4uy8qxv/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-j4uy8qxv/source.adoc
+Prepared Markdown saved to: /tmp/build-index-0l8z8_sj/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-0l8z8_sj/source.adoc
+Prepared Markdown saved to: /tmp/build-index-j9oog_0_/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-j9oog_0_/source.adoc
+Prepared Markdown saved to: /tmp/build-index-s65qjxdf/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-s65qjxdf/source.adoc
+Prepared Markdown saved to: /tmp/build-index-6x105whp/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-6x105whp/source.adoc
+Prepared Markdown saved to: /tmp/build-index-nuniefut/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-nuniefut/source.adoc
+Prepared Markdown saved to: /tmp/build-index-5xm5jdia/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-5xm5jdia/source.adoc
+Prepared Markdown saved to: /tmp/build-index-topvfvj4/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-topvfvj4/source.adoc
+Prepared Markdown saved to: /tmp/build-index-7w51joax/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-7w51joax/source.adoc
+Prepared Markdown saved to: /tmp/build-index-u6p2j7lj/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-u6p2j7lj/source.adoc
+Prepared Markdown saved to: /tmp/build-index-f6sjkcpp/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-f6sjkcpp/source.adoc
+Prepared Markdown saved to: /tmp/build-index-rb22orzz/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-rb22orzz/source.adoc
+Prepared Markdown saved to: /tmp/build-index-4gg5gfob/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-4gg5gfob/source.adoc
+Prepared Markdown saved to: /tmp/build-index-j4ed0r8s/prepared.md
+Normalized AsciiDoc IDs saved to: /tmp/build-index-j4ed0r8s/source.adoc
+Generated root index: /home/paulwright/repos/sk/vale/sk-vale/index.adoc
+Generated index.adoc with 26 assemblies and 67 modules
+Generating subset documentation (master.adoc)...
+INFO: subset.yml not found, skipping master.adoc generation
+Step 2/3: Running Vale...
+{}
+Vale: all checks passed.
+Step 3/3: Generating HTML documentation...
+HTML generation: completed successfully.
+Generated: /home/paulwright/repos/sk/vale/sk-vale/docs/index.html
