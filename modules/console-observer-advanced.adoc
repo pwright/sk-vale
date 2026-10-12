@@ -1,0 +1,34 @@
+[id="observer-advanced_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Advanced options
+
+[role="_abstract"]
+Configure naming and label behavior for the Network Observer chart.
+
+
+.Name Overrides
+|===
+| Path | Type | Default | Description
+
+| `nameOverride`
+| string
+| `""`
+| Override chart name
+
+| `fullnameOverride`
+| string
+| `""`
+| Override full resource name
+|===
+
+
+.Skip Management Labels
+|===
+| Path | Type | Default | Description
+
+| `skipManagementLabels`
+| bool
+| `false`
+| Skip Skupper management labels
+|===
+

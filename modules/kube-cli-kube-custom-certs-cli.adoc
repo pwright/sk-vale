@@ -1,0 +1,10 @@
+[id="kube-custom-certs-cli_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Custom certificates and the Skupper CLI
+
+[role="_abstract"]
+For custom certificate workflows, YAML provides more control over certificate management and PKI integration.
+You can still use the Skupper CLI to generate links for those workflows.
+
+* xref:kube-yaml-custom-certs_{context}[Linking sites using custom certificates]
+

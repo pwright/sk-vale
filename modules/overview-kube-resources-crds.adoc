@@ -1,0 +1,12 @@
+[id="kube-resources-crds_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Custom resource definitions
+
+[role="_abstract"]
+To get start creating application networks, you create the following custom resources:
+
+* Sites
+* Links
+* Connectors
+* Listeners
+

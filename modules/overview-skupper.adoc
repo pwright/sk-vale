@@ -1,0 +1,20 @@
+[id="skupper_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Skupper
+
+[role="_abstract"]
+Skupper is the tool that creates and manages application networks across sites.
+
+Skupper is an open source tool for creating application networks in Kubernetes or Linux.
+By using Skupper, you can create a distributed application consisting of microservices running in different sites.
+
+This diagram illustrates a Skupper network that connects three services running in three different sites:
+
+image::../images/overview-clusters.png[Three Kubernetes clusters, each with a namespace containing a service and a Skupper instance, connected by a Skupper network]
+
+In a Skupper network, each namespace contains a Skupper instance.
+When these Skupper instances connect, they continually share information about the services that each instance exposes.
+This means that each Skupper instance is always aware of every service that has been exposed to the Skupper network, regardless of the namespace in which each service resides.
+
+Once a Skupper network is formed across Kubernetes namespaces, any of the services in those namespaces can be exposed (through annotation) to the Skupper network.
+When a service is exposed, Skupper creates proxy endpoints to make that service available on each namespace in the Skupper network.
