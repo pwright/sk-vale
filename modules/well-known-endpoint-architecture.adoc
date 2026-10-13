@@ -1,0 +1,82 @@
+[id="well-known-endpoint-architecture_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Well-known endpoint architecture
+
+[role="_abstract"]
+{registry} exposes well-known endpoints for agent discovery, MCP tool discovery, and JSON schema retrieval. Each endpoint serves a specific role in the A2A and MCP ecosystems.
+
+The following table lists the available well-known endpoints.
+
+.Well-known endpoints
+[cols="3,1,4",options="header"]
+|===
+|Path |Method |Description
+
+|`/.well-known/agent.json`
+|GET
+|Returns the agent card for this {registry} instance. Use this endpoint for standard A2A protocol discovery.
+
+|`/.well-known/agent-card.json`
+|GET
+|Returns the agent card for this {registry} instance. This alias exists for compatibility with IBM watsonx Orchestrate, which discovers agents at this path by default. It returns the same response as `/.well-known/agent.json`.
+
+|`/.well-known/agents`
+|GET
+|Searches for registered agent cards by name, skill, capability, input mode, or output mode. Supports pagination with `offset` and `limit` parameters.
+
+|`/.well-known/agents/\{groupId}/\{artifactId}`
+|GET
+|Returns a specific registered agent card by group ID and artifact ID. Accepts an optional `version` query parameter that defaults to the latest version.
+
+|`/.well-known/mcp-tools`
+|GET
+|Searches for registered MCP tool definitions by name or input parameter. Supports pagination with `offset` and `limit` parameters.
+
+|`/.well-known/mcp-tools/\{groupId}/\{artifactId}`
+|GET
+|Returns a specific registered MCP tool definition by group ID and artifact ID. Accepts an optional `version` query parameter that defaults to the latest version.
+
+|`/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatible`
+|GET
+|Returns the registered MCP tool definitions that can receive the structured output of the specified tool as their input. Accepts an optional `version` query parameter and supports pagination with `offset` and `limit` parameters.
+
+|`/.well-known/schemas/\{type}/\{version}`
+|GET
+|Returns the JSON schema for a specific LLM artifact type. Supported types are `prompt-template`, `model-schema`, and `mcp-tool`, each with version `v1`.
+
+|`/.well-known/ai-catalog.json`
+|GET
+|Returns an AI Catalog document (see xref:getting-started/assembly-ai-catalog-ard.adoc[AI Catalog and ARD discovery]) projecting registered `AGENT_CARD` and `MCP_TOOL` artifacts.
+
+|`/.well-known/ard.json`
+|GET
+|Returns the same document as `/.well-known/ai-catalog.json`, at the path mandated by the ARD (Agentic Resource Discovery) specification.
+|===
+
+The `/.well-known/agent.json` endpoint returns the {registry} instance agent card, which represents the registry itself as an A2A agent. This endpoint requires no authentication.
+
+The `/.well-known/agents` and `/.well-known/agents/\{groupId}/\{artifactId}` endpoints operate on agent cards that you store in {registry} as `AGENT_CARD` artifacts. The search endpoint requires no authentication. When OIDC or basic authentication is enabled, the search endpoint returns only the agent cards that the caller has permission to view, based on the `apicurio.agent.visibility` label. The `/.well-known/agents/\{groupId}/\{artifactId}` endpoint requires read-level authorization.
+
+The `/.well-known/mcp-tools`, `/.well-known/mcp-tools/\{groupId}/\{artifactId}`, and `/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatible` endpoints operate on MCP tool definitions that you store in {registry} as `MCP_TOOL` artifacts. These endpoints require read-level authorization and are available only when MCP tools support is enabled.
+
+The `/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatible` endpoint compares the `outputSchema` of the specified tool with the `inputSchema` of each candidate tool, as if the whole output object were passed to the candidate. A candidate is returned only when the comparison proves that it accepts every output that the `outputSchema` permits:
+
+* Every input that the candidate requires is also required by the `outputSchema`.
+* The type of each property in the output is accepted by the candidate.
+* Any property that the output can contain, but that the candidate does not declare, is allowed by the `additionalProperties` of the candidate.
+
+An `outputSchema` that declares no `type` permits values other than objects, because `properties`, `required`, and `additionalProperties` apply only to objects. No candidate whose `inputSchema` declares a `type` is returned for such a tool, since it would reject those values.
+
+The comparison evaluates `type`, `properties`, `required`, and `additionalProperties` on each schema, and `type` on each property. Annotations such as `title`, `description`, `default`, `examples`, and `$comment` do not affect the result. A candidate is not returned when either schema uses any other keyword, such as `enum`, `format`, or `$ref`, gives `type` as an array, nests object or array structure inside a property, or declares a `$schema` dialect other than JSON Schema draft-04, draft-06, draft-07, 2019-09, or 2020-12. A schema that does not declare `$schema` is treated as JSON Schema 2020-12, which is the default dialect in the MCP specification. A candidate is also not returned when the result depends on the specified tool producing only the properties that it declares, which can happen only when its `outputSchema` declares properties and does not set `additionalProperties`.
+
+IMPORTANT: The `/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatible` endpoint now returns a different set of tools than earlier versions of {registry}, which returned any candidate whose `inputSchema` declared every property in the `outputSchema` of the specified tool. A candidate that ignores part of the output is now returned. A candidate is no longer returned when it requires an input that the `outputSchema` does not require, or when the comparison cannot evaluate part of either schema.
+
+The `/.well-known/schemas/\{type}/\{version}` endpoint serves built-in JSON schemas that you can use for IDE autocompletion and validation of `PROMPT_TEMPLATE`, `MODEL_SCHEMA`, and `MCP_TOOL` artifacts. This endpoint requires no authentication.
+
+The `/.well-known/ai-catalog.json` and `/.well-known/ard.json` endpoints require read-level authorization when authentication is enabled. Anonymous clients can read them only if anonymous read access is enabled. {registry} filters agent card entries by the same visibility labels as `/.well-known/agents`. See xref:getting-started/assembly-ai-catalog-ard.adoc[AI Catalog and ARD discovery] for the full ARD search API.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-a2a-features.adoc[A2A protocol features]
+
+// con-agent-discovery-patterns-overview
