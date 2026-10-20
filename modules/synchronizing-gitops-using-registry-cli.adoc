@@ -1,0 +1,48 @@
+[id="synchronizing-gitops-using-registry-cli_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Checking and synchronizing GitOps storage using the CLI
+
+[role="_abstract"]
+You can inspect GitOps storage status and request an immediate synchronization from the configured Git repositories.
+
+.Prerequisites
+* Your CLI context points to a {registry} instance that uses GitOps storage.
+* You have read access to view status and administrator access to request synchronization when authorization is enabled.
+
+.Procedure
+. Check the current synchronization status:
++
+[source,bash]
+----
+$ acr gitops status
+----
++
+The output includes the synchronization state, attempt and success timestamps, resource counts, source commit identifiers, and reported errors.
+. Request synchronization and wait for the server to report a completed attempt:
++
+[source,bash]
+----
+$ acr gitops sync --wait --timeout 300
+----
++
+The CLI checks status every two seconds. It waits for the attempt timestamp to advance and for the state to become `IDLE` or `ERROR`. Without `--wait`, the command returns after requesting synchronization.
+. Optional: Write the reported status as JSON for automation:
++
+[source,bash]
+----
+$ acr gitops status --output-type json
+$ acr gitops sync --wait --output-type json
+----
++
+For `sync`, JSON status output requires `--wait`. Without `--wait`, the command prints a request confirmation regardless of the output format.
+
+.Verification
+* Check that the `sources` values match the expected commits. The CLI reports the server status; a successful command exit alone does not verify which commit the registry loaded.
+
+ifndef::service-registry-downstream[]
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-configuring-gitops-storage.adoc[]
+endif::[]
+
+

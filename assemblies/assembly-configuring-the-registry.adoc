@@ -1,0 +1,21 @@
+[id="configuring-the-registry_{context}_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Configuring your {registry} deployment
+
+[role="_abstract"]
+You can configure your {registry} deployment, including file-based secrets, HTTP caching, the web console, logging, health checks, and observability.
+
+NOTE: For a list of all available configuration options, see {registry-config-reference}.
+
+// proc-configuring-file-based-secrets
+include::../modules/configuring-file-based-secrets.adoc[leveloffset=+1]
+include::../modules/configuring-registry-http-caching.adoc[leveloffset=+1]
+include::../modules/registry-http-cache-behavior.adoc[leveloffset=+1]
+include::../modules/configuring-registry-ui.adoc[leveloffset=+1]
+include::../modules/configuring-registry-observability.adoc[leveloffset=+1]
+include::../modules/otel-features.adoc[leveloffset=+1]
+include::../modules/otel-performance.adoc[leveloffset=+1]
+include::../modules/configuring-dynamic-log-level.adoc[leveloffset=+1]
+include::../modules/registry-rest-metrics-distribution.adoc[leveloffset=+1]
+include::../modules/configuring-liveness-readiness-probes.adoc[leveloffset=+1]
+include::../modules/registry-liveness-env-vars.adoc[leveloffset=+1]
