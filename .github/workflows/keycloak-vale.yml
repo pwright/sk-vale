@@ -26,6 +26,9 @@ jobs:
           wget -qO- "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
             | tar xz -C /usr/local/bin vale
 
+      - name: Install asciidoctor
+        run: gem install asciidoctor
+
       - name: Clone pwright/keycloak (generated-guides)
         run: git clone --depth 1 --branch generated-guides https://github.com/pwright/keycloak.git
 
