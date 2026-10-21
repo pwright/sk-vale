@@ -11,6 +11,15 @@ DO_COMMIT=false
 KEYCLOAK_BRANCH="keycloak"
 CLEANUP_DIR=""
 
+INCLUDE_GUIDES=(
+    high-availability
+    observability
+    operator
+    securing-apps
+    server
+    ui-customization
+)
+
 usage() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -86,17 +95,22 @@ vale sync
 echo "Splitting AsciiDoc files with leben.py..."
 cd "$REPO_ROOT"
 count=0
-while IFS= read -r -d '' adoc_file; do
-    python3 leben.py "$adoc_file"
-    count=$((count + 1))
-done < <(find "$INPUT_DIR" -name '*.adoc' \
-    -not -path '*/target/*' \
-    -not -path '*/src/*' \
-    -not -path '*/partials/*' \
-    -not -path '*/templates/*' \
-    -not -name 'attributes.adoc' \
-    -not -name 'assembly.xml' \
-    -print0)
+for guide_dir in "${INCLUDE_GUIDES[@]}"; do
+    guide_path="$INPUT_DIR/$guide_dir"
+    if [[ ! -d "$guide_path" ]]; then
+        echo "WARNING: Guide directory not found: $guide_path"
+        continue
+    fi
+    while IFS= read -r -d '' adoc_file; do
+        python3 leben.py "$adoc_file"
+        count=$((count + 1))
+    done < <(find "$guide_path" -name '*.adoc' \
+        -not -path '*/partials/*' \
+        -not -path '*/templates/*' \
+        -not -name 'attributes.adoc' \
+        -not -name 'assembly.xml' \
+        -print0)
+done
 
 if [[ $count -eq 0 ]]; then
     echo "ERROR: No .adoc files found in $INPUT_DIR"
