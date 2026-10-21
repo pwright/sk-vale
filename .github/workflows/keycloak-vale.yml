@@ -1,0 +1,43 @@
+name: Keycloak Vale Lint
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '12 3 * * 3'
+
+permissions:
+  contents: write
+
+jobs:
+  keycloak-vale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out sk-vale
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Vale
+        run: |
+          VALE_VERSION=3.22.0
+          wget -qO- "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
+            | tar xz -C /usr/local/bin vale
+
+      - name: Clone pwright/keycloak (generated-guides)
+        run: git clone --depth 1 --branch generated-guides https://github.com/pwright/keycloak.git
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Run conversion and linting
+        id: lint
+        continue-on-error: true
+        run: bash scripts/convert-keycloak.sh --input-dir keycloak --commit
+
+      - name: Push keycloak branch
+        run: git push origin keycloak --force
