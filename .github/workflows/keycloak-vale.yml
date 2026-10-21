@@ -27,7 +27,9 @@ jobs:
             | tar xz -C /usr/local/bin vale
 
       - name: Install asciidoctor
-        run: gem install asciidoctor
+        run: |
+          gem install --user-install asciidoctor
+          echo "$(ruby -e 'puts Gem.user_dir')/bin" >> "$GITHUB_PATH"
 
       - name: Clone pwright/keycloak (generated-guides)
         run: git clone --depth 1 --branch generated-guides https://github.com/pwright/keycloak.git
