@@ -185,6 +185,21 @@ def extract_mkdocs_nav_links(mkdocs_file):
 
     return md_links
 
+
+def extract_mkdocs_variables(mkdocs_file):
+    """Returns the set of Jinja variable names defined in mkdocs.yml extra."""
+    try:
+        import yaml
+    except ImportError:
+        return set()
+
+    with open(mkdocs_file, 'r', encoding='utf-8') as f:
+        config = yaml.safe_load(f)
+
+    extra = config.get('extra', {})
+    return {k for k, v in extra.items() if isinstance(v, str) and v}
+
+
 def generate_unique_anchor(md_file):
     """Creates a unique anchor using the file's relative path and filename."""
     relative_path = os.path.splitext(md_file)[0]  # Remove .md extension
@@ -556,7 +571,7 @@ ADOC_BARE_LANGUAGE_PATTERN = re.compile(
     r"^\[,([\w+-]+)\]$", re.MULTILINE
 )
 JINJA_ATTRIBUTE_PREFIXES = ("skupper_",)
-JINJA_ATTRIBUTE_PATTERN = re.compile(r"\{\{(\w+)\}\}")
+JINJA_ATTRIBUTE_PATTERN = re.compile(r"\{\\?\{(\w+)\}\}")
 
 ADOC_LISTING_DELIM = re.compile(r"^-{4,}[ \t]*$")
 ADOC_ATTR_LIST = re.compile(r"^\[.*\][ \t]*$")
@@ -592,27 +607,33 @@ def add_attribute_subs_to_code_blocks(content):
     return "\n".join(result)
 
 
-def normalize_adoc_ids(content):
+def normalize_adoc_ids(content, jinja_vars=None):
     """Rewrites kramdoc-style IDs and passthrough HTML anchors as AsciiDoc IDs."""
     content = ADOC_HTML_ANCHOR_PATTERN.sub(r'\1[id="\2"]', content)
     content = ADOC_SECTION_ID_PATTERN.sub(r'\1[id="\2"]', content)
     content = ADOC_ID_HEADING_GAP_PATTERN.sub(r"\1\n\2", content)
     content = convert_blockquote_admonitions(content)
     content = ADOC_BARE_LANGUAGE_PATTERN.sub(r"[source,\1]", content)
-    content = JINJA_ATTRIBUTE_PATTERN.sub(
-        lambda m: f"{{{m.group(1)}}}" if m.group(1).startswith(JINJA_ATTRIBUTE_PREFIXES) else m.group(0),
-        content,
-    )
+    if jinja_vars is not None:
+        content = JINJA_ATTRIBUTE_PATTERN.sub(
+            lambda m: f"{{{m.group(1)}}}" if m.group(1) in jinja_vars else m.group(0),
+            content,
+        )
+    else:
+        content = JINJA_ATTRIBUTE_PATTERN.sub(
+            lambda m: f"{{{m.group(1)}}}" if m.group(1).startswith(JINJA_ATTRIBUTE_PREFIXES) else m.group(0),
+            content,
+        )
     #content = content.replace("Skupper", "{skupper-name}")
     content = add_attribute_subs_to_code_blocks(content)
     return content
 
-def convert_adoc_ids(input_file, output_file):
+def convert_adoc_ids(input_file, output_file, jinja_vars=None):
     """Normalizes AsciiDoc IDs in-place or to a new output file."""
     with open(input_file, "r", encoding="utf-8") as in_f:
         content = in_f.read()
 
-    converted = normalize_adoc_ids(content)
+    converted = normalize_adoc_ids(content, jinja_vars=jinja_vars)
 
     output_dir = os.path.dirname(output_file)
     if output_dir:

@@ -192,7 +192,7 @@ def rewrite_internal_html_links(content, source_html_path, page_ids, fragment_id
     return HTML_LINK_PATTERN.sub(replace_link, content)
 
 
-def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_script, image_registry, page_ids, fragment_ids, copy_images=False):
+def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_script, image_registry, page_ids, fragment_ids, copy_images=False, jinja_vars=None):
     assemblies_out = output_dir / "assemblies"
     modules_out = output_dir / "modules"
     images_out = output_dir / "images"
@@ -205,7 +205,7 @@ def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_s
 
         merge.prepare_markdown_file(str(md_file), str(prepared_md))
         run_command(["kramdoc", "--format=GFM", "-o", str(converted_adoc), str(prepared_md)])
-        merge.convert_adoc_ids(str(converted_adoc), str(converted_adoc))
+        merge.convert_adoc_ids(str(converted_adoc), str(converted_adoc), jinja_vars=jinja_vars)
         run_command([sys.executable, str(leben_script), converted_adoc.name], cwd=str(temp_dir))
 
         assembly_files = sorted((temp_dir / "assemblies").glob("*.adoc"))
@@ -311,8 +311,10 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
 
     # Detect file type and extract links accordingly
     index_file_str = str(index_file)
+    jinja_vars = None
     if index_file_str.endswith('.yml') or index_file_str.endswith('.yaml'):
         md_links = merge.extract_mkdocs_nav_links(index_file_str)
+        jinja_vars = merge.extract_mkdocs_variables(index_file_str)
     else:
         md_links = merge.extract_md_links(index_file_str)
 
@@ -407,6 +409,7 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
                 page_ids,
                 fragment_ids,
                 copy_images,
+                jinja_vars=jinja_vars,
             )
         )
 
