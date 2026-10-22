@@ -478,7 +478,7 @@ def prepare_markdown_for_kramdoc(content, source_name="<memory>"):
 
 REF_LINK_DEF_PATTERN = re.compile(r"^\[([^\]]+)\]:\s+https?://\S+", re.MULTILINE)
 ADDITIONAL_RESOURCES_PATTERN = re.compile(
-    r"\*\*Additional resources\*\*\s*\n(\s*\n)*(?=\n|$|\*\*|<a |#{1,6} )",
+    r"\*\*Additional resources\*\*\s*\n(\s*\n)*(?=$|\*\*|<a |#{1,6} )",
 )
 
 
