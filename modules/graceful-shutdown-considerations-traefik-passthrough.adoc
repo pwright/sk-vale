@@ -1,0 +1,122 @@
+[id="graceful-shutdown-considerations-traefik-passthrough_{context}"]
+= Graceful shutdown considerations
+
+
+With TLS passthrough, Traefik cannot signal a connection close at the HTTP level.
+The Traefik health check settings determine how long it takes for the proxy to detect that a {project_name} instance is shutting down and that connections should no longer be routed to it.
+
+With the health check settings from the configuration above (`interval: 5s`, `timeout: 3s`), it takes up to 8 seconds (`interval + timeout`) for Traefik to mark a {project_name} instance as down.
+During this period, {project_name} must remain running to serve in-flight requests.
+Therefore, you need to configure the `--shutdown-delay` to be at least as long as the detection time:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --proxy-protocol-enabled true --health-enabled true --metrics-enabled true --http-management-scheme=http --shutdown-delay=30s
+----
+
+NOTE: The 30-second delay accounts for both the detection time (~8 seconds) and draining existing open TCP connections, which Traefik cannot close at the HTTP level in passthrough mode.
+A `--shutdown-delay=16s` (2x the maximum detection time) is sufficient if TCP connection draining is not a concern.
+
+For a detailed explanation of shutdown phases and how to tune the delay and timeout values, see the Graceful HTTP shutdown section in the link:{links_server_reverseproxy_url}[{links_server_reverseproxy_name}] {section}.
+
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+health-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose health check endpoints.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If enabled, health checks are available at the `/health`, `/health/ready` and `/health/live` endpoints.#
+
+
+
+*CLI:* `+--health-enabled+` +
+*Env:* `+KC_HEALTH_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+http-management-scheme+`# 
+
+[.options-description]#Configures the management interface scheme.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If `inherited`, the management interface will inherit the HTTPS settings of the main interface. If `http`, the management interface will be accessible via HTTP - it will not inherit HTTPS settings and cannot be configured for HTTPS.#
+
+
+
+*CLI:* `+--http-management-scheme+` +
+*Env:* `+KC_HTTP_MANAGEMENT_SCHEME+`
+--
+
+
+
+|
+`+http+`, `+inherited+`
+
+|
+`+inherited+`
+
+|
+[.options-key]#`+metrics-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose metrics.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If enabled, metrics are available at the `/metrics` endpoint.#
+
+
+
+*CLI:* `+--metrics-enabled+` +
+*Env:* `+KC_METRICS_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+proxy-protocol-enabled+`# 
+
+[.options-description]#Whether the server should use the HA PROXY protocol when serving requests from behind a proxy.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#When set to true, the remote address returned will be the one from the actual connecting client. Cannot be enabled when the `proxy-headers` is used.#
+
+
+
+*CLI:* `+--proxy-protocol-enabled+` +
+*Env:* `+KC_PROXY_PROTOCOL_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+
+|===

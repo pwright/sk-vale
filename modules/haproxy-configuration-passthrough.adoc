@@ -1,0 +1,72 @@
+[id="haproxy-configuration-passthrough_{context}"]
+= HAProxy configuration
+
+
+The following `haproxy.cfg` shows a configuration for TLS passthrough with two {project_name} backend servers.
+
+[source,haproxy]
+----
+global
+    log stdout format raw local0
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5s
+    timeout client  50s
+    timeout server  50s
+    retries 3
+
+frontend https_front
+    bind *:8443 # <1>
+    mode tcp # <2>
+    option tcplog
+    default_backend keycloak_back
+
+backend keycloak_back
+    mode tcp # <3>
+    balance roundrobin # <4>
+    option httpchk GET /health/ready # <5>
+    http-check expect status 200
+    server keycloak1 keycloak1:8443 send-proxy-v2 check port 9000 check-ssl verify none inter 5s fall 3 rise 2 slowstart 60s # <6>
+    server keycloak2 keycloak2:8443 send-proxy-v2 check port 9000 check-ssl verify none inter 5s fall 3 rise 2 slowstart 60s
+----
+
+<1> The port HAProxy listens on for incoming TLS connections.
+Clients connect to this port, and HAProxy forwards the raw TCP stream to the backend.
+<2> Enables link:https://docs.haproxy.org/3.2/configuration.html#4-mode[TCP mode] on the frontend.
+This tells HAProxy to operate at Layer 4, forwarding raw bytes without decrypting TLS.
+HAProxy never sees the plaintext HTTP traffic in this mode.
+<3> The backend must also use TCP mode to match the frontend.
+<4> Distributes connections across backend servers using link:https://docs.haproxy.org/3.2/configuration.html#4-balance[round-robin] load balancing.
+<5> Configures link:https://docs.haproxy.org/3.2/configuration.html#4.2-option%20httpchk[HTTP health checks] against {project_name}'s readiness endpoint.
+Even though the data traffic uses TCP mode, HAProxy can perform HTTP health checks on a separate port.
+The `http-check expect status 200` directive tells HAProxy to consider the server healthy only when it receives an HTTP 200 response.
+For details on the {project_name} health check endpoint, see the link:{links_server_management-interface_url}[{links_server_management-interface_name}] {section}.
+<6> Defines a backend {project_name} server.
+The parameters on this line control PROXY protocol, health checks, and failure detection:
+
+The `server` directive parameters are explained below:
+
+`send-proxy-v2`::
+Enables the link:https://docs.haproxy.org/3.2/configuration.html#5.2-send-proxy-v2[PROXY protocol v2].
+HAProxy prepends the original client IP address to the TCP connection so that {project_name} sees the real source IP instead of HAProxy's address.
+This requires {project_name} to be configured with `--proxy-protocol-enabled=true` (see <<keycloak-configuration-haproxy-passthrough>>).
+Version 1 (`send-proxy`) is also supported.
+
+`check port 9000 check-ssl verify none`::
+Directs health checks to the link:https://docs.haproxy.org/3.2/configuration.html#5.2-check[management port] (`9000`) over HTTPS.
+The `verify none` option skips TLS certificate verification for the health check connection, which is acceptable because the health check is an internal communication between HAProxy and {project_name}.
+The management port is separate from the main application port (`8443`), as described in the link:{links_server_management-interface_url}[{links_server_management-interface_name}] {section}.
+
+`inter 5s fall 3 rise 2`::
+Configures the link:https://docs.haproxy.org/3.2/configuration.html#5.2-inter[health check frequency]:
+poll every 5 seconds, mark a server as down after 3 consecutive failures, and mark it as up again after 2 consecutive successes.
+These values affect how quickly HAProxy detects that a {project_name} instance is shutting down (see <<graceful-shutdown-considerations-haproxy-passthrough>>).
+
+`slowstart 60s`::
+Gradually increases the server's weight from 0 to its full value over 60 seconds after the server becomes available.
+This gives {project_name} and the JVM time to warm up (JIT compilation, class loading, cache population) before receiving full traffic, preventing performance degradation and timeouts during the warmup phase.
+

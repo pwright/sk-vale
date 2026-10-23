@@ -1,0 +1,40 @@
+[id="client-registration_{context}"]
+= Using the client registration service
+
+
+
+
+In order for an application or service to utilize {project_name} it has to register a client in {project_name}.
+An admin can do this through the admin console (or admin REST endpoints), but clients can also register themselves through the {project_name} client registration service.
+
+The Client Registration Service provides built-in support for {project_name} Client Representations, OpenID Connect Client Meta Data and SAML Entity Descriptors.
+The Client Registration Service endpoint is `/realms/<realm>/clients-registrations/<provider>`.
+
+The built-in supported `providers` are:
+
+* default - {project_name} Client Representation (JSON)
+* install - {project_name} Adapter Configuration (JSON)
+* openid-connect - OpenID Connect Client Metadata Description (JSON)
+* saml2-entity-descriptor - SAML Entity Descriptor (XML)
+
+The following sections will describe how to use the different providers.
+
+[#_authentication]
+== Authentication
+
+To invoke the Client Registration Services you usually need a token. The token can be a bearer token, an initial access token or a registration access token.
+There is an alternative to register new client without any token as well, but then you need to configure Client Registration Policies (see below).
+
+=== Bearer token
+
+The bearer token can be issued on behalf of a user or a Service Account. The following permissions are required to invoke the endpoints (see link:{adminguide_link}[{adminguide_name}] for more details):
+
+* create-client or manage-client - To create clients
+* view-client or manage-client - To view clients
+* manage-client - To update or delete client
+
+If you are using a bearer token to create clients it's recommend to use a token from a Service Account with only the `create-client` role (see link:{adminguide_link}[{adminguide_name}] for more details).
+
+include::../modules/-initial-access-token.adoc[leveloffset=+2]
+include::../modules/-registration-access-token.adoc[leveloffset=+2]
+include::../modules/-client-registration-policies.adoc[leveloffset=+1]

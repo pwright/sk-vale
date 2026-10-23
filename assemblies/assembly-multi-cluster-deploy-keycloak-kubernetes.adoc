@@ -1,0 +1,108 @@
+[id="multi-cluster-deploy-keycloak-kubernetes_{context}"]
+= Deploying {project_name} for HA with the Operator
+
+
+
+
+This {section} describes advanced {project_name} configurations for {kubernetes} which are load tested and will recover from single Pod failures.
+
+These instructions are intended for use with the setup described in the link:{links_high-availability_multi-cluster-concepts_url}[{links_high-availability_multi-cluster-concepts_name}] {section}.
+Use it together with the other building blocks outlined in the link:{links_high-availability_multi-cluster-building-blocks_url}[{links_high-availability_multi-cluster-building-blocks_name}] {section}.
+
+== Prerequisites
+
+* {kubernetes} cluster running.
+* Understanding of a link:{links_operator_basic-deployment_url}[{links_operator_basic-deployment_name}] of {project_name} with the {project_name} Operator.
+* AWS Aurora database deployed using the link:{links_high-availability_multi-cluster-deploy-aurora_url}[{links_high-availability_multi-cluster-deploy-aurora_name}] {section}.
+* {jdgserver_name} server deployed using the link:{links_high-availability_multi-cluster-deploy-infinispan-kubernetes-crossdc_url}[{links_high-availability_multi-cluster-deploy-infinispan-kubernetes-crossdc_name}] {section}.
+
+== Procedure
+
+. Determine the sizing of the deployment using the link:{links_high-availability_multi-cluster-concepts-memory-and-cpu-sizing_url}[{links_high-availability_multi-cluster-concepts-memory-and-cpu-sizing_name}] {section}.
+
+. Install the {project_name} Operator as described in the link:{links_operator_installation_url}[{links_operator_installation_name}] {section}.
+
+. Notice the configuration file below contains options relevant for connecting to the Aurora database from link:{links_high-availability_multi-cluster-deploy-aurora_url}#multi-cluster-aurora-connect[{links_high-availability_multi-cluster-deploy-aurora_name}]
+
+. Notice the configuration file below options relevant for connecting to the {jdgserver_name} server from link:{links_high-availability_multi-cluster-deploy-infinispan-kubernetes-crossdc_url}#connect-infinispan-to-keycloak[{links_high-availability_multi-cluster-deploy-infinispan-kubernetes-crossdc_name}]
+
+. Build a custom {project_name} image which is link:{links_server_db_url}#preparing-keycloak-for-amazon-aurora-postgresql[prepared for usage with the Amazon Aurora PostgreSQL database].
+
+. Secure the Amazon Aurora PostgreSQL database connection by downloading the https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.SSL.html[certificate bundles].
+Create a `ConfigMap` with the certificate bundle using:
++
+[source,bash]
+----
+kubectl --namespace keycloak create configmap keycloak-aurora-rootcert --from-file aurora.pem=/path/to/bundle.pem
+----
+
+. Deploy the {project_name} CR with the following values with the resource requests and limits calculated in the first step:
++
+[source,yaml]
+----
+include::../examples/generated/keycloak.yaml[tag=keycloak]
+----
+<1> Set the Amazon Aurora PostgreSQL URL.
+<2> The database connection pool initial, max and min size should be identical to allow statement caching for the database.
+Adjust this number to meet the needs of your system.
+As most requests will not touch the database due to the {project_name} embedded cache, this change can serve several hundreds of requests per second.
+See the link:{links_high-availability_multi-cluster-concepts-database-connections_url}[{links_high-availability_multi-cluster-concepts-database-connections_name}] {section} for details.
+<3> Specify the URL to your custom {project_name} image. If your image is optimized, set the `startOptimized` flag to `true`.
+<4> Enable additional features for multi-cluster support like the loadbalancer probe `/lb-check`.
+<5> To be able to analyze the system under load, enable the metrics endpoint.
+<6> Secure the database connection.
+<7> Specify the `ConfigMap` name that contains the Amazon Aurora PostgreSQL database certificate bundle.
+The Operator will automatic mount the file in directory `/opt/keycloak/conf/truststores/configmap-<config map name>/<file-name>`
+
+[#multi-cluster-verify-deployment]
+== Verify the deployment
+
+Confirm that the {project_name} deployment is ready.
+
+[source,bash]
+----
+kubectl wait --for=condition=Ready keycloaks.k8s.keycloak.org/keycloak
+kubectl wait --for=condition=RollingUpdate=False keycloaks.k8s.keycloak.org/keycloak
+----
+
+[#multi-cluster-load-shedding]
+== Optional: Load shedding
+
+To enable load shedding, limit the number of queued requests.
+
+.Load shedding with max queued http requests
+[source,yaml,indent=0]
+----
+spec:
+  additionalOptions:
+include::../examples/generated/keycloak.yaml[tag=keycloak-queue-size]
+----
+
+All exceeding requests are served with an HTTP 503.
+
+You might consider limiting the value for `http-pool-max-threads` further because multiple concurrent threads will lead to throttling by {kubernetes} once the requested CPU limit is reached.
+
+See the link:{links_high-availability_multi-cluster-concepts-threads_url}#multi-cluster-load-shedding[{links_high-availability_multi-cluster-concepts-threads_name}] {section} about load shedding for details.
+
+[#multi-cluster-sticky-sessions]
+== Optional: Disable sticky sessions
+
+When running on OpenShift and the default passthrough Ingress setup as provided by the {project_name} Operator, the load balancing done by HAProxy is done by using sticky sessions based on the IP address of the source.
+
+The recommended way to run {project_name} behind a load balancer is to disable sticky session to allow for an even distribution of requests across all nodes.
+
+Add the following supplementary configuration under the `spec` in the {project_name} Custom Resource to disable sticky sessions.
+
+[source,yaml,subs="attributes+"]
+----
+spec:
+  ingress:
+    enabled: true
+    annotations:
+      # When running load tests, disable sticky sessions on the OpenShift HAProxy router
+      # to avoid receiving all requests on a single {project_name} Pod.
+      haproxy.router.openshift.io/balance: roundrobin
+      haproxy.router.openshift.io/disable_cookies: 'true'
+----
+
+

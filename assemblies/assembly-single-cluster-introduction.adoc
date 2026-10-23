@@ -1,0 +1,98 @@
+[id="single-cluster-introduction_{context}"]
+= Single-cluster deployments
+
+
+
+
+== When to use a single-cluster setup
+
+The {project_name} single-cluster setup is targeted at use cases that:
+
+* Deploy to an infrastructure with transparent networking, like for example a single {kubernetes} cluster.
+* Desire all healthy {project_name} instances to handle user requests.
+* Are constrained to a single
+region (e.g. a single AWS region)
+* Permit planned outages for maintenance.
+* Fit within a defined user and request count.
+* Can accept the impact of periodic outages.
+* Deployed in data centers with the required network latency and database configuration
+
+[#single-cluster-tested-configuration]
+== Tested Configuration
+
+We regularly test {project_name} with the following configuration:
+
+* An OpenShift cluster deployed across three AWS availability zones in the same region.
+** Provisioned with https://www.redhat.com/en/technologies/cloud-computing/openshift/aws[Red Hat OpenShift Service on AWS] (ROSA),
+using ROSA HCP.
+
+** At least one worker node for each availability-zone
+** OpenShift version 4.21.
+
+* Amazon Aurora PostgreSQL database
+** High availability with a primary DB instance in one availability zone, and synchronously replicated readers in the other availability zones
+** Version 17.5
+
+* Support for {project_name} in these configurations may require replicating issues in this tested set up.
+
+[#single-cluster-configuration]
+== Configuration
+
+
+* {project_name} deployed on an OpenShift cluster version 4.17 or later
+** For cloud setups, Pods can be scheduled across up to three availability zones within the same region
+if OpenShift supports spanning multiple availability zones in that environment and {project_name}'s latency requirements are met.
+** For on-premise setups, Pods can be scheduled across up to three datacenters
+if OpenShift supports spanning multiple datacenters in that environment and {project_name}'s latency requirements are met.
+
+
+
+* Deployments require a round-trip latency of less than 10 ms between {project_name} instances.
+
+* Database
+** For a list of supported databases, see link:{links_server_db_url}[{links_server_db_name}].
+** Deployments spanning multiple availability zones must utilize a database that can tolerate zone failures
+and synchronously replicates data between replicas.
+
+A deviation from these requirements can cause data loss, errors or outages. Any issues encountered with {project_name} would need to be replicated in an environment that meets these requirements in order for the Red Hat support team to assist.
+
+Read more on each item in the link:{links_high-availability_single-cluster-building-blocks_url}[{links_high-availability_single-cluster-building-blocks_name}] {section}.
+
+[#single-cluster-load]
+== Maximum load
+
+We regularly test {project_name} with the following load:
+
+* 1,000,000 users
+* 300 requests per second
+
+[IMPORTANT]
+====
+It is imperative that your production deployments are integrated with an observability stack in order to identify issues
+early and facilitate troubleshooting when they do arise. Additional demand on {project_name} makes isolating issues harder,
+therefore this becomes increasingly pertinent as the total number of users and requests per second increases.
+====
+
+
+See the link:{links_high-availability_single-cluster-concepts-memory-and-cpu-sizing_url}[{links_high-availability_single-cluster-concepts-memory-and-cpu-sizing_name}] {section} for more information.
+
+
+[#single-cluster-limitations]
+== Limitations
+
+Even with the additional redundancy of three availability-zones, downtime can still occur when:
+
+* Simultaneous node failures occur
+* Rolling out {project_name} upgrades
+* Infrastructure fails, for example the {kubernetes} cluster
+
+For more details on limitations see the link:{links_high-availability_single-cluster-concepts_url}[{links_high-availability_single-cluster-concepts_name}] {section}.
+
+== Next steps
+
+The different {sections} introduce the necessary concepts and building blocks.
+For each building block, a blueprint shows how to deploy a fully functional example.
+Additional performance tuning and security hardening are still recommended when preparing a production setup.
+
+
+

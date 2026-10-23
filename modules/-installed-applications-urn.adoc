@@ -1,0 +1,11 @@
+[id="_installed_applications_urn_{context}"]
+= _installed_applications_urn
+
+`urn:ietf:wg:oauth:2.0:oob`::
+
+  If you cannot start a web server in the client (or a browser is not available), you can use the special `urn:ietf:wg:oauth:2.0:oob` redirect uri.
+  When this redirect uri is used, {project_name} displays a page with the code in the title and in a box on the page.
+  The application can either detect that the browser title has changed, or the user can copy and paste the code manually to the application.
+  With this redirect uri, a user can use a different device to obtain a code to paste back to the application.
+
+

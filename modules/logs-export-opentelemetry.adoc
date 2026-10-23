@@ -1,0 +1,1443 @@
+[id="logs-export-opentelemetry_{context}"]
+= Telemetry Logs export (OpenTelemetry)
+
+
+It is possible to export OpenTelemetry logs from your deployment to the OpenTelemetry collector for centralized log management.
+
+For more details, see the link:{links_observability_telemetry_url}[{links_observability_telemetry_name}] guide.
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log+`# 
+
+[.options-description]#Enable one or more log handlers in a comma-separated list.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log+` +
+*Env:* `+KC_LOG+`
+--
+
+
+
+|
+`+console+`, `+file+`, `+syslog+`
+
+|
+`+console+`
+
+|
+[.options-key]#`+log-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to all handlers.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-async+` +
+*Env:* `+KC_LOG_ASYNC+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-level+`# 
+
+[.options-description]#The log level of the root category or a comma-separated list of individual categories and their levels.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#For the root category, you don't need to specify a category.#
+
+
+
+*CLI:* `+--log-level+` +
+*Env:* `+KC_LOG_LEVEL+`
+--
+
+
+
+|_List_
+
+|
+`+info+`
+
+|
+[.options-key]#`+log-level-<category>+`# 
+
+[.options-description]#The log level of a category.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Takes precedence over the `log-level` option.#
+
+
+
+*CLI:* `+--log-level-<category>+` +
+*Env:* `+KC_LOG_LEVEL_<CATEGORY>+`
+--
+
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+|
+[.options-key]#`+log-service-environment+`# 
+
+[.options-description]#Set the `service.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#environment` field in JSON log entries for all log handlers. In ECS format, defaults to the Quarkus profile if not set.#
+
+
+
+*CLI:* `+--log-service-environment+` +
+*Env:* `+KC_LOG_SERVICE_ENVIRONMENT+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+log-service-name+`# 
+
+[.options-description]#Set the `service.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#name` field in JSON log entries for all log handlers.#
+
+
+
+*CLI:* `+--log-service-name+` +
+*Env:* `+KC_LOG_SERVICE_NAME+`
+--
+
+
+
+|_String_
+
+|
+`+keycloak+`
+
+
+|===
+
+
+**Console**
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log-console-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to console.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not set, value from the parent property `log-async` is used.#
+
+
+
+*CLI:* `+--log-console-async+` +
+*Env:* `+KC_LOG_CONSOLE_ASYNC+`
+--
+
+Available only when Console log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-console-async-queue-length+`# 
+
+[.options-description]#The queue length to use before flushing writing when logging to console.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-console-async-queue-length+` +
+*Env:* `+KC_LOG_CONSOLE_ASYNC_QUEUE_LENGTH+`
+--
+
+Available only when Console log handler is activated and asynchronous logging is enabled
+
+
+|_Integer_
+
+|
+`+512+`
+
+|
+[.options-key]#`+log-console-color+`# 
+
+[.options-description]#Enable or disable colors when logging to console.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If this is not present then an attempt will be made to guess if the terminal supports color.#
+
+
+
+*CLI:* `+--log-console-color+` +
+*Env:* `+KC_LOG_CONSOLE_COLOR+`
+--
+
+Available only when Console log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+|
+[.options-key]#`+log-console-format+`# 
+
+[.options-description]#The format of unstructured console log entries.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the format has spaces in it, escape the value using "<format>".#
+
+
+
+*CLI:* `+--log-console-format+` +
+*Env:* `+KC_LOG_CONSOLE_FORMAT+`
+--
+
+Available only when Console log handler is activated
+
+
+|_String_
+
+|
+`+%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n+`
+
+|
+[.options-key]#`+log-console-include-mdc+`# 
+
+[.options-description]#Include mdc information in the console log.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-console-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-console-include-mdc+` +
+*Env:* `+KC_LOG_CONSOLE_INCLUDE_MDC+`
+--
+
+Available only when Console log handler and MDC logging are activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-console-include-trace+`# 
+
+[.options-description]#Include tracing information in the console log.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-console-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-console-include-trace+` +
+*Env:* `+KC_LOG_CONSOLE_INCLUDE_TRACE+`
+--
+
+Available only when Console log handler and Tracing is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-console-json-format+`# 
+
+[.options-description]#Set the format of the produced JSON.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-console-json-format+` +
+*Env:* `+KC_LOG_CONSOLE_JSON_FORMAT+`
+--
+
+Available only when Console log handler is activated and output is set to 'json'
+
+
+|
+`+default+`, `+ecs+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-console-level+`# 
+
+[.options-description]#Set the log level for the console handler.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#It specifies the most verbose log level for logs shown in the output. It respects levels specified in the `log-level` option, which represents the maximal verbosity for the whole logging system. For more information, check the Logging guide.#
+
+
+
+*CLI:* `+--log-console-level+` +
+*Env:* `+KC_LOG_CONSOLE_LEVEL+`
+--
+
+Available only when Console log handler is activated
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+log-console-output+`# 
+
+[.options-description]#Set the log output to JSON or default (plain) unstructured logging.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-console-output+` +
+*Env:* `+KC_LOG_CONSOLE_OUTPUT+`
+--
+
+Available only when Console log handler is activated
+
+
+|
+`+default+`, `+json+`
+
+|
+`+default+`
+
+
+|===
+
+
+**File**
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log-file+`# 
+
+[.options-description]#Set the log file path and filename.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file+` +
+*Env:* `+KC_LOG_FILE+`
+--
+
+Available only when File log handler is activated
+
+
+|_File_
+
+|
+`+data/log/keycloak.log+`
+
+|
+[.options-key]#`+log-file-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to file log.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not set, value from the parent property `log-async` is used.#
+
+
+
+*CLI:* `+--log-file-async+` +
+*Env:* `+KC_LOG_FILE_ASYNC+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-file-async-queue-length+`# 
+
+[.options-description]#The queue length to use before flushing writing when logging to file log.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-async-queue-length+` +
+*Env:* `+KC_LOG_FILE_ASYNC_QUEUE_LENGTH+`
+--
+
+Available only when File log handler is activated and asynchronous logging is enabled
+
+
+|_Integer_
+
+|
+`+512+`
+
+|
+[.options-key]#`+log-file-format+`# 
+
+[.options-description]#Set a format specific to file log entries.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-format+` +
+*Env:* `+KC_LOG_FILE_FORMAT+`
+--
+
+Available only when File log handler is activated
+
+
+|_String_
+
+|
+`+%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n+`
+
+|
+[.options-key]#`+log-file-include-mdc+`# 
+
+[.options-description]#Include MDC information in the file log.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-file-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-file-include-mdc+` +
+*Env:* `+KC_LOG_FILE_INCLUDE_MDC+`
+--
+
+Available only when File log handler and MDC logging are activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-file-include-trace+`# 
+
+[.options-description]#Include tracing information in the file log.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-file-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-file-include-trace+` +
+*Env:* `+KC_LOG_FILE_INCLUDE_TRACE+`
+--
+
+Available only when File log handler and Tracing is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-file-json-format+`# 
+
+[.options-description]#Set the format of the produced JSON.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-json-format+` +
+*Env:* `+KC_LOG_FILE_JSON_FORMAT+`
+--
+
+Available only when File log handler is activated and output is set to 'json'
+
+
+|
+`+default+`, `+ecs+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-file-level+`# 
+
+[.options-description]#Set the log level for the file handler.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#It specifies the most verbose log level for logs shown in the output. It respects levels specified in the `log-level` option, which represents the maximal verbosity for the whole logging system. For more information, check the Logging guide.#
+
+
+
+*CLI:* `+--log-file-level+` +
+*Env:* `+KC_LOG_FILE_LEVEL+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+log-file-output+`# 
+
+[.options-description]#Set the log output to JSON or default (plain) unstructured logging.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-output+` +
+*Env:* `+KC_LOG_FILE_OUTPUT+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+default+`, `+json+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-file-rotation-enabled+`# 
+
+[.options-description]#Enables log file rotation.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-rotation-enabled+` +
+*Env:* `+KC_LOG_FILE_ROTATION_ENABLED+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-file-rotation-file-suffix+`# 
+
+[.options-description]#Set the log file handler rotation file suffix.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#When used, the file will be rotated based on its suffix. Example: `.yyyy-MM-dd` to rotate daily. Note: If the suffix ends with `.zip` or `.gz`, the rotation file will also be compressed.#
+
+
+
+*CLI:* `+--log-file-rotation-file-suffix+` +
+*Env:* `+KC_LOG_FILE_ROTATION_FILE_SUFFIX+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+log-file-rotation-max-backup-index+`# 
+
+[.options-description]#The maximum number of backup log files to keep.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-rotation-max-backup-index+` +
+*Env:* `+KC_LOG_FILE_ROTATION_MAX_BACKUP_INDEX+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|_Integer_
+
+|
+`+5+`
+
+|
+[.options-key]#`+log-file-rotation-max-file-size+`# 
+
+[.options-description]#The maximum log file size, after which a rotation is executed.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Supports size suffixes (e.g. 10M, 1G).#
+
+
+
+*CLI:* `+--log-file-rotation-max-file-size+` +
+*Env:* `+KC_LOG_FILE_ROTATION_MAX_FILE_SIZE+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|_String_
+
+|
+`+10M+`
+
+|
+[.options-key]#`+log-file-rotation-rotate-on-boot+`# 
+
+[.options-description]#Indicates whether to rotate log files on server start.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-rotation-rotate-on-boot+` +
+*Env:* `+KC_LOG_FILE_ROTATION_ROTATE_ON_BOOT+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+
+|===
+
+
+**Syslog**
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log-syslog-app-name+`# 
+
+[.options-description]#Set the app name used when formatting the message in RFC5424 format.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-app-name+` +
+*Env:* `+KC_LOG_SYSLOG_APP_NAME+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+`+keycloak+`
+
+|
+[.options-key]#`+log-syslog-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to Syslog.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not set, value from the parent property `log-async` is used.#
+
+
+
+*CLI:* `+--log-syslog-async+` +
+*Env:* `+KC_LOG_SYSLOG_ASYNC+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-syslog-async-queue-length+`# 
+
+[.options-description]#The queue length to use before flushing writing when logging to Syslog.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-async-queue-length+` +
+*Env:* `+KC_LOG_SYSLOG_ASYNC_QUEUE_LENGTH+`
+--
+
+Available only when Syslog is activated and asynchronous logging is enabled
+
+
+|_Integer_
+
+|
+`+512+`
+
+|
+[.options-key]#`+log-syslog-counting-framing+`# 
+
+[.options-description]#If `true`, the message being sent is prefixed with the size of the message.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If `protocol-dependent`, the default value is `true` when `log-syslog-protocol` is `tcp` or `ssl-tcp`, otherwise `false`.#
+
+
+
+*CLI:* `+--log-syslog-counting-framing+` +
+*Env:* `+KC_LOG_SYSLOG_COUNTING_FRAMING+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+true+`, `+false+`, `+protocol-dependent+`
+
+|
+`+protocol-dependent+`
+
+|
+[.options-key]#`+log-syslog-endpoint+`# 
+
+[.options-description]#Set the IP address and port of the Syslog server.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-endpoint+` +
+*Env:* `+KC_LOG_SYSLOG_ENDPOINT+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+`+localhost:514+`
+
+|
+[.options-key]#`+log-syslog-format+`# 
+
+[.options-description]#Set a format specific to Syslog entries.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-format+` +
+*Env:* `+KC_LOG_SYSLOG_FORMAT+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+`+%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n+`
+
+|
+[.options-key]#`+log-syslog-include-mdc+`# 
+
+[.options-description]#Include MDC information in the Syslog.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-syslog-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-syslog-include-mdc+` +
+*Env:* `+KC_LOG_SYSLOG_INCLUDE_MDC+`
+--
+
+Available only when Syslog handler and MDC logging are activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-syslog-include-trace+`# 
+
+[.options-description]#Include tracing information in the Syslog.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-syslog-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-syslog-include-trace+` +
+*Env:* `+KC_LOG_SYSLOG_INCLUDE_TRACE+`
+--
+
+Available only when Syslog handler and Tracing is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-syslog-json-format+`# 
+
+[.options-description]#Set the format of the produced JSON.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-json-format+` +
+*Env:* `+KC_LOG_SYSLOG_JSON_FORMAT+`
+--
+
+Available only when Syslog is activated and output is set to 'json'
+
+
+|
+`+default+`, `+ecs+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-syslog-level+`# 
+
+[.options-description]#Set the log level for the Syslog handler.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#It specifies the most verbose log level for logs shown in the output. It respects levels specified in the `log-level` option, which represents the maximal verbosity for the whole logging system. For more information, check the Logging guide.#
+
+
+
+*CLI:* `+--log-syslog-level+` +
+*Env:* `+KC_LOG_SYSLOG_LEVEL+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+log-syslog-max-length+`# 
+
+[.options-description]#Set the maximum length, in bytes, of the message allowed to be sent.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The length includes the header and the message. If not set, the default value is 2048 when `log-syslog-type` is rfc5424 (default) and 1024 when `log-syslog-type` is rfc3164.#
+
+
+
+*CLI:* `+--log-syslog-max-length+` +
+*Env:* `+KC_LOG_SYSLOG_MAX_LENGTH+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+|
+[.options-key]#`+log-syslog-output+`# 
+
+[.options-description]#Set the Syslog output to JSON or default (plain) unstructured logging.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-output+` +
+*Env:* `+KC_LOG_SYSLOG_OUTPUT+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+default+`, `+json+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-syslog-protocol+`# 
+
+[.options-description]#Set the protocol used to connect to the Syslog server.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-protocol+` +
+*Env:* `+KC_LOG_SYSLOG_PROTOCOL+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+tcp+`, `+udp+`, `+ssl-tcp+`
+
+|
+`+tcp+`
+
+|
+[.options-key]#`+log-syslog-type+`# 
+
+[.options-description]#Set the Syslog type used to format the sent message.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-type+` +
+*Env:* `+KC_LOG_SYSLOG_TYPE+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+rfc5424+`, `+rfc3164+`
+
+|
+`+rfc5424+`
+
+
+|===
+
+
+**HTTP Access log**
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+http-access-log-enabled+`# 
+
+[.options-description]#If HTTP access logging is enabled.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#By default this will log records in console.#
+
+
+
+*CLI:* `+--http-access-log-enabled+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+http-access-log-exclude+`# 
+
+[.options-description]#A regular expression that can be used to exclude some paths from logging.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#For instance, `/realms/my-realm/.*` will exclude all subsequent endpoints for realm `my-realm` from the log.#
+
+
+
+*CLI:* `+--http-access-log-exclude+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_EXCLUDE+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+http-access-log-file-enabled+`# 
+
+[.options-description]#If HTTP access logging should be done to a separate file.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--http-access-log-file-enabled+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_FILE_ENABLED+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+http-access-log-file-name+`# 
+
+[.options-description]#The HTTP access log file base name, which will create a log file name concatenating base and suffix (e.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#g. `keycloak-http-access.log`). The file is located in the `/data/log` directory of the distribution.#
+
+
+
+*CLI:* `+--http-access-log-file-name+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_FILE_NAME+`
+--
+
+Available only when HTTP Access logging to file is enabled
+
+
+|_String_
+
+|
+`+keycloak-http-access+`
+
+|
+[.options-key]#`+http-access-log-file-rotate+`# 
+
+[.options-description]#If the HTTP Access log file should be rotated daily.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--http-access-log-file-rotate+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_FILE_ROTATE+`
+--
+
+Available only when HTTP Access logging to file is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+http-access-log-file-suffix+`# 
+
+[.options-description]#The HTTP access log file suffix.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#When rotation is enabled, a date-based suffix `.{yyyy-MM-dd}` is added before the specified suffix. If multiple rotations occur on the same day, an incremental index is appended to the date.#
+
+
+
+*CLI:* `+--http-access-log-file-suffix+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_FILE_SUFFIX+`
+--
+
+Available only when HTTP Access logging to file is enabled
+
+
+|_String_
+
+|
+`+.log+`
+
+|
+[.options-key]#`+http-access-log-masked-cookies+`# 
+
+[.options-description]#Set of HTTP Cookie headers whose values must be masked when the `long` pattern or `%{ALL_REQUEST_HEADERS}` format is enabled with the `http-access-log-pattern` option.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Selected security sensitive cookies are always masked.#
+
+
+
+*CLI:* `+--http-access-log-masked-cookies+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_MASKED_COOKIES+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|_List_
+
+|
+|
+[.options-key]#`+http-access-log-masked-headers+`# 
+
+[.options-description]#Set of HTTP headers whose values must be masked when the `long` pattern or `%{ALL_REQUEST_HEADERS}` format is enabled with the `http-access-log-pattern` option.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Selected security sensitive headers are always masked.#
+
+
+
+*CLI:* `+--http-access-log-masked-headers+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_MASKED_HEADERS+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|_List_
+
+|
+|
+[.options-key]#`+http-access-log-pattern+`# 
+
+[.options-description]#The HTTP access log pattern.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#You can use the available named formats, or use custom format described in Quarkus documentation.#
+
+
+
+*CLI:* `+--http-access-log-pattern+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_PATTERN+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|
+`+common+`, `+combined+`, `+long+`, or any
+
+|
+`+common+`
+
+
+|===
+
+
+**Mapped Diagnostic Context (MDC)**
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log-mdc-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Indicates whether to add information about the realm and other information to the mapped diagnostic context.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#All elements will be prefixed with `kc.`#
+
+
+
+*CLI:* `+--log-mdc-enabled+` +
+*Env:* `+KC_LOG_MDC_ENABLED+`
+--
+
+Available only when log-mdc preview feature is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-mdc-keys+`# 
+
+[.options-description]#Defines which information should be added to the mapped diagnostic context as a comma-separated list.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-mdc-keys+` +
+*Env:* `+KC_LOG_MDC_KEYS+`
+--
+
+Available only when MDC logging is enabled
+
+
+|
+`+realmName+`, `+clientId+`, `+userId+`, `+ipAddress+`, `+org+`, `+sessionId+`, `+authenticationSessionId+`, `+authenticationTabId+`
+
+|
+`+realmName,clientId,org,sessionId,authenticationSessionId,authenticationTabId+`
+
+
+|===
+
+
+**Telemetry Logs (OpenTelemetry)**
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+telemetry-logs-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enables exporting logs to a destination handling OpenTelemetry logs.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--telemetry-logs-enabled+` +
+*Env:* `+KC_TELEMETRY_LOGS_ENABLED+`
+--
+
+Available only when feature 'opentelemetry-logs:v1' is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+telemetry-logs-endpoint+`# 
+
+[.options-description]#OpenTelemetry endpoint to export logs to.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from the `telemetry-endpoint` option.#
+
+
+
+*CLI:* `+--telemetry-logs-endpoint+` +
+*Env:* `+KC_TELEMETRY_LOGS_ENDPOINT+`
+--
+
+Available only when Telemetry Logs functionality ('telemetry-logs-enabled') is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+telemetry-logs-header-<header>+`# 
+
+[.options-description]#OpenTelemetry header that will be part of the log exporter request (mainly useful for providing Authorization header).#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Check the documentation on how to set environment variables for headers containing special characters or custom case-sensitive headers.#
+
+
+
+*CLI:* `+--telemetry-logs-header-<header>+` +
+*Env:* `+KC_TELEMETRY_LOGS_HEADER_<HEADER>+`
+--
+
+Available only when Telemetry Logs functionality ('telemetry-logs-enabled') is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+telemetry-logs-level+`# 
+
+[.options-description]#The most verbose log level exported to the telemetry endpoint.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#For more information, check the Telemetry guide.#
+
+
+
+*CLI:* `+--telemetry-logs-level+` +
+*Env:* `+KC_TELEMETRY_LOGS_LEVEL+`
+--
+
+Available only when Telemetry Logs functionality ('telemetry-logs-enabled') is enabled
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+telemetry-logs-protocol+`# 
+
+[.options-description]#OpenTelemetry protocol used for exporting logs.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from the `telemetry-protocol` option.#
+
+
+
+*CLI:* `+--telemetry-logs-protocol+` +
+*Env:* `+KC_TELEMETRY_LOGS_PROTOCOL+`
+--
+
+Available only when Telemetry Logs functionality ('telemetry-logs-enabled') is enabled
+
+
+|
+`+grpc+`, `+http/protobuf+`
+
+|
+
+|===
+
+
+

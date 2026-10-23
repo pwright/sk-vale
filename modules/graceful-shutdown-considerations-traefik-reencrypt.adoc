@@ -1,0 +1,221 @@
+[id="graceful-shutdown-considerations-traefik-reencrypt_{context}"]
+= Graceful shutdown considerations
+
+
+The Traefik health check settings determine how long it takes for the proxy to detect that a {project_name} instance is shutting down and that connections should no longer be routed to it.
+
+With the health check settings from the configuration above (`interval: 5s`, `timeout: 3s`), it takes up to 8 seconds (`interval + timeout`) for Traefik to mark a {project_name} instance as down.
+During this period, {project_name} must remain running to serve in-flight requests.
+Therefore, you need to configure the `--shutdown-delay` to be at least as long as the detection time:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --proxy-headers xforwarded --health-enabled true --metrics-enabled true --https-certificate-file=/path/to/certificate --https-certificate-key-file=/path/to/key --https-client-auth=required --https-trust-store-file=/path/to/https-truststore --https-management-client-auth=none --shutdown-delay=8s
+----
+
+For a detailed explanation of shutdown phases and how to tune the delay and timeout values, see the Graceful HTTP shutdown section in the link:{links_server_reverseproxy_url}[{links_server_reverseproxy_name}] {section}.
+
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+https-certificate-file+`# 
+
+[.options-description]#The file path to a server certificate or certificate chain in PEM format.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-certificate-file+` +
+*Env:* `+KC_HTTPS_CERTIFICATE_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-certificate-key-file+`# 
+
+[.options-description]#The file path to a private key in PEM format.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-certificate-key-file+` +
+*Env:* `+KC_HTTPS_CERTIFICATE_KEY_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-client-auth+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Configures the server to require/request client authentication.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-client-auth+` +
+*Env:* `+KC_HTTPS_CLIENT_AUTH+`
+--
+
+
+
+|
+`+none+`, `+request+`, `+required+`
+
+|
+`+none+`
+
+|
+[.options-key]#`+https-trust-store-file+`# 
+
+[.options-description]#The trust store which holds the certificate information of the certificates to trust.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-trust-store-file+` +
+*Env:* `+KC_HTTPS_TRUST_STORE_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+shutdown-delay+`# 
+
+[.options-description]#Length of the pre-shutdown phase during which the server prepares for shutdown.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d]. This period allows for loadbalancer reconfiguration and draining of TLS/HTTP keepalive connections.#
+
+
+
+*CLI:* `+--shutdown-delay+` +
+*Env:* `+KC_SHUTDOWN_DELAY+`
+--
+
+
+
+|_String_
+
+|
+`+1s+`
+
+|
+[.options-key]#`+health-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose health check endpoints.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If enabled, health checks are available at the `/health`, `/health/ready` and `/health/live` endpoints.#
+
+
+
+*CLI:* `+--health-enabled+` +
+*Env:* `+KC_HEALTH_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+https-management-client-auth+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Configures the management interface to require/request client authentication.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-client-auth+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_CLIENT_AUTH+`
+--
+
+
+
+|
+`+none+`, `+request+`, `+required+`
+
+|
+`+none+`
+
+|
+[.options-key]#`+metrics-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose metrics.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If enabled, metrics are available at the `/metrics` endpoint.#
+
+
+
+*CLI:* `+--metrics-enabled+` +
+*Env:* `+KC_METRICS_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+proxy-headers+`# 
+
+[.options-description]#The proxy headers that should be accepted by the server.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Misconfiguration might leave the server exposed to security vulnerabilities. Takes precedence over the deprecated proxy option.#
+
+
+
+*CLI:* `+--proxy-headers+` +
+*Env:* `+KC_PROXY_HEADERS+`
+--
+
+
+
+|
+`+forwarded+`, `+xforwarded+`
+
+|
+
+|===

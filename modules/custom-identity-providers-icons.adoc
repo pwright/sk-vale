@@ -1,0 +1,188 @@
+[id="custom-identity-providers-icons_{context}"]
+= Adding custom Identity Providers icons
+
+
+{project_name} supports adding icons for custom Identity providers, which are displayed on the login screen.
+
+.Procedure
+
+. Define icon classes in your login `theme.properties` file (for example, `themes/mytheme/login/theme.properties`) with key pattern `kcLogoIdP-<alias>`.
+
+. For an Identity Provider with an alias `myProvider`, you may add a line to `theme.properties` file of your custom theme. For example:
++
+[source]
+----
+kcLogoIdP-myProvider = fa fa-lock
+----
+
+All icons are available on the official website of PatternFly4.
+Icons for social providers are already defined in `base` login theme properties (`themes/keycloak/login/theme.properties`), where you can inspire yourself.
+
+
+**Creating a custom HTML template**
+
+
+{project_name} uses https://freemarker.apache.org/[Apache Freemarker] templates to generate HTML and render pages.
+
+Although it is possible to create custom templates to change completely how pages are rendered, the recommendation is to leverage the built-in
+templates as much as possible. The reasons are:
+
+* During upgrades, you might be forced to update your custom templates to get the latest updates from newer versions
+* <<_theme_stylesheet,Configuring CSS styles>> to your themes allows you to adapt the UI to match your UI design standards and guidelines.
+* link:{adminguide_link}#user-profile[User Profile] allows you to support custom user attributes and configure how they are rendered.
+
+In most cases, you won't need to change templates to adapt {project_name} to your needs, but you can override individual
+templates in your own theme by creating `<THEME TYPE>/<TEMPLATE>.ftl`.
+Admin and account console use a single template `index.ftl` for rendering the application.
+
+For a list of templates in other theme types look at the `theme/base/<THEME_TYPE>` directory in the JAR file at `$KEYCLOAK_HOME/lib/lib/main/org.keycloak.keycloak-themes-<VERSION>.jar`.
+
+.Procedure
+
+. Copy the template from the base theme to your own theme.
+
+. Apply the modifications you need.
++
+For example, to create a custom login form for the `mytheme` theme, copy `themes/base/login/login.ftl` to `themes/mytheme/login` and open it in an editor.
++
+After the first line (`+<#import ...>+`), add `<h1>HELLO WORLD!</h1>` as shown here:
++
+[source,html]
+----
+<#import "template.ftl" as layout>
+<h1>HELLO WORLD!</h1>
+...
+----
+
+. Back up the modified template. When upgrading to a new version of {project_name} you may need to update your custom templates to apply changes to the original template if applicable.
+
+[role="_additional-resources"]
+.Additional resources
+* See the https://freemarker.apache.org/docs/index.html[FreeMarker Manual] for details on how to edit templates.
+
+
+**Emails**
+
+
+To edit the subject and contents for emails, for example password recovery email, add a message bundle to the `email` type of your theme. There are three messages for each email. One for the subject, one for the plain text body and one for the html body.
+
+To see all emails available take a look at `themes/base/email/messages/messages_en.properties`.
+
+For example to change the password recovery email for the `mytheme` theme create `themes/mytheme/email/messages/messages_en.properties` with the following
+content:
+[source]
+----
+passwordResetSubject=My password recovery
+passwordResetBody=Reset password link: {0}
+passwordResetBodyHtml=<a href="{0}">Reset password</a>
+----
+
+== Deploying themes
+
+Themes can be deployed to {project_name} by copying the theme directory to `themes` or it can be deployed as an archive. During development you can copy the
+theme to the `themes` directory, but in production you may want to consider using an `archive`. An `archive` makes it simpler to have a versioned copy of
+the theme, especially when you have multiple instances of {project_name} for example with clustering.
+
+WARNING: Themes contain FreeMarker templates that the server renders at runtime, so a malicious template can run code as the {project_name} process. Install themes only from trusted sources, and restrict write access to the `themes` directory and to theme JARs under `providers/` to trusted operators.
+
+
+.Procedure
+
+. To deploy a theme as an archive, create a JAR archive with the theme resources.
+. Add a file `META-INF/keycloak-themes.json` to the
+archive that lists the available themes in the archive as well as what types each theme provides.
++
+For example for the `mytheme` theme create `mytheme.jar` with the contents:
++
+* META-INF/keycloak-themes.json
+* theme/mytheme/login/theme.properties
+* theme/mytheme/login/login.ftl
+* theme/mytheme/login/resources/css/styles.css
+* theme/mytheme/login/resources/img/image.png
+* theme/mytheme/login/messages/messages_en.properties
+* theme/mytheme/email/messages/messages_en.properties
++
+The contents of `META-INF/keycloak-themes.json` in this case would be:
++
+[source,json]
+----
+{
+    "themes": [{
+        "name" : "mytheme",
+        "types": [ "login", "email" ]
+    }]
+}
+----
++
+A single archive can contain multiple themes and each theme can support one or more types.
+
+To deploy the archive to {project_name}, add it to the `providers/` directory of
+{project_name} and restart the server if it is already running.
+
+== Dark Mode
+Dark mode is a feature that changes the color scheme to a dark background with lighter text.  For example, themes based on PatternFly, such as Keycloak's admin console and account console, support dark mode.  But for some themes, dark mode doesn't work well for various reasons.  So Keycloak allows you to disable dark mode from the admin console.
+
+.Procedure to disable dark mode
+
+. Log into the Admin Console.
+. Select your realm.
+. Click *Realm Settings* from the menu.
+. Click on the *Themes* tab.
+. Unselect *Dark mode* and click *Save*.
+
+If enabled, the dark variant of the theme will be applied based on user preference through an operating system setting (e.g. light or dark mode) or a user agent setting. If disabled, only the light variant will be used. This setting only applies to themes that support dark and light variants. On themes that do not support this feature it will have no effect.
+
+[role="_additional-resources"]
+== Additional resources for Themes
+* For more inspiration, see <<_default-themes,Default Themes>> bundled inside {project_name}.
+* {quickstartRepo_link}[{quickstartRepo_name}] - Directory `extension` of the quickstarts repository contains some theme examples, which can be also used as an inspiration.
+
+
+== Theme SPIs
+
+The following sections show how to achieve finer grained control over your themes.
+
+
+**Theme selector**
+
+
+By default the theme configured for the realm is used, with the exception of clients being able to override the login
+theme. This behavior can be changed through the Theme Selector SPI.
+
+This could be used to select different themes for desktop and mobile devices by looking at the user agent
+header, for example.
+
+To create a custom theme selector you need to implement `ThemeSelectorProviderFactory` and `ThemeSelectorProvider`.
+
+
+**Theme resources**
+
+
+When implementing custom providers there may often be a need to add additional templates, resources and messages bundles.
+
+
+The easiest way to load additional theme resources is to create a JAR with templates in `theme-resources/templates`
+resources in `theme-resources/resources` and messages bundles in `theme-resources/messages`.
+
+If you want a more flexible way to load templates and resources that can be achieved through the ThemeResourceSPI.
+By implementing `ThemeResourceProviderFactory` and `ThemeResourceProvider` you can decide exactly how to load templates
+and resources.
+
+
+**Locale selector**
+
+
+By default, the locale is selected using the `DefaultLocaleSelectorProvider` which implements the `LocaleSelectorProvider` interface. English is the default language when internationalization is disabled.
+
+With internationalization enabled, the locale is resolved according to the logic described in the {adminguide_user_locale}[Server Administration documentation].
+
+This behavior can be changed through the `LocaleSelectorSPI` by implementing the `LocaleSelectorProvider` and `LocaleSelectorProviderFactory`.
+
+The `LocaleSelectorProvider` interface has a single method, `resolveLocale`, which must return a locale given a `RealmModel` and a nullable `UserModel`. The actual request is available from the `KeycloakSession#getContext` method.
+
+Custom implementations can extend the `DefaultLocaleSelectorProvider` in order to reuse parts of the default behavior. For example to ignore the `Accept-Language` request header, a custom implementation could extend the default provider, override it's `getAcceptLanguageHeaderLocale`, and return a null value. As a result the locale selection will fall back on the realm's default language.
+
+
+**Additional resources for Locale selector**
+
+* For more details on creating and deploying a custom provider, see {server_providers}[Service Provider Interfaces].

@@ -1,0 +1,235 @@
+[id="caching_{context}"]
+= Configuring distributed caches
+
+
+
+
+{project_name} is designed for high availability and multi-node clustered setups.
+The current distributed cache implementation is built on top of https://infinispan.org[Infinispan], a high-performance, distributable in-memory data grid.
+
+== Enable distributed caching
+When you start {project_name} in production mode, by using the `start` command, caching is enabled and all {project_name} nodes in your network are discovered.
+
+By default, caches use the `jdbc-ping` stack which is based upon a TCP transport and uses the configured database to track nodes joining the cluster.
+{project_name} allows you to either choose from a set of pre-defined default transport stacks, or to define your own custom stack, as you will see later in this {section}.
+
+To explicitly enable distributed infinispan caching, enter this command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --cache=ispn
+----
+
+When you start {project_name} in development mode, by using the `start-dev` command, {project_name} uses only local caches and distributed caches are completely disabled by implicitly setting the `--cache=local` option.
+The `local` cache mode is intended only for development and testing purposes.
+
+== Configuring caches
+{project_name} provides a regular {infinispan_configuring_docs}[Infinispan configuration file] located at `conf/cache-ispn.xml`.
+This file contains the default configuration used for the cache-container and JGroups transport.
+
+The following table gives an overview of the specific caches {project_name} uses:
+
+[%autowidth]
+|===
+|Cache name|Cache Type|Description
+
+|realms|Local|Cache persisted realm data
+|users|Local|Cache persisted user data
+|authorization|Local|Cache persisted authorization data
+|keys|Local|Cache external public keys
+|crl|Local|Cache for X.509 authenticator CRLs
+|work|Replicated|Propagate invalidation messages across nodes
+|authenticationSessions|Distributed|Caches authentication sessions, created/destroyed/expired during the authentication process
+|sessions|Distributed|Cache persisted user session data
+|clientSessions|Distributed|Cache persisted client session data
+|offlineSessions|Distributed|Cache persisted offline user session data
+|offlineClientSessions|Distributed|Cache persisted offline client session data
+|loginFailures|Distributed|keep track of failed logins, fraud detection
+|actionTokens|Distributed|Caches action Tokens
+|===
+
+=== Cache types and defaults
+
+.Local caches
+{project_name} caches persistent data locally to avoid unnecessary round-trips to the database.
+
+The following data is kept local to each node in the cluster using local caches:
+
+* *realms* and related data like clients, roles, and groups.
+* *users* and related data like granted roles and group memberships.
+* *authorization* and related data like resources, permissions, and policies.
+* *keys*
+
+Local caches for realms, users, and authorization are configured to hold up to 10,000 entries per default.
+The local key cache can hold up to 1,000 entries per default and defaults to expire every one hour.
+Therefore, keys are forced to be periodically downloaded from external clients or identity providers.
+
+In order to achieve an optimal runtime and avoid additional round-trips to the database you should consider looking at
+the configuration for each cache to make sure the maximum number of entries is aligned with the size of your database. More entries
+you can cache, less often the server needs to fetch data from the database. You should evaluate the trade-offs between memory utilization and performance.
+
+.Invalidation of local caches
+Local caching improves performance, but adds a challenge in multi-node setups.
+
+When one {project_name} node updates data in the shared database, all other nodes need to be aware of it, so they invalidate that data from their caches.
+
+The `work` cache is a replicated cache and used for sending these invalidation messages. The entries/messages in this cache are very short-lived,
+and you should not expect this cache growing in size over time.
+
+.Authentication sessions
+Authentication sessions are created whenever a user tries to authenticate. They are automatically destroyed once the authentication process
+completes or due to reaching their expiration time.
+
+The `authenticationSessions` distributed cache is used to store authentication sessions and any other data associated with it
+during the authentication process.
+
+By relying on a distributable cache, authentication sessions are available to any node in the cluster so that users can be redirected
+to any node without losing their authentication state. However, production-ready deployments should always consider session affinity and favor redirecting users
+to the node where their sessions were initially created. By doing that, you are going to avoid unnecessary state transfer between nodes and improve
+CPU, memory, and network utilization.
+
+.Password brute force detection
+Login failure data for brute force detection is stored in the database by default.
+Deployments using the `multi-site` or `clusterless` features continue to store login failures in the external Infinispan `loginFailures` cache.
+The embedded `loginFailures` distributed cache is available as a fallback when the deprecated `login-failures:v1` feature is explicitly enabled, but this mode will be removed in a future release.
+When switching between storage modes (for example, from database to external Infinispan or vice versa), stale login failure entries may remain in the previous store.
+These entries are not cleaned up automatically and can resurface if the deployment reverts to the previous storage mode.
+Administrators should manually remove stale login failure data from the previous store after switching.
+
+.Action tokens
+Action tokens are used for scenarios when a user needs to confirm an action asynchronously, for example in the emails sent by the forgot password flow.
+The `actionTokens` distributed cache is used to track metadata about action tokens.
+
+TIP: You can see the applied Infinispan configuration in the logs by configuring `--log-level=info,org.keycloak.connections.infinispan.DefaultInfinispanConnectionProviderFactory:debug`.
+
+=== User session caching
+
+A user session tracks an authenticated user across one or more applications (client sessions). Offline sessions are long-lived sessions backed by offline tokens.
+User sessions, client sessions, offline user sessions, and offline client sessions are stored in the database. The embedded Infinispan caches (`sessions`, `clientSessions`, `offlineSessions`, `offlineClientSessions`) are used to cache this data in memory.
+
+By default, with persistent user sessions enabled, sessions are loaded on-demand from the database into the embedded caches.
+Cached sessions are available to any node in the cluster without a database round-trip.
+In-memory caches are limited to 10000 entries per node by default (configurable via `--cache-embedded-sessions-max-count` etc.)
+Cache entries use a single owner per entry.
+
+==== Disabling session caching
+
+This setting is only available when persistent user sessions are enabled.
+To disable session caching, set:
+
+[source]
+----
+spi-user-sessions--infinispan--use-caches=false
+----
+
+Reasons to consider disabling session caching:
+
+* *Reduced memory usage* on each {project_name} node, as sessions are no longer held in the embedded cache.
+* *Less network traffic between cluster nodes*, as there is no cache synchronization overhead
+* *Reduced impact on slow or stalling nodes* when serving requests.
+
+When session caching is disabled, every session read goes directly to the database.
+This may increase database connection usage and CPU load, especially for workloads that rely heavily on token introspection or token exchange.
+For deployments that are already using persistent sessions, the database's own caching layer should prevent any additional IOPS.
+
+=== Volatile user sessions (deprecated)
+
+WARNING: Volatile user sessions are deprecated since {project_name} 26.8 and will be removed in a future release. Persistent user sessions will become the only supported mode.
+If you have `--features-disabled=persistent-user-sessions` in your configuration, remove it to use the default persistent sessions mode.
+
+By default, regular user sessions are stored in the database.
+It is possible to configure {project_name} to store regular user sessions in-memory only by disabling the `persistent-user-sessions` feature.
+This means all user sessions are lost when all {project_name} nodes are restarted, and memory consumption increases as the number of active sessions grows.
+
+=== Stateless instances
+
+When the feature `stateless` is enabled, {project_name} does not cache user entity data, and login failures, authentication sessions, and action tokens are persisted to the database. While realm and authorization data are still cached, session-related state is persisted and the database becomes the source of truth. The `work` cache is still used to invalidate realm and authorization data within the cluster.
+
+If you are running multiple independent {project_name} clusters against the same database, cache invalidation between clusters is performed via a database table (outbox). For that, each cluster needs to have a unique name specified via `+--cache-embedded-cluster-name+`.
+
+This is the foundation for the multi-cluster (v2) setup that is covered in more detail in the high-availability guide at link:{links_high-availability_multi-cluster-v2-introduction_url}[{links_high-availability_multi-cluster-v2-introduction_name}].
+
+=== Configuring cache maximum size
+
+In order to reduce memory usage, it's possible to place an upper bound on the number of entries which are stored in a given
+cache. To specify an upper bound of on a cache, you must provide the following command line argument
+`--cache-embedded-$\{CACHE_NAME}-max-count=`, with `$\{CACHE_NAME}` replaced with the name of the cache you would like to
+apply the upper bound to. For example, to apply an upper-bound of `1000` to the `offlineSessions` cache you would configure
+`--cache-embedded-offline-sessions-max-count=1000`. An upper bound can not be defined on the following caches:
+`actionToken`, `authenticationSessions`, `loginFailures`, `work`.
+
+Setting a maximum cache size for `sessions`, `clientSessions` is not supported when the deprecated volatile sessions mode is used.
+
+=== Specify your own cache configuration file
+
+To specify your own cache configuration file, enter this command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --cache-config-file=my-cache-file.xml
+----
+
+The configuration file can be an absolute path or path relative to the `conf/` directory.
+
+=== Modifying cache configuration defaults
+
+{project_name} automatically creates all required caches with the expected configurations. You can add additional caches or override the default cache configurations in `conf/cache-ispn.xml` or in your own file provided via `--cache-config-file`.
+
+To see the applied Infinispan configuration in the logs, configure `--log-level=info,org.keycloak.connections.infinispan.DefaultInfinispanConnectionProviderFactory:debug`.
+
+[WARNING]
+====
+While overriding the default cache configurations via XML is technically possible, it is not supported.
+This is only recommended for advanced use-cases where the default cache configurations are proven to be problematic.
+The only supported way to change the default cache configurations is via the `+cache-...+` options.
+====
+
+In order to prevent a warning being logged when a modified default cache configuration is detected, add the following option:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --cache-config-mutate=true
+----
+
+=== CLI options for remote server
+
+For configuration of {project_name} server for high availability and multi-node clustered setup there was introduced following CLI options `cache-remote-host`, `cache-remote-port`, `cache-remote-username` and `cache-remote-password` simplifying configuration within the XML file.
+Once any of the declared CLI parameters are present, it is expected there is no configuration related to remote store present in the XML file.
+
+==== Connecting to an insecure Infinispan server
+
+WARNING: Disabling security is not recommended in production!
+
+In a development or test environment, it is easier to start an unsecured Infinispan server.
+For these use case, the CLI options `cache-remote-tls-enabled` disables the encryption (TLS) between {project_name} and {jdgserver_name}.
+{project_name} will fail to start if the {jdgserver_name} server is configured to accept only encrypted connections.
+
+The CLI options `cache-remote-username` and `cache-remote-password` are optional and, if not set, {project_name} will connect to the {jdgserver_name} server without presenting any credentials.
+If the {jdgserver_name} server has authentication enabled, {project_name} will fail to start.
+
+== Cluster identification
+
+The following options allow you to identify the cluster and its nodes:
+
+Cluster name::
+Defines the name of the cluster.
+Only nodes with the same cluster name can discover each other and form a cluster.
+Because {project_name} uses the database for node discovery via `jdbc-ping` by default, clusters that share the same database but should remain separate will merge unless they have distinct cluster names.
+The default cluster name is `ISPN`.
++
+Use `+--cache-embedded-cluster-name+` (or environment variable `+KC_CACHE_EMBEDDED_CLUSTER_NAME+`).
++
+For example: `+--cache-embedded-cluster-name=my-cluster+`
++
+WARNING: As invalidation of caches between clusters with distinct names will not work, this will lead to stale caches and incorrect behavior. Use only together with the `stateless` feature.
+
+Node name::
+Sets a human-readable name for the current node, used in log messages and management tools.
+By default, a random name is generated on each start, which makes it difficult to correlate metrics and logs across restarts.
+Set this option to assign a stable name, which is especially useful for observability tools such as Grafana dashboards and log aggregation.
++
+Use `+--cache-embedded-node-name+` (or environment variable `+KC_CACHE_EMBEDDED_NODE_NAME+`).
++
+For example: `+--cache-embedded-node-name=node-1+`
+
+include::../modules/cache-topology.adoc[leveloffset=+1]

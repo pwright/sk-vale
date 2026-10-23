@@ -1,0 +1,98 @@
+[id="supported-configurations_{context}"]
+= Supported Configurations
+
+
+
+
+This {section} provides an overview of the platforms, versions, and configurations that are tested and supported for running {project_name} in production environments.
+
+== Java Virtual Machine
+
+{project_name} requires a Java Virtual Machine (JVM) to run. The following Java Development Kit (JDK) versions are supported:
+
+* OpenJDK 17 (LTS)
+* OpenJDK 21 (LTS)
+* OpenJDK 25 (LTS)
+
+NOTE: To benefit from the latest performance improvements, we suggest using the latest supported JDK version for production deployments.
+This is currently OpenJDK {jdk_version_latest}.
+
+=== Container Image
+
+{project_name} provides official container image that is using OpenJDK {jdk_version_container}. Consider this when writing
+custom extensions. For more details on the container image, see link:{links_server_containers_url}[{links_server_containers_name}].
+
+== Runtime Platform
+
+{project_name} can be deployed in various environments:
+
+* **Bare Metal / Virtual Machines** - Direct installation on Linux or Windows servers
+* **Containers** - Docker, Podman
+* **Kubernetes** - OpenShift 4.18-4.21, corresponding to Kubernetes API 1.31-1.34
+
+NOTE: Other non-OpenShift Kubernetes distributions (like Amazon EKS or Azure Kubernetes Service etc.) are supported only in a best-effort manner, i.e. support will be provided for issues that
+are specific to the supported Kubernetes API or OpenShift versions, but issues that are reproducible only on a particular Kubernetes distribution may not be supported.
+
+NOTE: The supported versions of each respective environment are limited to the versions that are currently supported by the respective vendors. For example, for OpenShift, only the versions that are currently supported by Red Hat are supported by {project_name}.
+
+== Supported Databases
+
+{project_name} has built-in support for different relational databases. The following table lists the supported databases and their tested versions.
+
+[%autowidth]
+|===
+|Database  | Supported Versions
+
+|MariaDB Server  | 11.8 (LTS), 11.4 (LTS), 10.11 (LTS), 10.6 (LTS)
+|Microsoft SQL Server  | 2022, 2019
+|MySQL  | 8.4 (LTS), 8.0 (LTS)
+|Oracle Database  | 23.x (i.e 23.5+), 19c (19.3+) (*Note:* Oracle RAC is also supported if using the same database engine version, e.g 23.5+, 19.3+)
+|PostgreSQL  | 18.x, 17.x, 16.x, 15.x, 14.x
+|EnterpriseDB Advanced  | 18.x, 17.x
+|Amazon Aurora PostgreSQL  | 17.x, 16.x, 15.x
+|Azure SQL Database  | latest
+|Azure SQL Managed Instance  | latest
+|===
+
+For details on configuring a supported database, see link:{links_server_db_url}[{links_server_db_name}] {section}.
+
+== Supported Browsers
+
+The {project_name} UI including login pages, Admin Console and Account Console are supported with the following browsers:
+
+[%autowidth]
+|===
+|Browser | Supported Versions
+
+|Google Chrome | Latest stable version
+|Mozilla Firefox | Latest stable version
+|Microsoft Edge | Latest stable version
+|Apple Safari | Latest stable version
+|===
+
+NOTE: Both desktop and mobile versions of the browsers are supported.
+
+NOTE: The Admin Console and Account Console require JavaScript to be enabled. Browsers must support modern web standards including ES6+, WebAuthn, and Web Crypto API for full functionality.
+
+== Clustering and High Availability
+
+{project_name} supports clustering for high availability and scalability using external Infinispan 16.0.15.
+For details, visit the link:{links_high-availability_introduction_url}[{links_high-availability_introduction_name}].
+
+== Hardware Requirements
+
+The hardware requirements for running {project_name} depend on the expected load and deployment environment.
+Consult  the link:{links_high-availability_introduction_url}[{links_high-availability_introduction_name}] for recommendations on hardware sizing for different deployment scenarios.
+
+== Additional Resources
+
+For more detailed configuration information, see:
+
+* link:{links_server_configuration-production_url}[{links_server_configuration-production_name}]
+* link:{links_server_db_url}[{links_server_db_name}]
+* link:{links_server_containers_url}[{links_server_containers_name}]
+* link:{links_high-availability_introduction_url}[{links_high-availability_introduction_name}]
+
+
+
+

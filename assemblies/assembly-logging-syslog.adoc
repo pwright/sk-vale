@@ -1,0 +1,517 @@
+[id="logging-syslog_{context}"]
+= Syslog logging
+
+
+
+
+{project_name} provides the ability to send logs to a remote Syslog server.
+It uses the protocol defined in https://datatracker.ietf.org/doc/html/rfc5424[RFC 5424].
+The more specific Syslog handler configuration mentioned below will only take effect when the Syslog logging is enabled.
+
+== Enable the Syslog handler
+To enable logging using Syslog, add it to the list of activated log handlers as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,syslog"
+----
+
+== Configuring the Application Name
+To set a different application name, add the `--log-syslog-app-name` option as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,syslog" --log-syslog-app-name=kc-p-itadmins
+----
+
+If not set, the application name defaults to `keycloak`.
+
+== Configuring the endpoint
+
+To configure the endpoint(_host:port_) of your centralized logging system, enter the following command and substitute the values with your specific values:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,syslog" --log-syslog-endpoint=myhost:12345
+----
+
+When the Syslog handler is enabled, the host is using `localhost` as host value.
+The Default port is `514`.
+
+== Configuring the log level
+Log level for Syslog log handler can be specified by `--log-syslog-level` property as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-syslog-level=warn
+----
+
+For more information, see link:{links_server_logging_url}#specify-log-level-each-handler[{links_server_logging_name}].
+
+== Configuring the protocol
+Syslog uses TCP as the default protocol for communication.
+To use UDP instead of TCP, add the `--log-syslog-protocol` option as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,syslog" --log-syslog-protocol=udp
+----
+
+The available protocols are: `tpc`, `udp`, and `ssl-tcp`.
+
+== Configuring the counting framing
+
+By default, Syslog messages sent over TCP or SSL-TCP are prefixed with the message size, as required by certain Syslog receivers.
+This behavior is controlled by the `--log-syslog-counting-framing` option.
+
+To explicitly enable or disable this feature, use the following command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-syslog-counting-framing=true
+----
+
+You can set the value to one of the following:
+
+* `protocol-dependent` (default) – Enable counting framing only when the `log-syslog-protocol` is `tcp` or `ssl-tcp`.
+* `true` – Always enable counting framing by prefixing messages with their size.
+* `false` – Never use counting framing.
+
+Note that using `protocol-dependent` ensures compatibility with most Syslog servers by enabling the prefix only when required by the protocol.
+
+== Configuring the log format
+To set the logging format for a logged line, perform these steps:
+
+. Build your desired format template using the preceding table.
+. Enter the following command:
++
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-syslog-format="'<format>'"
+----
+
+Note that you need to escape characters when invoking commands containing special shell characters such as `;` using the CLI. Therefore, consider setting it in the configuration file instead.
+
+.Example: Abbreviate the fully qualified category name
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-syslog-format="'%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n'"
+----
+
+This example abbreviates the category name to three characters by setting `[%c{3.}]` in the template instead of the default `[%c]`.
+
+== Configuring the Syslog type
+
+Syslog uses different message formats based on particular RFC specifications.
+To change the Syslog type with a different message format, use the `--log-syslog-type` option as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-syslog-type=rfc3164
+----
+
+Possible values for the `--log-syslog-type` option are:
+
+        * `+rfc5424+`  (default) 
+        * `+rfc3164+`  
+
+The preferred Syslog type is https://datatracker.ietf.org/doc/html/rfc5424[RFC 5424], which obsoletes https://datatracker.ietf.org/doc/html/rfc3164[RFC 3164], known as BSD Syslog protocol.
+
+== Configuring the maximum message length
+
+To set the maximum length of the message allowed to be sent (in bytes), use the `--log-syslog-max-length` option as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-syslog-max-length=1536
+----
+
+The length can be specified in memory size format with the appropriate suffix, like `1k` or `1K`.
+The length includes the header and the message.
+
+If the length is not explicitly set, the default values are set based on the `--log-syslog-type` option as follows:
+
+* `2048B` - for RFC 5424
+* `1024B` - for RFC 3164
+
+== Configuring the structured output
+By default, the Syslog log handler sends plain unstructured data to the Syslog server.
+To use structured JSON log output instead, enter the following command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-syslog-output=json
+----
+
+.Example Log Message
+[source, bash]
+----
+2024-04-05T12:32:20.616+02:00 host keycloak 2788276 io.quarkus - {"timestamp":"2024-04-05T12:32:20.616208533+02:00","sequence":9948,"loggerClassName":"org.jboss.logging.Logger","loggerName":"io.quarkus","level":"INFO","message":"Profile prod activated. ","threadName":"main","threadId":1,"mdc":{},"ndc":"","hostName":"host","processName":"QuarkusEntryPoint","processId":2788276}
+----
+
+When using JSON output, colors are disabled and the format settings set by `--log-syslog-format` does not apply.
+
+To use unstructured logging, enter the following command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-syslog-output=default
+----
+
+.Example Log Message
+[source, bash]
+----
+2024-04-05T12:31:38.473+02:00 host keycloak 2787568 io.quarkus - 2024-04-05 12:31:38,473 INFO  [io.quarkus] (main) Profile prod activated.
+----
+
+As you can see, the timestamp is present twice, so you can amend it correspondingly by the `--log-syslog-format` property.
+
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log-syslog-app-name+`# 
+
+[.options-description]#Set the app name used when formatting the message in RFC5424 format.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-app-name+` +
+*Env:* `+KC_LOG_SYSLOG_APP_NAME+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+`+keycloak+`
+
+|
+[.options-key]#`+log-syslog-counting-framing+`# 
+
+[.options-description]#If `true`, the message being sent is prefixed with the size of the message.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If `protocol-dependent`, the default value is `true` when `log-syslog-protocol` is `tcp` or `ssl-tcp`, otherwise `false`.#
+
+
+
+*CLI:* `+--log-syslog-counting-framing+` +
+*Env:* `+KC_LOG_SYSLOG_COUNTING_FRAMING+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+true+`, `+false+`, `+protocol-dependent+`
+
+|
+`+protocol-dependent+`
+
+|
+[.options-key]#`+log-syslog-endpoint+`# 
+
+[.options-description]#Set the IP address and port of the Syslog server.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-endpoint+` +
+*Env:* `+KC_LOG_SYSLOG_ENDPOINT+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+`+localhost:514+`
+
+|
+[.options-key]#`+log-syslog-format+`# 
+
+[.options-description]#Set a format specific to Syslog entries.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-format+` +
+*Env:* `+KC_LOG_SYSLOG_FORMAT+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+`+%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n+`
+
+|
+[.options-key]#`+log-syslog-include-mdc+`# 
+
+[.options-description]#Include MDC information in the Syslog.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-syslog-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-syslog-include-mdc+` +
+*Env:* `+KC_LOG_SYSLOG_INCLUDE_MDC+`
+--
+
+Available only when Syslog handler and MDC logging are activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-syslog-include-trace+`# 
+
+[.options-description]#Include tracing information in the Syslog.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-syslog-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-syslog-include-trace+` +
+*Env:* `+KC_LOG_SYSLOG_INCLUDE_TRACE+`
+--
+
+Available only when Syslog handler and Tracing is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-syslog-json-format+`# 
+
+[.options-description]#Set the format of the produced JSON.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-json-format+` +
+*Env:* `+KC_LOG_SYSLOG_JSON_FORMAT+`
+--
+
+Available only when Syslog is activated and output is set to 'json'
+
+
+|
+`+default+`, `+ecs+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-syslog-level+`# 
+
+[.options-description]#Set the log level for the Syslog handler.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#It specifies the most verbose log level for logs shown in the output. It respects levels specified in the `log-level` option, which represents the maximal verbosity for the whole logging system. For more information, check the Logging guide.#
+
+
+
+*CLI:* `+--log-syslog-level+` +
+*Env:* `+KC_LOG_SYSLOG_LEVEL+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+log-syslog-max-length+`# 
+
+[.options-description]#Set the maximum length, in bytes, of the message allowed to be sent.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The length includes the header and the message. If not set, the default value is 2048 when `log-syslog-type` is rfc5424 (default) and 1024 when `log-syslog-type` is rfc3164.#
+
+
+
+*CLI:* `+--log-syslog-max-length+` +
+*Env:* `+KC_LOG_SYSLOG_MAX_LENGTH+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+|
+[.options-key]#`+log-syslog-output+`# 
+
+[.options-description]#Set the Syslog output to JSON or default (plain) unstructured logging.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-output+` +
+*Env:* `+KC_LOG_SYSLOG_OUTPUT+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+default+`, `+json+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-syslog-protocol+`# 
+
+[.options-description]#Set the protocol used to connect to the Syslog server.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-protocol+` +
+*Env:* `+KC_LOG_SYSLOG_PROTOCOL+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+tcp+`, `+udp+`, `+ssl-tcp+`
+
+|
+`+tcp+`
+
+|
+[.options-key]#`+log-syslog-type+`# 
+
+[.options-description]#Set the Syslog type used to format the sent message.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-type+` +
+*Env:* `+KC_LOG_SYSLOG_TYPE+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+rfc5424+`, `+rfc3164+`
+
+|
+`+rfc5424+`
+
+
+|===
+
+== Asynchronous
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log-syslog-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to Syslog.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not set, value from the parent property `log-async` is used.#
+
+
+
+*CLI:* `+--log-syslog-async+` +
+*Env:* `+KC_LOG_SYSLOG_ASYNC+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-syslog-async-queue-length+`# 
+
+[.options-description]#The queue length to use before flushing writing when logging to Syslog.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-async-queue-length+` +
+*Env:* `+KC_LOG_SYSLOG_ASYNC_QUEUE_LENGTH+`
+--
+
+Available only when Syslog is activated and asynchronous logging is enabled
+
+
+|_Integer_
+
+|
+`+512+`
+
+
+|===
+
+
+

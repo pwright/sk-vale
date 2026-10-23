@@ -1,0 +1,46 @@
+[id="_theme_custom_footer_{context}"]
+= Adding a custom footer to a login theme
+
+
+In order to use a custom footer, create a `footer.ftl` file in your custom login theme with the desired content.
+
+An example for a custom `footer.ftl` may look like this:
+
+[source]
+----
+<#macro content>
+<#-- footer at the end of the login box -->
+<div>
+    <ul id="kc-login-footer-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</div>
+</#macro>
+----
+
+
+**Adding an image to an email theme**
+
+
+To make images available to the theme add them to the `<THEME TYPE>/email/resources/img` directory of your theme. These can be used from within directly in HTML templates.
+
+For example to add an image to the `mytheme` copy an image to `themes/mytheme/email/resources/img/logo.jpg`.
+
+To use directly in HTML templates add the following to a custom HTML template:
+
+[source,html]
+----
+<img src="${url.resourcesUrl}/img/image.jpg" alt="My image description">
+----
+
+To reference images from common theme resources in email templates, use `url.resourcesCommonUrl` which provides the full URL (including scheme and host) required by email clients:
+
+[source,html]
+----
+<img src="${url.resourcesCommonUrl}/img/logo.png" alt="My logo">
+----
+
+NOTE: Email clients require absolute URLs for images since they cannot resolve relative paths. Use `url.resourcesCommonUrl` or `url.resourcesUrl` instead of their `Path` counterparts (`url.resourcesCommonPath`, `url.resourcesPath`) in email templates.
+
