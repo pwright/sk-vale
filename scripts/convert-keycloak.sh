@@ -10,6 +10,7 @@ INPUT_DIR=""
 DO_COMMIT=false
 KEYCLOAK_BRANCH="keycloak"
 CLEANUP_DIR=""
+RESOLVED_DIR=""
 
 INCLUDE_GUIDES=(
     high-availability
@@ -38,6 +39,9 @@ EOF
 cleanup() {
     if [[ -n "$CLEANUP_DIR" && -d "$CLEANUP_DIR" ]]; then
         rm -rf "$CLEANUP_DIR"
+    fi
+    if [[ -n "$RESOLVED_DIR" && -d "$RESOLVED_DIR" ]]; then
+        rm -rf "$RESOLVED_DIR"
     fi
 }
 trap cleanup EXIT
@@ -90,6 +94,12 @@ mkdir -p "$REPO_ROOT/assemblies" "$REPO_ROOT/modules"
 echo "Syncing Vale styles..."
 cd "$REPO_ROOT"
 vale sync
+
+# --- Resolve conditionals on monolithic files ---
+echo "Resolving AsciiDoc conditionals (keeping project_product content)..."
+RESOLVED_DIR="$(mktemp -d)"
+python3 "$SCRIPT_DIR/keycloak-conditionals.py" "$INPUT_DIR" "$RESOLVED_DIR"
+INPUT_DIR="$RESOLVED_DIR"
 
 # --- Split each AsciiDoc file into assemblies and modules ---
 echo "Splitting AsciiDoc files with leben.py..."
