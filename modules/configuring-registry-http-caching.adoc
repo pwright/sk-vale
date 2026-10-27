@@ -1,0 +1,59 @@
+[id="configuring-registry-http-caching_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Enabling HTTP caching for artifact content
+
+[role="_abstract"]
+You can enable HTTP cache headers for supported v3 content endpoints so that a reverse proxy can serve repeated requests from its cache.
+
+.Prerequisites
+* You can update and restart the {registry} deployment.
+* A reverse proxy cache is available in front of {registry}.
+* An artifact version is available for testing content requests.
+
+.Procedure
+. Enable HTTP caching in the server configuration:
++
+[source,properties]
+----
+apicurio.http-caching.enabled=true
+----
++
+The equivalent environment variable is `APICURIO_HTTP_CACHING_ENABLED=true`.
+. Set expiration times that match how long your clients can tolerate stale content.
+For example, the following configuration caches highly cacheable content for one hour and uses shorter periods for content that can change:
++
+[source,properties]
+----
+apicurio.http-caching.high-cacheability.max-age-seconds=3600
+apicurio.http-caching.moderate-cacheability.max-age-seconds=30
+apicurio.http-caching.low-cacheability.max-age-seconds=10
+----
+. Configure the reverse proxy to use `Surrogate-Control`, `ETag`, and `Vary` response headers.
++
+The default `Vary` headers are `Accept`, `Accept-Encoding`, and `Authorization`.
+Configure the proxy to keep responses for different credentials separate and to enforce your access policy when serving cached responses.
+{registry} does not invalidate proxy entries when content access or version state changes.
+. Restart the {registry} deployment to apply the configuration.
+
+.Verification
+* Request an existing artifact version through the proxy and inspect its response headers:
++
+[source,bash]
+----
+curl --include \
+  "https://registry.example.com/apis/registry/v3/groups/my-group/artifacts/my-schema/versions/1.0.0/content"
+----
++
+Replace the URL and artifact coordinates with values from your deployment, and supply authentication if required.
+For a successful cacheable response, check for `ETag`, `Surrogate-Control`, and `Vary` headers.
+With the default diagnostic headers enabled, `X-Cache-Cacheability` identifies the selected cacheability level.
+Use the proxy's cache-hit statistics or logs to verify that repeated requests use its cache.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:registry-http-cache-behavior_{context}[HTTP cache behavior]
+* {registry-config-reference}
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/http-caching[HTTP caching example with Varnish]
+
+
+// ref-registry-http-cache-behavior

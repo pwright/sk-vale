@@ -1,0 +1,548 @@
+{
+  "assemblies/assembly-configuring-resource-authorization.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        3,
+        49
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:resource-authorization-overview_{context}[",
+      "Line": 8
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        3,
+        54
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:resource-authorization-configuration_{context}[",
+      "Line": 9
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        3,
+        47
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:resource-authorization-grants_{context}[",
+      "Line": 10
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        3,
+        49
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:resource-authorization-coverage_{context}[",
+      "Line": 11
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        3,
+        50
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:resource-authorization-use-cases_{context}[",
+      "Line": 12
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        3,
+        53
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:resource-authorization-interactions_{context}[",
+      "Line": 13
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        3,
+        51
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:resource-authorization-monitoring_{context}[",
+      "Line": 14
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        3,
+        56
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:resource-authorization-troubleshooting_{context}[",
+      "Line": 15
+    }
+  ],
+  "assemblies/assembly-mcp-registry-api.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        33
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"mcp-registry-api_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        38
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= MCP Registry API (Developer Preview)",
+      "Line": 2
+    }
+  ],
+  "assemblies/assembly-registry-sizing-guide.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        21,
+        82
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-registry-high-availability.adoc[",
+      "Line": 22
+    }
+  ],
+  "modules/a2a-openapi-agent-card.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        27
+      ],
+      "Check": "AsciiDocDITA.BlockTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Block titles can only be assigned to examples, figures, and tables in DITA.",
+      "Severity": "warning",
+      "Match": ".Provenance and sync labels",
+      "Line": 56
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.BlockTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Block titles can only be assigned to examples, figures, and tables in DITA.",
+      "Severity": "warning",
+      "Match": ".Known limitations",
+      "Line": 86
+    }
+  ],
+  "modules/resource-authorization-configuration.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        63
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"resource-authorization-configuration_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        15
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Configuration",
+      "Line": 2
+    }
+  ],
+  "modules/resource-authorization-coverage.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        58
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"resource-authorization-coverage_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        36
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= References and generated artifacts",
+      "Line": 2
+    }
+  ],
+  "modules/resource-authorization-grants.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        56
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"resource-authorization-grants_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        20
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Grants file format",
+      "Line": 2
+    }
+  ],
+  "modules/resource-authorization-interactions.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        62
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"resource-authorization-interactions_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        47
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Interaction with other authorization features",
+      "Line": 2
+    }
+  ],
+  "modules/resource-authorization-monitoring.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        60
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"resource-authorization-monitoring_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        30
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Monitoring and audit logging",
+      "Line": 2
+    }
+  ],
+  "modules/resource-authorization-overview.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        58
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"resource-authorization-overview_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        10
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Overview",
+      "Line": 2
+    }
+  ],
+  "modules/resource-authorization-troubleshooting.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        65
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"resource-authorization-troubleshooting_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        17
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Troubleshooting",
+      "Line": 2
+    }
+  ],
+  "modules/resource-authorization-use-cases.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        59
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"resource-authorization-use-cases_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        18
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Common use cases",
+      "Line": 2
+    }
+  ]
+}

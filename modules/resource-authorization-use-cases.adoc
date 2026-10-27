@@ -1,0 +1,68 @@
+[id="resource-authorization-use-cases_{context}_{context}"]
+= Common use cases
+
+
+
+**Multi-team isolation**
+
+
+Each team sees and modifies only its own schemas:
+
+[source,json]
+----
+{
+  "config": { "admin_roles": ["sr-admin"] },
+  "grants": [
+    {"principal_role": "team-a-developers", "operation": "write", "resource_type": "artifact", "resource_pattern_type": "prefix", "resource_pattern": "team-a/"},
+    {"principal_role": "team-a-developers", "operation": "write", "resource_type": "group", "resource_pattern_type": "exact", "resource_pattern": "team-a"},
+    {"principal_role": "team-b-developers", "operation": "write", "resource_type": "artifact", "resource_pattern_type": "prefix", "resource_pattern": "team-b/"},
+    {"principal_role": "team-b-developers", "operation": "write", "resource_type": "group", "resource_pattern_type": "exact", "resource_pattern": "team-b"}
+  ]
+}
+----
+
+
+**Shared schemas with selective write access**
+
+
+All developers read shared schemas; only the platform team modifies them:
+
+[source,json]
+----
+{"principal_role": "sr-developer", "operation": "read", "resource_type": "artifact", "resource_pattern_type": "prefix", "resource_pattern": "shared/"},
+{"principal_role": "sr-developer", "operation": "read", "resource_type": "group", "resource_pattern_type": "exact", "resource_pattern": "shared"},
+{"principal_role": "platform-team", "operation": "write", "resource_type": "artifact", "resource_pattern_type": "prefix", "resource_pattern": "shared/"},
+{"principal_role": "platform-team", "operation": "write", "resource_type": "group", "resource_pattern_type": "exact", "resource_pattern": "shared"}
+----
+
+
+**Read-only service account**
+
+
+[source,json]
+----
+{"principal": "monitoring-service", "operation": "read", "resource_type": "artifact", "resource_pattern": "*"},
+{"principal": "monitoring-service", "operation": "read", "resource_type": "group", "resource_pattern": "*"}
+----
+
+
+**CI/CD pipeline with scoped write access**
+
+
+[source,json]
+----
+{"principal": "ci-pipeline", "operation": "write", "resource_type": "artifact", "resource_pattern_type": "prefix", "resource_pattern": "production/"},
+{"principal": "ci-pipeline", "operation": "write", "resource_type": "group", "resource_pattern_type": "exact", "resource_pattern": "production"}
+----
+
+
+**Group access with excluded artifacts**
+
+
+[source,json]
+----
+{"principal": "contractor", "operation": "read", "resource_type": "artifact", "resource_pattern_type": "prefix", "resource_pattern": "team-a/"},
+{"principal": "contractor", "operation": "read", "resource_type": "group", "resource_pattern_type": "exact", "resource_pattern": "team-a"},
+{"principal": "contractor", "operation": "read", "resource_type": "artifact", "resource_pattern_type": "prefix", "resource_pattern": "team-a/internal-", "deny": true}
+----
+

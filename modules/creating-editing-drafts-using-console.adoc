@@ -1,0 +1,35 @@
+[id="creating-editing-drafts-using-console_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Creating and editing draft versions using the web console
+
+[role="_abstract"]
+You can create a draft, edit its content in Studio, and save changes without publishing a new version after each edit.
+
+.Prerequisites
+* You have access to the web console of a running {registry} instance, and the web console is not in read-only mode.
+* An administrator has enabled draft content mutability on the server.
+* If authentication is enabled, you have the developer or administrator role. If artifact owner-only authorization is enabled, you are the owner of the artifact or an administrator.
+
+.Procedure
+. Click the *Drafts* tab, and then click *Create draft*.
+. In *Draft Coordinates*, enter the group ID, draft ID, and version number, select the artifact type, and then click *Next*. Leave the group ID empty to use the `default` group.
++
+Use a version number that does not already exist for the artifact. You can leave the draft ID and version number empty to generate them automatically.
+. In *Draft Content*, choose a template, upload or enter content, or import content from a URL, and then click *Next*.
+. In *Draft References (optional)*, add any references that the content requires, and then click *Next*.
+. In *Draft Metadata*, enter an optional name and description, and then click *Create*.
++
+The web console opens the draft in the editor. To edit an existing draft, select *Edit draft* from its Action menu (three vertical dots) on the *Drafts* tab.
+. Edit the content, and then click *Save*.
++
+Studio provides dedicated editors for OpenAPI, AsyncAPI, and Protobuf, and a text editor for other types. Saving updates the same draft version. It does not publish the draft.
+
+.Verification
+* Return to the *Drafts* tab, select *Edit draft* for the same version, and verify that the editor displays your saved content.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:draft-version-settings_{context}[]
+* xref:publishing-drafts-using-console_{context}[]
+
+

@@ -1,0 +1,43 @@
+[id="resource-authorization-configuration_{context}_{context}"]
+= Configuration
+
+
+Per-resource authorization requires authentication (OIDC, HTTP basic, or proxy header authentication) to be enabled.
+
+[cols="2,1,3"]
+|===
+|Property |Default |Description
+
+|`apicurio.auth.resource-based-authorization.enabled`
+|`false`
+|Enables per-resource authorization.
+
+|`apicurio.auth.resource-based-authorization.grants.path`
+|_(none)_
+|Path to the JSON grants file. Required when per-resource authorization is enabled. {registry} fails to start if the file is missing or invalid.
+
+|`apicurio.auth.resource-based-authorization.grants.reload-every`
+|`5s`
+|How often to check the grants file for changes. Must be a duration, for example `5s` or `1m`.
+
+|`apicurio.auth.resource-based-authorization.grants.reload-enabled`
+|`true`
+|Reloads the grants file when it changes. Set to `false` to load it only at startup.
+
+|`apicurio.auth.resource-based-authorization.owner-bypass.enabled`
+|`true`
+|Lets the recorded owner of an artifact or group access it regardless of grants.
+|===
+
+.Example configuration
+[source,yaml]
+----
+environment:
+  apicurio.auth.resource-based-authorization.enabled: "true"
+  apicurio.auth.resource-based-authorization.grants.path: "/opt/apicurio/authz/grants.json"
+----
+
+In Kubernetes, store the grants file in a ConfigMap and mount it as a volume. Mount the ConfigMap as a directory rather than with `subPath`, because `subPath` mounts do not receive ConfigMap updates.
+
+A complete Docker Compose example with {keycloak}, including a script that verifies the expected access, is available in `distro/docker-compose/in-memory-with-authz-grants/`.
+

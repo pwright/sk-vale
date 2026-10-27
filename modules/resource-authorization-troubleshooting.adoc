@@ -1,0 +1,37 @@
+[id="resource-authorization-troubleshooting_{context}_{context}"]
+= Troubleshooting
+
+
+
+**A user is denied access although a grant matches**
+
+
+Check, in order:
+
+. **RBAC:** does the user's role allow the operation? `sr-readonly` users cannot write.
+. **Operation:** does the grant's operation cover the request? Changes and deletes require `write`.
+. **Resource type:** operations on a group itself, such as listing its artifacts or creating an artifact in it, need a `group` grant.
+. **Deny rules:** does a deny rule match? Deny rules take precedence.
+. **Referenced and generated artifacts:** dereferencing, or registering content with references, requires `read` on every referenced artifact; writing an artifact that generates other artifacts requires `write` on them.
+. **Resource name:** artifacts are named `{groupId}/{artifactId}`; the default group is `default`. For the Confluent compatibility API, check which group the request addresses.
+. **Audit log:** the `authz.denied` message shows the exact resource name and operation that were evaluated.
+
+
+**A user can see more than expected**
+
+
+Check whether the user is an RBAC administrator or has a role listed in `config.admin_roles`, whether the user owns the resources (see `owner-bypass.enabled`), and, for unauthenticated callers, what the `$anonymous` role is granted.
+
+
+**{registry} does not start**
+
+
+{registry} fails to start when per-resource authorization is enabled and the grants file path is not set, the file does not exist, or the file is not valid grants data. The startup error names the file and the problem.
+
+
+**Grants file changes do not take effect**
+
+
+. Check that `apicurio.auth.resource-based-authorization.grants.reload-enabled` is not `false`.
+. Check the logs for `Grants data reloaded successfully` or for a reload error. If the new file is invalid, the previous grants stay in effect.
+. In Kubernetes, check that the ConfigMap is not mounted with `subPath`.

@@ -1,0 +1,24 @@
+[id="configuring-resource-authorization_{context}_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Configuring per-resource authorization
+
+[role="_abstract"]
+Per-resource authorization controls access to individual groups and artifacts, for example "Alice can write artifacts in group `team-a` and read `shared`, but cannot see `team-b`". Access is defined in a grants file and applies to every {registry} API, including search and list results.
+
+* xref:resource-authorization-overview_{context}[]
+* xref:resource-authorization-configuration_{context}[]
+* xref:resource-authorization-grants_{context}[]
+* xref:resource-authorization-coverage_{context}[]
+* xref:resource-authorization-use-cases_{context}[]
+* xref:resource-authorization-interactions_{context}[]
+* xref:resource-authorization-monitoring_{context}[]
+* xref:resource-authorization-troubleshooting_{context}[]
+
+include::../modules/resource-authorization-overview.adoc[leveloffset=+1]
+include::../modules/resource-authorization-configuration.adoc[leveloffset=+1]
+include::../modules/resource-authorization-grants.adoc[leveloffset=+1]
+include::../modules/resource-authorization-coverage.adoc[leveloffset=+2]
+include::../modules/resource-authorization-use-cases.adoc[leveloffset=+1]
+include::../modules/resource-authorization-interactions.adoc[leveloffset=+1]
+include::../modules/resource-authorization-monitoring.adoc[leveloffset=+1]
+include::../modules/resource-authorization-troubleshooting.adoc[leveloffset=+1]

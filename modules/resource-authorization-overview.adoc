@@ -1,0 +1,20 @@
+[id="resource-authorization-overview_{context}_{context}"]
+= Overview
+
+
+{registry} applies two layers of authorization:
+
+* **Role-based access control (RBAC):** coarse-grained global roles (`sr-readonly`, `sr-developer`, `sr-admin`), typically assigned by an identity provider such as {keycloak}.
+* **Per-resource authorization:** fine-grained access to individual groups and artifacts, defined in a grants file and evaluated after RBAC.
+
+A request must pass both layers. Grants restrict within what RBAC allows; they never grant more than the user's role permits.
+
+Grants are evaluated by an implementation of the https://github.com/kroxylicious/kroxylicious/tree/main/kroxylicious-authorizer-api[Kroxylicious Authorizer API], the authorization contract shared with Kroxylicious and StreamsHub, so the same grants file can describe access across those systems.
+
+
+**How it works**
+
+
+* **Point access** (reading, writing, or deleting a specific group or artifact): the user's identity and roles are matched against the grants for the addressed resource.
+* **Search and lists:** the user's grants are translated into the storage query, so results contain exactly the resources the user can read, and page sizes and total counts are accurate. A resource never appears in search results unless direct read access to it would also be allowed.
+

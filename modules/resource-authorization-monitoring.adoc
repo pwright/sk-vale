@@ -1,0 +1,37 @@
+[id="resource-authorization-monitoring_{context}_{context}"]
+= Monitoring and audit logging
+
+
+
+**Metrics**
+
+
+When OpenTelemetry metrics are enabled, {registry} exports the counter `apicurio.authz.decisions`, with the attributes:
+
+[cols="2,3"]
+|===
+|Attribute |Values
+
+|`apicurio.registry.result`
+|`allow` or `deny`
+
+|`apicurio.registry.entity_type`
+|`artifact`, `group`, or `content`
+
+|`apicurio.registry.operation`
+|`read`, `write`, or `admin`
+|===
+
+
+**Audit log**
+
+
+Denied point-access decisions are logged at `INFO` level to the `io.apicurio.registry.audit.authz` logger:
+
+[source]
+----
+authz.denied user="alice" operation="write" resource_type="artifact" resource="team-b/secret-schema"
+----
+
+To disable these messages, set `quarkus.log.category."io.apicurio.registry.audit.authz".level=OFF`.
+

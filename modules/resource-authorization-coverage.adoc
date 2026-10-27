@@ -1,0 +1,38 @@
+[id="resource-authorization-coverage_{context}_{context}"]
+= References and generated artifacts
+
+
+Some operations read or write artifacts other than the one addressed by the request. These artifacts are authorized as if the caller accessed them directly:
+
+* **Resolving references:** dereferencing content (`references=DEREFERENCE`, or `dereference=true` in the v2 API), returning canonical content, exporting a Protobuf version as a ZIP file, and the Confluent `format=resolved` option all include the content of referenced artifacts. They require `read` on every referenced artifact, including references of references; otherwise the request fails with 403. Without these options, content is returned as stored, with its references unresolved.
+* **Registering references:** creating an artifact or version whose content references other artifacts requires `read` on every referenced artifact, through any API, including draft versions.
+* **Listing references:** inbound reference lists, including the Confluent `referencedby` endpoint, contain only readable artifacts. The outbound reference graph shows that a reference exists but hides the metadata of unreadable targets.
+* **Generated artifacts:** some artifact types make {registry} write additional artifacts in the same group. Embedded schemas of `MODEL_SCHEMA` and `PROMPT_TEMPLATE` artifacts are registered as `{artifactId}-input-schema` and `{artifactId}-output-schema`, and an OpenAPI artifact with an `x-agent-card` extension generates `{artifactId}-agent-card`. Writing the artifact requires `write` on each artifact it would generate and, if a generated artifact does not exist yet, `write` on the group, as for any artifact creation. Embedded schemas are also subject to owner-only authorization. These checks, and the reference checks above, run before anything is written, so a request rejected with 403 leaves no generated artifacts or versions behind.
+
+== Covered APIs
+
+Per-resource authorization applies to every API that addresses or lists groups and artifacts:
+
+[cols="1,3"]
+|===
+|API |Behavior
+
+|Core REST API v3 and v2
+|Group and artifact operations are checked against the addressed resource. Searches and lists, including group lists, artifact and version searches, and inbound references, return only readable resources. Creating a group requires `write` on that group.
+
+|Content and global IDs (`/ids/...`)
+|A global ID resolves to its artifact. Content can be shared by several artifacts, so a content ID or hash is readable if at least one artifact that uses it is readable.
+
+|Confluent Schema Registry compatibility API
+|A subject is an artifact in the group given by the `X-Registry-GroupId` header (or, with `apicurio.ccompat.group-concat.enabled`, in the group encoded in the subject name). Schema IDs resolve as content IDs, or as global IDs in legacy ID mode. Subject and schema lists, and `referencedby` lists, contain only readable subjects. Registering a schema under a new subject also requires `write` on its group.
+
+|Iceberg REST catalog
+|A namespace is a group and a table or view is an artifact in it. The catalog prefix in the URL does not affect authorization. Renaming requires `write` on the source, on the destination, and on the destination namespace.
+
+|MCP Registry API
+|A server name `namespace/server` is the artifact `namespace/server`. Publishing requires `write` on it, and publishing a new server also requires `write` on the `namespace` group. Server lists contain only readable servers.
+
+|Discovery endpoints (`/.well-known/...`)
+|Agent, AI catalog, and MCP tool listings contain only readable artifacts.
+|===
+

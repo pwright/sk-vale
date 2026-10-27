@@ -1,0 +1,137 @@
+[id="resource-authorization-grants_{context}_{context}"]
+= Grants file format
+
+
+The grants file is a JSON object with an optional `config` section and a required `grants` array.
+
+[source,json]
+----
+{
+  "config": {
+    "admin_roles": ["sr-admin"]
+  },
+  "grants": [
+    {
+      "principal": "alice",
+      "operation": "write",
+      "resource_type": "artifact",
+      "resource_pattern_type": "prefix",
+      "resource_pattern": "team-a/"
+    },
+    {
+      "principal_role": "sr-developer",
+      "operation": "read",
+      "resource_type": "artifact",
+      "resource_pattern_type": "prefix",
+      "resource_pattern": "public/"
+    }
+  ]
+}
+----
+
+`config.admin_roles` lists roles whose users have full access to all resources; no grants are evaluated for them. RBAC administrators (the `sr-admin` role, or the role configured as the RBAC admin role) always bypass grants, so `admin_roles` is only needed for additional roles. It must be an array of non-empty strings; any other value rejects the file, like an invalid grant.
+
+
+**Grant fields**
+
+
+[cols="2,1,3"]
+|===
+|Field |Required |Description
+
+|`principal`
+|One of `principal` or `principal_role`
+|User name to match, from the authenticated identity. Never matches unauthenticated requests.
+
+|`principal_role`
+|One of `principal` or `principal_role`
+|Role to match. Any user with this role receives the grant.
+
+|`operation`
+|Yes
+|`read`, `write`, or `admin`.
+
+|`resource_type`
+|Yes
+|`artifact` or `group`.
+
+|`resource_pattern_type`
+|No
+|`prefix` matches names that start with the pattern. `exact`, or omitting the field, matches the name exactly.
+
+|`resource_pattern`
+|Yes
+|The name or prefix to match. `*` matches every resource of the type, whatever the pattern type.
+
+|`deny`
+|No
+|`true` makes the grant deny the matched access. Deny rules take precedence over allow rules. Default: `false`.
+|===
+
+Every grant must be valid: exactly one of `principal` and `principal_role`, a known `operation` and `resource_pattern_type`, and a boolean `deny`. A file with an invalid grant is rejected as a whole, because skipping an invalid deny rule would grant access you meant to forbid: {registry} does not start, or keeps the previous grants on reload.
+
+
+**Resource names**
+
+
+* **Artifacts:** `{groupId}/{artifactId}`, for example `team-a/my-schema`. Artifacts in the default group are named `default/{artifactId}`.
+* **Groups:** the group ID, for example `team-a`. The default group is named `default`.
+
+In artifact names, the characters `%` and `/` in the group ID are written as `%25` and `%2F`, so the first `/` always separates the group from the artifact ID. For example, artifact `x` in group `team-a/sub` is named `team-a%2Fsub/x`, while artifact `sub/x` in group `team-a` is named `team-a/sub/x`. Artifact IDs and group names are not escaped.
+
+Patterns are matched against the complete name. For example, the prefix `team-a/` matches every artifact in group `team-a` (but not in group `team-a/sub`), and the prefix `team-a/internal-` matches only the artifacts in `team-a` whose ID starts with `internal-`.
+
+Matching is case-sensitive on every storage variant, in direct access and in search results. Some databases, such as MySQL and SQL Server, look up group and artifact IDs case-insensitively, so a request for `TEAM-A/My-Schema` can address the stored artifact `team-a/my-schema`. Such a request is authorized against the stored IDs, so changing the case of an ID never gets around a grant or deny rule.
+
+
+**Operations**
+
+
+`admin` implies `write`, and `write` implies `read`. The operation required by each API operation matches its RBAC level: reads require `read`, and changes, including deletes, require `write`. A few operations require `admin`, such as dropping Iceberg namespaces, tables, and views.
+
+
+**Group grants and artifact grants**
+
+
+* **Group grants** control operations on the group itself: reading group metadata, listing artifacts in it, and creating, updating, or deleting the group.
+* **Artifact grants** control operations on artifacts and their versions, content, comments, and references.
+
+Some operations need both:
+
+* Creating an artifact requires `write` on the group and on the new artifact's name, so a deny on an artifact name also prevents creating it. This applies to every API that creates artifacts, including registering a new subject with the Confluent compatibility API, publishing a new MCP server, and renaming an Iceberg table.
+* Deleting a group, or all artifacts in a group, requires `write` on the group and on every artifact in it.
+
+Most deployments need both. For example, to give a user full access to `team-a`:
+
+[source,json]
+----
+{"principal": "alice", "operation": "write", "resource_type": "group", "resource_pattern_type": "exact", "resource_pattern": "team-a"},
+{"principal": "alice", "operation": "write", "resource_type": "artifact", "resource_pattern_type": "prefix", "resource_pattern": "team-a/"}
+----
+
+
+**Deny rules**
+
+
+Deny rules use the same fields with `"deny": true`. If a deny rule matches, access is denied even if an allow rule also matches. Deny rules apply to search results as well as direct access.
+
+[source,json]
+----
+{"principal": "alice", "operation": "write", "resource_type": "artifact", "resource_pattern_type": "prefix", "resource_pattern": "team-a/"},
+{"principal": "alice", "operation": "read", "resource_type": "artifact", "resource_pattern_type": "exact", "resource_pattern": "team-a/secret-schema", "deny": true}
+----
+
+Alice can read and write all artifacts in `team-a` except `team-a/secret-schema`.
+
+A deny rule denies its operation and every operation that implies it:
+
+* Denying `read` blocks all access, and hides the resource from search results.
+* Denying `write` blocks changes but keeps read access, which makes the resource read-only for the user.
+* Denying `admin` blocks only operations that require `admin`.
+
+
+**Reloading the grants file**
+
+
+{registry} checks the grants file for changes at the interval set by `apicurio.auth.resource-based-authorization.grants.reload-every` and applies changes without a restart. If the changed file is not valid JSON, is not an object, or has no `grants` array, {registry} logs an error and keeps using the previously loaded grants.
+
