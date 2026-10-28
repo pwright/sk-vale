@@ -1,0 +1,146 @@
+[id="_performing_crud_operations_{context}"]
+= Creating a client configuration
+
+
+The first task after authenticating with credentials or configuring an Initial Access Token is usually to create a new client. Often you might want to use a prepared JSON file as a template and set or override some of the attributes.
+
+The following example shows how to read a JSON file, override any client id it may contain, set any other attributes, and print the configuration to a standard output after successful creation.
+
+* Linux:
+[options="nowrap"]
+----
+$ kcreg.sh create -f client-template.json -s clientId=myclient -s baseUrl=/myclient -s 'redirectUris=["/myclient/*"]' -o
+----
+* Windows:
+[options="nowrap"]
+----
+C:\> kcreg create -f client-template.json -s clientId=myclient -s baseUrl=/myclient -s "redirectUris=[\"/myclient/*\"]" -o
+----
+
+Run the [command]`kcreg create --help` for more information about the [command]`kcreg create` command.
+
+You can use [command]`kcreg attrs` to list available attributes. Keep in mind that many configuration attributes are not checked for validity or consistency. It is up to you to specify proper values. Remember that you should not have any id fields in your
+template and should not specify them as arguments to the [command]`kcreg create` command.
+
+
+
+**Retrieving a client configuration**
+
+
+You can retrieve an existing client by using the [command]`kcreg get` command.
+
+For example, on:
+
+* Linux:
+[options="nowrap"]
+----
+$ kcreg.sh get myclient
+----
+* Windows:
+[options="nowrap"]
+----
+C:\> kcreg get myclient
+----
+
+[WARNING]
+====
+The `-e install` flag retrieves adapter configuration via the deprecated `install` client registration provider.
+Use the Admin REST API (`GET /admin/realms/<realm>/clients/<client-uuid>/installation/providers/<provider-id>`) instead.
+====
+
+You can also retrieve the client configuration as an adapter configuration file, which you can package with your web application.
+
+For example, on:
+
+* Linux:
+[options="nowrap"]
+----
+$ kcreg.sh get myclient -e install > keycloak.json
+----
+* Windows:
+[options="nowrap"]
+----
+C:\> kcreg get myclient -e install > keycloak.json
+----
+
+Run the [command]`kcreg get --help` command for more information about the [command]`kcreg get` command.
+
+
+
+**Modifying a client configuration**
+
+
+There are two methods for updating a client configuration.
+
+One method is to submit a complete new state to the server after getting the current configuration, saving it to a file, editing it, and posting it back to the server.
+
+For example, on:
+
+ * Linux:
+[options="nowrap"]
+----
+$ kcreg.sh get myclient > myclient.json
+$ vi myclient.json
+$ kcreg.sh update myclient -f myclient.json
+----
+* Windows:
+[options="nowrap"]
+----
+C:\> kcreg get myclient > myclient.json
+C:\> notepad myclient.json
+C:\> kcreg update myclient -f myclient.json
+----
+
+The second method fetches the current client, sets or deletes fields on it, and posts it back in one step.
+
+For example, on:
+
+* Linux:
+[options="nowrap"]
+----
+$ kcreg.sh update myclient -s enabled=false -d redirectUris
+----
+* Windows:
+[options="nowrap"]
+----
+C:\> kcreg update myclient -s enabled=false -d redirectUris
+----
+
+You can also use a file that contains only changes to be applied so you do not have to specify too many values as arguments. In this case, specify [command]`--merge` to tell the Client Registration CLI that rather than treating the JSON file as a full, new configuration, it should treat it as a set of attributes to be applied over the existing configuration.
+
+For example, on:
+
+* Linux:
+[options="nowrap"]
+----
+$ kcreg.sh update myclient --merge -d redirectUris -f mychanges.json
+----
+* Windows:
+[options="nowrap"]
+----
+C:\> kcreg update myclient --merge -d redirectUris -f mychanges.json
+----
+
+Run the [command]`kcreg update --help` command for more information about the [command]`kcreg update` command.
+
+
+
+**Deleting a client configuration**
+
+
+Use the following example to delete a client.
+
+* Linux:
+[options="nowrap"]
+----
+$ kcreg.sh delete myclient
+----
+*  Windows:
+[options="nowrap"]
+----
+C:\> kcreg delete myclient
+----
+
+Run the [command]`kcreg delete --help` command for more information about the [command]`kcreg delete` command.
+
+

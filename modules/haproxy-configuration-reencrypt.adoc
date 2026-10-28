@@ -1,0 +1,119 @@
+[id="haproxy-configuration-reencrypt_{context}"]
+= HAProxy configuration
+
+
+The following `haproxy.cfg` shows a configuration for TLS re-encrypt with two {project_name} backend servers.
+
+[source,haproxy]
+----
+global
+    log stdout format raw local0
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5s
+    timeout client  50s
+    timeout server  50s
+    retries 3
+
+frontend https_front
+    bind *:8443 ssl crt /path/to/haproxy-external-certificate # <1>
+    mode http # <2>
+
+    # Prevent external spoofing
+    http-request del-header Forwarded <3>
+    http-request del-header x-forwarded-.* -m reg
+    http-request del-header x-original-.* -m reg
+    http-request del-header x-real-ip
+
+    # Prevent external spoofing of client certificate headers
+    # These must be deleted unconditionally, because the set-header directives below
+    # are conditional
+    http-request del-header Client-Cert
+    http-request del-header Client-Cert-Chain
+
+    # Prevent external tracing context injection (W3C Trace Context / Baggage)
+    http-request del-header traceparent
+    http-request del-header tracestate
+    http-request del-header baggage
+
+    # Prevent external tracing context injection (Zipkin, Jaeger, OpenTracing)
+    http-request del-header b3
+    http-request del-header x-b3-.* -m reg
+    http-request del-header uber-trace-id
+    http-request del-header x-ot-span-context
+
+    # Optional. Forward client identities so that client certificate lookups work as expected
+    http-request set-header Client-Cert %[ssl_c_der,base64] if { ssl_c_used } { ssl_c_verify 0 }
+    http-request set-header Client-Cert-Chain %[ssl_c_chain_der,base64] if { ssl_c_used } { ssl_c_verify 0 }
+
+    # Public paths. Revisit the reverse proxy guide for the latest guidance. # <4>
+    # With these settings, the redirect to the welcome screen or Admin UI will not work from external IP addresses, and this is expected.
+    acl is_public_path path_beg /realms/
+    acl is_public_path path_beg /resources/
+    acl is_public_path path_beg /.well-known/
+
+    # Allowed source IP ranges. Replace with your internal IP address ranges. # <4>
+    acl is_allowed_src src 192.168.0.0/16
+    acl is_allowed_src src 172.16.0.0/12
+    acl is_allowed_src src 10.0.0.0/8
+    acl is_allowed_src src 127.0.0.0/8
+
+    http-request deny unless is_public_path or is_allowed_src # <4>
+
+    default_backend keycloak_back
+
+backend keycloak_back
+    mode http # <5>
+    balance roundrobin # <6>
+    option forwarded host by by_port for # <7>
+    option httpchk GET /health/ready # <8>
+    http-check expect status 200
+
+    server keycloak1 keycloak1:8443 ssl verify required crt /path/to/haproxy-internal-certificate ca-file /path/to/keycloak-1-certificate check port 9000 check-ssl verify none inter 5s fall 3 rise 2 slowstart 60s # <9>
+
+    server keycloak2 keycloak2:8443 ssl verify required crt /path/to/haproxy-internal-certificate ca-file /path/to/keycloak-2-certificate check port 9000 check-ssl verify none inter 5s fall 3 rise 2 slowstart 60s
+
+----
+
+<1> The port HAProxy listens on for incoming TLS connections.
+The `ssl crt /path/to/haproxy-external-certificate` directive sets the certificate that the proxy will use to identify itself on the frontend.
+<2> Enables link:https://docs.haproxy.org/3.2/configuration.html#4-mode[HTTP mode] on the frontend.
+This tells HAProxy to operate at Layer 7, decrypting and re-encrypting HTTP traffic.
+HAProxy has access to the plaintext HTTP traffic in this mode.
+<3> The `http-request del-header` directives remove HTTP headers from incoming requests before forwarding them to {project_name}.
+This prevents external clients from spoofing proxy identity headers (such as `Forwarded`, `+X-Forwarded-*+`, and `X-Real-IP`), injecting authentication-related headers (such as `X-Forwarded-Access-Token`), or injecting distributed tracing context (such as W3C Trace Context, Zipkin B3, or Jaeger headers).
+For the full list of recommended headers to filter, see the link:{links_server_reverseproxy_url}#header-filtering-recommendations[{links_server_reverseproxy_name}] {section}.
+<4> Restricts access so that only public {project_name} paths are reachable from external networks. Requests to non-public paths (such as the Admin API or Admin Console) are only allowed from the configured internal IP ranges. For the full list of paths and recommendations, see the link:{links_server_reverseproxy_url}#_exposed_path_recommendations[{links_server_reverseproxy_name}] {section}.
+<5> The backend must also use HTTP mode to match the frontend.
+<6> Distributes connections across backend servers using link:https://docs.haproxy.org/3.2/configuration.html#4-balance[round-robin] load balancing.
+<7> This option adds a `Forwarded` header containing the correct client information.
+<8> Configures link:https://docs.haproxy.org/3.2/configuration.html#4.2-option%20httpchk[HTTP health checks] against {project_name}'s readiness endpoint.
+<9> Defines a backend {project_name} server.
+The parameters on this line control mTLS settings, health checks, and failure detection:
+
+The `server` directive parameters are explained below:
+
+`ssl verify required`:: Enables a secure connection to Keycloak and verifies the certificate.
+
+`crt /path/to/haproxy-internal-certificate`:: Configures the certificate used to authenticate HAProxy to Keycloak.
+
+`ca-file /path/to/keycloak-N-certificate`:: Configures the backend server certificate (or issuing CA certificate) used to authenticate the particular Keycloak server to HAProxy.
+
+`check port 9000 check-ssl verify none`::
+Directs health checks to the link:https://docs.haproxy.org/3.2/configuration.html#5.2-check[management port] (`9000`) over HTTPS.
+The `verify none` option skips TLS certificate verification for the health check connection, which is acceptable because the health check is an internal communication between HAProxy and {project_name}.
+The management port is separate from the main application port (`8443`), as described in the link:{links_server_management-interface_url}[{links_server_management-interface_name}] {section}.
+
+`inter 5s fall 3 rise 2`::
+Configures the link:https://docs.haproxy.org/3.2/configuration.html#5.2-inter[health check frequency]:
+poll every 5 seconds, mark a server as down after 3 consecutive failures, and mark it as up again after 2 consecutive successes.
+These values affect how quickly HAProxy detects that a {project_name} instance is shutting down (see <<graceful-shutdown-considerations-haproxy-reencrypt>>).
+
+`slowstart 60s`::
+Gradually increases the server's weight from 0 to its full value over 60 seconds after the server becomes available.
+This gives {project_name} and the JVM time to warm up (JIT compilation, class loading, cache population) before receiving full traffic, preventing performance degradation and timeouts during the warmup phase.
+

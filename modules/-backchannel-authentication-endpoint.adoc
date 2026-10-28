@@ -1,0 +1,50 @@
+[id="_backchannel_authentication_endpoint_{context}"]
+= Backchannel Authentication endpoint
+
+....
+/realms/{realm-name}/protocol/openid-connect/ext/ciba/auth
+....
+
+The backchannel authentication endpoint is used to obtain an auth_req_id that identifies the authentication request made by the client. It can only be invoked by confidential clients.
+
+For more details on how to invoke on this endpoint, see https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html[OpenID Connect Client Initiated Backchannel Authentication Flow specification].
+
+Also refer to other places of {project_name} documentation like <<_client_initiated_backchannel_authentication_grant,Client Initiated Backchannel Authentication Grant section of this guide>> and link:{adminguide_link}#_client_initiated_backchannel_authentication_grant[Client Initiated Backchannel Authentication Grant section] of {adminguide_name}.
+
+== Supported Grant Types
+
+This section describes the different grant types available to relaying parties.
+
+
+**Authorization code**
+
+
+The Authorization Code flow redirects the user agent to {project_name}. Once the user has successfully authenticated with {project_name}, an
+Authorization Code is created and the user agent is redirected back to the application. The application then uses the authorization code along with its
+credentials to obtain an Access Token, Refresh Token and ID Token from {project_name}.
+
+The flow is targeted towards web applications, but is also recommended for native applications, including mobile applications, where it is possible to embed
+a user agent.
+
+For more details refer to the https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth[Authorization Code Flow] in the OpenID Connect specification.
+
+
+**Implicit**
+
+
+The Implicit flow works similarly to the Authorization Code flow, but instead of returning an Authorization Code, the Access Token and ID Token is
+returned. This approach reduces the need for the extra invocation to exchange the Authorization Code for an Access Token. However, it does not include a Refresh
+Token. This results in the need to permit Access Tokens with a long expiration; however, that approach is not practical because it is very hard to invalidate these tokens. Alternatively, you can
+require a new redirect to obtain a new Access Token once the initial Access Token has expired. The Implicit flow is useful if the application only wants to
+authenticate the user and deals with logout itself.
+
+You can instead use a Hybrid flow where both the Access Token and an Authorization Code are returned.
+
+One thing to note is that both the Implicit flow and Hybrid flow have potential security risks as the Access Token may be leaked through web server logs and
+browser history. You can somewhat mitigate this problem by using short expiration for Access Tokens.
+
+For more details, see the https://openid.net/specs/openid-connect-core-1_0.html#ImplicitFlowAuth[Implicit Flow] in the OpenID Connect specification.
+
+Per current https://datatracker.ietf.org/doc/html/rfc9700#name-implicit-grant[Best Current Practice for OAuth 2.0 Security (RFC 9700)], this flow SHOULD NOT be used.
+This flow is removed from the future https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-13[OAuth 2.1 specification].
+

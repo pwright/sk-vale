@@ -1,0 +1,62 @@
+[id="specify-log-level-each-handler_{context}"]
+= Specify log level for each handler
+
+
+The `log-level` property specifies the global root log level and levels for selected categories.
+However, a more fine-grained approach for log levels is necessary to comply with the modern application requirements.
+
+To set log levels for particular handlers, properties in format `log-<handler>-level` (where `<handler>` is available log handler) were introduced.
+
+It means properties for log level settings look like this:
+
+* `log-console-level` - Console log handler
+* `log-file-level` - File log handler
+* `log-syslog-level` - Syslog log handler
+
+NOTE: The `log-<handler>-level` properties are available only when the particular log handlers are enabled.
+More information in log handlers settings below.
+
+Only log levels specified in <<Log levels>> section are accepted, and *must be in lowercase*.
+There is no support for specifying particular categories for log handlers yet.
+
+
+**General principle**
+
+
+It is necessary to understand that setting the log levels for each particular handler *does not override the root level* specified in the `log-level` property.
+Log handlers respect the root log level, which represents the maximal verbosity for the whole logging system.
+It means individual log handlers can be configured to be less verbose than the root logger, but not more.
+
+Specifically, when an arbitrary log level is defined for the handler, it does not mean the log records with the log level will be present in the output.
+In that case, the root `log-level` must also be assessed.
+Log handler levels provide the *restriction for the root log level*, and the default log level for log handlers is `all` - without any restriction.
+
+
+**Examples**
+
+
+.Example: `debug` for file handler, but `info` for console handler:
+[source,bash]
+----
+bin/kc.[sh|bat] start --log=console,file --log-level=debug --log-console-level=info
+----
+
+The root log level is set to `debug`, so every log handler inherits the value - so does the file log handler.
+To hide `debug` records in the console, we need to set the minimal (least severe) level to `info` for the console handler.
+
+.Example: `warn` for all handlers, but `debug` for file handler:
+[source,bash]
+----
+bin/kc.[sh|bat] start --log=console,file,syslog --log-level=debug --log-console-level=warn --log-syslog-level=warn
+----
+
+The root level must be set to the most verbose required level (`debug` in this case), and other log handlers must be amended accordingly.
+
+.Example: `info` for all handlers, but `debug`+`org.keycloak.events:trace` for Syslog handler:
+[source,bash]
+----
+bin/kc.[sh|bat] start --log=console,file,syslog --log-level=debug,org.keycloak.events:trace, --log-syslog-level=trace --log-console-level=info --log-file-level=info
+----
+
+In order to see the `org.keycloak.events:trace`, the `trace` level must be set for the Syslog handler.
+

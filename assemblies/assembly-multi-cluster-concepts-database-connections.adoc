@@ -1,0 +1,15 @@
+[id="multi-cluster-concepts-database-connections_{context}"]
+= Concepts for database connection pools
+
+
+
+
+This section is intended when you want to understand considerations and best practices on how to configure database connection pools for {project_name}.
+For a configuration where this is applied, visit link:{links_high-availability_multi-cluster-deploy-keycloak-kubernetes_url}[{links_high-availability_multi-cluster-deploy-keycloak-kubernetes_name}].
+
+[#multi-cluster-db-concepts]
+== Concepts
+
+include::../partials/database-connections/configure-db-connection-pool-best-practices.adoc[]
+
+

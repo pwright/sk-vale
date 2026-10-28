@@ -1,0 +1,250 @@
+[id="basic-deployment_{context}"]
+= Basic {project_name} deployment
+
+
+
+
+== Performing a basic {project_name} deployment
+This {section} describes how to perform a basic {project_name} Deployment on
+OpenShift using the Operator.
+
+=== Preparing for deployment
+
+Once the {project_name} Operator is installed and running in the cluster namespace, you can set up the other deployment prerequisites.
+
+* Database
+* Hostname
+* TLS Certificate and associated keys
+
+==== Database
+
+A database should be available and accessible from the cluster namespace where {project_name} is installed.
+For a list of supported databases, see link:{links_server_db_url}[{links_server_db_name}].
+The {project_name} Operator does not manage the database and you need to provision it yourself. Consider verifying your cloud provider offering or using a database operator.
+
+For development purposes, you can use an ephemeral PostgreSQL pod installation. To provision it, follow the approach below:
+
+Create YAML file `example-postgres.yaml`:
+[source,yaml]
+----
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql-db
+spec:
+  serviceName: postgresql-db-service
+  selector:
+    matchLabels:
+      app: postgresql-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgresql-db
+    spec:
+      containers:
+        - name: postgresql-db
+          image: postgres:15
+          volumeMounts:
+            - mountPath: /data
+              name: cache-volume
+          env:
+            - name: POSTGRES_USER
+              value: testuser
+            - name: POSTGRES_PASSWORD
+              value: testpassword
+            - name: PGDATA
+              value: /data/pgdata
+            - name: POSTGRES_DB
+              value: keycloak
+      volumes:
+        - name: cache-volume
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-db
+spec:
+  selector:
+    app: postgresql-db
+  type: LoadBalancer
+  ports:
+  - port: 5432
+    targetPort: 5432
+----
+
+Apply the changes:
+
+[source,bash]
+----
+kubectl apply -f example-postgres.yaml
+----
+
+==== Hostname
+
+For a production ready installation, you need a hostname that can be used to contact {project_name}.
+See link:{links_server_hostname_url}[{links_server_hostname_name}] for the available configurations.
+
+For development purposes, this {section} will use `test.keycloak.org`.
+
+When running on OpenShift, with ingress enabled, and with the spec.ingress.classname set to openshift-default, you may leave the spec.hostname.hostname unpopulated in the Keycloak CR.
+The operator will assign a default hostname to the stored version of the CR similar to what would be created by an OpenShift Route without an explicit host - that is ingress-namespace.appsDomain
+If the appsDomain changes, or should you need a different hostname for any reason, then update the Keycloak CR.
+
+NOTE: If you set the `hostname-admin`, or the deprecated `hostname-admin-url`, even if you enable ingress, no ingress will be created specifically for admin access.
+Admin access via a separate hostname is generally expected to have access restrictions, which are not currently expressible via the Keycloak CR.
+Also the default ingress does not prevent accessing admin endpoints, so you may not want to enable ingress handling via the Keycloak CR at all when you have a separate hostname for admin endpoints.
+
+==== TLS Certificate and key
+
+See your Certification Authority to obtain the certificate and the key.
+
+For development purposes, you can enter this command to obtain a self-signed certificate:
+
+[source,bash]
+----
+openssl req -subj '/CN=test.keycloak.org/O=Test Keycloak./C=US' -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -addext "basicConstraints=critical,CA:FALSE" -out certificate.pem
+----
+
+You should install it in the cluster namespace as a Secret by entering this command:
+
+[source,bash]
+----
+kubectl create secret tls example-tls-secret --cert certificate.pem --key key.pem
+----
+
+=== Deploying {project_name}
+
+To deploy {project_name}, you create a Custom Resource (CR) based on the Keycloak Custom Resource Definition (CRD).
+
+[NOTE]
+====
+If you are on OpenShift, you cannot use wildcard certificates on passthrough Routes with HTTP/2 enabled. The following Keycloak CR on OpenShift if you are using a wildcard certificate with the default IngressClass, creates such a Route. In this situation, modify the YAML based on "Accessing the {project_name} deployment" later in this topic to use TLS Termination or an OpenShift re-encrypt Route.
+====
+
+Consider storing the Database credentials in a separate Secret. Enter the following commands:
+[source,bash]
+----
+kubectl create secret generic keycloak-db-secret \
+  --from-literal=username=[your_database_username] \
+  --from-literal=password=[your_database_password]
+----
+
+You can customize several fields using the Keycloak CRD. For a basic deployment, you can stick to the following approach:
+
+Create YAML file `example-kc.yaml`:
+
+:check-lb-forwarded-header: pass:quotes[Check your load balancer or reverse proxy configuration to determine whether it utilizes the `Forwarded` (RFC 7239) or `X-Forwarded-*` (e.g., `X-Forwarded-For`) mechanism for header propagation.]
+
+[source,yaml]
+----
+apiVersion: k8s.keycloak.org/v2beta1
+kind: Keycloak
+metadata:
+  name: example-kc
+spec:
+  instances: 1
+  db:
+    vendor: postgres
+    host: postgres-db
+    usernameSecret:
+      name: keycloak-db-secret
+      key: username
+    passwordSecret:
+      name: keycloak-db-secret
+      key: password
+  http:
+    tlsSecret: example-tls-secret
+  hostname:
+    hostname: test.keycloak.org
+  proxy:
+    headers: xforwarded # <1>
+----
+<1> {check-lb-forwarded-header}
+
+Apply the changes:
+
+[source,bash]
+----
+kubectl apply -f example-kc.yaml
+----
+
+To check that the {project_name} instance has been provisioned in the cluster, check the status of the created CR by entering the following command:
+
+[source,bash]
+----
+kubectl get keycloaks/example-kc -o go-template='{{range .status.conditions}}CONDITION: {{.type}}{{"\n"}}  STATUS: {{.status}}{{"\n"}}  MESSAGE: {{.message}}{{"\n"}}{{end}}'
+----
+
+When the deployment is ready, look for output similar to the following:
+
+[source,bash]
+----
+CONDITION: Ready
+  STATUS: true
+  MESSAGE:
+CONDITION: HasErrors
+  STATUS: false
+  MESSAGE:
+CONDITION: RollingUpdate
+  STATUS: false
+  MESSAGE:
+----
+
+=== Accessing the {project_name} deployment
+
+The {project_name} deployment can be exposed through a basic Ingress accessible through the provided hostname.
+
+On installations with multiple default IngressClass instances
+or when running on OpenShift 4.12+ you should provide an ingressClassName by setting `ingress` spec with `className` property to the desired class name:
+
+Edit YAML file `example-kc.yaml`:
+
+[source,yaml]
+----
+apiVersion: k8s.keycloak.org/v2beta1
+kind: Keycloak
+metadata:
+  name: example-kc
+spec:
+    ...
+    ingress:
+      className: openshift-default
+----
+
+NOTE: The operator annotates the Ingress to match expectations for TLS passthrough or TLS termination on OpenShift with the default IngressClass.
+See below for more on TLS termination.
+
+==== TLS Termination with default Ingress
+
+When using the operator-provided ingress (`spec.ingress.enabled: true`), there are many Keycloak CR options (like service and ingress labels and annotations) that allow you to customize your ingress behavior.
+
+With passthrough, the client IP address is not visible to {project_name} because the default ingress controller does not support the PROXY protocol between the ingress and {project_name}.
+
+Passthrough is the best option when you want to use mTLS (mutual TLS), as the TLS connection is established directly between the client and {project_name}, preserving the client certificate for authentication.
+Edge and reencrypt do not offer mTLS between the client and the ingress via configuration options in the CRs.
+
+With edge, the ingress controller terminates TLS and forwards the connection to {project_name} unencrypted.
+If internal encryption is required, use reencrypt instead.
+
+With edge or reencrypt, you can only trust the client IP address and other forwarded headers if you restrict access to the {project_name} HTTP port via network policies (see link:{links_operator_advanced-configuration_url}#_network_policies[{links_operator_advanced-configuration_name}]). For example, allow connections only from the namespace where the ingress controller runs.
+You must also prevent users in the {project_name} namespace from creating additional ingress or route instances, as an unauthorized ingress could bypass the trusted ingress controller and spoof client IP addresses or other forwarded headers.
+Without these protections, any Pod that can connect to {project_name} directly can spoof forwarded headers.
+Parsing proxy headers therefore conflicts with direct backchannel access to {project_name}, as backchannel clients bypass the ingress and could spoof those headers.
+
+This section shows how to achieve the following TLS Termination when using OpenShift:
+
+- <<passthrough, Passthrough>>
+- <<edge_cluster_domain, Edge using cluster domain and certificate>>
+- <<edge_custom_domain, Edge using custom domain and certificate>>
+- <<reencrypt_cluster_domain, Reencrypt using cluster domain and certificate>>
+- <<reencrypt_custom_domain, Reencrypt using custom domain and certificate>>
+
+For other platforms or IngressControllers, you can use the provided examples as a starting point.
+
+include::../modules/passthrough.adoc[leveloffset=+4]
+include::../modules/edge-cluster-domain.adoc[leveloffset=+1]
+include::../modules/edge-custom-domain.adoc[leveloffset=+1]
+include::../modules/reencrypt-cluster-domain.adoc[leveloffset=+1]
+include::../modules/reencrypt-custom-domain.adoc[leveloffset=+1]

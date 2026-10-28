@@ -1,0 +1,41 @@
+[id="mdc_{context}"]
+= Adding context for log messages
+
+
+You can enable additional context information for each log line like the current realm and client that is executing the request.
+
+Use the option `log-mdc-enabled` to enable it.
+
+.Example configuration
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-mdc-enabled=true
+----
+
+.Example output
+----
+2025-06-20 14:13:01,772 {kc.clientId=security-admin-console, kc.realmName=master} INFO ...
+----
+
+Specify which keys to be added by setting the configuration option `log-mdc-keys`.
+
+== Use different JSON format for log handlers
+Every log handler provides the ability to have structured log output in JSON format.
+It can be enabled by properties in the format `log-<handler>-output=json` (where `<handler>` is a log handler).
+
+If you need a different format of the produced JSON, you can leverage the following JSON output formats:
+
+* `default` (default)
+* `ecs`
+
+The `ecs` value refers to the https://www.elastic.co/guide/en/ecs-logging/overview/current/intro.html[ECS] (Elastic Common Schema).
+
+ECS is an open-source, community-driven specification that defines a common set of fields to be used with Elastic solutions.
+The ECS specification is being converged with https://opentelemetry.io/docs/concepts/semantic-conventions/[OpenTelemetry Semantic Conventions] with the goal of creating a single standard maintained by OpenTelemetry.
+
+In order to change the JSON output format, properties in the format `log-<handler>-json-format` (where `<handler>` is a log handler) were introduced:
+
+* `log-console-json-format` - Console log handler
+* `log-file-json-format` - File log handler
+* `log-syslog-json-format` - Syslog log handler
+

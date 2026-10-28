@@ -1,0 +1,141 @@
+[id="header-filtering-recommendations_{context}"]
+= Header filtering recommendations
+
+
+When using TLS re-encrypt, the proxy can inspect and modify HTTP traffic.
+Use this capability to prevent external clients from injecting headers that affect identity resolution, access control, or observability.
+
+NOTE: The following assumes that there is only a single proxy layer in front of {project_name}, and that it is not receiving traffic from another trusted proxy layer with trusted headers.
+
+Configure the proxy to apply the following rules to incoming requests before forwarding them to {project_name}:
+
+* *Overwrite* `Forwarded` and `+X-Forwarded-*+` headers with the proxy's own values rather than removing them, because {project_name} relies on these headers when `--proxy-headers` is configured.
+* *Strip* all other headers listed below entirely.
+
+Depending on your security setup, you might want to allow some of the tracing headers through — either as-is or after sanitizing their values — for requests from trusted callers.
+This assessment depends on your trust boundaries and security trade-offs and is out of scope for this guide.
+
+[%autowidth]
+|===
+|Header(s) |Category |Risk if not filtered
+
+|`Forwarded`, `X-Forwarded-For`, `X-Forwarded-Proto`, `X-Forwarded-Host`, `X-Forwarded-Port`, `X-Forwarded-Prefix`
+|Proxy identity
+|Clients can spoof their IP address, protocol, or host, affecting access control and audit logging. Forging the host allows Host header injection, enabling attackers to manipulate dynamically generated URLs.
+*Overwrite* these headers rather than stripping them.
+
+|`X-Original-Forwarded-For`
+|Proxy identity
+|Variant of `X-Forwarded-For` recognized by some proxies.
+Can be spoofed to bypass IP-based access controls.
+
+|`X-Real-IP`
+|Proxy identity
+|Trusted by some applications for rate limiting and audit logging.
+Can be spoofed to bypass IP-based restrictions.
+
+|`X-Original-URL`, `X-Original-Method`
+|Proxy identity
+|Used by authentication sub-request mechanisms in some proxies.
+Can be spoofed to manipulate path-based authorization decisions.
+
+|`X-Forwarded-Access-Token`
+|Proxy identity
+|Injected by some OAuth2 proxies.
+Can be spoofed to inject forged access tokens.
+
+|`traceparent`, `tracestate`
+|Distributed tracing
+|https://www.w3.org/TR/trace-context/[W3C Trace Context] headers.
+External injection allows attackers to correlate requests in the tracing backend and map internal service dependencies.
+
+|`baggage`
+|Distributed tracing
+|https://www.w3.org/TR/baggage/[W3C Baggage] header.
+Can inject arbitrary key-value pairs into the trace context propagated to downstream services.
+
+|`b3`, `x-b3-traceid`, `x-b3-spanid`, `x-b3-parentspanid`, `x-b3-sampled`, `x-b3-flags`
+|Distributed tracing
+|https://github.com/openzipkin/b3-propagation[Zipkin B3] propagation headers.
+External injection inflates observability costs and enables cross-service correlation.
+
+|`uber-trace-id`
+|Distributed tracing
+|https://www.jaegertracing.io/sdk-migration/#propagation-format[Jaeger] propagation header (deprecated in favor of W3C Trace Context).
+Same risks as other tracing headers.
+
+|`x-ot-span-context`
+|Distributed tracing
+|OpenTracing propagation header (deprecated in favor of W3C Trace Context).
+Same risks as other tracing headers.
+
+|===
+
+[#_exposed_path_recommendations]
+
+**Exposed path recommendations**
+
+
+When using a reverse proxy, {project_name} only requires certain paths to be exposed.
+The following table shows the recommended paths to expose.
+
+[%autowidth]
+|===
+|{project_name} Path|Reverse Proxy Path|Exposed|Reason
+
+|/
+|-
+|No
+|When exposing all paths, admin paths are exposed unnecessarily.
+
+|/admin/
+| -
+|Only internally
+|Exposed admin paths lead to an unnecessary attack vector.
+
+|/realms/
+|/realms/
+|Yes
+|This path is needed to work correctly, for example, for OIDC endpoints.
+
+|/realms/master/
+|/realms/master/
+|Only internally
+|Assuming the administrative realm is called `master`, restrict `/realms/master/` to internal access. See <<isolating-master-realm, Isolating authentication for the administrative realm>> for more information.
+
+|/resources/
+|/resources/
+|Yes
+|This path is needed to serve assets correctly. It may be served from a CDN instead of the {project_name} path.
+
+|/.well-known/
+|/.well-known/
+|Yes
+|This path is needed to resolve Authorization Server Metadata and other information via https://www.rfc-editor.org/rfc/rfc8414.html[RFC 8414].
+
+|/metrics
+|-
+|No
+|Exposed metrics lead to an unnecessary attack vector.
+
+|/health
+|-
+|No
+|Exposed health checks lead to an unnecessary attack vector.
+
+|/lb-check
+|/lb-check
+|Yes
+|Endpoint to be used for an external load balancer to check the availability of a {project_name} cluster.
+
+|===
+
+We assume you run {project_name} on the root path `/` on your reverse proxy/gateway's public API.
+If not, prefix the path with your desired one.
+
+NOTE: If you configured an `http-relative-path` on the server, proceed as follows to use discovery with RFC 8414: Configure a reverse proxy to map the `/.well-known/` path without the prefix to the path with the prefix on the server.
+
+The `lb-check` endpoint is only available when the `stateless` or the `multi-site` feature is enabled.
+It is intended for external load balancers when you do not want to expose the management interface and its `/health` endpoints publicly.
+This is a non-blocking endpoint and should remain responsive under high load, so the load balancer does not remove a healthy cluster from rotation during transient overload.
+
