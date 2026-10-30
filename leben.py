@@ -32,7 +32,7 @@ def eprint(*args, **kwargs):
 
 SCRIPT_VERSION = '20221205'
 
-RE_NESTED_SECTION = re.compile(r'^(={3,})[ \t]+(.*)')
+RE_NESTED_SECTION = re.compile(r'^(={2,})[ \t]+(.*)')
 
 class NebelContext:
     def __init__(self):
@@ -41,8 +41,9 @@ class NebelContext:
         self.ASSEMBLY_PREFIX = 'assembly-'
 
 class ModuleFactory:
-    def __init__(self, ctx: NebelContext):
+    def __init__(self, ctx: NebelContext, flatten_from_level=3):
         self.ctx = ctx
+        self.flatten_from_level = flatten_from_level
 
     @staticmethod
     def _split_leading_attributes(lines):
@@ -69,15 +70,14 @@ class ModuleFactory:
 
         return attributes, lines[idx:]
 
-    @staticmethod
-    def _flatten_nested_sections(lines):
-        """Convert === and deeper headings to bold paragraphs,
+    def _flatten_nested_sections(self, lines):
+        """Convert headings at the configured level or deeper to bold paragraphs,
         or to table titles when immediately followed by a table."""
         result = []
         i = 0
         while i < len(lines):
             m = RE_NESTED_SECTION.match(lines[i])
-            if m:
+            if m and len(m.group(1)) >= self.flatten_from_level:
                 title = m.group(2).strip()
                 j = i + 1
                 while j < len(lines) and not lines[j].strip():
@@ -125,9 +125,9 @@ class ModuleFactory:
         return path
 
 class SplitTask:
-    def __init__(self):
+    def __init__(self, flatten_from_level=3):
         self.ctx = NebelContext()
-        self.fact = ModuleFactory(self.ctx)
+        self.fact = ModuleFactory(self.ctx, flatten_from_level=flatten_from_level)
         # Match [[id]] OR [id="..."]
         self.id_pattern = re.compile(r'^\s*(?:\[\[([^\]]+)\]\]|\[id="([^"\]]+)"\])')
         self.heading_pattern = re.compile(r'^(=+)\s+(.*)')
@@ -261,12 +261,22 @@ def main():
     )
     p.add_argument('FROM_FILE', help='Input .adoc, glob, or directory')
     p.add_argument(
+        '--flatten-from-level',
+        type=int,
+        choices=range(2, 7),
+        default=3,
+        metavar='N',
+        help='Flatten unanchored module headings at level N or deeper (2–6; default: 3)'
+    )
+    p.add_argument(
         '--report-metrics',
         metavar='FILE',
         help='Output JSON metrics about the split process'
     )
     args = p.parse_args()
-    SplitTask().adoc_split(args.FROM_FILE, metrics_file=args.report_metrics)
+    SplitTask(flatten_from_level=args.flatten_from_level).adoc_split(
+        args.FROM_FILE, metrics_file=args.report_metrics
+    )
 
 if __name__ == '__main__':
     main()

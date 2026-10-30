@@ -46,7 +46,7 @@ If a section begins with document attributes, `leben.py` lifts those attributes 
 ## Command syntax
 
 ```bash
-python3 leben.py <file.adoc|glob|directory>
+python3 leben.py <file.adoc|glob|directory> [--flatten-from-level N]
 ```
 
 Examples:
@@ -55,7 +55,20 @@ Examples:
 python3 leben.py my-big-doc.adoc
 python3 leben.py '*.adoc'
 python3 leben.py my_docs/
+python3 leben.py my-big-doc.adoc --flatten-from-level 2
 ```
+
+## Heading flattening
+
+`--flatten-from-level N` accepts levels 2–6 and defaults to 3. In module bodies,
+unanchored headings at level N or deeper become bold paragraphs. If only optional
+blank lines separate such a heading from a table, it becomes a table title instead.
+Shallower headings remain unchanged.
+
+For example, level 2 flattens `==` and deeper headings, while level 4 preserves
+`==` and `===` headings. The setting applies to all files selected by the input.
+It does not change ID-based module boundaries, module titles, include offsets,
+or assembly introductions. Bare block delimiters such as `====` remain unchanged.
 
 ## Input expectations
 
