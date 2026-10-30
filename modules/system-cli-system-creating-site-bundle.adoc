@@ -1,0 +1,112 @@
+[id="system-creating-site-bundle_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Provision and deploy site bundles
+
+[role="_abstract"]
+Create a site bundle when you want to prepare a site on one system and install it on a remote host.
+
+Sometimes, you might want to create all the configuration for a site and apply it automatically to a remote host.
+To support this, Skupper allows you create a bundle as a `.tar.gz` archive or a shell script to start the remote site.
+
+.Prerequisites
+
+* The `skupper` CLI is installed. The CLI is not required on the remote site.
+
+.Procedure
+
+. Set the `SKUPPER_PLATFORM` for type of site you want to install:
+ ** `podman`
+ ** `docker`
+ ** `linux`
+. Install the controller for Podman and Docker sites:
++
+[source,bash]
+----
+skupper system install
+----
++
+This runs a container to support site, link and service operations.
+This feature is not available on Linux local system sites (systemd).
++
+*Optional:* Enable the Dynamic System Controller to automatically process YAML resources:
++
+[source,bash]
+----
+export SKUPPER_SYSTEM_RELOAD_TYPE=auto
+skupper system install
+----
++
+With this feature enabled, you can create sites, links, connectors and listeners without needing a system reload to apply your configuration.
++
+NOTE: When the dynamic system controller is enabled, the `skupper system start`, `skupper system reload`, and `skupper system stop` commands are not needed as configuration changes are automatically applied.
+
+. Create a site:
++
+[source,bash]
+----
+skupper site create <site-name>
+----
++
+For example:
++
+[source,bash]
+----
+skupper site create remote-site
+
+Waiting for status...
+Site "remote-site" is ready.
+----
++
+While the site is created, the site is not running and that is not a requirement for this usecase.
+
+. Create the bundle:
++
+[source,bash]
+----
+ skupper system generate-bundle remote-site
+----
++
+By default, the bundle is a `.tar.gz` archive.
+To generate a shell script instead, use `--type shell-script`:
++
+[source,bash]
+----
+ skupper system generate-bundle --type shell-script remote-site
+----
++
+The output shows the location of the generated bundle, for example:
++
+[source,text]
+----
+Site "remote-site" has been created (as a distributable bundle)
+Installation bundle available at: /home/user/.local/share/skupper/bundles/remote-site.tar.gz
+Default namespace: default
+Default platform: podman
+----
+
+. Transfer the bundle to the remote location.
++
+For a `.tar.gz` bundle, uncompress the file in an appropriate location:
++
+[source,bash]
+----
+tar -xzvf remote-site.tar.gz
+----
+
+. Start the site:
++
+For a `.tar.gz` bundle:
++
+[source,bash]
+----
+install.sh
+----
++
+For a shell script bundle, run the script directly:
++
+[source,bash]
+----
+bash remote-site.sh
+----
++
+The site is now running, you can verify with `skupper site status` if the CLI is installed at that location.
