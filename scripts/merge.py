@@ -527,6 +527,7 @@ def prepare_markdown_file(input_file, output_file):
     with open(input_file, "r", encoding="utf-8") as in_f:
         content = in_f.read()
 
+    content = strip_yaml_frontmatter(content)
     content = strip_external_link_references(content)
     prepared = prepare_markdown_for_kramdoc(content, input_file)
 

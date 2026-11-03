@@ -45,6 +45,22 @@ def should_skip_file(md_file):
     return False
 
 
+def get_content_type(md_file):
+    """Read 'type' field from YAML frontmatter (e.g. 'type: module')."""
+    try:
+        content = md_file.read_text(encoding='utf-8')
+    except Exception:
+        return None
+    frontmatter_match = re.match(r'^---\s*\n(.*?)\n---\s*\n', content, re.DOTALL | re.MULTILINE)
+    if not frontmatter_match:
+        return None
+    yaml_content = frontmatter_match.group(1)
+    type_match = re.search(r'^\s*type\s*:\s*(\S+)\s*$', yaml_content, re.MULTILINE)
+    if type_match:
+        return type_match.group(1).lower()
+    return None
+
+
 def warn(message):
     print(f"WARNING: {message}", file=sys.stderr)
 
@@ -192,11 +208,12 @@ def rewrite_internal_html_links(content, source_html_path, page_ids, fragment_id
     return HTML_LINK_PATTERN.sub(replace_link, content)
 
 
-def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_script, image_registry, page_ids, fragment_ids, copy_images=False, jinja_vars=None):
+def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_script, image_registry, page_ids, fragment_ids, copy_images=False, jinja_vars=None, content_type=None):
     assemblies_out = output_dir / "assemblies"
     modules_out = output_dir / "modules"
     images_out = output_dir / "images"
     source_html_path = md_to_html_path(relative_md)
+    module_only = content_type == "module"
 
     with tempfile.TemporaryDirectory(prefix="build-index-") as temp_dir:
         temp_dir = Path(temp_dir)
@@ -206,7 +223,29 @@ def process_markdown_source(md_file, relative_md, namespace, output_dir, leben_s
         merge.prepare_markdown_file(str(md_file), str(prepared_md))
         run_command(["kramdoc", "--format=GFM", "-o", str(converted_adoc), str(prepared_md)])
         merge.convert_adoc_ids(str(converted_adoc), str(converted_adoc), jinja_vars=jinja_vars)
-        run_command([sys.executable, str(leben_script), converted_adoc.name], cwd=str(temp_dir))
+
+        leben_cmd = [sys.executable, str(leben_script), converted_adoc.name]
+        if module_only:
+            leben_cmd.append("--module-only")
+        run_command(leben_cmd, cwd=str(temp_dir))
+
+        if module_only:
+            module_files = sorted((temp_dir / "modules").glob("*.adoc"))
+            if len(module_files) != 1:
+                raise RuntimeError(f"{md_file}: expected exactly one module in module-only mode, found {len(module_files)}")
+
+            module_file = module_files[0]
+            module_name = namespaced_filename(namespace, module_file.name)
+            module_destination = modules_out / module_name
+            if module_destination.exists():
+                raise RuntimeError(f"{md_file}: duplicate module output path {module_destination}")
+
+            content = module_file.read_text(encoding="utf-8")
+            content = copy_and_rewrite_images(content, md_file.parent, images_out, image_registry, copy_images)
+            content = rewrite_internal_html_links(content, source_html_path, page_ids, fragment_ids)
+            module_destination.write_text(content, encoding="utf-8")
+
+            return module_destination
 
         assembly_files = sorted((temp_dir / "assemblies").glob("*.adoc"))
         module_files = sorted((temp_dir / "modules").glob("*.adoc"))
@@ -350,11 +389,11 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
                 continue
 
             if md_link in assembly_map:
-                asm_file = assemblies_dir / assembly_map[md_link]
+                asm_file = output_dir / assembly_map[md_link]
                 if asm_file.exists():
                     assembly_paths.append(asm_file)
                 else:
-                    warn(f"Assembly {assembly_map[md_link]} from map not found on disk for {md_link}")
+                    warn(f"{assembly_map[md_link]} from map not found on disk for {md_link}")
             else:
                 warn(f"No mapping found for {md_link} in assembly-map.json")
 
@@ -397,6 +436,7 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
 
         namespace = md_file.parent.name
         relative_md = md_file.relative_to(source_root).as_posix()
+        content_type = get_content_type(md_file)
         built_md_links.append(md_link)
         assembly_paths.append(
             process_markdown_source(
@@ -410,16 +450,17 @@ def build_site(index_file, output_dir, clean=False, source_dir=None, copy_images
                 fragment_ids,
                 copy_images,
                 jinja_vars=jinja_vars,
+                content_type=content_type,
             )
         )
 
     if not assembly_paths:
         raise RuntimeError(f"No Markdown sources were built from {index_file}")
 
-    # Save md -> assembly mapping so --index-only can look it up
+    # Save md -> output file mapping so --index-only can look it up
     assembly_map = {}
     for md_link, asm_path in zip(built_md_links, assembly_paths):
-        assembly_map[md_link] = Path(asm_path).name
+        assembly_map[md_link] = str(Path(asm_path).relative_to(output_dir))
     map_file = output_dir / "assembly-map.json"
     map_file.write_text(json.dumps(assembly_map, indent=2) + "\n")
 

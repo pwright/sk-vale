@@ -70,13 +70,14 @@ class ModuleFactory:
         return attributes, lines[idx:]
 
     @staticmethod
-    def _flatten_nested_sections(lines):
-        """Convert === and deeper headings to bold paragraphs,
+    def _flatten_nested_sections(lines, min_level=3):
+        """Convert headings at min_level and deeper to bold paragraphs,
         or to table titles when immediately followed by a table."""
+        pattern = re.compile(rf'^(={{{min_level},}})[ \t]+(.*)')
         result = []
         i = 0
         while i < len(lines):
-            m = RE_NESTED_SECTION.match(lines[i])
+            m = pattern.match(lines[i])
             if m:
                 title = m.group(2).strip()
                 j = i + 1
@@ -125,12 +126,13 @@ class ModuleFactory:
         return path
 
 class SplitTask:
-    def __init__(self):
+    def __init__(self, module_only=False):
         self.ctx = NebelContext()
         self.fact = ModuleFactory(self.ctx)
         # Match [[id]] OR [id="..."]
         self.id_pattern = re.compile(r'^\s*(?:\[\[([^\]]+)\]\]|\[id="([^"\]]+)"\])')
         self.heading_pattern = re.compile(r'^(=+)\s+(.*)')
+        self.module_only = module_only
         # Metrics tracking
         self.assemblies_written = []
         self.modules_written = []
@@ -166,6 +168,13 @@ class SplitTask:
                 break
         if not root_mid:
             eprint(f"ERROR: No root id in {filepath}")
+            return
+
+        if self.module_only:
+            body = lines[idx:]
+            body = self.fact._flatten_nested_sections(body, min_level=2)
+            self.fact.write(root_mid, root_title, body, is_assembly=False, split_task=self)
+            self.total_sections += 1
             return
 
         # Collect assembly body until first module id
@@ -265,8 +274,13 @@ def main():
         metavar='FILE',
         help='Output JSON metrics about the split process'
     )
+    p.add_argument(
+        '--module-only',
+        action='store_true',
+        help='Emit a single module instead of an assembly with child modules'
+    )
     args = p.parse_args()
-    SplitTask().adoc_split(args.FROM_FILE, metrics_file=args.report_metrics)
+    SplitTask(module_only=args.module_only).adoc_split(args.FROM_FILE, metrics_file=args.report_metrics)
 
 if __name__ == '__main__':
     main()
