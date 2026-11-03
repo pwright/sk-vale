@@ -1,0 +1,20 @@
+[id="skupper_{context}"]
+:_mod-docs-content-type: CONCEPT
+= {skupper_name}
+
+[role="_abstract"]
+{skupper_name} is the tool that creates and manages application networks across sites.
+
+{skupper_name} is an open source tool for creating application networks in Kubernetes or Linux.
+By using {skupper_name}, you can create a distributed application consisting of microservices running in different sites.
+
+This diagram illustrates a {skupper_name} network that connects three services running in three different sites:
+
+image::../images/overview-clusters.png[Three Kubernetes clusters, each with a namespace containing a service and a {skupper_name} instance, connected by a {skupper_name} network]
+
+In a {skupper_name} network, each namespace contains a {skupper_name} instance.
+When these {skupper_name} instances connect, they continually share information about the services that each instance exposes.
+This means that each {skupper_name} instance is always aware of every service that has been exposed to the {skupper_name} network, regardless of the namespace in which each service resides.
+
+Once a {skupper_name} network is formed across Kubernetes namespaces, any of the services in those namespaces can be exposed (through annotation) to the {skupper_name} network.
+When a service is exposed, {skupper_name} creates proxy endpoints to make that service available on each namespace in the {skupper_name} network.
