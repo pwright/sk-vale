@@ -1,0 +1,39 @@
+[id="registry-content-search-configuration_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Search index configuration
+
+[role="_abstract"]
+You can configure the search index name, shard counts, and content size limit independently of the primary storage settings.
+
+.Search index properties
+[cols="4,2,5",options="header"]
+|===
+|Property |Default |Description
+|`apicurio.features.experimental.enabled`
+|`false`
+|Experimental feature setting. Set to `true` when configuring content search.
+|`apicurio.search.index.enabled`
+|`false`
+|Enables indexing and content and structure searches.
+|`apicurio.search.index.elasticsearch.index-name`
+|`apicurio-registry`
+|Name of the Elasticsearch index. Use separate index names for independent registry deployments.
+|`apicurio.search.index.elasticsearch.number-of-shards`
+|`1`
+|Number of primary shards when {registry} creates the index.
+|`apicurio.search.index.elasticsearch.number-of-replicas`
+|`1`
+|Number of replica shards when {registry} creates the index. The local single-node example uses `0`.
+|`apicurio.search.index.content.max-size`
+|`1048576`
+|Maximum number of characters from each artifact version to index for content search. This limit does not change stored artifact content.
+|===
+
+Elasticsearch connection properties use the `quarkus.elasticsearch` prefix. The connection settings include `hosts`, `protocol`, `username`, and `password`. {registry} disables the Quarkus Elasticsearch health check by default and provides a separate readiness check for startup indexing.
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://quarkus.io/guides/elasticsearch[Quarkus Elasticsearch client configuration]
+
+
+// con-registry-search-index-operations

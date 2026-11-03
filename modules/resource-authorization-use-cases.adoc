@@ -1,0 +1,74 @@
+[id="resource-authorization-use-cases_{context}_{context}"]
+= Common use cases
+
+
+Each example is a complete rules file, or the rules to add before `otherwise deny;`.
+
+
+**Multi-team isolation**
+
+
+Each team sees and modifies only its own schemas:
+
+[source]
+----
+from io.apicurio.authz import Artifact, Group, Role;
+
+allow Role with name = "team-a-developers" to WRITE Artifact with name like "team-a/*";
+allow Role with name = "team-a-developers" to WRITE Group with name = "team-a";
+allow Role with name = "team-b-developers" to WRITE Artifact with name like "team-b/*";
+allow Role with name = "team-b-developers" to WRITE Group with name = "team-b";
+otherwise deny;
+----
+
+
+**Shared schemas with selective write access**
+
+
+All developers can read the `shared` group; only the platform team can change it:
+
+[source]
+----
+allow Role with name = "sr-developer" to READ Artifact with name like "shared/*";
+allow Role with name = "sr-developer" to READ Group with name = "shared";
+allow Role with name = "platform-team" to WRITE Artifact with name like "shared/*";
+allow Role with name = "platform-team" to WRITE Group with name = "shared";
+----
+
+
+**Read-only service account**
+
+
+[source]
+----
+allow User with name = "monitoring-service" to READ Artifact with name *;
+allow User with name = "monitoring-service" to READ Group with name *;
+----
+
+
+**CI/CD pipeline with scoped write access**
+
+
+[source]
+----
+allow User with name = "ci-pipeline" to WRITE Artifact with name like "production/*";
+allow User with name = "ci-pipeline" to WRITE Group with name = "production";
+----
+
+
+**Group access with excluded artifacts**
+
+
+[source]
+----
+deny User with name = "contractor" to * Artifact with name like "team-a/internal-*";
+allow User with name = "contractor" to READ Artifact with name like "team-a/*";
+allow User with name = "contractor" to READ Group with name = "team-a";
+----
+
+
+**Search and regular expressions**
+
+
+`matching` rules work for direct access, but search cannot evaluate them. A user whose rules use `matching` for a resource type gets no search results for that type. Use `=`, `in` or `like` for resources that must be searchable.
+

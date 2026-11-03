@@ -1,0 +1,55 @@
+[id="registry-storage-content-cache_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Storage content cache
+
+[role="_abstract"]
+{registry} keeps an in-memory, byte-weighted cache of immutable artifact content in front of the storage layer. The cache reduces storage round trips for reads that look up content by content ID or content hash, such as the Confluent-compatible schema lookup by ID that Kafka clients use.
+
+The cache is enabled by default and applies to every storage variant because {registry} adds it as a storage decorator. The storage content cache is separate from HTTP caching, which sets response headers so that a reverse proxy or CDN can cache REST responses outside {registry}. The content cache works inside the {registry} process and also serves requests that HTTP caching does not cover, such as Confluent-compatible requests, which {registry} returns without cache headers.
+
+*Cached reads*
+
+A cache entry holds the content bytes, the artifact type, and the parsed references for one piece of content. {registry} caches only reads whose result depends solely on an immutable content identifier:
+
+* Content by content ID, for example, `GET /apis/registry/v3/ids/contentIds/\{contentId}` and its `/references` variant.
+* Content by SHA-256 content hash, for example, `GET /apis/registry/v3/ids/contentHashes/\{contentHash}` and its `/references` variant.
+* Content and artifact type by content ID, which serves the Confluent-compatible `GET /apis/ccompat/v7/schemas/ids/\{id}` and `GET /apis/ccompat/v7/schemas/ids/\{id}/schema` requests when legacy ID mode is disabled, which is the default.
+
+{registry} does not cache reads that resolve content through a group, artifact, and version coordinate, or through a global ID, because that mapping can change over time.
+
+Content bytes never change for a given content ID or content hash, so the content-by-ID and content-by-hash entries have no expiry. {registry} evicts them only when a cache exceeds its size limit. The content-and-type entry also depends on whether an artifact version still references the content, so it has a bounded staleness window.
+
+{registry} coalesces concurrent misses for the same key into a single storage call. It never caches failed lookups, so a request for content that does not exist always reaches storage.
+
+*Bounded staleness window*
+
+{registry} returns `404 Not Found` for a content-and-type lookup when the content is orphaned, that is, when no artifact version references it. Orphan status can change after {registry} caches the entry, most commonly when you delete the last version that references the content. To keep the hot path fast, {registry} accepts a short window during which a cached content-and-type entry can be stale:
+
+* Each content-and-type entry expires `apicurio.storage.content-cache.hot-path.ttl-seconds` after {registry} writes it. The default is 30 seconds.
+* When you delete a single artifact version, {registry} resolves the content ID of that version before the delete and invalidates the matching content-and-type entry after the delete. If the lookup fails, the delete still completes and the entry expires through the TTL instead.
+* Other operations that can orphan content, such as deleting a whole artifact or group, importing data, or restoring a snapshot, do not invalidate entries. The TTL bounds the staleness for these cases.
+
+As a result, a Confluent-compatible schema lookup by ID can still succeed for up to the TTL after a bulk operation removes the last referencing version. Set the TTL to `0` to disable the content-and-type cache and remove the window at the cost of a storage query on every lookup.
+
+The scheduled orphaned content cleanup job, configured by `apicurio.storage.orphan-cleanup.every`, later removes orphaned content rows from storage. Content-by-ID and content-by-hash entries never expire, so a cached copy of removed content remains readable by content ID or content hash until {registry} evicts it or restarts.
+
+*Memory sizing*
+
+`apicurio.storage.content-cache.max-size` sets the maximum weight, in bytes, of each of the three caches separately, not of all caches together. The default is 64 MiB (`67108864` bytes) for each cache, so the caches can hold up to about 192 MiB of content in total. The same content can be present in more than one cache, for example, when clients request it by content ID and by content hash.
+
+NOTE: The configuration reference describes this property as a maximum total weight. The limit applies to each cache separately, so the total memory bound is the configured value multiplied by the number of caches.
+
+{registry} weighs each entry as the size of the content bytes plus 64 bytes of overhead and 128 bytes for each reference. The weight estimates the payload, not the JVM objects that hold it. When you plan the JVM heap and the container memory limit, count up to three times the configured `max-size` toward the memory that {registry} uses under sustained load, in addition to the baseline memory that your capacity planning requires.
+
+To size the cache for your workload, compare the total size of the schemas that clients read most often with the per-cache limit. Use the cache metrics to confirm the result after a change.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:configuring-storage-content-cache_{context}[]
+* xref:storage-content-cache-reference_{context}[]
+ifndef::service-registry-downstream[]
+* xref:getting-started/assembly-registry-sizing-guide.adoc[]
+endif::[]
+
+
+// proc-configuring-storage-content-cache

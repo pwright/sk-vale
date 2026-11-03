@@ -1,0 +1,54 @@
+[id="iceberg-catalog-metrics-reference_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Iceberg catalog metrics reference
+
+[role="_abstract"]
+The Iceberg catalog publishes the following Micrometer metrics in Prometheus format on the management `/metrics` endpoint.
+
+.Iceberg catalog metrics
+[cols="2,1,3",options="header"]
+|===
+|Prometheus metric
+|Labels
+|Description
+
+|`iceberg_namespace_operations_total`
+|`operation`, `result`
+|Successful namespace creation, deletion, and property updates.
+
+|`iceberg_table_operations_total`
+|`operation`, `result`
+|Successful table creation, deletion, renaming, and commits.
+
+|`iceberg_view_operations_total`
+|`operation`, `result`
+|Successful view creation, deletion, renaming, and replacement.
+
+|`iceberg_commit_conflicts_total`
+|`entity_type`
+|Commit conflicts for tables or views detected by optimistic concurrency checks.
+
+|`iceberg_commit_duration_seconds_count`, `iceberg_commit_duration_seconds_sum`, `iceberg_commit_duration_seconds_max`
+|`entity_type`, `result`
+|Successful commit timer samples, total duration, and maximum duration in seconds.
+
+|`iceberg_errors_total`
+|`error_type`
+|Errors handled by the Iceberg API error mapper, grouped by error type.
+|===
+
+The `operation` label identifies the completed operation, such as `created`, `deleted`, or `committed`.
+The `entity_type` label identifies `table` or `view`.
+Operation counters and commit timers use `result="success"`.
+Use the error and conflict counters to monitor failures.
+
+Setting `apicurio.metrics.iceberg.enabled=false` disables collection of these Micrometer metrics.
+OpenTelemetry export uses the separate OpenTelemetry configuration.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-configuring-the-registry.adoc#configuring-registry-observability_{context}[OpenTelemetry configuration]
+* {registry-config-reference}
+
+
+// ref-registry-iceberg-catalog-query-engines

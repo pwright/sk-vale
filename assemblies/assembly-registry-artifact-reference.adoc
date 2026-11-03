@@ -1,0 +1,27 @@
+[id="registry-artifact-reference_{context}_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= {registry} artifact reference
+
+[role="_abstract"]
+Look up the artifact types that {registry} supports, including AI/ML types, the states that artifact versions move through, and the metadata that {registry} stores for groups, artifacts, and artifact versions.
+
+[role="_additional-resources"]
+.Additional resources
+* link:{attachmentsdir}/registry-rest-api.htm[Apicurio Registry REST API documentation]
+
+//INCLUDES
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_registry-reference.adoc
+
+// ref-registry-artifact-types
+include::../modules/registry-artifact-types.adoc[leveloffset=+1]
+include::../modules/registry-artifact-type-reference-support.adoc[leveloffset=+1]
+include::../modules/registry-ai-ml-artifact-types.adoc[leveloffset=+1]
+include::../modules/registry-artifact-states.adoc[leveloffset=+1]
+include::../modules/registry-group-metadata.adoc[leveloffset=+1]
+include::../modules/registry-automatic-group-creation.adoc[leveloffset=+1]
+include::../modules/registry-default-reference-handling.adoc[leveloffset=+1]
+include::../modules/registry-artifact-metadata.adoc[leveloffset=+1]
+include::../modules/registry-artifact-version-metadata.adoc[leveloffset=+1]

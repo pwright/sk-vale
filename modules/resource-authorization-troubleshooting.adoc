@@ -1,0 +1,37 @@
+[id="resource-authorization-troubleshooting_{context}_{context}"]
+= Troubleshooting
+
+
+
+**A user is denied access although a rule matches**
+
+
+Check, in order:
+
+. **RBAC:** does the user's role allow the operation? `sr-readonly` users cannot write.
+. **Operation:** does the rule's operation cover the request? Changes and deletes require `WRITE`.
+. **Resource type:** operations on a group itself, such as listing its artifacts or creating an artifact in it, need a `Group` rule.
+. **Deny rules:** does a deny rule match? Deny rules take precedence, and denying `WRITE` also denies `READ`.
+. **Referenced and generated artifacts:** dereferencing, or registering content with references, requires `READ` on every referenced artifact; writing an artifact that generates other artifacts requires `WRITE` on them.
+. **Resource name and principal:** artifacts are named `{groupId}/{artifactId}`; the default group is `default`. For the Confluent compatibility API, check which group the request addresses. Roles are matched with `Role`, user names with `User`.
+. **Audit log:** the `authz.denied` message shows the exact resource name and operation that were evaluated.
+
+
+**A user can see more than expected**
+
+
+Check whether the user is an RBAC administrator or has a role that the rules allow everything, whether the user owns the resources (see `owner-bypass.enabled`), and, for unauthenticated callers, what the rules allow the `$anonymous` role. A `READ` deny does not block writes: use `*` to hide a resource.
+
+
+**{registry} does not start**
+
+
+{registry} fails to start when per-resource authorization is enabled and the access rules file path is not set, the file does not exist, or the file is not a valid rules file, including when it has rules for resource types {registry} does not enforce. The startup error names the file, and the line and problem of each error.
+
+
+**Access rules file changes do not take effect**
+
+
+. Check that `apicurio.auth.resource-based-authorization.rules.reload-enabled` is not `false`.
+. Check the logs for `Access rules reloaded successfully` or for a reload error. If the new file is invalid, the previous rules stay in effect.
+. In Kubernetes, check that the ConfigMap is not mounted with `subPath`.

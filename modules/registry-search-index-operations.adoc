@@ -1,0 +1,16 @@
+[id="registry-search-index-operations_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Search index operation and limitations
+
+[role="_abstract"]
+The search index is a secondary copy of registry data. Index updates and rebuilds affect when artifact versions become visible in content and structure searches.
+
+On startup, {registry} creates the index if necessary. If the index contains no artifact versions, {registry} rebuilds it from primary storage. A distributed lock in Elasticsearch selects one registry replica to run the startup rebuild. Other replicas skip that rebuild, so their search results can be incomplete until indexing finishes.
+
+When an upgrade changes the index mapping version, {registry} deletes and recreates the search index before rebuilding it. The primary storage retains artifact data. Rebuilding a large index can extend startup time. Check the logs for indexing errors and verify representative search results after a rebuild; application readiness alone does not confirm that every version was indexed.
+
+During normal operation, a background worker processes index updates. The delay before results reflect a change depends on the indexing workload and Elasticsearch refreshes. A successful artifact write does not confirm that its search index update has completed.
+
+Edits to draft version content do not currently trigger an index update. Finalizing the draft triggers reindexing of that version. Until then, content and structure searches can continue to match the content from before the edit.
+
+For content search, {registry} indexes only the first `apicurio.search.index.content.max-size` characters of each version. The default is 1,048,576 characters. Terms beyond that limit do not match a content query. Structured extraction receives the complete artifact content and is separate from this truncation.

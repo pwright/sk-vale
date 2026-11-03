@@ -1,0 +1,21 @@
+[id="configuring-content-search_{context}_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Configuring content and structure searches
+
+[role="_abstract"]
+You can connect {registry} to Elasticsearch to find artifact versions by their content or structural elements, such as schema names, fields, and operations.
+
+IMPORTANT: Content and structure searches are experimental. Their configuration and behavior can change between releases.
+
+
+// con-registry-content-search
+include::../modules/registry-content-search.adoc[leveloffset=+1]
+include::../modules/enabling-registry-content-search.adoc[leveloffset=+1]
+include::../modules/trying-content-search-compose.adoc[leveloffset=+1]
+include::../modules/configuring-content-search-operator.adoc[leveloffset=+1]
+include::../modules/searching-version-content-api.adoc[leveloffset=+1]
+include::../modules/searching-version-content-console.adoc[leveloffset=+1]
+include::../modules/registry-structure-search-formats.adoc[leveloffset=+1]
+include::../modules/registry-searchable-elements.adoc[leveloffset=+1]
+include::../modules/registry-content-search-configuration.adoc[leveloffset=+1]
+include::../modules/registry-search-index-operations.adoc[leveloffset=+1]

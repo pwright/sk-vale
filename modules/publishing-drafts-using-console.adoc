@@ -1,0 +1,29 @@
+[id="publishing-drafts-using-console_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Publishing a draft version using the web console
+
+[role="_abstract"]
+You can validate a saved draft against the configured content rules, and then finalize it to publish the version.
+
+.Prerequisites
+* You have saved the draft content that you want to publish.
+* You have access to the *Drafts* tab and permission to update the artifact.
+
+.Procedure
+. On the *Drafts* tab, select *Finalize draft* from the draft's Action menu (three vertical dots).
+. Optional: Turn on *Dry run only*, and then click *Finalize (dry run)* to check the content rules without publishing the version.
++
+If the content violates a rule, correct the content in the editor and save it before trying again. A successful dry run leaves the version in the `DRAFT` state.
+. Select *Finalize draft* again if you performed a dry run. Ensure that *Dry run only* is off, and then click *Finalize*.
++
+{registry} applies the content rules and changes the version to `ENABLED`. If a rule fails, the version remains a draft. After publication, you cannot edit the version's content or return it to `DRAFT`. To prepare further changes, select *Create draft from...* on the published version page and create a new draft version.
+
+.Verification
+* Open the published version on the *Explore* tab and verify that *Status* displays *Enabled*.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:artifact-version-states-using-console_{context}[]
+* xref:configuring-rules-using-console_{context}[]
+
+

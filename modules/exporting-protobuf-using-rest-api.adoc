@@ -1,0 +1,51 @@
+[id="exporting-protobuf-using-rest-api_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Exporting a Protobuf schema with its dependencies
+
+[role="_abstract"]
+You can download a Protobuf artifact version and its direct and indirect dependencies as a ZIP archive for use with the `protoc` compiler.
+{registry} organizes the files by package name and rewrites import statements to match those paths.
+
+.Prerequisites
+* {registry} contains the Protobuf artifact version and all its registered references.
+* You have permission to read the artifact.
+* You have installed `curl` and `unzip`.
+* The `REGISTRY_URL` environment variable contains the registry URL, and `ACCESS_TOKEN` contains a valid access token if authentication is enabled.
+
+.Procedure
+. Download the schema package:
++
+[source,bash]
+----
+$ curl --fail-with-body \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  "$REGISTRY_URL/apis/registry/v3/groups/my-group/artifacts/my-schema/versions/1.0.0/export" \
+  --output my-schema-1.0.0.zip
+----
++
+This operation supports only `PROTOBUF` artifacts.
+For another artifact type, the server returns HTTP `400`.
+The registry resolves registered references while it streams the ZIP response.
+If a reference cannot be resolved, the download ends early with a truncated or invalid archive rather than an error status, so verify that the archive extracts cleanly.
+. Extract the archive:
++
+[source,bash]
+----
+$ unzip my-schema-1.0.0.zip -d my-schema
+----
++
+For example, a schema with artifact ID `my-schema` and package `com.example` appears at `com/example/my-schema.proto`.
+The archive contains separate files for dependencies, including schemas in different packages.
+
+.Verification
+* List the archive entries and check that the schema and its dependencies are present:
++
+[source,bash]
+----
+$ unzip -l my-schema-1.0.0.zip
+----
++
+This archive contains Protobuf source files.
+Use the administrative export operation to create an archive for the registry import operation.
+
+// proc-exporting-importing-using-rest-api

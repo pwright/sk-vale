@@ -1,0 +1,114 @@
+[id="resource-authorization-grants_{context}_{context}"]
+= Access rules file format
+
+
+The access rules file lists who may do what, one rule per line, and ends with `otherwise deny;`:
+
+[source]
+----
+from io.apicurio.authz import Artifact, Group, Role;
+
+deny User with name = "bob" to * Artifact with name = "team-a/secret-schema";
+allow User with name = "alice" to WRITE Artifact with name like "team-a/*";
+allow User with name = "alice" to WRITE Group with name = "team-a";
+allow Role with name = "sr-developer" to READ Artifact with name like "public/*";
+otherwise deny;
+----
+
+The format is the Kroxylicious ACL rules format, described in https://github.com/kroxylicious/design/blob/main/proposals/009-authorizer.md[Kroxylicious proposal 009]. In {registry}:
+
+* `from io.apicurio.authz import Artifact, Group, Role;` imports the {registry} resource types `Artifact` and `Group`, and the `Role` principal. `User` does not need to be imported.
+* `User with name ...` matches the authenticated user name. `Role with name ...` matches a role of the user, for example a role from the identity provider.
+* `deny` rules must come before `allow` rules, and the file must end with `otherwise deny;`. Lines starting with `//` are comments.
+
+Names are selected with:
+
+[cols="1,3"]
+|===
+|Selector |Matches
+
+|`with name = "x"`
+|exactly `x`
+
+|`with name in {"x", "y"}`
+|any of the listed names
+
+|`with name like "team-a/*"`
+|names starting with `team-a/`. `*` is only allowed at the end; `like "*"` matches every name.
+
+|`with name *`
+|every name
+
+|`with name matching /regex/`
+|names that fully match the regular expression (RE2 syntax). Resources only. A backslash inside the expression is removed, so `/a\.b/` is the expression `a.b`.
+|===
+
+The file is validated as a whole. A syntax error, an unknown type, principal or operation, an invalid regular expression, or a rule for a resource type that {registry} does not enforce (such as a Kroxylicious `Topic`) rejects the file: {registry} does not start, or keeps the previous rules on reload.
+
+NOTE: The `config.admin_roles` setting of earlier development versions has no equivalent. To give a role full access, allow it every operation on every resource: `allow Role with name = "ops" to * Artifact with name *;` and the same for `Group`.
+
+
+**Resource names**
+
+
+* **Artifacts:** `{groupId}/{artifactId}`, for example `team-a/my-schema`. Artifacts in the default group are named `default/{artifactId}`.
+* **Groups:** the group ID, for example `team-a`. The default group is named `default`.
+
+In artifact names, the characters `%` and `/` in the group ID are written as `%25` and `%2F`, so the first `/` always separates the group from the artifact ID. For example, artifact `x` in group `team-a/sub` is named `team-a%2Fsub/x`, while artifact `sub/x` in group `team-a` is named `team-a/sub/x`. Artifact IDs and group names are not escaped.
+
+Names are matched in full. For example, `like "team-a/*"` matches every artifact in group `team-a` (but not in group `team-a/sub`), and `like "team-a/internal-*"` matches only the artifacts in `team-a` whose ID starts with `internal-`.
+
+Matching is case-sensitive on every storage variant, in direct access and in search results. Some databases, such as MySQL and SQL Server, look up group and artifact IDs case-insensitively, so a request for `TEAM-A/My-Schema` can address the stored artifact `team-a/my-schema`. Such a request is authorized against the stored IDs, so changing the case of an ID never gets around a rule.
+
+
+**Operations**
+
+
+`ADMIN` implies `WRITE`, and `WRITE` implies `READ`; `*` means all three. The operation required by each API operation matches its RBAC level: reads require `READ`, and changes, including deletes, require `WRITE`. A few operations require `ADMIN`, such as dropping Iceberg namespaces, tables, and views.
+
+
+**Group rules and artifact rules**
+
+
+* **Group rules** control operations on the group itself: reading group metadata, listing artifacts in it, and creating, updating, or deleting the group.
+* **Artifact rules** control operations on artifacts and their versions, content, comments, and references.
+
+Some operations need both:
+
+* Creating an artifact requires `WRITE` on the group and on the new artifact's name, so a deny on an artifact name also prevents creating it. This applies to every API that creates artifacts, including registering a new subject with the Confluent compatibility API, publishing a new MCP server, and renaming an Iceberg table.
+* Deleting a group, or all artifacts in a group, requires `WRITE` on the group and on every artifact in it.
+
+Most deployments need both. For example, to give a user full access to `team-a`:
+
+[source]
+----
+allow User with name = "alice" to * Group with name = "team-a";
+allow User with name = "alice" to * Artifact with name like "team-a/*";
+----
+
+
+**Deny rules**
+
+
+If a deny rule matches, access is denied even if an allow rule also matches. Deny rules apply to search results as well as direct access.
+
+[source]
+----
+deny User with name = "alice" to * Artifact with name = "team-a/secret-schema";
+allow User with name = "alice" to WRITE Artifact with name like "team-a/*";
+----
+
+Alice can read and write all artifacts in `team-a` except `team-a/secret-schema`.
+
+A deny rule denies its operations and the operations they imply:
+
+* Denying `*` (or `ADMIN`, which implies the other two) blocks all access, and hides the resource from search results. Use it to hide a resource.
+* Denying `WRITE` also denies `READ`, which `WRITE` implies, but not `ADMIN`: a rule that allows `ADMIN` or `*` still allows `ADMIN` operations. A resource cannot be made read-only with a deny rule; allow only `READ` on it instead.
+* Denying `READ` blocks reads but not writes: `WRITE` implies `READ`, but `READ` does not imply `WRITE`. Use `*` to hide a resource.
+
+
+**Reloading the access rules file**
+
+
+{registry} checks the access rules file for changes at the interval set by `apicurio.auth.resource-based-authorization.rules.reload-every` and applies changes without a restart. If the changed file is invalid, {registry} logs an error and keeps using the previously loaded rules.
+

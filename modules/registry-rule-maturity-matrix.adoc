@@ -1,0 +1,75 @@
+[id="registry-rule-maturity-matrix_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} content rule maturity
+
+[role="_abstract"]
+Not all content rules are fully implemented for every artifact type supported by {registry}. The following table shows the current maturity level for each rule and artifact type:
+
+.{registry} content rule maturity matrix
+[%header,cols=4*]
+|===
+|Artifact type
+|Validity rule
+|Compatibility rule
+|Integrity rule
+|*Avro*
+a| Full
+a| Full
+a| Full
+|*Protobuf*
+a| Full
+a| Full
+a| Full
+|*JSON Schema*
+a| Full
+a| Full
+a| Full
+|*OpenAPI*
+a| Full
+a| Full
+a| Full
+|*AsyncAPI*
+a| Syntax Only
+a| None
+a| Full
+|*OpenRPC*
+a| Full
+a| None
+a| Full
+|*GraphQL*
+a| Syntax Only
+a| None
+a| Mapping detection not supported
+|*Kafka Connect*
+a| Syntax Only
+a| None
+a| Mapping detection not supported
+|*Thrift*
+a| Syntax Only
+a| None
+a| Mapping detection not supported
+|*WSDL*
+a| Full
+a| None
+a| Full
+|*XML*
+a| Full
+a| None
+a| Mapping detection not supported
+|*XSD*
+a| Full
+a| Full
+a| Full
+|===
+
+NOTE: For XSD and WSDL artifacts, the `ALL_REFS_MAPPED` and `FULL` integrity levels check that every
+`schemaLocation` value (`xs:import`, `xs:include`, `xs:redefine`, `xs:override`) and every WSDL import or
+include `location` value is mapped to an artifact reference. An `xs:import` without a `schemaLocation` does
+not require a mapping. At the `FULL` validity level, {registry} resolves XSD imports and includes only from
+the mapped artifact references and never fetches them from the network or file system. An unmapped location
+fails with `Unresolved reference: <location>`. For WSDL 1.1, `FULL` validity also compiles the schemas
+embedded in `wsdl:types` by using the same resolution. For WSDL 2.0, `FULL` validity checks syntax only.
+
+
+
+// ref-registry-rule-json-schema-validity
