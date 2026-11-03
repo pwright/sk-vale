@@ -1,0 +1,785 @@
+[
+  {
+    "file": "assemblies/console-assembly-observer-config.adoc",
+    "heading": "Look up Network Observer configuration options",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 10,
+    "abstract_chars": 74,
+    "abstract": "Configure the Skupper Network Observer, which enables the network console."
+  },
+  {
+    "file": "assemblies/kube-cli-assembly-kube-cli.adoc",
+    "heading": "Skupper CLI on Kubernetes",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 19,
+    "abstract_chars": 123,
+    "abstract": "You can use the `skupper` CLI on Kubernetes after installing the Skupper controller to configure sites, links and services."
+  },
+  {
+    "file": "assemblies/kube-cli-assembly-kube-creating-site-cli.adoc",
+    "heading": "Create a site on Kubernetes using the CLI",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 20,
+    "abstract_chars": 127,
+    "abstract": "Using the skupper command-line interface (CLI) allows you to create and manage sites from the context of the current namespace."
+  },
+  {
+    "file": "assemblies/kube-cli-assembly-kube-exposing-services-cli.adoc",
+    "heading": "Expose services on the application network using the CLI on Kubernetes",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 11,
+    "abstract_chars": 82,
+    "abstract": "Create connectors and listeners to expose services across the application network."
+  },
+  {
+    "file": "assemblies/kube-cli-assembly-kube-linking-cli.adoc",
+    "heading": "Link sites on Kubernetes using the CLI",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 10,
+    "abstract_chars": 58,
+    "abstract": "Create links between sites on Kubernetes by using the CLI."
+  },
+  {
+    "file": "assemblies/kube-yaml-assembly-kube-creating-site-yaml.adoc",
+    "heading": "Create a site on Kubernetes using YAML",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 16,
+    "abstract_chars": 91,
+    "abstract": "Using YAML allows you to create and manage sites from the context of the current namespace."
+  },
+  {
+    "file": "assemblies/kube-yaml-assembly-kube-exposing-services-yaml.adoc",
+    "heading": "Expose services on the application network using YAML on Kubernetes",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 26,
+    "abstract_chars": 169,
+    "abstract": "After creating an application network by linking sites, you can expose services from one site using connectors and consume those services on other sites using listeners."
+  },
+  {
+    "file": "assemblies/kube-yaml-assembly-kube-yaml-custom-certs.adoc",
+    "heading": "Secure inter-site communication with custom certificates",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 27,
+    "abstract_chars": 218,
+    "abstract": "By default, the Skupper controller generates internal Certificate Authorities (CAs) and self-signed certificates. For example, it creates certificates to authenticate incoming Skupper links from external Skupper sites."
+  },
+  {
+    "file": "assemblies/kube-yaml-assembly-kube-yaml-site-linking.adoc",
+    "heading": "Link sites on Kubernetes using YAML",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 24,
+    "abstract_chars": 156,
+    "abstract": "Once sites are linked, services can be exposed and consumed across the application network without the need to open ports or manage inter-site connectivity."
+  },
+  {
+    "file": "assemblies/kube-yaml-assembly-kube-yaml.adoc",
+    "heading": "YAML on Kubernetes",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 21,
+    "abstract_chars": 131,
+    "abstract": "You can use YAML on Kubernetes after installing the Skupper controller to create sites, link sites, and expose or consume services."
+  },
+  {
+    "file": "assemblies/overview-assembly-kube-resources.adoc",
+    "heading": "Look up Custom Resource specifications and CLI commands",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 20,
+    "abstract_chars": 178,
+    "abstract": "{skupper_name} creates and manages several types of Kubernetes resources, including custom resource definitions, service accounts, deployments, ConfigMaps, secrets, and services."
+  },
+  {
+    "file": "assemblies/overview-assembly-migrating.adoc",
+    "heading": "Migrate from {skupper_name} v1",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 32,
+    "abstract_chars": 206,
+    "abstract": "{skupper_name} v1 sites are not compatible with {skupper_name} v2 sites. While there are plans to create migration tooling, currently, the only way migrate an application network is to create a new network."
+  },
+  {
+    "file": "assemblies/overview-assembly-overview-connectivity.adoc",
+    "heading": "Establish system connectivity",
+    "level": 1,
+    "content_type": "CONCEPT",
+    "abstract_words": 10,
+    "abstract_chars": 90,
+    "abstract": "{skupper_name} provides secure connectivity for services running across multiple clusters."
+  },
+  {
+    "file": "assemblies/overview-assembly-overview-load-balancing.adoc",
+    "heading": "Ensure high availability and continuity",
+    "level": 1,
+    "content_type": "CONCEPT",
+    "abstract_words": 14,
+    "abstract_chars": 96,
+    "abstract": "{skupper_name} balances new TCP connections across sites and reroutes traffic when a site fails."
+  },
+  {
+    "file": "assemblies/overview-assembly-skupper-overview.adoc",
+    "heading": "What is {skupper_name}?",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 11,
+    "abstract_chars": 97,
+    "abstract": "{skupper_name} connects distributed applications across sites by creating an application network."
+  },
+  {
+    "file": "assemblies/overview-assembly-skupper-routing.adoc",
+    "heading": "Directing network traffic",
+    "level": 1,
+    "content_type": "CONCEPT",
+    "abstract_words": 12,
+    "abstract_chars": 93,
+    "abstract": "{skupper_name} routes application traffic by using routing keys, ports, and site-aware paths."
+  },
+  {
+    "file": "assemblies/overview-assembly-skupper-security.adoc",
+    "heading": "Secure systems and data",
+    "level": 1,
+    "content_type": "CONCEPT",
+    "abstract_words": 9,
+    "abstract_chars": 91,
+    "abstract": "{skupper_name} protects service-to-service communication with built-in mutual TLS security."
+  },
+  {
+    "file": "assemblies/system-cli-assembly-system-cli.adoc",
+    "heading": "Skupper CLI on local systems",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 20,
+    "abstract_chars": 111,
+    "abstract": "Use the Skupper CLI on local systems to create sites, link them to other sites, and expose or consume services."
+  },
+  {
+    "file": "assemblies/system-cli-assembly-system-creating-site-cli.adoc",
+    "heading": "Create a site on a local system using the CLI",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 21,
+    "abstract_chars": 130,
+    "abstract": "Using the skupper command-line interface (CLI) allows you to create and manage Skupper sites from the context of the current user."
+  },
+  {
+    "file": "assemblies/system-cli-assembly-system-exposing-services-cli.adoc",
+    "heading": "Expose services on the application network using the CLI on local systems",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 17,
+    "abstract_chars": 104,
+    "abstract": "Use the CLI on local systems to create connectors and listeners for services on the application network."
+  },
+  {
+    "file": "assemblies/system-cli-assembly-system-linking-cli.adoc",
+    "heading": "Link sites on local systems using the CLI",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 12,
+    "abstract_chars": 67,
+    "abstract": "Use the Skupper CLI on local systems to create links between sites."
+  },
+  {
+    "file": "assemblies/system-yaml-assembly-system-yaml-service-exposure.adoc",
+    "heading": "Expose services on the application network using YAML on local systems",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 13,
+    "abstract_chars": 84,
+    "abstract": "Use YAML to create connectors and listeners for services on the application network."
+  },
+  {
+    "file": "assemblies/system-yaml-assembly-system-yaml-site-configuration.adoc",
+    "heading": "Create a site on local systems using YAML",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 14,
+    "abstract_chars": 77,
+    "abstract": "Using YAML allows you to create and manage sites on Docker, Podman and Linux."
+  },
+  {
+    "file": "assemblies/system-yaml-assembly-system-yaml-site-linking.adoc",
+    "heading": "Link sites on local systems using YAML",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 15,
+    "abstract_chars": 90,
+    "abstract": "Use a `link` resource YAML file to create links between local system and Kubernetes sites."
+  },
+  {
+    "file": "assemblies/system-yaml-assembly-system-yaml.adoc",
+    "heading": "YAML on local systems",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 18,
+    "abstract_chars": 100,
+    "abstract": "Use YAML on local systems to create sites, link them to other sites, and expose or consume services."
+  },
+  {
+    "file": "assemblies/troubleshooting-assembly-troubleshooting.adoc",
+    "heading": "Troubleshoot link failures and resolve routing issues",
+    "level": 1,
+    "content_type": "ASSEMBLY",
+    "abstract_words": 18,
+    "abstract_chars": 131,
+    "abstract": "Diagnose and resolve issues with your application network by checking site status, verifying links, and collecting diagnostic data."
+  },
+  {
+    "file": "modules/console-observer-advanced.adoc",
+    "heading": "Resource naming and label options",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 9,
+    "abstract_chars": 61,
+    "abstract": "Configure naming and label behavior for the Network Observer."
+  },
+  {
+    "file": "modules/console-observer-authentication.adoc",
+    "heading": "Authentication",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 9,
+    "abstract_chars": 71,
+    "abstract": "Configure the authentication strategy for the Network Observer console."
+  },
+  {
+    "file": "modules/console-observer-external-access.adoc",
+    "heading": "Console access",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 12,
+    "abstract_chars": 83,
+    "abstract": "Configure access to the Network Observer console using Ingress or OpenShift Routes."
+  },
+  {
+    "file": "modules/console-observer-images.adoc",
+    "heading": "Container images",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 11,
+    "abstract_chars": 83,
+    "abstract": "Configure container image repositories, tags, and pull policies for each component."
+  },
+  {
+    "file": "modules/console-observer-labels.adoc",
+    "heading": "Labels and Annotations",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 9,
+    "abstract_chars": 71,
+    "abstract": "Configure labels and annotations applied to Network Observer resources."
+  },
+  {
+    "file": "modules/console-observer-metrics.adoc",
+    "heading": "Metrics",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 17,
+    "abstract_chars": 113,
+    "abstract": "The Network Observer serves Prometheus metrics on a dedicated HTTP listener, separate from the main API endpoint."
+  },
+  {
+    "file": "modules/console-observer-persistence.adoc",
+    "heading": "Persistent storage",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 14,
+    "abstract_chars": 124,
+    "abstract": "By default, Prometheus uses ephemeral storage (`emptyDir`). For persistent time-series data, enable a PersistentVolumeClaim."
+  },
+  {
+    "file": "modules/console-observer-prometheus.adoc",
+    "heading": "Prometheus",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 9,
+    "abstract_chars": 74,
+    "abstract": "The Prometheus container supports custom configuration and tuning options."
+  },
+  {
+    "file": "modules/console-observer-resources.adoc",
+    "heading": "Resource requests and limits",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 13,
+    "abstract_chars": 77,
+    "abstract": "Resource requests and limits can be configured for each container in the Pod."
+  },
+  {
+    "file": "modules/console-observer-router.adoc",
+    "heading": "Router connection",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 10,
+    "abstract_chars": 66,
+    "abstract": "Configure how the Network Observer connects to the Skupper router."
+  },
+  {
+    "file": "modules/console-observer-security.adoc",
+    "heading": "Security contexts",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 10,
+    "abstract_chars": 71,
+    "abstract": "Configure pod and container security contexts for the Network Observer."
+  },
+  {
+    "file": "modules/console-observer-service.adoc",
+    "heading": "Service",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 9,
+    "abstract_chars": 67,
+    "abstract": "Configure the Kubernetes Service that exposes the Network Observer."
+  },
+  {
+    "file": "modules/console-observer-tls.adoc",
+    "heading": "TLS Certificates",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 10,
+    "abstract_chars": 72,
+    "abstract": "Configure how TLS certificates are provisioned for the Network Observer."
+  },
+  {
+    "file": "modules/console-observer-tuning.adoc",
+    "heading": "Runtime behavior",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 11,
+    "abstract_chars": 85,
+    "abstract": "Configure command-line flags and runtime behavior for the Network Observer container."
+  },
+  {
+    "file": "modules/console-observer-validation.adoc",
+    "heading": "Validation and Troubleshooting",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 13,
+    "abstract_chars": 81,
+    "abstract": "Use the following steps to verify that the Network Observer is running correctly."
+  },
+  {
+    "file": "modules/kube-cli-kube-checking-cli.adoc",
+    "heading": "Check the Skupper CLI",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 15,
+    "abstract_chars": 105,
+    "abstract": "Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper."
+  },
+  {
+    "file": "modules/kube-cli-kube-creating-connector-cli.adoc",
+    "heading": "Create a Kubernetes connector using the CLI",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 19,
+    "abstract_chars": 121,
+    "abstract": "A connector binds a local workload to listeners in remote sites. Listeners and connectors are matched using routing keys."
+  },
+  {
+    "file": "modules/kube-cli-kube-creating-listener-cli.adoc",
+    "heading": "Create a Kubernetes listener using the CLI",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 20,
+    "abstract_chars": 132,
+    "abstract": "A listener binds a local connection endpoint to connectors in remote sites. Listeners and connectors are matched using routing keys."
+  },
+  {
+    "file": "modules/kube-cli-kube-creating-simple-site-cli.adoc",
+    "heading": "Create a simple site using the CLI on Kubernetes",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 15,
+    "abstract_chars": 86,
+    "abstract": "Use the Skupper CLI to create a site on Kubernetes from the current namespace context."
+  },
+  {
+    "file": "modules/kube-cli-kube-custom-certs-cli.adoc",
+    "heading": "Custom certificates and the Skupper CLI",
+    "level": 1,
+    "content_type": "CONCEPT",
+    "abstract_words": 27,
+    "abstract_chars": 182,
+    "abstract": "For custom certificate workflows, YAML provides more control over certificate management and PKI integration. You can still use the Skupper CLI to generate links for those workflows."
+  },
+  {
+    "file": "modules/kube-cli-kube-deleting-site-cli.adoc",
+    "heading": "Delete a site using the CLI on Kubernetes",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 18,
+    "abstract_chars": 99,
+    "abstract": "Delete a Skupper site on Kubernetes by using the CLI from the namespace where the site was created."
+  },
+  {
+    "file": "modules/kube-cli-kube-ha-cli.adoc",
+    "heading": "Create a high availability site using the CLI on Kubernetes",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 15,
+    "abstract_chars": 84,
+    "abstract": "Create a highly available Skupper site on Kubernetes by enabling HA mode in the CLI."
+  },
+  {
+    "file": "modules/kube-cli-kube-link-cli.adoc",
+    "heading": "Link sites using a `link` resource",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 27,
+    "abstract_chars": 153,
+    "abstract": "An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site."
+  },
+  {
+    "file": "modules/kube-cli-kube-link-cost-cli.adoc",
+    "heading": "Specify link cost using the CLI",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 32,
+    "abstract_chars": 204,
+    "abstract": "Link cost is a configurable integer value that influences how Skupper routes traffic across links between sites. The routing algorithm favors paths with the lowest total cost from client to target server."
+  },
+  {
+    "file": "modules/kube-cli-kube-proxy-cli.adoc",
+    "heading": "Link sites through an HTTP proxy",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 34,
+    "abstract_chars": 205,
+    "abstract": "If your network requires routing through an HTTP CONNECT proxy to reach remote sites, you can configure Skupper links to use a proxy. This feature is only available when using `link` resources, not tokens."
+  },
+  {
+    "file": "modules/kube-cli-kube-token-cli.adoc",
+    "heading": "Link sites using a token",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 45,
+    "abstract_chars": 223,
+    "abstract": "A token provides a secure method to link sites. By default, a token can only be used once and must be used within 15 minutes to link sites. Issue a token from one site and redeem that token on another site to create a link."
+  },
+  {
+    "file": "modules/kube-yaml-kube-access-yaml.adoc",
+    "heading": "Link sites using `AccessGrant` and `AccessToken` resources",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 15,
+    "abstract_chars": 103,
+    "abstract": "Use `AccessGrant` and `AccessToken` resources to create a link between two Kubernetes sites using YAML."
+  },
+  {
+    "file": "modules/kube-yaml-kube-creating-attachedconnector-yaml.adoc",
+    "heading": "Create a connector for a different namespace using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 11,
+    "abstract_chars": 64,
+    "abstract": "A connector binds a local workload to listeners in remote sites."
+  },
+  {
+    "file": "modules/kube-yaml-kube-creating-connector-yaml.adoc",
+    "heading": "Create a Kubernetes connector using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 19,
+    "abstract_chars": 121,
+    "abstract": "A connector binds a local workload to listeners in remote sites. Listeners and connectors are matched using routing keys."
+  },
+  {
+    "file": "modules/kube-yaml-kube-creating-listener-yaml.adoc",
+    "heading": "Create a Kubernetes listener using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 20,
+    "abstract_chars": 132,
+    "abstract": "A listener binds a local connection endpoint to connectors in remote sites. Listeners and connectors are matched using routing keys."
+  },
+  {
+    "file": "modules/kube-yaml-kube-creating-multikeylistener-yaml.adoc",
+    "heading": "Create a Kubernetes multi-key listener using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 33,
+    "abstract_chars": 204,
+    "abstract": "A multi-key listener binds a single local host and port to multiple routing keys in remote sites. Use a multi-key listener when you want one service endpoint to aggregate traffic from multiple connectors."
+  },
+  {
+    "file": "modules/kube-yaml-kube-creating-simple-site-yaml.adoc",
+    "heading": "Create a simple site on Kubernetes using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 10,
+    "abstract_chars": 52,
+    "abstract": "You can use YAML to create and manage Skupper sites."
+  },
+  {
+    "file": "modules/kube-yaml-kube-ha-yaml.adoc",
+    "heading": "Create a high availability site using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 12,
+    "abstract_chars": 68,
+    "abstract": "Use the `ha` option to create a highly available site on Kubernetes."
+  },
+  {
+    "file": "modules/kube-yaml-kube-link-cost-yaml.adoc",
+    "heading": "Specify link cost using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 32,
+    "abstract_chars": 204,
+    "abstract": "Link cost is a configurable integer value that influences how Skupper routes traffic across links between sites. The routing algorithm favors paths with the lowest total cost from client to target server."
+  },
+  {
+    "file": "modules/kube-yaml-kube-link-custom-certs-yaml.adoc",
+    "heading": "Link sites using `Link` resources and custom certificates",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 12,
+    "abstract_chars": 95,
+    "abstract": "Link sites using custom TLS certificates instead of the default Skupper-generated certificates."
+  },
+  {
+    "file": "modules/kube-yaml-kube-router-access-custom-certs-yaml.adoc",
+    "heading": "Link sites using a custom `RouterAccess`, and custom certificates",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 24,
+    "abstract_chars": 219,
+    "abstract": "By default, when you set `spec.linkAccess` on a `Site`, the Skupper controller automatically creates a `RouterAccess` named `skupper-router` with `generateTlsCredentials: true` and `tlsCredentials: skupper-site-server`."
+  },
+  {
+    "file": "modules/kube-yaml-kube-site-resources-yaml.adoc",
+    "heading": "Set site resources using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 24,
+    "abstract_chars": 158,
+    "abstract": "You can configure the Skupper Router and Kube Adaptor components with minimum and maximum CPU and memory resources by defining sizing models using ConfigMaps."
+  },
+  {
+    "file": "modules/kube-yaml-kube-yaml-custom-certs-info.adoc",
+    "heading": "Custom certificates and YAML",
+    "level": 1,
+    "content_type": "CONCEPT",
+    "abstract_words": 23,
+    "abstract_chars": 180,
+    "abstract": "You can link sites using custom TLS certificates instead of the default Skupper-generated certificates. Custom certificates allow integration with your existing PKI infrastructure."
+  },
+  {
+    "file": "modules/overview-application-networks.adoc",
+    "heading": "Application networks",
+    "level": 1,
+    "content_type": "CONCEPT",
+    "abstract_words": 13,
+    "abstract_chars": 87,
+    "abstract": "An application network connects services across sites as if they were running together."
+  },
+  {
+    "file": "modules/overview-migrating-links.adoc",
+    "heading": "Link sites",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 13,
+    "abstract_chars": 102,
+    "abstract": "These examples show how site-linking commands changed between {skupper_name} v1 and {skupper_name} v2."
+  },
+  {
+    "file": "modules/overview-migrating-services.adoc",
+    "heading": "Expose services",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 13,
+    "abstract_chars": 106,
+    "abstract": "These examples show how service-exposure commands changed between {skupper_name} v1 and {skupper_name} v2."
+  },
+  {
+    "file": "modules/overview-migrating-sites.adoc",
+    "heading": "Create sites",
+    "level": 1,
+    "content_type": "REFERENCE",
+    "abstract_words": 4,
+    "abstract_chars": 23,
+    "abstract": "Create sites using CLI:"
+  },
+  {
+    "file": "modules/overview-skupper-routers.adoc",
+    "heading": "{skupper_name} routers",
+    "level": 1,
+    "content_type": "CONCEPT",
+    "abstract_words": 10,
+    "abstract_chars": 85,
+    "abstract": "{skupper_name} routers carry application traffic between services in different sites."
+  },
+  {
+    "file": "modules/overview-skupper.adoc",
+    "heading": "{skupper_name}",
+    "level": 1,
+    "content_type": "CONCEPT",
+    "abstract_words": 12,
+    "abstract_chars": 86,
+    "abstract": "{skupper_name} is the tool that creates and manages application networks across sites."
+  },
+  {
+    "file": "modules/system-cli-system-checking-cli.adoc",
+    "heading": "Check the Skupper CLI and environment",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 15,
+    "abstract_chars": 105,
+    "abstract": "Installing the skupper command-line interface (CLI) provides a simple method to get started with Skupper."
+  },
+  {
+    "file": "modules/system-cli-system-creating-connector-cli.adoc",
+    "heading": "Create a local system connector using the CLI",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 19,
+    "abstract_chars": 121,
+    "abstract": "A connector binds a local workload to listeners in remote sites. Listeners and connectors are matched using routing keys."
+  },
+  {
+    "file": "modules/system-cli-system-creating-listener-cli.adoc",
+    "heading": "Create a local system listener using the CLI",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 20,
+    "abstract_chars": 132,
+    "abstract": "A listener binds a local connection endpoint to connectors in remote sites. Listeners and connectors are matched using routing keys."
+  },
+  {
+    "file": "modules/system-cli-system-creating-simple-site-cli.adoc",
+    "heading": "Create a simple site using the CLI on local systems",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 12,
+    "abstract_chars": 55,
+    "abstract": "Use the Skupper CLI to create a site on a local system."
+  },
+  {
+    "file": "modules/system-cli-system-creating-site-bundle.adoc",
+    "heading": "Provision and deploy site bundles",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 21,
+    "abstract_chars": 99,
+    "abstract": "Create a site bundle when you want to prepare a site on one system and install it on a remote host."
+  },
+  {
+    "file": "modules/system-cli-system-deleting-site-cli.adoc",
+    "heading": "Delete a site using the CLI on local systems",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 12,
+    "abstract_chars": 57,
+    "abstract": "Delete a Skupper site on a local system by using the CLI."
+  },
+  {
+    "file": "modules/system-cli-system-link-cli.adoc",
+    "heading": "Link sites using a `link` resource and the CLI",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 27,
+    "abstract_chars": 153,
+    "abstract": "An alternative approach to linking sites using tokens is to create a `link` resource YAML file using the CLI, and to apply that resource to another site."
+  },
+  {
+    "file": "modules/system-cli-system-token-cli.adoc",
+    "heading": "Link to Kubernetes sites using a token",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 13,
+    "abstract_chars": 68,
+    "abstract": "A token lets a local system site link securely to a Kubernetes site."
+  },
+  {
+    "file": "modules/system-yaml-system-creating-connector-yaml.adoc",
+    "heading": "Create a local system connector using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 19,
+    "abstract_chars": 121,
+    "abstract": "A connector binds a local workload to listeners in remote sites. Listeners and connectors are matched using routing keys."
+  },
+  {
+    "file": "modules/system-yaml-system-creating-listener-yaml.adoc",
+    "heading": "Create a local system listener using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 20,
+    "abstract_chars": 132,
+    "abstract": "A listener binds a local connection endpoint to connectors in remote sites. Listeners and connectors are matched using routing keys."
+  },
+  {
+    "file": "modules/system-yaml-system-creating-multikeylistener-yaml.adoc",
+    "heading": "Create a local system multi-key listener using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 33,
+    "abstract_chars": 204,
+    "abstract": "A multi-key listener binds a single local host and port to multiple routing keys in remote sites. Use a multi-key listener when you want one service endpoint to aggregate traffic from multiple connectors."
+  },
+  {
+    "file": "modules/system-yaml-system-creating-simple-site-yaml.adoc",
+    "heading": "Create a simple site on local systems using YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 10,
+    "abstract_chars": 52,
+    "abstract": "You can use YAML to create and manage Skupper sites."
+  },
+  {
+    "file": "modules/system-yaml-system-link-yaml.adoc",
+    "heading": "Link sites using a `link` resource and YAML",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 18,
+    "abstract_chars": 93,
+    "abstract": "Create a `link` resource YAML file and apply it to the local system site to establish a link."
+  },
+  {
+    "file": "modules/troubleshooting-checking-links.adoc",
+    "heading": "Check links",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 14,
+    "abstract_chars": 92,
+    "abstract": "Check link status to confirm that sites can exchange traffic across the application network."
+  },
+  {
+    "file": "modules/troubleshooting-checking-sites.adoc",
+    "heading": "Check sites",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 16,
+    "abstract_chars": 112,
+    "abstract": "Check site, connector, listener, and link status to confirm that the application network is operating correctly."
+  },
+  {
+    "file": "modules/troubleshooting-debug-dump.adoc",
+    "heading": "Create a Skupper debug tar file",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 19,
+    "abstract_chars": 124,
+    "abstract": "Create a debug tar file containing diagnostic information about a Skupper site to troubleshoot issues or share with support."
+  },
+  {
+    "file": "modules/troubleshooting-dynamic-system-controller.adoc",
+    "heading": "Troubleshoot the Dynamic System Controller",
+    "level": 1,
+    "content_type": "PROCEDURE",
+    "abstract_words": 26,
+    "abstract_chars": 181,
+    "abstract": "Diagnose issues with the Dynamic System Controller on Docker and Podman platforms when YAML (YAML Ain't Markup Language) resources are not being automatically detected or processed."
+  }
+]
