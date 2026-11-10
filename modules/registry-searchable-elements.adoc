@@ -1,0 +1,49 @@
+[id="registry-searchable-elements_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Searchable structural elements
+
+[role="_abstract"]
+Each artifact type defines the structural elements that {registry} extracts for search. Use the element kinds with the `structure` filter to narrow a query.
+
+.Artifact types and extracted element kinds
+[cols="2,5",options="header"]
+|===
+|Artifact type identifier |Element kinds
+|`AGENT_CARD`
+|`skill`, `capability`, `inputmode`, `outputmode`, `protocolbinding`, `protocolversion`, `url`, `securityscheme`, `tag`
+|`ASYNCAPI`
+|`channel`, `message`, `schema`, `operation`, `tag`, `server`, `parameter`, `security_scheme`
+|`AVRO`
+|`name`, `field`, `type`, `enum_symbol`, `namespace`
+|`GRAPHQL`
+|`type`, `field`, `enum`, `input`, `interface`, `union`, `directive`
+|`ICEBERG_TABLE`
+|`name`, `column`, `partition`, `sort`
+|`ICEBERG_VIEW`
+|`name`, `column`, `sql`
+|`JSON`
+|`id`, `property`, `definition`, `required`
+|`MCP_TOOL`
+|`parameter`
+|`MODEL_SCHEMA`
+|`modelid`, `provider`, `inputproperty`, `outputproperty`
+|`OPENAPI`
+|`schema`, `path`, `operation`, `tag`, `parameter`, `security_scheme`, `server`
+|`PROMPT_TEMPLATE`
+|`templateid`, `variable`, `outputproperty`
+|`PROTOBUF`
+|`package`, `message`, `field`, `enum`, `service`, `rpc`
+|`THRIFT`
+|`namespace`, `struct`, `enum`, `union`, `exception`, `service`, `typedef`, `const`
+|`WSDL`
+|`service`, `port`, `binding`, `portType`, `operation`, `message`, `element`, `complexType`, `simpleType`
+|`XML`
+|`element`, `namespace`
+|`XSD`
+|`element`, `complexType`, `simpleType`, `attribute`, `attributeGroup`, `group`
+|===
+
+Extraction depends on the content and format. For example, OpenAPI schema names come from component definitions, and XSD type names come from top-level schema declarations. Types without a structured extractor, and content that an extractor cannot parse, have no extracted elements. Their raw content remains available for content search, subject to the content size limit.
+
+
+// ref-registry-content-search-configuration

@@ -1,0 +1,13 @@
+[id="using-schema-validation-library_{context}_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Validating data with the {registry} schema validation library
+
+[role="_abstract"]
+You can use the {registry} schema validation library to check JSON, Avro, and Protobuf payloads in a Java application against schemas stored in {registry}. The library fetches and caches each schema and reports every problem it finds, without Kafka serializers or deserializers.
+
+// con-schema-validation-library-overview
+include::../modules/schema-validation-library-overview.adoc[leveloffset=+1]
+include::../modules/validating-json-with-schema-validation-library.adoc[leveloffset=+1]
+include::../modules/validating-avro-with-schema-validation-library.adoc[leveloffset=+1]
+include::../modules/validating-protobuf-with-schema-validation-library.adoc[leveloffset=+1]
+include::../modules/schema-validation-library-reference.adoc[leveloffset=+1]

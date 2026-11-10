@@ -1,0 +1,40 @@
+[id="connecting-ai-assistant-via-mcp_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Connecting an AI assistant by using MCP
+
+[role="_abstract"]
+You can connect an MCP client, such as Claude Desktop or an IDE assistant, to the {registry} MCP server. The MCP server runs as a container that the client starts and talks to over standard input and output, and it reaches {registry} through the Docker network of the quick start stack.
+
+.Prerequisites
+* The quick start stack is running
+* An MCP client that can start a local command, such as Claude Desktop
+
+.Procedure
+. Add the {registry} MCP server to the MCP configuration of your client. In Claude Desktop, open *Settings* > *Developer* > *Edit Config*:
++
+[source,json]
+----
+{
+  "mcpServers": {
+    "apicurio-registry": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "--network", "ai-agent-registry_default",
+        "-e", "REGISTRY_URL=http://apicurio-registry:8080",
+        "-e", "QUARKUS_OIDC_TENANT_ENABLED=false",
+        "quay.io/apicurio/apicurio-registry-mcp-server:latest-snapshot"
+      ]
+    }
+  }
+}
+----
++
+. Restart the client.
+
+.Verification
+* Ask the assistant a question about the catalog, for example: "Which agents in Apicurio Registry can translate?"
++
+The assistant uses the MCP server tools, such as `search_artifacts`, and answers with the Translation Agent.
+
+// proc-rejecting-an-incompatible-tool-change

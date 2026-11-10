@@ -1,0 +1,40 @@
+[id="resource-authorization-configuration_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Per-resource authorization configuration properties
+
+[role="_abstract"]
+The following properties control per-resource authorization. Authentication is configured independently; enabling the feature does not enable an authentication mechanism or RBAC.
+
+.Per-resource authorization properties
+[cols="2,1,3",options="header"]
+|===
+|Property |Default |Description
+
+|`apicurio.auth.resource-based-authorization.enabled`
+|`false`
+|Enables per-resource authorization.
+
+|`apicurio.auth.resource-based-authorization.rules.path`
+|_(none)_
+|Path to the access rules file. Required when per-resource authorization is enabled. {registry} fails to start if the file is missing or not valid.
+
+|`apicurio.auth.resource-based-authorization.rules.reload-every`
+|`5s`
+|How often to check the access rules file for changes. Must be a duration, for example `5s` or `1m`.
+
+|`apicurio.auth.resource-based-authorization.rules.reload-enabled`
+|`true`
+|Reloads the access rules file when it changes. Set to `false` to load it only at startup.
+
+|`apicurio.auth.resource-based-authorization.owner-bypass.enabled`
+|`true`
+|Lets an authenticated recorded owner bypass access rules for the owned artifact or group. Earlier RBAC checks still apply.
+|===
+
+**Automatic reloading**
+
+{registry} checks the file's modification time at the interval set by `apicurio.auth.resource-based-authorization.rules.reload-every`. A valid changed file is applied without restart. If loading a changed file fails, {registry} keeps the last successfully loaded rules and logs the failure once for that modification time. Correcting the file must also update its modification time. A missing or non-regular file during polling leaves the last rules active without a reload-error message; deleting the file does not revoke access.
+
+Each replica loads and polls its own file. All replicas must receive the update, and polling plus volume-projection delays can postpone its effect. The interval is not a guaranteed cluster-wide revocation deadline, and a request making several authorization checks can overlap a reload. The polling job is registered only when the feature and reload are both enabled.
+
+// ref-resource-authorization-grants

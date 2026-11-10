@@ -1,0 +1,18 @@
+[id="data-contracts-configuration_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Configuration
+
+[role="_abstract"]
+Data contracts are always available; no special configuration is required. Submitting a contract is an explicit opt-in action that does not affect existing registry functionality.
+
+Contract rule enforcement in Kafka client applications is controlled by the SerDes properties described in the Kafka SerDes integration reference.
+
+Data contracts work across all storage variants:
+
+SQL (PostgreSQL, MySQL, MSSQL, H2):: Full support with immediate consistency. The `contract_rules` table (database upgrade 103) and the `contract_audit_log` table (database upgrade 106) are created automatically. The global contract ruleset is also stored in `contract_rules`.
+KafkaSQL:: Full support. Label writes go through the Kafka journal for multi-node consistency.
+GitOps / KubernetesOps:: Read-only. Contracts cannot be submitted, and other write operations are rejected.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:data-contracts-serdes_{context}[]

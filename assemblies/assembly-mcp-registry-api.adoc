@@ -1,0 +1,12 @@
+[id="mcp-registry-api_{context}_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= MCP Registry API (Developer Preview)
+
+[role="_abstract"]
+{registry} exposes an experimental Model Context Protocol (MCP) Registry API at `/apis/mcp-registry/v0.1`. You can use it to publish, read, list, and manage MCP server definitions, which {registry} stores as artifacts.
+
+// con-mcp-registry-api-overview
+include::../modules/mcp-registry-api-overview.adoc[leveloffset=+1]
+include::../modules/enabling-mcp-registry-api.adoc[leveloffset=+1]
+include::../modules/mcp-registry-api-operations.adoc[leveloffset=+1]
+include::../modules/mcp-registry-api-operational-considerations.adoc[leveloffset=+1]

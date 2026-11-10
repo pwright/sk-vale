@@ -1,0 +1,234 @@
+{
+  "modules/connecting-claude-desktop-via-mcp.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        248
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/agent-registry[AI agent registry demo], which runs every agent registry feature with Docker Compose, together with Quarkus LangChain4j agents, and includes a step-by-step guide",
+      "Line": 53
+    }
+  ],
+  "modules/importing-tools-from-running-mcp-server.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        152,
+        232
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-mcp-tool-features.adoc[MCP tool definition features",
+      "Line": 8
+    }
+  ],
+  "modules/mcp-importing-tools-results.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        54
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"mcp-importing-tools-results_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        16
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Import results",
+      "Line": 2
+    }
+  ],
+  "modules/mcp-importing-tools-security.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        55
+      ],
+      "Check": "AsciiDocDITA.ContentType",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "The '_mod-docs-content-type' attribute definition is missing.",
+      "Severity": "warning",
+      "Match": "[id=\"mcp-importing-tools-security_{context}_{context}\"]",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        30
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Outbound connection security",
+      "Line": 2
+    }
+  ],
+  "modules/registering-artifact-references-using-java.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        9
+      ],
+      "Check": "AsciiDocDITA.BlockTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Block titles can only be assigned to examples, figures, and tables in DITA.",
+      "Severity": "warning",
+      "Match": ".Behavior",
+      "Line": 72
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        9
+      ],
+      "Check": "AsciiDocDITA.TaskTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Unsupported titles cannot be mapped to DITA tasks.",
+      "Severity": "warning",
+      "Match": ".Behavior",
+      "Line": 72
+    }
+  ],
+  "modules/resource-authorization-permissions.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        50
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Caller permissions in v3 search and list results",
+      "Line": 3
+    }
+  ],
+  "modules/schema-references-shared-types.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        139
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-artifact-reference.adoc#registry-artifact-type-reference-support_{context}[Artifact reference support by type",
+      "Line": 23
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        56
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:registry-artifact-type-reference-support_{context}[",
+      "Line": 26
+    }
+  ],
+  "modules/stopping-agent-registry-quickstart.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        32
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Stopping the quick start stack",
+      "Line": 3
+    }
+  ]
+}

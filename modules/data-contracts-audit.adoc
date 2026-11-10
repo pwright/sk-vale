@@ -1,0 +1,43 @@
+[id="data-contracts-audit_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Audit log
+
+[role="_abstract"]
+The contract audit log records every change to the contract state of an artifact.
+
+The audit log records the following operations:
+
+* `CONTRACT_PROJECTED`: an ODCS contract version was projected onto the artifact, for example `orders-contract 1.0.0`
+* `CONTRACT_REMOVED`: a contract's projection was removed, because the contract was deleted or its new version no longer references the artifact
+* `STATUS_CHANGED`: status transitions through the contract status endpoint, for example `STABLE -> DEPRECATED`
+* `METADATA_UPDATED`: contract metadata updates through `PUT .../contract/metadata`
+* `PROMOTED`: promotions, for example `orders-contract: DEV -> STAGE`
+* `COMPATIBILITY_GROUP_SET`: compatibility group changes
+* `RULESET_CONFIGURED` and `RULESET_DELETED`: changes to the artifact-level ruleset, or to a version-level ruleset (the entry's `version` is then set)
+
+Changes to the global contract ruleset do not belong to an artifact and are not in this log. Deleting an artifact, or the group that contains it, deletes its audit entries.
+
+Query the audit log for an artifact (`limit` defaults to 20, maximum 500):
+
+[source,bash]
+----
+curl "http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/audit?offset=0&limit=20"
+----
+
+.Response
+[source,json]
+----
+[
+  {
+    "auditId": 2,
+    "groupId": "my-group",
+    "artifactId": "my-artifact",
+    "version": null,
+    "action": "STATUS_CHANGED",
+    "principal": "admin",
+    "details": "STABLE -> DEPRECATED",
+    "createdOn": "2026-05-19T10:30:00Z"
+  }
+]
+----
+

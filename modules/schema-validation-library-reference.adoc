@@ -1,0 +1,167 @@
+[id="schema-validation-library-reference_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Schema validation library dependencies and configuration
+
+[role="_abstract"]
+The schema validation library consists of four Maven modules that share one result API and one set of configuration properties. The following tables list the modules, the result methods, the error context values, the artifact coordinates, and the configuration properties.
+
+**Maven modules**
+
+All modules use the group ID `io.apicurio` and the same version as the {registry} release. Versions 3.3.0 and later are available from Maven Central. Add only the format modules that you need; each format module pulls in the common module, the schema resolver, and the {registry} Java SDK.
+
+.Maven modules of the schema validation library
+[options="header",cols="3,3"]
+|====
+|Artifact ID
+|Contents
+
+|`apicurio-registry-schema-validation-common`
+|`ValidationResult`, `ValidationError`, `SchemaValidationRecord`, and `SchemaValidationMetadata` in the `io.apicurio.schema.validation` package
+
+|`apicurio-registry-schema-validation-jsonschema`
+|`JsonValidator`, which validates JSON payloads with the networknt `json-schema-validator` library. The validator uses the JSON Schema draft-07 dialect by default; when the artifact declares a `$schema` keyword, the validator uses that dialect.
+
+|`apicurio-registry-schema-validation-avro`
+|`AvroValidator`, which validates `GenericRecord` objects and JSON-encoded data with Apache Avro
+
+|`apicurio-registry-schema-validation-protobuf`
+|`ProtobufValidator`, which compares the compiled message definition with the registered schema by using the {registry} Protobuf compatibility checker
+|====
+
+**Result types**
+
+.Methods of ValidationResult and ValidationError
+[options="header",cols="2,4"]
+|====
+|Method
+|Description
+
+|`ValidationResult.success()`
+|Returns `true` when the validator reports no errors and `false` otherwise. The `GenericRecord` validation limitations still apply.
+
+|`ValidationResult.getValidationErrors()`
+|Returns the list of errors, or `null` when the validator reports no errors. Check `success()` before you read the list.
+
+|`ValidationResult.toString()`
+|Returns `+ValidationResult [ success ]+` for a successful result, or `+ValidationResult [ errors = [...] ]+` with every reported error for a failed result.
+
+|`ValidationError.getDescription()`
+|Returns the human-readable message for one violation.
+
+|`ValidationError.getContext()`
+|Returns where or why the violation occurred. The value depends on the format, as described in the following table.
+|====
+
+.Values of the error context by format
+[options="header",cols="2,4"]
+|====
+|Format
+|Context value
+
+|JSON Schema
+|The error code of the violated keyword from the networknt library, for example `1028` for a missing required property and `1029` for a type mismatch. The description starts with the JSON path of the value, for example `$.time`.
+
+|Avro, `GenericRecord` payload
+|The path of the field that failed, for example `time` or `address.city`.
+
+|Avro, JSON `String` payload
+|`TYPE_ERROR` when the data does not match the schema type, or `VALIDATION_ERROR` for any other decoding failure.
+
+|Protobuf
+|An empty string.
+
+|Any format
+|`SCHEMA_RESOLUTION_ERROR` when the validator cannot fetch the schema from {registry}. The description starts with `Failed to resolve schema from registry` and includes the exception class and message. For JSON payloads, the validator also returns this context when it cannot convert the payload to a JSON tree, for example when a `ByteBuffer` contains malformed JSON.
+|====
+
+**Artifact references**
+
+For `validateByArtifactReference`, build an `ArtifactReference` with `ArtifactReference.builder()` and one of the following combinations of coordinates, and pass it to the validator constructor. When a reference carries more than one kind of coordinate, the resolver uses the first one in the order of the table.
+
+.Artifact coordinates for validateByArtifactReference
+[options="header",cols="2,4"]
+|====
+|Builder methods
+|Resolved version
+
+|`contentId(Long)`
+|The content with that content ID.
+
+|`contentHash(String)`
+|The content with that content hash.
+
+|`globalId(Long)`
+|The version with that global ID.
+
+|`groupId(String)`, `artifactId(String)`, `version(String)`
+|The named version of the artifact. When you omit `version`, the latest version of the artifact. The `artifactId` is required.
+|====
+
+For per-record `validate`, the resolver copies only the group ID, artifact ID, and version from the metadata reference. It discards `contentId`, `contentHash`, and `globalId`, so an ID-only metadata reference cannot select the schema by that ID and can produce `SCHEMA_RESOLUTION_ERROR`.
+
+Specify a version in the per-record reference, or set `SchemaResolverConfig.FIND_LATEST_ARTIFACT` to `true` to select the latest version by group ID and artifact ID. With the default `false` and no version, a cache miss uses schema-content lookup instead. The Protobuf validator cannot extract schema content through that lookup path, so it requires an explicit version or `FIND_LATEST_ARTIFACT=true` to work without a cached schema.
+
+**Configuration properties**
+
+You pass configuration properties to the validator constructor as a `Map<String, Object>`. The property keys are available as constants on the `SchemaResolverConfig` class. The following table lists the properties that are most relevant to validation.
+
+.Configuration properties for the schema validation library
+[options="header",cols="3,3,1"]
+|====
+|Property
+|Description
+|Default
+
+|`apicurio.registry.url`
+|URL of the {registry} REST API, for example `\http://localhost:8080/apis/registry/v3`. Required.
+|None
+
+|`apicurio.registry.url.version`
+|Major version of the REST API at the URL, `2` or `3`. Set it only when the resolver cannot detect the version from the URL.
+|Detected from the URL
+
+|`apicurio.registry.auth.service.token.endpoint`, `apicurio.registry.auth.client.id`, `apicurio.registry.auth.client.secret`, `apicurio.registry.auth.client.scope`
+|OAuth 2.0 client credentials for an instance of {registry} that requires authentication.
+|None
+
+|`apicurio.registry.auth.username`, `apicurio.registry.auth.password`
+|Credentials for HTTP basic authentication.
+|None
+
+|`apicurio.registry.check-period-ms`
+|How long, in milliseconds, the resolver caches a schema before it checks {registry} again.
+|`30000`
+
+|`apicurio.registry.cache-latest`
+|Whether the resolver caches lookups that do not specify a version. Set it to `false` to fetch the latest version on every validation.
+|`true`
+
+|`apicurio.registry.find-latest`
+|Whether per-record `validate` resolves by artifact coordinates instead of schema content when no version is specified. Set it to `true` to use the latest version. The fixed-reference `validateByArtifactReference` method uses the latest version when no version is specified, regardless of this setting.
+|`false`
+
+|`apicurio.registry.retry-count`, `apicurio.registry.retry-backoff-ms`
+|Number of times the resolver retries a failed schema lookup, and the delay between retries in milliseconds.
+|`3`, `300`
+
+|`apicurio.registry.fault-tolerant-refresh`
+|Whether the resolver keeps a cached schema and logs the error when a refresh fails, instead of failing the validation.
+|`false`
+
+|`apicurio.registry.dereference-schema`
+|Whether the resolver asks {registry} for a dereferenced schema instead of fetching the referenced artifacts separately.
+|`false`
+
+|`apicurio.registry.vertx.instance`
+|A `Vertx` object that the resolver uses for HTTP connections. Set it programmatically to reuse a Vert.x instance that you manage. When it is not set, the {registry} Java SDK creates its own HTTP client, with Vert.x when it is available and the JDK HTTP client otherwise.
+|None
+|====
+
+The validators accept every property of the {registry} schema resolver. For the TLS and proxy properties, see {registry-client-serdes-config}. For the complete list, including the HTTP adapter and client retry properties, see the `SchemaResolverConfig` class in the schema resolver module.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-using-the-registry-client.adoc[Managing {registry} content using an SDK]
+* {registry-client-serdes-config}
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/schema-validation[Schema validation library source code]
+endif::[]

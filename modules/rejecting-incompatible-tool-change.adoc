@@ -1,0 +1,33 @@
+[id="rejecting-incompatible-tool-change_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Seeing a compatibility rule reject an incompatible tool change
+
+[role="_abstract"]
+A registry is more than a catalog: rules decide which changes are accepted. The demo `weather.get_forecast` tool has a `BACKWARD` compatibility rule, so a new version must accept every call that the previous version accepted. In this procedure, you try to make a new parameter required, which would break existing callers.
+
+.Prerequisites
+* The quick start stack is running
+* You are in the root directory of the {registry} repository
+
+.Procedure
+* Try to create version `2` of the tool, which adds a required `units` parameter:
++
+[source,bash]
+----
+curl -X POST http://localhost:8080/apis/registry/v3/groups/demo/artifacts/weather.get_forecast/versions \
+  -H "Content-Type: application/json" \
+  -d @distro/docker-compose/ai-agent-registry/test/get-forecast-v2-incompatible.json
+----
+
+.Verification
+. {registry} rejects the version with HTTP status `400`. The response names each incompatible change, including `A property was made 'required'.` at `/inputSchema/required/1`.
+. Check that the accepted version is unchanged:
++
+[source,bash]
+----
+curl http://localhost:8080/apis/registry/v3/groups/demo/artifacts/weather.get_forecast/versions
+----
++
+The tool has only version `1`. Agents that use this tool keep getting the definition that they were built against.
+
+// con-importing-tools-from-a-running-mcp-server

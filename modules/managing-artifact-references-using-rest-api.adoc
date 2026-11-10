@@ -1,0 +1,223 @@
+[id="managing-artifact-references-using-rest-api_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Managing schema and API artifact references using {registry} REST API commands
+
+[role="_abstract"]
+Some {registry} artifact types can include _artifact references_ from one artifact file to another. You can create efficiencies by defining reusable schema or API artifacts, and then referencing them from multiple locations in artifact references.
+
+The following artifact types support artifact references:
+
+* Apache Avro
+* Google Protobuf
+* JSON Schema
+* OpenAPI
+* AsyncAPI
+* XML Schema (XSD)
+* WSDL (1.1 and 2.0)
+
+For XSD and WSDL artifacts, the reference name must equal the literal value of the `schemaLocation`
+attribute (`xs:import`, `xs:include`, `xs:redefine`, and `xs:override`, including schemas embedded in WSDL
+`types`) or the `location` attribute (`wsdl:import`, and WSDL 2.0 `import` and `include`).
+An `xs:import` element that specifies only a `namespace`, without a `schemaLocation`, does not require a
+reference mapping.
+
+For the full list of artifact types that support references, and what each type supports, see
+ifndef::service-registry-downstream[]
+xref:getting-started/assembly-artifact-reference.adoc#registry-artifact-type-reference-support_{context}[Artifact reference support by type].
+endif::[]
+ifdef::service-registry-downstream[]
+xref:registry-artifact-type-reference-support_{context}[].
+endif::[]
+
+Use the Core Registry API v3 to add and retrieve an artifact reference in {registry}.
+
+This example first creates a schema artifact named `ItemId`:
+
+**ItemId schema**
+
+[source,json]
+----
+{
+    "namespace":"com.example.common",
+    "name":"ItemId",
+    "type":"record",
+    "fields":[
+        {
+            "name":"id",
+            "type":"int"
+        }
+    ]
+}
+----
+
+This example then creates a schema artifact named `Item`, which includes a reference to the nested `ItemId` artifact.
+
+**Item schema with nested ItemId schema**
+
+[source,json]
+----
+{
+    "namespace":"com.example.common",
+    "name":"Item",
+    "type":"record",
+    "fields":[
+        {
+            "name":"itemId",
+            "type":"com.example.common.ItemId"
+        }
+    ]
+}
+----
+
+**Dereference**
+
+In some situations, having an artifact's content with the referenced content inlined might be helpful. For those situations, the Core Registry API v3 supports the _references parameter_ in certain operations.
+
+Support for `DEREFERENCE` and `REWRITE` varies by artifact type. For the types that support each value, see
+ifndef::service-registry-downstream[]
+xref:getting-started/assembly-artifact-reference.adoc#registry-artifact-type-reference-support_{context}[Artifact reference support by type].
+endif::[]
+ifdef::service-registry-downstream[]
+xref:registry-artifact-type-reference-support_{context}[].
+endif::[]
+`DEREFERENCE` resolves references transitively. If the reference graph is deeper than `apicurio.storage.references.max-depth` (default `100`), the request returns HTTP `409`.
+
+NOTE: For Avro and Protobuf artifacts, requesting `references=REWRITE` returns HTTP `400`
+(`DereferencingNotSupportedException`).
+For XSD and WSDL artifacts, requesting `references=DEREFERENCE` returns HTTP `400`
+(`DereferencingNotSupportedException`). For those types, `REWRITE` replaces each mapped `schemaLocation` or
+`location` value with the {registry} content URL of the referenced artifact.
+
+.Prerequisites
+
+* {registry} is installed and running in your environment.
+
+.Procedure
+. Add the `ItemId` schema artifact that you want to create the nested artifact reference to using the `/groups/\{groupId\}/artifacts` operation:
++
+[source,bash]
+----
+$ curl -X POST MY-REGISTRY-URL/apis/registry/v3/groups/my-group/artifacts \
+   -H "Content-Type: application/json" \
+   -H "Authorization: Bearer $ACCESS_TOKEN" \
+   --data '{"artifactId":"ItemId","artifactType":"AVRO","firstVersion":{"version":"1.0.0","content":{"content":"{\"namespace\":\"com.example.common\",\"name\":\"ItemId\",\"type\":\"record\",\"fields\":[{\"name\":\"id\",\"type\":\"int\"}]}","contentType":"application/json"}}}'
+----
++
+* This example adds an Avro schema artifact with an artifact ID of `ItemId`. If you do not specify a unique artifact ID, {registry} generates one automatically as a UUID.
+* `MY-REGISTRY-URL` is the
+hostname on which {registry} is deployed. For example: `\http://localhost:8080`.
+* This example specifies a group ID of `my-group` in the API path. If you do not specify a unique group ID, you must specify `../groups/default` in the API path.
+
+. Verify that the response includes the expected JSON body to confirm that the artifact was added. For example:
++
+[source,bash]
+----
+{"artifact":{"owner":"","createdOn":"2024-09-26T16:27:38Z","modifiedBy":"","modifiedOn":"2024-09-26T16:27:38Z","artifactType":"AVRO","groupId":"my-group","artifactId":"ItemId"},"version":{"version":"1.0.0","owner":"","createdOn":"2024-09-26T16:27:38Z","artifactType":"AVRO","globalId":2,"state":"ENABLED","groupId":"my-group","contentId":2,"artifactId":"ItemId"}}
+----
+
+. Optional: Before you register the `Item` schema, use the `/content/references` operation to find the reference names that you must map:
++
+[source,bash]
+----
+$ curl -X POST "MY-REGISTRY-URL/apis/registry/v3/content/references?artifactType=AVRO" \
+   -H "Content-Type: application/json" \
+   -H "Authorization: Bearer $ACCESS_TOKEN" \
+   --data '{"content":"{\"namespace\":\"com.example.common\",\"name\":\"Item\",\"type\":\"record\",\"fields\":[{\"name\":\"itemId\",\"type\":\"com.example.common.ItemId\"}]}","contentType":"application/json"}'
+----
++
+The response lists each reference found in the content, with only the `name` field set. For this schema, the name is `com.example.common.ItemId`. If you omit the `artifactType` parameter, {registry} detects the type from the content.
+
+. Add the `Item` schema artifact that includes the artifact reference to the `ItemId` schema using the `/groups/\{groupId\}/artifacts` operation:
++
+[source,bash]
+----
+$ curl -X POST MY-REGISTRY-URL/apis/registry/v3/groups/my-group/artifacts \
+-H 'Content-Type: application/json' \
+-H "Authorization: Bearer $ACCESS_TOKEN" \
+--data-raw '{
+	"artifactId": "Item",
+	"artifactType": "AVRO",
+	"firstVersion": {
+		"version": "1.0.0",
+		"content": {
+			"content": "{\"namespace\":\"com.example.common\",\"name\":\"Item\",\"type\":\"record\",\"fields\":[{\"name\":\"itemId\",\"type\":\"com.example.common.ItemId\"}]}",
+			"contentType": "application/json",
+			"references": [
+				{
+					"name": "com.example.common.ItemId",
+					"groupId": "my-group",
+					"artifactId": "ItemId",
+					"version": "1.0.0"
+				}
+			]
+		}
+	}
+}'
+----
+
+. Verify that the response includes the expected JSON body to confirm that the artifact was created with the reference. For example:
++
+[source,bash]
+----
+{"artifact":{"owner":"","createdOn":"2024-09-26T16:28:45Z","modifiedBy":"","modifiedOn":"2024-09-26T16:28:45Z","artifactType":"AVRO","groupId":"my-group","artifactId":"Item"},"version":{"version":"1.0.0","owner":"","createdOn":"2024-09-26T16:28:45Z","artifactType":"AVRO","globalId":3,"state":"ENABLED","groupId":"my-group","contentId":3,"artifactId":"Item"}}
+----
+
+. Retrieve the artifact reference from {registry} by specifying the coordinates of the artifact that includes the reference:
++
+[source,bash]
+----
+$ curl -H "Authorization: Bearer $ACCESS_TOKEN" MY-REGISTRY-URL/apis/registry/v3/groups/my-group/artifacts/Item/versions/1.0.0/references
+----
+
+. Verify that the response includes the expected JSON body for this artifact reference. For example:
++
+[source,bash]
+----
+[{"groupId":"my-group","artifactId":"ItemId","version":"1.0.0","name":"com.example.common.ItemId"}]
+----
+
+. Optional: To list the versions that reference a version instead, add the `refType=INBOUND` query parameter. The following request lists the versions that reference `ItemId` version `1.0.0`, including the `Item` artifact that you created:
++
+[source,bash]
+----
+$ curl -H "Authorization: Bearer $ACCESS_TOKEN" "MY-REGISTRY-URL/apis/registry/v3/groups/my-group/artifacts/ItemId/versions/1.0.0/references?refType=INBOUND"
+----
+
+. Retrieve the dereferenced (inlined) schema content:
++
+[source,bash]
+----
+$ curl -H "Authorization: Bearer $ACCESS_TOKEN" MY-REGISTRY-URL/apis/registry/v3/groups/my-group/artifacts/Item/versions/1.0.0/content?references=DEREFERENCE
+----
+
+. Verify that the response includes the expected JSON body for this artifact content with the references inlined. For example:
++
+[source,bash]
+----
+{"type":"record","name":"Item","namespace":"com.example.common","fields":[{"name":"itemId","type":{"type":"record","name":"ItemId","fields":[{"name":"id","type":"int"}]}}]}
+----
++
+For the artifact types that support `references=DEREFERENCE`, see
+ifndef::service-registry-downstream[]
+xref:getting-started/assembly-artifact-reference.adoc#registry-artifact-type-reference-support_{context}[Artifact reference support by type].
+endif::[]
+ifdef::service-registry-downstream[]
+xref:registry-artifact-type-reference-support_{context}[].
+endif::[]
+For XSD and WSDL artifacts, dereferencing returns HTTP `400`.
++
+NOTE: For Protobuf artifacts, dereferencing content is supported only when all the schemas belong to the same package.
++
+NOTE: {registry} stores circular references between artifact versions. Reference resolution stops at a version that is already in the graph. The reference graph operation reports cycles in the `metadata.hasCycles` field. To reject circular references when you create a version, set the `INTEGRITY` rule to `NO_CIRCULAR_REFERENCES` or `FULL`.
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-rest-api}
+* {registry-client-serdes-config}
+
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_managing-registry-artifacts.adoc
+
+// proc-matching-references-using-rest-api

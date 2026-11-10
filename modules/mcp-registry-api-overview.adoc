@@ -1,0 +1,12 @@
+[id="mcp-registry-api-overview_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= MCP Registry API overview
+
+[role="_abstract"]
+The Model Context Protocol (MCP) Registry API is an experimental {registry} API for publishing and reading MCP server definitions. It is separate from the `mcp/` server module, which exposes {registry} operations as MCP tools.
+
+This Developer Preview targets {registry} 3.4.0. The internal Java package and specification directory use `v0` for the facade generation; the published upstream wire contract is explicitly `v0.1`. They are not separate served API versions.
+
+{registry} stores each published server definition as an artifact of type `MCP_SERVER`. The reverse-DNS server name maps to a group and an artifact ID. For example, `io.github.example/weather` maps to group `io.github.example` and artifact ID `weather`.
+
+// proc-enabling-mcp-registry-api

@@ -1,0 +1,26 @@
+[id="searching-version-content-console_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Searching version content in the web console
+
+[role="_abstract"]
+You can use the *Content* and *Structure* filters in the web console to search artifact versions without writing a REST request.
+
+.Prerequisites
+* You have enabled the search index and indexed artifact versions.
+* You have access to the {registry} web console.
+
+.Procedure
+. Open the *Search* page.
+. In the *Search for* field, select *Versions*.
+. In the filter selector, select *Content* or *Structure*.
+. Enter a search value, such as `customer` for content or `openapi:schema:Order` for structure, and press Enter to add the filter.
+. Optional: Add metadata filters, such as *Type* or *Group*, to narrow the results.
+
+.Verification
+* Check that the results include the expected artifact versions. Use *Refresh* to repeat the search after an index update.
+
+.Troubleshooting
+* If *Content* and *Structure* are unavailable, confirm that you selected *Versions* and that the application has search indexing enabled.
+
+
+// ref-registry-structure-search-formats

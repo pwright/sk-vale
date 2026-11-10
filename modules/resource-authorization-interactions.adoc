@@ -1,0 +1,58 @@
+[id="resource-authorization-interactions_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Interaction with other authorization features
+
+[role="_abstract"]
+Per-resource authorization is one of several authorization features in {registry}. The order in which {registry} evaluates them determines which callers bypass the access rules, and how owner access, anonymous access, and administrator access interact with the rules.
+
+For authenticated protected requests, the main checks are:
+
+[source]
+----
+Authentication
+  → Trusted proxy authorization        (only a proxy-header-authenticated request, when enabled)
+  → Admin override                     (bypasses everything below)
+  → RBAC                                (when enabled; authenticated read access skips the read-role check)
+  → Owner-only authorization (OBAC)     (when enabled)
+  → Per-resource authorization          (RBAC admins, and by default resource owners, bypass it)
+----
+
+Anonymous callers have a separate path: unprotected operations are permitted, and protected reads require anonymous-read access plus applicable access rules. Other anonymous operations are rejected. If no authentication backend is enabled, authorization is bypassed. Application-managed role-mapping endpoints also have a configuration guard requiring application-managed RBAC before the general bypasses.
+
+**RBAC**
+
+With RBAC enabled, RBAC administrators bypass per-resource authorization, and a user whose only Registry role is `sr-readonly` cannot write regardless of an ACL allow. Give users requiring writes the `sr-developer` role and use rules to choose the resources. With RBAC disabled, the `sr-admin` role name alone does not grant a bypass: configure admin override if that is intended. RBAC role names are configurable.
+
+**Resource owners**
+
+By default, an authenticated recorded owner bypasses access rules for the owned artifact or group, independently of owner-only authorization (`apicurio.auth.owner-only-authorization`). Earlier role checks still apply: owning a resource does not make a read-only role writable when RBAC is enabled. Set `apicurio.auth.resource-based-authorization.owner-bypass.enabled` to `false` to require an ACL allow from owners too. Missing resources, anonymous callers, and resources without an owner do not qualify for this bypass.
+
+Owners can see owned resources in search and read content used by owned artifacts. With Elasticsearch, the query receives at most 1000 owned artifact names resolved from primary storage, in addition to the names the rules permit. Owned artifacts outside that set can be omitted unless the rules also allow them. Index freshness can also affect results. Versions use their artifact's owner for access checks.
+
+Owner-only authorization is a separate write restriction, also applied to body-addressed targets such as Iceberg rename targets and published MCP servers. It permits missing or unowned resources, and exempts RBAC administrators. Groups are restricted by ownership only when `apicurio.auth.owner-only-authorization.limit-group-access=true`. Disabling owner bypass does not disable owner-only authorization, or vice versa.
+
+The creator of an artifact becomes its owner, but creating it requires `write` on both the group and the artifact name, so the owner bypass cannot be used to get around a deny on that name.
+
+**Anonymous and authenticated read access**
+
+These settings skip the RBAC check for reads; per-resource authorization still applies:
+
+* With `apicurio.auth.authenticated-read-access.enabled`, authenticated callers skip the read-role check, even without a Registry role. Resource rules and their applicable bypasses still decide access; write/admin role checks are unchanged.
+* With `apicurio.auth.anonymous-read-access.enabled`, unauthenticated callers get the role `$anonymous`. They can read only what the rules allow to that role, for example:
++
+[source]
+----
+allow Role with name = "$anonymous" to READ Artifact with name like "public/*";
+----
++
+An anonymous point read denied by the interceptor returns `401`. Indirect checks after that gate, such as a denied referenced artifact while dereferencing, can return `403`. This artifact rule alone does not allow reading or listing the `public` group itself; add a `READ Group` rule if that is required.
+
+**Registry-wide reports**
+
+When resource-based authorization is enforced, reports that cannot be filtered per resource, such as GitOps status and validation tasks, require a caller-wide bypass, such as an administrator. An ACL rule allowing every artifact does not itself grant that bypass. The endpoint's other authentication and role checks also apply.
+
+**Admin override and trusted proxy authorization**
+
+Users identified as administrators by the admin override (`apicurio.auth.admin-override.*`) bypass per-resource authorization. When `apicurio.authn.proxy-header.trust-proxy-authorization` is `true`, requests authenticated by proxy headers bypass all local authorization, including the access rules.
+
+// ref-resource-authorization-monitoring

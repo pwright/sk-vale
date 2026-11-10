@@ -1,0 +1,17 @@
+[id="enabling-mcp-registry-api_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Enabling the MCP Registry API
+
+[role="_abstract"]
+The MCP Registry API is an experimental feature, so you must enable experimental features and the API itself before {registry} serves it.
+
+.Procedure
+* Set both of the following configuration properties:
++
+[source,properties]
+----
+apicurio.features.experimental.enabled=true
+apicurio.mcp-registry.enabled=true
+----
+
+// ref-mcp-registry-api-operations

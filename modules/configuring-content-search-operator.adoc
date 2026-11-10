@@ -1,0 +1,69 @@
+[id="configuring-content-search-operator_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Configuring content search with the {operator}
+
+[role="_abstract"]
+You can configure the Elasticsearch connection in the `spec.app.searchIndex` section of an `ApicurioRegistry3` custom resource.
+
+.Prerequisites
+* You have installed the {operator} and created an `ApicurioRegistry3` custom resource.
+* You have an Elasticsearch cluster that the {registry} application pods can reach.
+* You have created a secret containing the Elasticsearch password in the same namespace as the custom resource, if Elasticsearch requires authentication.
+
+.Procedure
+. Add the search index configuration to your existing `registry.yaml` custom resource file:
++
+[source,yaml]
+----
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry3
+metadata:
+  name: my-registry
+spec:
+  app:
+    searchIndex:
+      enabled: true
+      hosts: "elasticsearch:9200"
+      indexName: "apicurio-registry"
+      username: "registry-search"
+      password:
+        name: elasticsearch-credentials
+        key: password
+----
++
+Preserve your existing storage and deployment settings. Replace the hostname, username, and secret reference with your values. Omit `username` and `password` if your cluster does not require authentication.
++
+The {operator} sets the environment variables for experimental features, search indexing, the Elasticsearch hosts, and any supplied credentials and index name. The password reference uses `name` and `key` directly under `password`.
+. If your cluster requires HTTPS, add the client protocol and certificate trust settings to your existing `spec.app.podTemplateSpec` configuration.
++
+For example, set the protocol on the application container:
++
+[source,yaml]
+----
+spec:
+  app:
+    podTemplateSpec:
+      spec:
+        containers:
+          - name: apicurio-registry-app
+            env:
+              - name: QUARKUS_ELASTICSEARCH_PROTOCOL
+                value: https
+----
+. Apply the updated custom resource:
++
+[source,bash,subs="attributes"]
+----
+{kubernetes-client} apply -f registry.yaml
+----
+
+.Verification
+* Check the application pod logs for connection or indexing errors, then search for an existing artifact version.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-deploying-registry-operator.adoc[Deploying with the {operator}]
+* link:https://quarkus.io/guides/elasticsearch[Quarkus Elasticsearch client configuration]
+
+
+// proc-searching-version-content-api

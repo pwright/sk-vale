@@ -1,0 +1,18 @@
+[id="configuring-resource-authorization_{context}_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Configuring per-resource authorization
+
+[role="_abstract"]
+Per-resource authorization controls access to individual groups and artifacts. For example, you can allow Alice to write artifacts in `team-a` and read artifacts in `shared`, without granting access to `team-b`. You define access rules in a file. {registry} combines these rules with configured role and ownership checks, and filters search and list results. Administrator and owner bypasses affect the outcome, as described in this guide.
+
+// con-resource-authorization-overview
+include::../modules/resource-authorization-overview.adoc[leveloffset=+1]
+include::../modules/enabling-resource-authorization.adoc[leveloffset=+1]
+include::../modules/resource-authorization-configuration.adoc[leveloffset=+1]
+include::../modules/resource-authorization-grants.adoc[leveloffset=+1]
+include::../modules/resource-authorization-coverage.adoc[leveloffset=+1]
+include::../modules/resource-authorization-permissions.adoc[leveloffset=+1]
+include::../modules/resource-authorization-use-cases.adoc[leveloffset=+1]
+include::../modules/resource-authorization-interactions.adoc[leveloffset=+1]
+include::../modules/resource-authorization-monitoring.adoc[leveloffset=+1]
+include::../modules/resource-authorization-troubleshooting.adoc[leveloffset=+1]

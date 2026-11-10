@@ -1,0 +1,48 @@
+[id="exploring-demo-catalog_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Discovering agents and tools in the demo catalog
+
+[role="_abstract"]
+AI agents and orchestrators find agents and tools in {registry} through well-known discovery endpoints, without knowing the group or artifact ID in advance.
+
+.Prerequisites
+* The quick start stack is running
+
+.Procedure
+. Find the agents that have a translation skill:
++
+[source,bash]
+----
+curl "http://localhost:8080/.well-known/agents?skill=translation"
+----
++
+The response lists the `translator-agent` agent card.
++
+. Retrieve the Agentic Resource Discovery (ARD) catalog, which lists every agent and tool that {registry} publishes:
++
+[source,bash]
+----
+curl http://localhost:8080/.well-known/ard.json
+----
++
+. Search the catalog by name:
++
+[source,bash]
+----
+curl -X POST http://localhost:8080/.well-known/ard/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": {"text": "transla"}}'
+----
++
+The `results` list contains the *Translation Agent*.
++
+. List the tools that the `weather` MCP server provides:
++
+[source,bash]
+----
+curl http://localhost:8080/apis/registry/v3/groups/demo/artifacts/weather/versions/1/references
+----
++
+The server version references `weather.get_forecast` version `1`.
+
+// proc-connecting-an-ai-assistant-by-using-mcp

@@ -1,0 +1,131 @@
+[id="validating-avro-with-schema-validation-library_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Validating Avro data against an Avro schema artifact
+
+[role="_abstract"]
+You can validate Avro `GenericRecord` objects or JSON-encoded Avro data against an Avro schema artifact that is stored in {registry} by using the `AvroValidator` class.
+
+`GenericRecord` validation performs partial checks. It skips primitive type checks, accepts a union when any branch reports no errors, and does not reject a non-collection value for an array or a non-map value for a map. For example, a record whose own schema declares `time` as a string can pass against a registered `long` field. A successful result does not establish full schema conformance.
+
+The JSON `String` overload instead decodes the data against the registered schema and reports decoding failures, including primitive type mismatches.
+
+The examples in this procedure use the following Avro schema, saved as `message.avsc` in the working directory of the application and registered in the `default` group with the artifact ID `message-avro`:
+
+[source,json]
+----
+{
+  "type": "record",
+  "name": "Message",
+  "namespace": "com.example",
+  "fields": [
+    { "name": "message", "type": "string" },
+    { "name": "time", "type": "long" }
+  ]
+}
+----
+
+.Prerequisites
+* {registry} is installed and running in your environment.
+* An Avro schema artifact is registered in {registry}, and you know its group ID and artifact ID.
+* You have a Maven project for your Java application.
+
+.Procedure
+. Add the Avro validation module to your Maven project:
++
+[source,xml,subs="+quotes,attributes"]
+----
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-schema-validation-avro</artifactId>
+    <version>${apicurio-registry.version}</version>
+</dependency>
+----
+
+. Create the validator with the {registry} URL and an artifact reference for the schema:
++
+[source,java]
+----
+import io.apicurio.registry.resolver.config.SchemaResolverConfig;
+import io.apicurio.registry.resolver.strategy.ArtifactReference;
+import io.apicurio.schema.validation.avro.AvroValidator;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+Map<String, Object> config = new HashMap<>();
+config.put(SchemaResolverConfig.REGISTRY_URL, "http://localhost:8080/apis/registry/v3");
+
+ArtifactReference reference = ArtifactReference.builder()
+        .groupId("default")
+        .artifactId("message-avro")
+        .build();
+
+AvroValidator validator = new AvroValidator(config, Optional.of(reference));
+----
+
+. Validate a `GenericRecord` that conforms to the schema:
++
+[source,java]
+----
+import io.apicurio.schema.validation.ValidationResult;
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericRecord;
+
+import java.io.File;
+
+Schema schema = new Schema.Parser().parse(new File("message.avsc"));
+
+GenericRecord payload = new GenericData.Record(schema);
+payload.put("message", "Hello world");
+payload.put("time", System.currentTimeMillis());
+
+ValidationResult result = validator.validateByArtifactReference(payload);
+System.out.println(result);
+----
++
+The output is `ValidationResult [ success ]`. When a field that the registered schema requires is missing from the record, the result contains an error whose context is the field path and whose description is `Missing required field: <name>`.
+
+. Validate JSON-encoded data that violates the schema and read the errors:
++
+[source,java]
+----
+import io.apicurio.schema.validation.ValidationError;
+
+String invalidJson = "{\"message\": \"Hello world\", \"time\": \"not-a-number\"}";
+
+ValidationResult invalidResult = validator.validateByArtifactReference(invalidJson);
+if (!invalidResult.success()) {
+    for (ValidationError error : invalidResult.getValidationErrors()) {
+        System.out.println(error.getContext() + ": " + error.getDescription());
+    }
+}
+----
++
+The output is `TYPE_ERROR: Expected long. Got VALUE_STRING`. The `String` overload decodes the JSON with the registered schema, so the context is `TYPE_ERROR` for a type mismatch and `VALIDATION_ERROR` for any other decoding problem.
+
+. Optional: To choose the schema for each record at run time, wrap the record in a `SchemaValidationRecord` and call `validate`:
++
+[source,java]
+----
+import io.apicurio.schema.validation.SchemaValidationMetadata;
+import io.apicurio.schema.validation.SchemaValidationRecord;
+
+SchemaValidationRecord<GenericRecord> record = new SchemaValidationRecord<>(
+        payload, new SchemaValidationMetadata(reference));
+
+ValidationResult recordResult = validator.validate(record);
+----
++
+The `validate` method accepts `GenericRecord` payloads only. To validate JSON-encoded Avro data, call `validateByArtifactReference` instead.
+
+.Verification
+* Run the application. The conforming record prints `ValidationResult [ success ]`, and the invalid JSON prints one error with the context `TYPE_ERROR`.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:schema-validation-library-reference_{context}[]
+* {managing-registry-artifacts-api}
+
+// proc-validating-protobuf-with-schema-validation-library

@@ -1,0 +1,27 @@
+[id="resource-authorization-overview_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Per-resource authorization overview
+
+[role="_abstract"]
+Per-resource authorization restricts which groups and artifacts each user or role can read, write, or administer. It can be used with optional role-based access control (RBAC) and owner-only authorization (OBAC).
+
+The following checks have distinct purposes:
+
+* **Role-based access control (RBAC):** coarse-grained global roles (`sr-readonly`, `sr-developer`, `sr-admin`), typically assigned by an identity provider such as {keycloak}.
+* **Owner-only authorization (OBAC):** when enabled, restricts writes to owned or unowned resources. Group ownership restrictions require a separate setting.
+* **Per-resource authorization:** fine-grained access to individual groups and artifacts, defined in an access rules file and evaluated after enabled RBAC and OBAC checks, unless an administrator or owner bypass applies.
+
+A request must pass every applicable check. With RBAC enabled, an access rule cannot override a role denial. RBAC is disabled by default (`apicurio.auth.role-based-authorization=false`) and is not a prerequisite for access rules. Authentication must be enabled separately.
+
+The access rules file uses the Kroxylicious ACL rules format, which Kroxylicious and StreamsHub also use. {registry} reads the file with the Kroxylicious rules parser and evaluates it itself, with the semantics described in this guide.
+
+**How it works**
+
+* **Point access** (reading, writing, or deleting a specific group or artifact): {registry} matches the identity and roles of the user against the rules for the addressed resource.
+* **Search and lists:** for paginated searches, {registry} translates supported access rules into the storage query before selecting and counting the page. Counts and offsets apply to the filtered result set. Regular-expression rules and indexed searches have the limitations described below; results from separate requests are not a shared snapshot.
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/kroxylicious/design/blob/main/proposals/009-authorizer.md[Kroxylicious ACL rules format (proposal 009)]
+
+// proc-enabling-resource-authorization

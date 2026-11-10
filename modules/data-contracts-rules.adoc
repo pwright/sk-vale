@@ -1,0 +1,47 @@
+[id="data-contracts-rules_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Contract rules
+
+[role="_abstract"]
+Contract rules define validation and transformation logic associated with artifacts or specific versions. Rules are organized into *domain rules* (business logic) and *migration rules* (schema evolution).
+
+When you submit an ODCS contract, its `quality.accuracy` rules are automatically projected as CEL domain rules on the referenced schema artifact.
+
+Contract rules are evaluated server-side by the rule execution REST endpoint, and client-side by the Java Kafka SerDes. Both merge the global, artifact-level, and version-level rules in the same way (see <<data-contracts-global-rules_{context}>>).
+
+Rules are classified by kind:
+
+`CONDITION`:: Validates a condition and either passes or fails.
+`TRANSFORM`:: Modifies data. If the output is a map, it is passed to the next rule.
+
+Rules run in one of the following modes:
+
+`WRITE`:: Executes on serialize (producer side).
+`READ`:: Executes on deserialize (consumer side).
+`WRITEREAD`:: Executes on both. A rule with no mode also matches any mode.
+`UPGRADE` / `DOWNGRADE`:: Executes during schema migration.
+
+{registry} supports the following rule types. Rules of any other type are skipped with a warning.
+
+`CEL`:: Common Expression Language for validation conditions and simple transforms, implemented with the `cel-standalone` library. Supports the full CEL specification, including `has()`, `size()`, `contains()`, `startsWith()`, parenthesized grouping, and ternary expressions. Each top-level field of the record is a CEL variable: write `totalAmount > 0`, not `record.totalAmount` or `message.totalAmount`. References to fields of nested records fail with an "undeclared reference" error.
+`JSONATA`:: JSONata expressions for data transformation. Supports both `CONDITION` and `TRANSFORM` (returns transformed data) kinds. Useful for schema migration transforms.
+
+Rules are evaluated as follows:
+
+. Disabled rules, and rules whose mode does not match, are skipped.
+. The remaining rules run in the order in which they are listed in the ruleset.
+. A `CONDITION` rule passes only if its result is exactly the boolean `true`, for both CEL and JSONata. Compilation and evaluation errors count as failures.
+. When a rule fails, a violation is recorded. The overall result is failed (`passed=false`) whatever the `onFailure` action.
+
+The `onFailure` action controls whether evaluation continues after a failure:
+
+`NONE`:: Evaluation continues with the next rule.
+`ERROR`:: Evaluation stops.
+`DLQ`:: Evaluation continues with the next rule. No dead letter queue routing is implemented.
+
+How a failed result affects Kafka clients depends on the SerDes `fail-on-error` setting, not on the `onFailure` action.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:data-contracts-serdes_{context}[]
+

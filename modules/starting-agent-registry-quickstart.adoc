@@ -1,0 +1,51 @@
+[id="starting-agent-registry-quickstart_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Starting the agent registry quick start
+
+[role="_abstract"]
+You can start {registry} with the agent features enabled, the web console, and a demo catalog by using one Docker Compose command. The stack stores its data in PostgreSQL, so the catalog survives a restart.
+
+IMPORTANT: The quick start stack is for local evaluation only. It has no authentication, and its database password is a fixed demo value. The agent features are experimental, and the stack uses the `latest-snapshot` images, which contain the most recent development build.
+
+.Prerequisites
+* Docker with Docker Compose v2 is installed
+* `git` and `curl` are installed
+
+.Procedure
+. Clone the {registry} repository and change to its directory:
++
+[source,bash]
+----
+git clone https://github.com/Apicurio/apicurio-registry.git
+cd apicurio-registry
+----
++
+. Start the stack:
++
+[source,bash]
+----
+docker compose -f distro/docker-compose/ai-agent-registry/docker-compose.yml up -d
+----
++
+The stack starts PostgreSQL, {registry} with the agent features enabled, and the web console. A `seed` container then loads the demo catalog into the `demo` group and exits.
+
+.Verification
+. Check that the demo catalog is loaded:
++
+[source,bash]
+----
+docker compose -f distro/docker-compose/ai-agent-registry/docker-compose.yml logs seed
+----
++
+The output ends with `Demo catalog ready in group 'demo'.` The catalog contains the following artifacts:
++
+* `weather`: an `MCP_SERVER` that references its `get_forecast` tool
+* `weather.get_forecast`: an `MCP_TOOL` with a `BACKWARD` compatibility rule
+* `translator-agent` and `sentiment-agent`: `AGENT_CARD` artifacts
+* `support-reply`: a `PROMPT_TEMPLATE`
++
+The seed container loads only the artifacts that do not exist yet, so restarting the stack does not change the catalog.
++
+. Open the web console at `http://localhost:8888` and browse the `demo` group. The *Agents* tab lists the two agent cards.
+
+// proc-exploring-the-demo-catalog

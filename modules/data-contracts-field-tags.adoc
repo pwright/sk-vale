@@ -1,0 +1,38 @@
+[id="data-contracts-field-tags_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Field-level tags
+
+[role="_abstract"]
+Field tags provide semantic annotation of schema fields, enabling you to identify sensitive data and apply tag-based governance.
+
+Field tags are stored as version labels. They come from two sources:
+
+Inline tags:: Declared in the schema content (see <<data-contracts-field-tags-formats_{context}>>). When a version is created through the Core Registry API v3, they are stored as `field-tag.\{fieldPath}|\{tagName}` labels with value `INLINE`. Labels submitted with the version take precedence over extracted tags with the same key. Versions created through the Confluent Schema Registry compatibility API, and draft content updates, do not get inline tags.
+External tags:: Projected from ODCS contracts as `field-tag.\{contractId}:\{fieldPath}|\{tagName}` labels with value `EXTERNAL`, or set manually by using the version labels API.
+
+The following tag names are commonly used:
+
+.Common field tags
+[cols="1,3", options="header"]
+|===
+|Tag |Meaning
+
+|`PII`
+|Personally Identifiable Information
+
+|`SENSITIVE`
+|Sensitive data requiring special handling
+
+|`EMAIL`
+|Email address fields
+
+|`PHONE`
+|Phone number fields
+
+|`FINANCIAL`
+|Financial data
+
+|`HEALTH`
+|Health-related data (PHI)
+|===
+
