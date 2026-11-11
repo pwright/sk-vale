@@ -1,0 +1,58 @@
+[id="evaluation-semantics_{context}"]
+= Evaluation semantics
+
+
+The `options.evaluations_semantic` field controls how {project_name} processes the batch. Three semantics are supported:
+
+[cols="1,3",options="header"]
+|===
+|Semantic |Behavior
+
+|`execute_all`
+|Evaluates all items and returns all decisions. This is the default.
+
+|`deny_on_first_deny`
+|Stops processing on the first denied item. The response includes decisions up to and including the denial, with a
+`context` containing `"reason": "deny_on_first_deny"` on the denied item.
+
+|`permit_on_first_permit`
+|Stops processing on the first permitted item. The response includes decisions up to and including the permit.
+|===
+
+The example request below shows the expected response when `deny_on_first_deny` semantics are requested.
+
+[source,json]
+----
+{
+  "subject": {
+    "type": "user",
+    "id": "alice"
+  },
+  "options": {
+    "evaluations_semantic": "deny_on_first_deny"
+  },
+  "evaluations": [
+    {
+      "resource": { "type": "document", "id": "public-doc" },
+      "action": { "name": "read" }
+    },
+    {
+      "resource": { "type": "document", "id": "restricted-doc" },
+      "action": { "name": "read" }
+    }
+  ]
+}
+----
+
+If the second item is denied, the response stops there:
+
+[source,json]
+----
+{
+  "evaluations": [
+    { "decision": true },
+    { "decision": false, "context": { "reason": "deny_on_first_deny" } }
+  ]
+}
+----
+

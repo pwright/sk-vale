@@ -1,0 +1,28 @@
+[id="_standard-token-exchange-comparison_{context}"]
+= Comparison of standard token exchange and legacy token exchange
+
+
+While the preceding sections fully detail standard and legacy token exchange, the following is an overall summary that compares the two token exchange methods.
+
+[cols="3*", options="header"]
+|===
+|Capability |Standard token exchange V2 |Legacy token exchange V1
+s|Internal-internal token exchange | Supported. Implemented as per RFC 8693 | Preview support. Loose implementation of RFC 8693. It is recommended to use V2 instead
+s|Allowed `subject_token_type`     | Access token type only   | Access token type only for internal-internal, JWT for external-internal scenarios
+s|Allowed `requested_token_type`   | Access token (default), Refresh token, ID token | Access token, Refresh token (default), SAML 2.0 assertion
+s|Behavior of `scope` parameter   | Aligned with other grants. Scope parameter means requesting optional scopes of the client, which sent the token exchange request  | Scope parameter based on the scopes of
+the "target" client specified by audience parameter. Downscoping support only
+s|Behavior of `audience` parameter   | Support for more values as per the specification. It can be used to narrow down the available audiences and keep only the requested audiences. Effectively downscoping the token per
+the required target audience | Support for single audience value. Token effectively issued to the client requested by the audience parameter and using the scopes of that client
+s|Public clients  | Not available. Downscoping implemented by V1 can be replaced by refresh token grant| Available only to exchange token of the client itself. Effectively downscoping support only
+s|Consents        | Allowed for clients with `Consent required` as long as the user is already granted consent | Not allowed for clients with *Consent required*
+s|Authorization  | Verification that the requester client must be in the audience of the `subject_token`. Integration with client policies. No Fine-grained admin permissions | Based on fine-grained admin permissions version 1
+s|Revocation chain | Not available for access tokens. Available for refresh tokens   | Not available for access nor refresh tokens
+s|Sender-constrained tokens (DPoP, mTLS) | Supported. See link:{links_securing-apps_dpop_url}[{links_securing-apps_dpop_name}]. | Not supported. The exchanged token is issued without any binding.
+s|Delegation per RFC 8693|Preview support via <<_token-exchange-delegation,Token Exchange Delegation>>|Not supported
+s|Resource parameter per RFC 8693|Not supported yet|Not supported
+s|Internal to external Token Exchange | Identity brokering APIs can be used instead. See link:{developerguide_link}#_identity-brokering-apis[Identity Brokering APIs] for more information. | Implemented as a preview
+s|External to internal Token Exchange | Use-case implemented by Standard Token Exchange V2 and JWT Authorization Grant. See link:{links_securing-apps_oauth-identity-authorization-chaining-across-domains_url}[{links_securing-apps_oauth-identity-authorization-chaining-across-domains_name}] for more information. | Implemented as a preview
+s|Subject impersonation (including direct naked impersonation)   | Not implemented yet | Implemented as a preview
+|===
+

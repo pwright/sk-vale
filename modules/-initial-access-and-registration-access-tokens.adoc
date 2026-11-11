@@ -1,0 +1,47 @@
+[id="_initial_access_and_registration_access_tokens_{context}"]
+= Initial Access and Registration Access Tokens
+
+
+Developers who do not have an account configured at the {project_name} server they want to use can use the Client Registration CLI. This is possible only when the realm administrator issues a developer an Initial Access Token. It is up to the realm administrator to decide how and when to issue and distribute these tokens. The realm administrator can limit the maximum age of the Initial Access Token and the total number of clients that can be created with it.
+
+Once a developer has an Initial Access Token, the developer can use it to create new clients without authenticating with [command]`kcreg config credentials`. The Initial Access Token can be stored in the configuration file or specified as part of the [command]`kcreg create` command.
+
+For example, on:
+
+* Linux:
+[options="nowrap"]
+----
+$ kcreg.sh config initial-token $TOKEN
+$ kcreg.sh create -s clientId=myclient
+----
+
+or
+
+[options="nowrap"]
+----
+$ kcreg.sh create -s clientId=myclient -t $TOKEN
+----
+
+* Windows:
+[options="nowrap"]
+----
+c:\> kcreg config initial-token %TOKEN%
+c:\> kcreg create -s clientId=myclient
+----
+
+or
+
+[options="nowrap"]
+----
+c:\> kcreg create -s clientId=myclient -t %TOKEN%
+----
+
+When using an Initial Access Token, the server response includes a newly issued Registration Access Token. Any subsequent operation for that client needs to be performed by authenticating with that token, which is only valid for that client.
+
+The Client Registration CLI automatically uses its private configuration file to save and use this token with its associated client. As long as the same configuration file is used for all client operations, the developer does not need to authenticate to read, update, or delete a client that was created this way.
+
+See link:{links_securing-apps_client-registration_url}#_authentication[{links_securing-apps_client-registration_name}] for more information about Initial Access and Registration Access Tokens.
+
+Run the [command]`kcreg config initial-token --help` and [command]`kcreg config registration-token --help` commands for more information on how to configure tokens with the Client Registration CLI.
+
+

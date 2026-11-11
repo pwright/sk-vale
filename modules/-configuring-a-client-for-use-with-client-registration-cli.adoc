@@ -1,0 +1,29 @@
+[id="_configuring_a_client_for_use_with_client_registration_cli_{context}"]
+= Configuring a client for use with the Client Registration CLI
+
+
+By default, the server recognizes the Client Registration CLI as the [filename]`admin-cli` client, which is configured automatically for every new realm. No additional client configuration is necessary when logging in with a user name.
+
+.Procedure
+
+. Create a client (for example, [filename]`reg-cli`) if you want to use a separate client configuration for the Client Registration CLI.
+. Uncheck *Standard Flow Enabled*.
+. Strengthen the security by toggling *Client authentication* to *On*.
+. Choose the type of account that you want to use.
+.. If you want to use a service account associated with the client, check *Service accounts roles*.
+.. If you prefer to use a regular user account, check *Direct access grants*.
+. Click *Next*.
+. Click *Save*.
+. Click the *Credentials* tab.
++
+Configure either [filename]`Client Id and Secret` or [filename]`Signed JWT`.
+. If you are using service account roles, click the *Service Account Roles* tab.
++
+Select the roles to configure the access for the service account. For the details on what roles to select, see <<_configuring_a_user_for_client_registration_cli>>.
+. Click *Save*.
+
+When you run the [command]`kcreg config credentials`, use the [command]`--secret` option to supply the configured secret.
+
+* Specify which [filename]`clientId` to use (for example, [command]`--client reg-cli`) when running [command]`kcreg config credentials`.
+* With the service account enabled, you can omit specifying the user when running [command]`kcreg config credentials` and only provide the client secret or keystore information.
+

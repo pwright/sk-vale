@@ -1,0 +1,19 @@
+[id="haproxy-passthrough_{context}"]
+= HAProxy with TLS passthrough
+
+
+
+
+This {section} describes how to configure link:https://www.haproxy.com/[HAProxy] as a TLS passthrough load balancer in front of {project_name}.
+
+In TLS passthrough mode, HAProxy forwards the raw TLS connection directly to {project_name} without terminating it.
+HAProxy operates at the TCP layer (Layer 4) and has no visibility into the HTTP content.
+The TLS handshake occurs between the client and {project_name}, preserving end-to-end encryption.
+
+For a general overview of TLS passthrough and how it compares to re-encrypt, see the link:{links_server_reverseproxy_url}[{links_server_reverseproxy_name}] {section}.
+
+A ready-to-run example with a Compose file is available in the link:https://github.com/keycloak/keycloak-quickstarts/tree/main/proxy/haproxy/passthrough[quickstart repository].
+
+include::../modules/haproxy-configuration-passthrough.adoc[leveloffset=+1]
+include::../modules/keycloak-configuration-haproxy-passthrough.adoc[leveloffset=+1]
+include::../modules/graceful-shutdown-considerations-haproxy-passthrough.adoc[leveloffset=+1]

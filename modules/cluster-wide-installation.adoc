@@ -1,0 +1,31 @@
+[id="cluster_wide_installation_{context}"]
+= Cluster-wide installation
+
+
+A single {project_name} Operator can reconcile custom resources in all namespaces in the cluster. This avoids running one Operator per namespace while still allowing {project_name} instances to be deployed in separate namespaces.
+
+The Operator supports the following OLM install modes (`MultiNamespace` is not supported):
+
+[cols="1,2",options="header"]
+|===
+| Install mode | Operator watches
+
+| `OwnNamespace`
+| The namespace where the Operator is installed
+
+| `SingleNamespace`
+| One namespace other than the Operator namespace
+
+| `AllNamespaces`
+| All namespaces in the cluster
+|===
+
+Install the cluster-wide Operator in a dedicated namespace rather than converting an existing single-namespace installation.
+
+[WARNING]
+====
+*Preview support*
+
+Cluster-wide installation is supported for common scenarios, but it is still considered in preview.
+====
+

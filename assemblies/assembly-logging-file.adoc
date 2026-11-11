@@ -1,0 +1,420 @@
+[id="logging-file_{context}"]
+= File logging
+
+
+
+
+As an alternative to logging to the console, you can use structured/unstructured logging to a file stored in the filesystem.
+The more specific file handler configuration mentioned below will only take effect when the file logging is enabled.
+
+== Enable file logging
+Logging to a file is disabled by default. To enable it, enter the following command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,file"
+----
+
+A log file named `keycloak.log` is created inside the `data/log` directory of your {project_name} installation.
+
+== Configuring the location and name of the log file
+
+To change where the log file is created and the file name, perform these steps:
+
+. Create a writable directory to store the log file.
++
+If the directory is not writable, {project_name} starts correctly, but it issues an error and no log file is created.
+
+. Enter this command:
++
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,file" --log-file=<path-to>/<your-file.log>
+----
+
+== Configuring the file handler format
+To configure a different logging format for the file log handler, enter the following command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-file-format="<pattern>"
+----
+
+See link:{links_server_logging-console_url}#console-log-format[{links_server_logging-console_name}] for more information and a table of the available pattern configuration.
+
+== Configuring the file log level
+Log level for file log handler can be specified by `--log-file-level` property as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log-file-level=warn
+----
+
+For more information, see link:{links_server_logging_url}#specify-log-level-each-handler[{links_server_logging_name}].
+
+== Log file rotation
+
+By default, log file rotation is enabled. The log file is rotated when its size exceeds 10 MB, and up to 5 backup files are kept.
+The log file is also rotated on server start by default.
+
+To disable log file rotation entirely, use the following configuration:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,file" --log-file-rotation-enabled=false
+----
+
+=== Configure rotation settings
+
+To change the maximum log file size before rotation:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,file" --log-file-rotation-max-file-size=50M
+----
+
+To change the number of backup files to keep:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,file" --log-file-rotation-max-backup-index=3
+----
+
+To disable rotation on server start, while keeping size-based rotation:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,file" --log-file-rotation-rotate-on-boot=false
+----
+
+To enable time-based rotation (e.g. daily), set a date-time format suffix:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --log="console,file" --log-file-rotation-file-suffix=.yyyy-MM-dd
+----
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log-file-format+`# 
+
+[.options-description]#Set a format specific to file log entries.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-format+` +
+*Env:* `+KC_LOG_FILE_FORMAT+`
+--
+
+Available only when File log handler is activated
+
+
+|_String_
+
+|
+`+%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n+`
+
+|
+[.options-key]#`+log-file-include-mdc+`# 
+
+[.options-description]#Include MDC information in the file log.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-file-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-file-include-mdc+` +
+*Env:* `+KC_LOG_FILE_INCLUDE_MDC+`
+--
+
+Available only when File log handler and MDC logging are activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-file-include-trace+`# 
+
+[.options-description]#Include tracing information in the file log.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `log-file-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-file-include-trace+` +
+*Env:* `+KC_LOG_FILE_INCLUDE_TRACE+`
+--
+
+Available only when File log handler and Tracing is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-file-json-format+`# 
+
+[.options-description]#Set the format of the produced JSON.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-json-format+` +
+*Env:* `+KC_LOG_FILE_JSON_FORMAT+`
+--
+
+Available only when File log handler is activated and output is set to 'json'
+
+
+|
+`+default+`, `+ecs+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-file-level+`# 
+
+[.options-description]#Set the log level for the file handler.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#It specifies the most verbose log level for logs shown in the output. It respects levels specified in the `log-level` option, which represents the maximal verbosity for the whole logging system. For more information, check the Logging guide.#
+
+
+
+*CLI:* `+--log-file-level+` +
+*Env:* `+KC_LOG_FILE_LEVEL+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+log-file-output+`# 
+
+[.options-description]#Set the log output to JSON or default (plain) unstructured logging.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-output+` +
+*Env:* `+KC_LOG_FILE_OUTPUT+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+default+`, `+json+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-file-rotation-enabled+`# 
+
+[.options-description]#Enables log file rotation.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-rotation-enabled+` +
+*Env:* `+KC_LOG_FILE_ROTATION_ENABLED+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-file-rotation-file-suffix+`# 
+
+[.options-description]#Set the log file handler rotation file suffix.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#When used, the file will be rotated based on its suffix. Example: `.yyyy-MM-dd` to rotate daily. Note: If the suffix ends with `.zip` or `.gz`, the rotation file will also be compressed.#
+
+
+
+*CLI:* `+--log-file-rotation-file-suffix+` +
+*Env:* `+KC_LOG_FILE_ROTATION_FILE_SUFFIX+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+log-file-rotation-max-backup-index+`# 
+
+[.options-description]#The maximum number of backup log files to keep.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-rotation-max-backup-index+` +
+*Env:* `+KC_LOG_FILE_ROTATION_MAX_BACKUP_INDEX+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|_Integer_
+
+|
+`+5+`
+
+|
+[.options-key]#`+log-file-rotation-max-file-size+`# 
+
+[.options-description]#The maximum log file size, after which a rotation is executed.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Supports size suffixes (e.g. 10M, 1G).#
+
+
+
+*CLI:* `+--log-file-rotation-max-file-size+` +
+*Env:* `+KC_LOG_FILE_ROTATION_MAX_FILE_SIZE+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|_String_
+
+|
+`+10M+`
+
+|
+[.options-key]#`+log-file-rotation-rotate-on-boot+`# 
+
+[.options-description]#Indicates whether to rotate log files on server start.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-rotation-rotate-on-boot+` +
+*Env:* `+KC_LOG_FILE_ROTATION_ROTATE_ON_BOOT+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+
+|===
+
+== Asynchronous
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log-file-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to file log.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not set, value from the parent property `log-async` is used.#
+
+
+
+*CLI:* `+--log-file-async+` +
+*Env:* `+KC_LOG_FILE_ASYNC+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-file-async-queue-length+`# 
+
+[.options-description]#The queue length to use before flushing writing when logging to file log.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-async-queue-length+` +
+*Env:* `+KC_LOG_FILE_ASYNC_QUEUE_LENGTH+`
+--
+
+Available only when File log handler is activated and asynchronous logging is enabled
+
+
+|_Integer_
+
+|
+`+512+`
+
+
+|===
+
+
+

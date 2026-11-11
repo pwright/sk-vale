@@ -1,0 +1,35 @@
+[id="_token_introspection_endpoint_{context}"]
+= Introspection endpoint
+
+....
+/realms/{realm-name}/protocol/openid-connect/token/introspect
+....
+
+The introspection endpoint is used to retrieve the active state of a token. In other words, you can use it to validate an access or refresh token.
+This endpoint can only be invoked by confidential clients.
+
+For more details on how to invoke on this endpoint, see https://datatracker.ietf.org/doc/html/rfc7662[OAuth 2.0 Token Introspection specification].
+
+
+**Introspection endpoint triggered with application/jwt header**
+
+
+WARNING: The functionality of invoking introspection endpoint with `Accept: application/jwt` header is deprecated now and will be removed in the future. Please
+use link:{links_securing-apps_token-exchange_url}[{links_securing-apps_token-exchange_name}] {section}.
+
+You can invoke an introspection endpoint with the HTTP header `Accept: application/jwt` instead of `Accept: application/json`. In case of `application/jwt`, the response
+may contain the additional claim `jwt` with the full JWT access token, which can be useful especially if the token to be introspected was a link:{adminguide_link}#_using_lightweight_access_token[lightweight access token]. This requires that you enable `Support JWT claim in Introspection Response`
+on the client advanced settings, which triggers the token introspection.
+
+
+**Dynamic Client Registration endpoint**
+
+....
+/realms/{realm-name}/clients-registrations/openid-connect
+....
+
+The dynamic client registration endpoint is used to dynamically register clients.
+
+For more details, see the link:{links_securing-apps_client-registration_url}[{links_securing-apps_client-registration_name}] {section} and the
+https://openid.net/specs/openid-connect-registration-1_0.html[OpenID Connect Dynamic Client Registration specification].
+

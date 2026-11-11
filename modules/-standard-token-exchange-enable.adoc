@@ -1,0 +1,12 @@
+[id="_standard-token-exchange-enable_{context}"]
+= How to enable token exchange
+
+
+For standard token exchange, `token-exchange-standard:v2` is enabled by default.  However, you also need to enable the *Standard token exchange* switch for
+the client that is supposed to send token exchange requests, such as the `requester-client` from the <<_standard-token-exchange-flow,previous example>>. Note that `requester-client` must be a confidential client.
+Also, as is the case for other grant requests, the token exchange requests must be authenticated by the appropriate link:{adminguide_link}#_client-credentials[client authentication method] that is configured
+for the client.
+
+.Enabling Token Exchange
+image::token-exchange-switch.png[Enabling Token Exchange]
+

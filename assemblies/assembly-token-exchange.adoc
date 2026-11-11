@@ -1,0 +1,43 @@
+[id="token-exchange_{context}"]
+= Configuring and using token exchange
+
+
+
+
+Token exchange is the process that allows a client application to exchange one token for another token. In {project_name}, two features implement token exchange:
+
+* <<_standard-token-exchange,Standard token exchange: version 2 (V2)>> - This feature is the fully supported token exchange implementation that is enabled by default once the {project_name} server is started.
+* <<_legacy-token-exchange,Legacy token exchange: version 1 (V1)>> - This preview feature is deprecated and not enabled by default once {project_name} server is started. In future versions legacy Token Exchange will be replaced by version 2, JWT Authorization grant and other features.
+
+The capabilities of {project_name} for token exchange are as follows:
+
+. A client can exchange an existing {project_name} token created for a specific client for a new token targeted to a different client in the same realm.
+. A client can exchange an existing {project_name} token for an external token, such as a linked Facebook account.
+. A client can exchange an external token for a {project_name} token.
+. A client can impersonate a user.
+
+The standard token exchange supports only use-case (1). The legacy token exchange supports the four use-cases, but it is a preview and deprecated feature. Therefore, the standard token exchange V2 is recommended  since it is supported and will be maintained for the future. The legacy token exchange is useful for last three use cases, but it may not be
+backwards compatible with future {project_name} versions, and it will be finally removed. You can also enable both token exchange features and use them together. For example, you could use both internal-internal exchange
+provided by V2 together with other use cases that are supported by V1. For more details, see this <<_standard-token-exchange-comparison,token exchange comparison>>.
+
+NOTE: If you still need legacy token exchange feature, you also need link:{adminguide_link}#fine-grained-admin-permissions-v1[Fine-grained admin permissions version 1] (FGAP:v1) enabled because
+link:{adminguide_link}#_fine_grained_permissions[Fine-grained admin permissions version 2] (FGAP:v2) does not have support for token exchange permissions. This is on purpose because
+token-exchange is conceptually not really an "admin" permission and hence there is no plan to add token exchange permissions to FGAP:v2.
+
+include::../modules/-standard-token-exchange.adoc[leveloffset=+1]
+include::../modules/-standard-token-exchange-flow.adoc[leveloffset=+2]
+include::../modules/-standard-token-exchange-enable.adoc[leveloffset=+2]
+include::../modules/-standard-token-exchange-request.adoc[leveloffset=+2]
+include::../modules/-standard-token-exchange-scope.adoc[leveloffset=+2]
+include::../modules/-standard-token-exchange-details.adoc[leveloffset=+2]
+include::../modules/-standard-token-exchange-comparison.adoc[leveloffset=+2]
+include::../modules/-token-exchange-delegation.adoc[leveloffset=+1]
+include::../modules/-client-delegation.adoc[leveloffset=+2]
+include::../modules/-performing-the-delegated-exchange.adoc[leveloffset=+2]
+include::../modules/-legacy-token-exchange.adoc[leveloffset=+1]
+include::../modules/-internal-token-to-internal-token-exchange.adoc[leveloffset=+2]
+include::../modules/-client-to-client-permission.adoc[leveloffset=+3]
+include::../modules/-internal-internal-making-request.adoc[leveloffset=+3]
+include::../modules/-grant-permission-external-exchange.adoc[leveloffset=+3]
+include::../modules/-internal-external-making-request.adoc[leveloffset=+3]
+include::../modules/-external-token-to-internal-token-exchange.adoc[leveloffset=+2]

@@ -1,0 +1,46 @@
+[id="metrics-for-troubleshooting-database_{context}"]
+= Database Metrics
+
+
+
+
+
+This is part of the link:{links_observability_metrics-for-troubleshooting_url}[{links_observability_metrics-for-troubleshooting_name}] {section}.
+
+== Prerequisites
+
+* Metrics need to be enabled for {project_name}. Follow the link:{links_observability_configuration-metrics_url}[{links_observability_configuration-metrics_name}] {section} for more details.
+* A monitoring system collecting the metrics.
+
+== Database connection pool metrics
+
+Configure {project_name} to use a fixed size database connection pool.
+See the link:{links_high-availability_single-cluster-concepts-database-connections_url}[{links_high-availability_single-cluster-concepts-database-connections_name}] {section} for more information.
+
+[TIP]
+====
+If there is a high count of threads waiting for a database connection, increasing the database connection pool size is not always the best option. It might overload the database which would then become the bottleneck. Consider the following options instead:
+
+* Reduce the number of HTTP worker threads using the option `http-pool-max-threads` to make it match the available database connections, and thereby reduce contention and resource usage in {project_name} and increase throughput.
+* Check which database statements are executed on the database. If you see, for example, a lot of information about clients and groups being fetched, and the `users` and `realms` cache are full, this might indicate that it is time to increase the sizes of those caches and see if this reduces your database load.
+====
+
+|===
+|Metric |Description
+
+m| agroal_available_count
+| Idle database connections.
+
+m| agroal_active_count
+| Database connections used in ongoing transactions.
+
+m| agroal_awaiting_count
+| Threads waiting for a database connection to become available.
+
+|===
+
+== Next steps
+
+Return back to the link:{links_observability_metrics-for-troubleshooting_url}[{links_observability_metrics-for-troubleshooting_name}] or proceed to link:{links_observability_metrics-for-troubleshooting-http_url}[{links_observability_metrics-for-troubleshooting-http_name}].
+
+

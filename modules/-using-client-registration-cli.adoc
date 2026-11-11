@@ -1,0 +1,50 @@
+[id="_using_client_registration_cli_{context}"]
+= Using the Client Registration CLI
+
+
+.Procedure
+
+. Start an authenticated session by logging in with your credentials.
+. Run commands on the [filename]`Client Registration REST` endpoint.
++
+For example, on:
+
+* Linux:
++
+[options="npwrap",subs="attributes+"]
+----
+$ kcreg.sh config credentials --server http://localhost:8080 --realm demo --user user --client reg-cli
+$ kcreg.sh create -s clientId=my_client -s 'redirectUris=["http://localhost:8980/myapp/*"]'
+$ kcreg.sh get my_client
+----
+* Windows:
++
+[options="npwrap",subs="attributes+"]
+----
+c:\> kcreg config credentials --server http://localhost:8080 --realm demo --user user --client reg-cli
+c:\> kcreg create -s clientId=my_client -s "redirectUris=[\"http://localhost:8980/myapp/*\"]"
+c:\> kcreg get my_client
+----
++
+[NOTE]
+====
+In a production environment, {project_name} has to be accessed with [filename]`https:` to avoid exposing tokens to network sniffers.
+====
+. If a server's certificate is not issued by one of the trusted certificate authorities (CAs) that are included in Java's default certificate truststore, prepare a [filename]`truststore.jks` file and instruct the Client Registration CLI to use it.
++
+For example, on:
+
+* Linux:
++
+[options="npwrap"]
+----
+$ kcreg.sh config truststore --trustpass $PASSWORD ~/.keycloak/truststore.jks
+----
+* Windows:
++
+[options="npwrap"]
+----
+c:\> kcreg config truststore --trustpass %PASSWORD% %HOMEPATH%\.keycloak\truststore.jks
+----
+
+

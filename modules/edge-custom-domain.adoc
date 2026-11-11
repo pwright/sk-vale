@@ -1,0 +1,35 @@
+[id="edge_custom_domain_{context}"]
+= edge_custom_domain
+
+*Using custom domain and certificate*
+
+To use custom domain provide a tls secrets for the `ingress` and ensure that `hostname` matches the `ingress` certificate.
+
+[source,yaml]
+----
+apiVersion: k8s.keycloak.org/v2beta1
+kind: Keycloak
+metadata:
+  name: example-kc
+spec:
+  http:
+    httpEnabled: true
+  ingress:
+    tlsSecret: example-tls-secret
+  hostname:
+    hostname: test.keycloak.org
+  proxy:
+    headers: xforwarded # <1>
+  networkPolicy:
+    enabled: true
+    http: ... # <2>
+----
+<1> {check-lb-forwarded-header}
+<2> Restrict access to the ingress controller to avoid spoofing of forwarding headers.
+
+
+**Reencrypt**
+
+
+There are two ways to achieve TLS Reencryption. In both it is needed to annotate the `ingress` to specify the desired termination type since operator still lacks logic to set itself the reencrypt termination.
+

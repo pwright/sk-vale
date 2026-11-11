@@ -1,0 +1,25 @@
+[id="metrics-for-troubleshooting-embedded-caches-multi-cluster_{context}"]
+= Embedded Infinispan metrics for multi-cluster deployments
+
+
+
+
+
+This is part of the link:{links_observability_metrics-for-troubleshooting_url}[{links_observability_metrics-for-troubleshooting_name}] {section}.
+
+== Prerequisites
+
+* Metrics need to be enabled for {project_name}. Follow the link:{links_observability_configuration-metrics_url}[{links_observability_configuration-metrics_name}] {section} for more details.
+* A monitoring system collecting the metrics.
+
+== Metrics
+
+:jgrp_application: {project_name}
+
+include::partials/ispn_metrics.adoc[leveloffset=+1]
+
+== Next steps
+
+Return back to the link:{links_observability_metrics-for-troubleshooting_url}[{links_observability_metrics-for-troubleshooting_name}] or proceed to link:{links_observability_metrics-for-troubleshooting-external-infinispan-multi-cluster_url}[{links_observability_metrics-for-troubleshooting-external-infinispan-multi-cluster_name}].
+
+

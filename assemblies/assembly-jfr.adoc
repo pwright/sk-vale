@@ -1,0 +1,67 @@
+[id="jfr_{context}"]
+= Troubleshooting performance issues using Java Flight Recorder (JFR)
+
+
+
+
+== What is Java Flight Recorder
+
+Java Flight Recorder (JFR) is a standard monitoring tool for collecting diagnostic and profiling data about a running Java application. It is built into the JVM and designed to have a low performance impact.
+
+The most common way to run JFR for {project_name} is a fixed-time recording.
+This guide demonstrates creating a fixed-time flight recording using the `jcmd` tool.
+Collecting data continuously is outside the scope of this guide.
+
+[WARNING]
+====
+Some of the diagnostic data collected by Java Flight Recorder is security-sensitive, such as confidential environment variables, network information or messages from exceptions.
+
+Do not share it outside your trust boundary.
+
+Sanitizing it using the `jfr scrub` command or disabling the collection of certain types of data at the time of collection is outside the scope of this guide.
+====
+
+== Find the {project_name} server process
+
+The `jcmd` tool can use a PID or a main class to identify the target process:
+[source]
+----
+jcmd <PID|main-class> <diagnostic-command> ...
+----
+
+Running the `jcmd` command without any arguments will list all Java processes on the system with their PIDs and main classes:
+[source]
+----
+jcmd
+----
+
+Example output:
+[source]
+----
+897052 jdk.jcmd/sun.tools.jcmd.JCmd
+896224 io.quarkus.bootstrap.runner.QuarkusEntryPoint start ... #<1>
+----
+<1> Assuming {project_name} is the only Quarkus-based application running on the system, its PID is `896224`. It is also possible to use the main class `QuarkusEntryPoint` instead of the PID.
+
+Example: Running a `JFR.check` diagnostic command using the PID:
+[source]
+----
+jcmd 896224 JFR.check
+----
+
+Example: Running a `JFR.check` diagnostic command using the main class:
+[source]
+----
+jcmd QuarkusEntryPoint JFR.check
+----
+
+Example output:
+[source]
+----
+896224:
+No available recordings.
+
+Use jcmd 896224 JFR.start to start a recording.
+----
+
+include::../modules/create-a-fixed-time-recording.adoc[leveloffset=+1]

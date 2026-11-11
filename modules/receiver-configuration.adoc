@@ -1,0 +1,163 @@
+[id="receiver-configuration_{context}"]
+= Receiver configuration
+
+
+The *Receiver* sub-tab groups configuration into sections. Frequently used knobs:
+
+[cols="1,3",options="header"]
+|===
+|Setting |Purpose
+
+|*Profile*
+|`SSF_1_0` (default) or `SSE_CAEP` (legacy wire format used by Apple Business Manager / Apple School Manager).
+
+|*Default subjects*
+|Per-receiver override of the realm-wide `default_subjects` policy (`ALL` / `NONE`).
+
+|*User subject format*
+|How the user identity is encoded in the SET's `sub_id`: `iss_sub`, `email`,
+`complex.iss_sub+tenant`, or `complex.email+tenant`.
+
+|*Supported events*
+|Multi-select of the SSF event types this receiver wishes to support. Native event types are badged as
+*built-in*; custom event types contributed by extensions appear here automatically.
+
+|*Auto notify on login*
+|Auto-subscribe the user as a subject the first time they log in via this receiver client.
+
+|*Receiver subject add policy*
+|Which subjects the receiver may add through the subject management endpoint: `AUTHENTICATED` (default),
+`ANY`, or `NONE`. See <<receiver-subject-add-policy>>.
+
+|*Allowed delivery methods*
+|Two checkboxes (*Push delivery*, *Poll delivery*) gating which delivery families this receiver may use.
+Empty means both are allowed.
+
+|*Valid push URLs*
+|`##`-separated allow-list of URL patterns the receiver may register as its push endpoint. Required when PUSH
+is allowed. Each entry is matched as either an exact URL or a trailing-`+*+` suffix wildcard
+(e.g. `++https://receiver.example.com/ssf/*++`). Bare `+*+` is not honored, this is the SSRF defense on outbound
+PUSH delivery.
+
+|*Allow synthetic events* / *Emit events role*
+|Opt-in path for trusted external systems (LDAP-change notifier, MDM, risk engine) to inject supported SSF events for
+this receiver via the admin emit endpoint, gated by a client role the caller's service account must hold.
+|===
+
+== Configuring delivery (PUSH or POLL)
+
+A receiver picks exactly one delivery method per stream. Both methods deliver the same signed SETs; they differ
+only in who initiates the HTTP call.
+
+
+**PUSH delivery (RFC 8935)**
+
+
+In PUSH mode {project_name} performs an outbound HTTP `POST` to a receiver-supplied URL whenever a SET is ready
+for delivery. To configure PUSH:
+
+. On the *Receiver* sub-tab, make sure *Push delivery* is allowed and add at least one entry to *Valid push URLs*
+matching the receiver's endpoint.
+. On the *Stream* sub-tab, select *Push* as the delivery method and enter the receiver's endpoint URL.
+. Optionally, provide an *Authorization header* value the transmitter must send on each delivery (e.g.
+`Bearer <token>` issued by the receiver). Vault expressions like `${vault.my-secret}` are resolved at dispatch time.
+
+Receiver-supplied URLs are validated against the per-receiver `ssf.validPushUrls` allow-list, and after a
+successful match the URL itself must use the `https` scheme and must not resolve to a loopback/link-local/
+site-local/unique-local/multicast address. Rejections are reported as HTTP `400` with a generic message;
+the operator-facing log entry contains the rejected URL and a suggested allow-list entry.
+
+PUSH delivery uses exponential backoff (8 attempts by default). After the attempt budget is exhausted, the row
+transitions to `DEAD_LETTER` and is retained for 30 days for inspection in the *Event Search* sub-tab.
+
+
+**POLL delivery (RFC 8936)**
+
+
+In POLL mode {project_name} hosts the endpoint and the receiver fetches events on its own cadence. To configure POLL:
+
+. On the *Receiver* sub-tab, make sure *Poll delivery* is allowed.
+. On the *Stream* sub-tab, select *Poll* as the delivery method. A copy-to-clipboard field appears with the
+transmitter-owned poll URL of the form:
+
+[source]
+----
+POST /realms/{realm}/ssf/transmitter/receivers/{clientId}/streams/{streamId}/poll
+----
+
+The receiver authenticates to this endpoint with the same bearer-token mechanism it would use for the SSF
+management API. A poll request carries `maxEvents`, optional `ack` (jti list to acknowledge), and optional
+`setErrs` (jti list to negative-acknowledge). The response delivers up to `maxEvents` signed SETs and a
+`moreAvailable` flag.
+
+NOTE: HTTP long-polling (`returnImmediately=false`, `maxWait`) is parsed but not yet honored. This means every poll
+returns immediately. Receivers should configure their own polling cadence accordingly.
+
+
+**Switching delivery method**
+
+
+Flipping the delivery method on an existing stream re-routes already-queued events between the PUSH and POLL
+outbox kinds without losing them. The stream status is preserved.
+
+== Stream configuration
+
+Each receiver owns exactly one stream. The stream is what receivers manage via the SSF spec endpoints, and what
+operators see on the *Stream* sub-tab.
+
+
+**Receiver-managed stream lifecycle**
+
+
+Receivers may use the standard SSF §8.1 management endpoints to create, read, update, and delete their stream:
+
+[source]
+----
+POST   /realms/{realm}/ssf/transmitter/streams
+GET    /realms/{realm}/ssf/transmitter/streams
+PATCH  /realms/{realm}/ssf/transmitter/streams
+PUT    /realms/{realm}/ssf/transmitter/streams
+DELETE /realms/{realm}/ssf/transmitter/streams
+----
+
+Transmitter-controlled fields such as `stream_id`, `iss`, `aud`, and `events_supported` are stamped by
+{project_name} and rejected if the receiver tries to supply them. Multi-stream per receiver is not supported in
+this release, a second `POST /streams` returns `409 Conflict`.
+
+
+**Stream status transitions**
+
+
+The stream has three statuses, transitioned via `POST /streams/status` (receiver-driven) or the admin
+*Stream* sub-tab:
+
+[cols="1,3",options="header"]
+|===
+|Status |Effect
+
+|`enabled`
+|Default. Events flow through the dispatcher to the outbox and are delivered.
+
+|`paused`
+|New events are enqueued as `HELD` instead of being delivered. Existing pending events transition to `HELD`.
+Re-enabling the stream releases held events back to delivery.
+
+|`disabled`
+|All pending and held events for this stream are discarded per the SSF specification's MUST-NOT-hold rule.
+Re-enabling starts from an empty queue.
+|===
+
+A `stream-updated` SET is dispatched on every status transition, including auto-pauses triggered by the
+inactivity timeout.
+
+
+**Verification**
+
+
+A verification SET (containing only an opaque `sub_id = stream_id`) can be triggered:
+
+* By the receiver via `+POST /realms/{realm}/ssf/transmitter/verify+`, rate-limited per receiver via the
+  `min_verification_interval` setting; over-frequent calls receive `429 Too Many Requests`.
+* By an administrator via the *Verify* button on the *Stream* sub-tab, bypasses the rate limit.
+* Automatically by the transmitter shortly after stream creation.
+

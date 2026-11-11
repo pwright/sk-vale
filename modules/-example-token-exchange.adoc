@@ -1,0 +1,110 @@
+[id="_example_token_exchange_{context}"]
+= 1.5 Test Token Exchange
+
+
+Normally `clienta` will possess an initial token issued by `domaina`, obtained via normal authorization flow, or just because the client is a service endpoint that receives the token as a bearer. In this example, a direct access grant for `testuser` is requested to get `token1`.
+
+[source,bash]
+----
+curl -s -X POST \
+  --location http://localhost:8080/realms/domaina/protocol/openid-connect/token \
+  --header "Content-Type: application/x-www-form-urlencoded" \
+  --data-urlencode "client_id=clienta" \
+  --data-urlencode "client_secret=XXXXXX" \
+  --data-urlencode "grant_type=password" \
+  --data-urlencode "username=testuser" \
+  --data-urlencode "password=YYYYYY"
+----
+
+Now `clienta` can exchange the token, including scope `access-domainb`, and restricting the audience to `http://localhost:8080/realms/domainb` (issuer of `domainb`).
+
+[source,bash]
+----
+curl -s -X POST \
+  --location http://localhost:8080/realms/domaina/protocol/openid-connect/token \
+  --header "Content-Type: application/x-www-form-urlencoded" \
+  --data-urlencode "client_id=clienta" \
+  --data-urlencode "client_secret=XXXXXX" \
+  --data-urlencode "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" \
+  --data-urlencode "subject_token_type=urn:ietf:params:oauth:token-type:access_token" \
+  --data-urlencode "scope=access-domainb"  \
+  --data-urlencode "audience=http://localhost:8080/realms/domainb" \
+  --data-urlencode "subject_token=$token1"
+----
+
+The resulting token `token2` is a JWT assertion (not a bearer token) that must be presented to `domainb` via JWT Authorization Grant to obtain a valid access token.
+
+You have now completed the configuration in `domaina`. Next, you need to configure `domainb` to accept the JWT assertion and convert it into a valid access token.
+
+== Step 2: Configure JWT Authorization Grant in `domainb`
+
+This step configures `domainb` to accept a JWT authorization grant using the assertion obtained via Token Exchange in `domaina`. This is required to convert the assertion into an access token that is valid for `domainb` and trusted by its resource servers.
+
+For more information about JWT Authorization Grant, see link:{links_securing-apps_jwt-authorization-grant_url}[{links_securing-apps_jwt-authorization-grant_name}].
+
+
+**2.1 Create an OpenID Connect Identity Provider for `domaina`**
+
+
+Create a Identity Provider to establish the trust relationship with `domaina`. In **Identity providers**, click the **OpenID Connect v1.0** type.
+
+* **Alias**: domaina
+* **Discovery endpoint**: http://localhost:8080/realms/domaina/.well-known/openid-configuration (load OpenID metadata from the discovery endpoint of `domaina`)
+* **Client ID**: http://localhost:8080/realms/domainb (client created in `domaina` that represents `domainb`)
+* **Client Secret**: <copy the secret for the client>
+
+.Identity Provider for domaina
+image::jwt-authorization-grant-oidc-idp.png[Identity Provider for domaina]
+
+After creation, enable the **JWT Authorization Grant** option.
+
+IMPORTANT: This option must be enabled to allow the Identity Provider to accept JWT assertions from `domaina` and convert them into access tokens.
+
+
+**2.2 Create a client to perform the JWT Authorization Grant**
+
+
+Create a confidential OpenID Connect client `clientb` with **JWT Authorization Grant** capability enabled. In the option **Allowed Identity Providers for JWT Authorization Grant** add the `domaina` Identity Provider.
+
+* **Client ID**: clientb
+* **Name**: clientb
+* Enable **Client authentication**.
+* Enable **JWT Authorization Grant** capability.
+* **Allowed Identity Providers for JWT Authorization Grant**: domaina
+
+.Client for JWT authorization grant
+image::jwt-authorization-grant-oidc-clientb.png[Client for JWT authorization grant]
+
+
+**2.3 Link the sample user in `domainb`**
+
+
+To test the JWT Authorization Grant, the sample user created in `domaina` should be linked in `domainb`. You can just access to the account page in `domainb`:
+
+* In a browser go to the account page in `domainb`: http://localhost:8080/realms/domainb/account
+* Click `domaina` button to use the Identity Provider to login.
+* The browser is redirected to login page in `domaina`.
+* Log in using the test user and the password assigned previously.
+* Check in **Account security** -> **Linked accounts** that the user is correctly linked to `domaina`.
+
+
+**2.4 Test JWT Authorization Grant**
+
+
+The `token2` obtained in <<_example_token_exchange,Test Token Exchange>> is a valid assertion for `domainb`. The `clientb` defined in `domainb` can send a JWT Authorization Grant request with that token.
+
+[source,bash]
+----
+curl -s -X POST \
+  --location http://localhost:8080/realms/domainb/protocol/openid-connect/token \
+  --header "Content-Type: application/x-www-form-urlencoded" \
+  --data-urlencode "client_id=clientb" \
+  --data-urlencode "client_secret=ZZZZZZ" \
+  --data-urlencode "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer" \
+  --data-urlencode "scope=profile" \
+  --data-urlencode "assertion=$token2"
+----
+
+The response will contain a new access token (`token3`) issued by `domainb`. This token3 is the final access token that can be used as a Bearer token to access protected resources in `domainb`.
+
+

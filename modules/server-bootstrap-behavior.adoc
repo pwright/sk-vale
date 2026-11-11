@@ -1,0 +1,96 @@
+[id="server-bootstrap-behavior_{context}"]
+= Server bootstrap behavior
+
+
+Server initialization, such as database migrations, may take a significant amount of time to complete.
+When {project_name} is configured to expose health endpoints, the server will open its HTTP(S) and Management endpoints while initialization progresses in the background.
+This allows the startup and liveness probes to report UP early, preventing orchestrators like Kubernetes from killing the container during a long-running migration, while the readiness probe reports DOWN until initialization completes.
+
+If you run {project_name} behind a proxy or load balancer, configure an HTTP health check with the path `/health/ready` to ensure traffic is routed only to instances that have completed initialization.
+
+If an HTTP health check is not possible, or you prefer the server to accept connections only after initialization completes, start {project_name} with the following option:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --server-async-bootstrap=false
+----
+
+With this setting, {project_name} opens its endpoints only after the bootstrap is complete and the server is ready to handle requests.
+
+== Production grade database
+The database used by {project_name} is crucial for the overall performance, availability, reliability and integrity of {project_name}. For details on how to configure a supported database, see link:{links_server_db_url}[{links_server_db_name}].
+
+== Running {project_name} in a cluster
+To ensure that users can continue to log in when a {project_name} instance goes down, a typical production environment contains two or more {project_name} instances.
+
+{project_name} runs on top of JGroups and Infinispan, which provide a reliable, high-availability stack for a clustered scenario. In the default setup, communication between the nodes is encrypted using TLS.
+
+To find out more about using multiple nodes, the different caches and an appropriate stack for your environment, see link:{links_server_caching_url}[{links_server_caching_name}].
+
+
+**Configure Firewall ports**
+
+
+A set of network ports must be open to allow a healthy network communication between {project_name} servers.
+See link:{links_server_caching_url}#network-ports[{links_server_caching_name}].
+It describes what ports need to be open and their usage.
+
+== Configure {project_name} Server with IPv4 or IPv6
+The system properties `java.net.preferIPv4Stack` and `java.net.preferIPv6Addresses` are used to configure the JVM for use with IPv4 or IPv6 addresses.
+
+By default, {project_name} is accessible via IPv4 and IPv6 addresses at the same time.
+In order to run only with IPv4 addresses, you need to specify the property `java.net.preferIPv4Stack=true`.
+The latter ensures that any hostname to IP address conversions always return IPv4 address variants.
+
+These system properties are conveniently set by the `JAVA_OPTS_APPEND` environment variable.
+For example, to change the IP stack preference to IPv4, set an environment variable as follows:
+
+[source, bash]
+----
+export JAVA_OPTS_APPEND="-Djava.net.preferIPv4Stack=true"
+----
+
+To set up the server for IPv6 only, set an environment variable as follows for the distributed caches to form a cluster:
+
+[source, bash]
+----
+export JAVA_OPTS_APPEND="-Djava.net.preferIPv4Stack=false -Djava.net.preferIPv6Addresses=true"
+----
+
+See link:{links_server_caching_url}#network-bind-address[{links_server_caching_name}] for more details.
+
+== Preview of enhanced HTTP performance
+
+[NOTE]
+====
+Optimized JSON serializers for better performance of the HTTP layer is
+*Technology Preview*
+and is not fully supported. This feature is disabled by default.
+
+
+To enable start the server with `--features=preview` or `--features=http-optimized-serializers`
+
+====
+
+In production environments, the performance of the HTTP layer is critical.
+Every request passes through it, making it a key factor in overall system responsiveness, scalability, and user experience.
+
+This feature improves how {project_name} handles JSON data in HTTP requests and responses.
+The result is a more efficient runtime with measurable benefits:
+
+- ~5% increase in throughput
+- More stable response times
+- Reduced system resource usage
+
+These improvements help ensure smoother, more predictable performance at scale while also lowering the operational cost of running production systems.
+
+The only known tradeoff is that build time increases by ~6% as certain actions were moved to the build time instead of runtime.
+
+You can enable this feature as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --features=http-optimized-serializers
+----
+
+

@@ -1,0 +1,11 @@
+[id="_refreshing_invalid_registration_access_tokens_{context}"]
+= Refreshing invalid Registration Access Tokens
+
+
+When performing a create, read, update, and delete (CRUD) operation using the [command]`--no-config` mode, the Client Registration CLI cannot handle Registration Access Tokens for you. In that case, it is possible to lose track of the most recently issued Registration Access Token for a client, which makes it impossible to perform any further CRUD operations on that client without authenticating with an account that has *manage-clients* permissions.
+
+If you have permissions, you can issue a new Registration Access Token for the client and have it printed to a standard output or saved to a configuration file of your choice. Otherwise, you have to ask the realm administrator to issue a new Registration Access Token for your client and send it to you. You can then pass it to any CRUD command via the [command]`--token` option. You can also use the [command]`kcreg config registration-token` command to save the new token in a configuration file and have the Client Registration CLI automatically handle it for you from that point on.
+
+Run the [command]`kcreg update-token --help` command for more information about the [command]`kcreg update-token` command.
+
+

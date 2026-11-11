@@ -1,0 +1,118 @@
+[id="graceful-shutdown-considerations-haproxy-passthrough_{context}"]
+= Graceful shutdown considerations
+
+
+With TLS passthrough, HAProxy cannot signal a connection close at the HTTP level.
+The HAProxy health check settings determine how long it takes for the proxy to detect that a {project_name} instance is shutting down and that connections should no longer be routed to it.
+
+With the health check settings from the configuration above (`inter 5s fall 3`), it takes up to 15 seconds (3 failures x 5-second interval) for HAProxy to mark a {project_name} instance as down.
+During this period, {project_name} must remain running to serve in-flight requests.
+Therefore, you need to configure the `--shutdown-delay` to be at least as long as the detection time:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --proxy-protocol-enabled true --health-enabled true --metrics-enabled true --shutdown-delay=30s
+----
+
+For a detailed explanation of shutdown phases and how to tune the delay and timeout values, see the Graceful HTTP shutdown section in the link:{links_server_reverseproxy_url}[{links_server_reverseproxy_name}] {section}.
+
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+shutdown-delay+`# 
+
+[.options-description]#Length of the pre-shutdown phase during which the server prepares for shutdown.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d]. This period allows for loadbalancer reconfiguration and draining of TLS/HTTP keepalive connections.#
+
+
+
+*CLI:* `+--shutdown-delay+` +
+*Env:* `+KC_SHUTDOWN_DELAY+`
+--
+
+
+
+|_String_
+
+|
+`+1s+`
+
+|
+[.options-key]#`+health-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose health check endpoints.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If enabled, health checks are available at the `/health`, `/health/ready` and `/health/live` endpoints.#
+
+
+
+*CLI:* `+--health-enabled+` +
+*Env:* `+KC_HEALTH_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+metrics-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose metrics.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If enabled, metrics are available at the `/metrics` endpoint.#
+
+
+
+*CLI:* `+--metrics-enabled+` +
+*Env:* `+KC_METRICS_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+proxy-protocol-enabled+`# 
+
+[.options-description]#Whether the server should use the HA PROXY protocol when serving requests from behind a proxy.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#When set to true, the remote address returned will be the one from the actual connecting client. Cannot be enabled when the `proxy-headers` is used.#
+
+
+
+*CLI:* `+--proxy-protocol-enabled+` +
+*Env:* `+KC_PROXY_PROTOCOL_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+
+|===

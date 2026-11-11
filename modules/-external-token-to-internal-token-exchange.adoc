@@ -1,0 +1,234 @@
+[id="_external-token-to-internal-token-exchange_{context}"]
+= External token to internal token exchange
+
+
+You can trust and exchange external tokens minted by external identity providers for internal tokens.  This can be
+used to bridge between realms or just to trust tokens from your social provider.  It works similarly to an identity provider
+browser login in that a new user is imported into your realm if it doesn't exist.
+
+NOTE:  The current limitation on external token exchanges is that if the external token maps to an existing user an
+       exchange will not be allowed unless the existing user already has an account link to the external identity
+       provider.
+
+When the exchange is complete, a user session will be created within the realm, and you will receive an access
+and or refresh token depending on the `requested_token_type` parameter value.  You should note that this new
+user session will remain active until it times out or until you call the logout endpoint of the realm passing this
+new access token.
+
+These types of changes required a configured identity provider in the Admin Console.
+
+NOTE:  SAML identity providers are not supported at this time.  Twitter tokens cannot be exchanged either.
+
+NOTE: A combination of <<_standard-token-exchange,Standard Token Exchange V2>> and link:{links_securing-apps_jwt-authorization-grant_url}[{links_securing-apps_jwt-authorization-grant_name}] is recommended instead of the legacy external to internal Token Exchange. See link:{links_securing-apps_oauth-identity-authorization-chaining-across-domains_url}[{links_securing-apps_oauth-identity-authorization-chaining-across-domains_name}] for more information about how those two supported features can be used to substitute the legacy Token Exchange.
+
+
+**Granting permission for the exchange**
+
+
+Before external token exchanges can be done, you grant permission for the calling client to make the exchange.  This
+permission is granted in the same manner as <<_grant_permission_external_exchange, internal to external permission is granted>>.
+
+If you also provide an `audience` parameter whose value points to a different client other than the calling one, you
+must also grant the calling client permission to exchange to the target client specific in the `audience` parameter.  How
+to do this is <<_client_to_client_permission, discussed earlier>> in this section.
+
+
+**Making the request**
+
+
+The `subject_token_type` must either be `urn:ietf:params:oauth:token-type:access_token` or `urn:ietf:params:oauth:token-type:jwt`.
+If the type is `urn:ietf:params:oauth:token-type:access_token` you specify the `subject_issuer` parameter and it must be the
+alias of the configured identity provider.  If the type is `urn:ietf:params:oauth:token-type:jwt`, the provider will be matched via
+the `iss` (issuer) claim within the JWT which must be the alias of the provider, or a registered issuer within the provider's configuration.
+
+For validation, if the token is an access token, the provider's user info service will be invoked to validate the token.  A successful call
+will mean that the access token is valid.  If the subject token is a JWT and if the provider has signature validation enabled, that will be attempted,
+otherwise, it will default to also invoking on the user info service to validate the token.
+
+WARNING: The legacy external-to-internal token exchange does *not* validate the `aud` (audience) claim of the `subject_token`, so an ID token issued by the external identity provider to a different client will be accepted as long as signature and expiry checks pass; restrict `token-exchange` permissions to only the clients that genuinely require them.
+
+By default, the internal token minted will use the calling client to determine what's in the token using the protocol
+mappers defined for the calling client.  Alternatively, you can specify a different target client using the `audience`
+parameter.
+
+[source,bash,subs="attributes+"]
+----
+curl -X POST \
+    -d "client_id=starting-client" \
+    -d "client_secret=the client secret" \
+    --data-urlencode "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" \
+    -d "subject_token=...." \
+    -d "subject_issuer=myOidcProvider" \
+    --data-urlencode "subject_token_type=urn:ietf:params:oauth:token-type:access_token" \
+    -d "audience=target-client" \
+    http://localhost:8080{kc_realms_path}/myrealm/protocol/openid-connect/token
+----
+
+
+If your `requested_token_type` parameter
+is a refresh token type, then the response will contain both an access token, refresh token, and expiration.  Here's
+an example JSON response you get back from this call.
+
+[source,json]
+----
+{
+   "access_token" : "....",
+   "refresh_token" : "....",
+   "expires_in" : 3600
+}
+----
+
+
+
+**Impersonation**
+
+
+For internal and external token exchanges, the client can request on behalf of a user to impersonate a different user.
+For example, you may have an admin application that needs to impersonate a user so that a support engineer can debug
+a problem.
+
+NOTE: The impersonation scenario mentioned here is different from the https://datatracker.ietf.org/doc/html/rfc8693#name-delegation-vs-impersonation[impersonation concept of the token exchange specification].
+The specification does not support impersonating the token subject to different subject. The specification semantics rather means "impersonating the client" instead of "impersonating the user".
+
+
+
+**Granting permission for the exchange**
+
+
+The user that the subject token represents must have permission to impersonate other users.  See the
+link:{adminguide_link}[{adminguide_name}] on how to enable this permission.  It can be done through a role or through
+fine grain admin permissions.
+
+
+
+**Making the request**
+
+
+Make the request as described in other chapters except additionally specify the `requested_subject` parameter.  The
+value of this parameter must be a username or user id.
+
+[source,bash,subs="attributes+"]
+----
+curl -X POST \
+    -d "client_id=starting-client" \
+    -d "client_secret=the client secret" \
+    --data-urlencode "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" \
+    -d "subject_token=...." \
+    --data-urlencode "requested_token_type=urn:ietf:params:oauth:token-type:access_token" \
+    -d "audience=target-client" \
+    -d "requested_subject=wburke" \
+    http://localhost:8080{kc_realms_path}/myrealm/protocol/openid-connect/token
+----
+
+
+**Direct Naked Impersonation**
+
+
+You can make an internal token exchange request without providing a `subject_token`.  This is called a direct
+naked impersonation because it places a lot of trust in a client as that client can impersonate any user in the realm.
+You might need this to bridge for applications where it is impossible to obtain a subject token to exchange.  For example,
+you may be integrating a legacy application that performs login directly with LDAP.  In that case, the legacy app
+is able to authenticate users itself, but not able to obtain a token.
+
+WARNING: It is very risky to enable direct naked impersonation for a client.  If the client's credentials are ever
+         stolen, that client can impersonate any user in the system.
+
+
+**Granting permission for the exchange**
+
+
+If the `audience` parameter is provided, then the calling client must have permission to exchange to the client.  How
+to set this up is discussed earlier in this chapter.
+
+Additionally, the calling client must be granted permission to impersonate users.
+
+.Procedure
+
+. Click *Users* in the menu.
+
+. Click the *Permissions* tab.
++
+.User Permissions
+image::exchange-users-permission-unset.png[User Permissions]
+
+. Toggle *Permissions Enabled* to *On*.
++
+.Identity Provider Permission
+image::exchange-users-permission-set.png[Users Impersonation Permission Set]
++
+The page displays an *impersonate* link.
+. Click that link to start defining the permission.
++
+This setup page displays.
++
+.Users Impersonation Permission Setup
+image::exchange-users-permission-setup.png[Users Impersonation Permission Setup]
+
+. Click *Client details* in the breadcrumbs at the top of the screen.
+. Define a policy for this permission.
+. Go to the *Policies* tab and create a client policy.
++
+.Client Policy Creation
+image::exchange-users-client-policy.png[Client Policy Creation]
+
+. Enter the starting client that is the authenticated client that is requesting a token exchange.
+
+. Return to the users' *impersonation* permission and add the client policy you just
+defined.
++
+.Apply Client Policy
+image::exchange-users-apply-policy.png[Apply Client Policy]
+
+Your client now has permission to impersonate users.  If you do not do this correctly, you will get a 403 Forbidden response if you
+try to make this type of exchange.
+
+NOTE: Public clients are not allowed to do direct naked impersonations.
+
+
+
+**Making the request**
+
+
+To make the request, simply specify the `requested_subject` parameter.  This must be the username or user id of
+a valid user.  You can also specify an `audience` parameter if you wish.
+
+[source,bash,subs="attributes+"]
+----
+curl -X POST \
+    -d "client_id=starting-client" \
+    -d "client_secret=the client secret" \
+    --data-urlencode "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" \
+    -d "requested_subject=wburke" \
+    http://localhost:8080{kc_realms_path}/myrealm/protocol/openid-connect/token
+----
+
+
+**Expand permission model with service accounts**
+
+
+When granting clients permission to exchange, you don't necessarily  manually enable those permissions for each and every client.
+If the client has a service account associated with it, you can use a role to group permissions together and assign exchange permissions
+by assigning a role to the client's service account.  For example, you might define a `naked-exchange` role and any service account that has that
+role can do a naked exchange.
+
+
+**Exchange vulnerabilities**
+
+
+When you start allowing token exchanges, there are various things you have to both be aware of and careful of.
+
+The first is public clients.  Public clients do not have or require a client credential in order to perform an exchange.  Anybody that has a valid
+token will be able to __impersonate__ the public client and perform the exchanges that public client is allowed to perform.  If there
+are any untrustworthy clients that are managed by your realm, public clients may open up vulnerabilities in your permission models.
+This is why direct naked exchanges do not allow public clients and will abort with an error if the calling client is public.
+
+It is possible to exchange social tokens provided by Facebook, Google, etc. for a realm token.  Be careful and vigilante on what
+the exchange token is allowed to do as it's not hard to create fake accounts on these social websites.  Use default roles, groups, and identity provider mappers to control what attributes and roles
+are assigned to the external social user.
+
+Direct naked exchanges are quite dangerous.  You are putting a lot of trust in the calling client that it will never leak out
+its client credentials.  If those credentials are leaked, then the thief can impersonate anybody in your system.  This is in direct
+contrast to confidential clients that have existing tokens.  You have two factors of authentication, the access token and the client
+credentials, and you're only dealing with one user.  So use direct naked exchanges sparingly.
+
+

@@ -1,0 +1,30 @@
+[id="keycloak-configuration-traefik-passthrough_{context}"]
+= {project_name} configuration
+
+
+With TLS passthrough, {project_name} requires the following configuration:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --proxy-protocol-enabled true --health-enabled true --metrics-enabled true --http-management-scheme=http
+----
+
+`--proxy-protocol-enabled true`::
+Enables the PROXY protocol so that {project_name} can read the real client IP address from the PROXY protocol header added by Traefik.
+Do not set `--proxy-headers` when using TLS passthrough because Traefik cannot inject HTTP headers into the encrypted traffic.
+The `--proxy-protocol-enabled` option and the `--proxy-headers` option are mutually exclusive.
+
+`--health-enabled true`::
+Enables the health check endpoints on the management port (`9000`).
+Without this, the health endpoint that Traefik polls will not be available, and Traefik will mark all {project_name} instances as down.
+
+`--metrics-enabled true`::
+Enables the metrics endpoints on the management port.
+Enabling metrics also enables an additional status check for the database, so it is recommended to enable metrics.
+
+`--http-management-scheme http`::
+Configures the management port (`9000`) to use plain HTTP instead of HTTPS.
+Traefik does not support native HTTP health checks for TCP services; it can only send and match raw bytes over a plain TCP connection.
+Disabling TLS on the management port allows the raw `send`/`expect` health check (see the health check configuration above) to communicate with {project_name} in plain HTTP.
+This is safe because the management port is only reachable on the internal backend network and is not exposed to clients.
+

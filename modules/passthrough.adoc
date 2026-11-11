@@ -1,0 +1,29 @@
+[id="passthrough_{context}"]
+= Passthrough
+
+
+It is enabled when you associate a `tlsSecret` with the `http` configuration and leave Ingress enabled without specifying a `tlsSecret` on it.
+
+[source,yaml]
+----
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: example-kc
+spec:
+  http:
+    tlsSecret: example-tls-secret
+  ingress:
+    enabled: true
+  hostname:
+    hostname: test.keycloak.org
+----
+
+NOTE: On OpenShift you are not allowed to use wildcard certificates on passthrough Routes with HTTP/2 enabled. For wildcard certificates use edge or reencrypt termination.
+
+
+**Edge**
+
+
+There are two ways to achieve TLS Edge. In both it is needed to enable HTTP access.
+
