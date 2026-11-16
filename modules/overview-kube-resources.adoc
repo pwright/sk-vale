@@ -1,0 +1,83 @@
+[id="kube-resources_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Look up Custom Resource specifications and CLI commands
+
+[role="_abstract"]
+{skupper_name} creates and manages several types of Kubernetes resources, including custom resource definitions, service accounts, deployments, ConfigMaps, secrets, and services.
+
+*Custom resources for application networks*
+
+To get start creating application networks, you create the following custom resources:
+
+* Sites
+* Links
+* Connectors
+* Listeners
+
+*RBAC resources*
+
+When you install the {skupper_name} controller, the following resources are created:
+
+* *skupper-controller*
+A service account, role and role binding with this name are created to manage the {skupper_name}  controller.
+
+When you create a {skupper_name} site, the following resources are created:
+
+* *skupper-router*
+A service account, role and role binding with this name are created to manage the {skupper_name} router.
+
+*Control and data plane deployments*
+
+The {skupper_name} controller deploys the *skupper-controller*, which provides the control plane for the application network.
+
+Each {skupper_name} site on Kubernetes deploys a *skupper-router*, which provides the data plane for the application network.
+
+*ConfigMaps*
+
+Do not edit these ConfigMap values directly.
+
+* *skupper-site*
+site settings, including:
+ ** console authentication
+ ** ingress strategy
+
++
+This ConfigMap is the root object for all the skupper resources; deleting it will remove the {skupper_name} deployment from the namespace.
+* *skupper-services*
+internal representation of the services available on the application network.
+* *skupper-internal*
+internal router configuration.
+The service controller determines the values in this ConfigMap based on the services available on the application network.
+
+*Certificates and secrets*
+
+Each site has two `kubernetes.io/tls` type secrets, *skupper-local-ca* and *skupper-site-ca*:
+
+* *skupper-local-ca*
+issues certs for local access.
++
+The local certs are held in:
+
+ ** *skupper-local-server* used by the router.
+
+* *skupper-site-ca*
+issues certs for remote access.
++
+The site ca issued certs are *skupper-site-server* which holds the certs that identify the router to other routers that link to this site.
+
+The tokens used to establish links creates the following secrets with variable names:
++
+
+* The site that issues a token generates a secret with a UUID name.
+This secret contains usage restrictions, such as the number of times you can use the token and the token validity period.
+* The site establishing the link will have a secret that contains the token.
+These secrets are typically called `link-<remote-site-name>`.
+
+*Kubernetes services*
+
+In addition to the services that are exposed on the application network, the following services are created:
+
+* *skupper-router-local*
+The service controller uses this service to connect to and configure the router.
+* *skupper-router*
+Other sites use this service to access the router over the inter-router or edge ports, although there may be other resources involved, for example, an ingress.
