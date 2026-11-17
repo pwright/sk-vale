@@ -1,0 +1,56 @@
+[id="mcp-importing-tools_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Importing tools from a live MCP server
+
+[role="_abstract"]
+{registry} can connect to a running MCP server, list its tools with `tools/list`, and publish each tool as an `MCP_TOOL` artifact, so that you do not need to write one artifact per tool by hand. Importing again after the server is redeployed shows which tool contracts changed, and configured rules reject changes that break them.
+
+IMPORTANT: This feature is experimental. The registry makes outbound connections to the URL in the request, so it is disabled by default and connects only to hosts that you allow.
+
+.Prerequisites
+* Experimental features are enabled: `apicurio.features.experimental.enabled=true`.
+* MCP import is enabled: `apicurio.mcp-import.enabled=true`.
+* The MCP server host is listed in `apicurio.mcp-import.allowed-hosts`. When this list is empty, which is the default, every host is refused.
+* An `MCP_SERVER` artifact exists for the server, and you have write access to it and to the group that the tools are published to.
+* The MCP server supports the Streamable HTTP transport. The `sse` and `stdio` transports are not supported.
+
+.Procedure
+. Import the tools:
++
+[source,bash]
+----
+curl -X POST http://localhost:8080/apis/registry/v3/groups/my-servers/artifacts/weather/mcp-import \
+  -H "Content-Type: application/json" \
+  -d '{
+        "url": "https://weather.apps.example.com/mcp",
+        "headers": { "Authorization": "Bearer <token>" },
+        "toolGroupId": "mcp-tools",
+        "dryRun": false
+      }'
+----
++
+* `url`: the MCP server endpoint. Required.
+* `headers`: HTTP headers to send to the MCP server, for example credentials. They are sent to the MCP server only, and are never stored, returned, logged, or audited. Headers that the transport sets itself, such as `Host`, `Content-Type`, `Accept`, and `Mcp-Session-Id`, are refused.
+* `toolGroupId`: the group for the `MCP_TOOL` artifacts. Defaults to the group of the `MCP_SERVER` artifact.
+* `dryRun`: when `true`, the server is contacted and the report is returned, but nothing is written.
+
+. Read the report. For example:
++
+[source,json]
+----
+{
+  "groupId": "my-servers",
+  "artifactId": "weather",
+  "status": "NEW_VERSION",
+  "version": "2",
+  "tools": [
+    { "name": "getWeather", "groupId": "mcp-tools", "artifactId": "weather.getWeather",
+      "version": "1", "status": "CREATED" }
+  ]
+}
+----
+
+.Verification
+* Each tool is stored as an `MCP_TOOL` artifact with the ID `<server artifact ID>.<tool name>`.
+* The new `MCP_SERVER` version references the tools, with each reference named after its tool.
+

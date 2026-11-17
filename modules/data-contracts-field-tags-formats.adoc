@@ -1,0 +1,47 @@
+[id="data-contracts-field-tags-formats_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Supported schema formats
+
+[role="_abstract"]
+{registry} extracts inline field tags from the following syntax in schema content.
+
+Avro:: `tags` and `confluent:tags` field properties. Tags are also read when the schema references named types defined in other artifacts.
++
+[source,json]
+----
+{
+  "type": "record",
+  "name": "User",
+  "fields": [{
+    "name": "email",
+    "type": "string",
+    "tags": ["PII", "EMAIL"]
+  }]
+}
+----
+
+JSON Schema:: `x-tags` and `x-confluent-tags` extension properties.
++
+[source,json]
+----
+{
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "x-tags": ["PII", "EMAIL"]
+    }
+  }
+}
+----
+
+Protobuf:: The `@tag:` annotation in documentation comments, and Confluent `confluent.field_meta` field options.
++
+[source,protobuf]
+----
+message User {
+  // @tag:PII,EMAIL
+  string email = 1;
+}
+----
+

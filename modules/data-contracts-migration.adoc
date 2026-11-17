@@ -1,0 +1,64 @@
+[id="data-contracts-migration_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Schema migration
+
+[role="_abstract"]
+Schema migration allows you to transform data records between different schema versions using migration rules.
+
+Migration rules use the UPGRADE or DOWNGRADE mode and are typically JSONata TRANSFORM rules that reshape data from one version to another. Migration uses only version-level migration rules, set through `PUT /groups/\{g}/artifacts/\{a}/versions/\{v}/contract/ruleset`. Artifact-level and global migration rules are not used for migration.
+
+.Migration rule example (version ruleset)
+[source,json]
+----
+{
+  "domainRules": [],
+  "migrationRules": [
+    {
+      "name": "v1-to-v2-upgrade",
+      "kind": "TRANSFORM",
+      "type": "JSONATA",
+      "mode": "UPGRADE",
+      "expr": "$ ~> |$|{'fullName': firstName & ' ' & lastName}|",
+      "onFailure": "ERROR",
+      "disabled": false
+    }
+  ]
+}
+----
+
+The migration endpoint chains transforms across multiple versions:
+
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/migrate \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "fromVersion": "1",
+    "toVersion": "3",
+    "record": {"firstName": "John", "lastName": "Doe", "amount": 100}
+  }'
+----
+
+The service walks the versions between `fromVersion` and `toVersion` in artifact version order. For each step it applies the migration rules of the version being moved to: in mode `UPGRADE` when moving forward, or in mode `DOWNGRADE` when moving backward. The transforms are chained sequentially.
+
+.Response (HTTP 200)
+[source,json]
+----
+{"passed": true, "transformedRecord": {...}, "violations": [], "executedRules": 1, "failedRules": 0}
+----
+
+Compatibility groups are stored as the artifact label `contract.\{contractId}.compatibility.group`. Compatibility checks do not use them yet.
+
+[source,bash]
+----
+# Set compatibility group (returns HTTP 204)
+curl -X PUT \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/compatibility-group \
+  -H 'Content-Type: application/json' \
+  -d '{"contractId": "orders-contract", "compatibilityGroup": "v2-family"}'
+
+# Get compatibility group (returns {"compatibilityGroup": "v2-family"})
+curl "http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/compatibility-group?contractId=orders-contract"
+----
+

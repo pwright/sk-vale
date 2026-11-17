@@ -1,0 +1,49 @@
+[id="registry-security-authn-http_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= {registry} authentication by using HTTP basic
+
+[role="_abstract"]
+By default, {registry} supports authentication by using OpenID Connect. Because some tools do not support OpenID Connect, you can also configure {registry} to support HTTP basic authentication.
+
+With OpenID Connect, users or API clients must obtain an access token to make authenticated calls to the {registry} REST API. To enable HTTP basic authentication, set the following configuration options to `true`:
+
+.Configuration for {registry} HTTP basic authentication
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+|`QUARKUS_OIDC_TENANT_ENABLED`
+|`quarkus.oidc.tenant-enabled`
+|Boolean
+|`false`
+|`APICURIO_AUTHN_BASIC_CLIENT_CREDENTIALS_ENABLED`
+|`apicurio.authn.basic-client-credentials.enabled`
+|Boolean
+|`false`
+|===
+
+*{registry} HTTP basic client credentials cache expiry.* You can also configure the HTTP basic client credentials cache expiry time. By default, when you use HTTP basic authentication, {registry} caches JWT tokens and does not issue a new token when there is no need. A token is cached until it expires, minus `cache-expiration-offset` seconds, so you do not need to match the expiry time of your identity provider. `cache-expiration` is the lifetime in minutes used only when the expiry of a token cannot be read:
+
+.Configuration for HTTP basic client credentials cache expiry
+[%header,cols="4,4,1,1"]
+|===
+|Environment variable
+|Java system property
+|Type
+|Default value
+|`APICURIO_AUTHN_BASIC_CLIENT_CREDENTIALS_CACHE_EXPIRATION`
+|`apicurio.authn.basic-client-credentials.cache-expiration`
+|Integer
+|`5`
+
+|`APICURIO_AUTHN_BASIC_CLIENT_CREDENTIALS_CACHE_EXPIRATION_OFFSET`
+|`apicurio.authn.basic-client-credentials.cache-expiration-offset`
+|Integer
+|`10`
+|===
+
+Tokens are cached until they expire, minus the offset in seconds. The expiration in minutes is used only when the expiry of a token cannot be read. Failed exchanges are cached for 60 seconds.
+
+// ref-registry-security-authn-chain

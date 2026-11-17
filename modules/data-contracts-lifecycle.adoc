@@ -1,0 +1,32 @@
+[id="data-contracts-lifecycle_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Contract lifecycle
+
+[role="_abstract"]
+The contract lifecycle tracks the maturity of a schema through defined status transitions.
+
+A contract has one of the following statuses:
+
+`DRAFT`:: The schema is being developed and is not ready for production.
+`STABLE`:: The schema is production-ready.
+`DEPRECATED`:: The schema is being phased out.
+
+Statuses transition in one direction only:
+
+----
+DRAFT ──────► STABLE ──────► DEPRECATED
+   │                              ▲
+   └──────────────────────────────┘
+         (skip stable)
+----
+
+NOTE: Reverse transitions are not allowed. The `POST /groups/\{g}/artifacts/\{a}/contract/status` endpoint enforces these transitions and sets the lifecycle dates. Any transition from `DEPRECATED` is rejected with HTTP 409. The contract metadata API (`PUT .../contract/metadata`) applies the same rules when it changes the status.
+
+Independently of status, a contract also tracks a promotion stage:
+
+----
+DEV ──────► STAGE ──────► PROD
+----
+
+Promotion is enforced via the `POST /groups/\{g}/artifacts/\{a}/contract/promote` endpoint. Promotion is forward-only, starts at `DEV`, and cannot skip stages (for example, promoting from `DEV` to `PROD` fails with "Cannot skip stages. Promote to STAGE first."). Promoting to `PROD` requires status `STABLE`. The response is `{"stage": "..."}`. The contract metadata API applies the same rules when it changes the stage.
+

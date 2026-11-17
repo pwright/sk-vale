@@ -1,0 +1,122 @@
+[id="registry-event-payload-structure_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Event payload structure
+
+[role="_abstract"]
+Each {registry} change event has a JSON payload with an `id` and an `eventType`.
+Additional fields identify the affected resource and describe the change.
+
+Artifact events include the following identifying fields:
+
+[source,json]
+----
+{
+  "id": "<uuid>",
+  "eventType": "<EVENT_TYPE>",
+  "groupId": "<group-id>",
+  "artifactId": "<artifact-id>"
+}
+----
+
+Additional fields vary by event type:
+
+* *Group events* include `groupId` and omit `artifactId`.
+* *Global rule events* omit both `groupId` and `artifactId`.
+* *Artifact version events* include a `version` field.
+* *Artifact version state change events* include `oldState` and `newState` fields.
+* *Metadata update events* include `name`, `description`, and `owner` fields where applicable.
+* *Rule events* include `ruleType` and `rule` (the rule configuration) fields.
+
+For artifacts in the default group, the payload omits `groupId`.
+Optional metadata fields with no value are also omitted.
+
+.Example: ARTIFACT_VERSION_CREATED payload
+[source,json]
+----
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "eventType": "ARTIFACT_VERSION_CREATED",
+  "groupId": "com.example",
+  "artifactId": "my-schema",
+  "version": "1.2.0",
+  "name": "My Schema",
+  "description": "Updated with new fields"
+}
+----
+
+.Example: ARTIFACT_VERSION_STATE_CHANGED payload
+[source,json]
+----
+{
+  "id": "550e8400-e29b-41d4-a716-446655440001",
+  "eventType": "ARTIFACT_VERSION_STATE_CHANGED",
+  "groupId": "com.example",
+  "artifactId": "my-schema",
+  "version": "1.0.0",
+  "oldState": "ENABLED",
+  "newState": "DEPRECATED"
+}
+----
+
+Contract events have the following payload fields in addition to `id` and `eventType`:
+
+.Contract event payload fields
+[cols="1,2",options="header"]
+|===
+|Event type
+|Fields and behavior
+
+|`CONTRACT_RULESET_CONFIGURED`
+|`groupId`, `artifactId`, and `action`, which is `SET` or `DELETE`.
+Version rulesets also include `version`.
+Global rulesets use `__GLOBAL__` for both `groupId` and `artifactId` and omit `version`.
+The payload does not include the ruleset content.
+
+|`CONTRACT_METADATA_UPDATED`
+|`groupId` and `artifactId` identify the affected contract.
+The payload does not include the updated labels.
+
+|`CONTRACT_STATUS_CHANGED`
+|`groupId`, `artifactId`, `fromStatus`, and `toStatus`.
+If the contract had no previous status, `fromStatus` is an empty string.
+The payload does not include the transition effective date.
+|===
+
+.Example: Version contract ruleset update
+[source,json]
+----
+{
+  "id": "550e8400-e29b-41d4-a716-446655440002",
+  "eventType": "CONTRACT_RULESET_CONFIGURED",
+  "groupId": "com.example",
+  "artifactId": "orders",
+  "version": "1.0.0",
+  "action": "SET"
+}
+----
+
+.Example: Contract metadata update
+[source,json]
+----
+{
+  "id": "550e8400-e29b-41d4-a716-446655440003",
+  "eventType": "CONTRACT_METADATA_UPDATED",
+  "groupId": "com.example",
+  "artifactId": "orders"
+}
+----
+
+.Example: Contract status change
+[source,json]
+----
+{
+  "id": "550e8400-e29b-41d4-a716-446655440004",
+  "eventType": "CONTRACT_STATUS_CHANGED",
+  "groupId": "com.example",
+  "artifactId": "orders",
+  "fromStatus": "DRAFT",
+  "toStatus": "STABLE"
+}
+----
+
+

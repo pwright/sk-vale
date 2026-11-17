@@ -1,0 +1,102 @@
+[id="preparing-registry-import-archive_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Preparing a registry import archive from a schema file
+
+[role="_abstract"]
+You can build a version 3 import archive from a local schema without first exporting data from a registry.
+This example creates one Apache Avro artifact, one version, and a `latest` branch.
+
+.Prerequisites
+* You have installed Python 3 and `curl`.
+* The `schema.json` file contains a valid Apache Avro schema without external references.
+* The target registry is empty, and you have administrator access.
+* The `REGISTRY_URL` environment variable contains the target registry URL, and `ACCESS_TOKEN` contains a valid access token if authentication is enabled.
+
+.Procedure
+. Save the following script as `create-import.py`:
++
+[source,python]
+----
+import hashlib
+import json
+import time
+import zipfile
+from pathlib import Path
+
+content = Path("schema.json").read_bytes()
+content_hash = hashlib.sha256(content).hexdigest()
+timestamp = int(time.time() * 1000)
+metadata = {
+    "owner": "import-user",
+    "createdOn": timestamp,
+    "modifiedBy": "import-user",
+    "modifiedOn": timestamp,
+}
+coordinates = {"groupId": "import-example", "artifactId": "my-schema"}
+artifact_path = "groups/import-example/artifacts/my-schema"
+entries = {
+    "manifest.Manifest.json": {
+        "exportVersion": "3.0",
+        "systemVersion": "3.0.0",
+        "systemName": "Offline import",
+        "exportedOn": timestamp,
+    },
+    f"content/{content_hash}.Content.json": {
+        "contentId": 1,
+        "contentHash": content_hash,
+        "contentType": "application/json",
+        "artifactType": "AVRO",
+    },
+    "groups/import-example.Group.json": {
+        **metadata, "groupId": "import-example",
+    },
+    f"{artifact_path}/MetaData.Artifact.json": {
+        **metadata, **coordinates, "artifactType": "AVRO",
+    },
+    f"{artifact_path}/versions/1.0.0.ArtifactVersion.json": {
+        **metadata, **coordinates,
+        "globalId": 1, "contentId": 1,
+        "version": "1.0.0", "versionOrder": 1, "state": "ENABLED",
+    },
+    f"{artifact_path}/branches/latest.Branch.json": {
+        **metadata, **coordinates,
+        "branchId": "latest", "systemDefined": True, "versions": ["1.0.0"],
+    },
+}
+with zipfile.ZipFile("registry-import.zip", "w", zipfile.ZIP_DEFLATED) as archive:
+    for name, entity in entries.items():
+        archive.writestr(name, json.dumps(entity))
+    archive.writestr(f"content/{content_hash}.Content.data", content)
+----
++
+The example uses matching `contentId` values in the content and version entries.
+It supplies `artifactType` so that the importer computes the canonical hash.
+The manifest identifies version 3 archive data, independently of the target registry's minor version.
+. Run the script:
++
+[source,bash]
+----
+$ python3 create-import.py
+----
+. Import the archive:
++
+[source,bash]
+----
+$ curl --fail-with-body -X POST \
+  "$REGISTRY_URL/apis/registry/v3/admin/import" \
+  -H "Content-Type: application/zip" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  --data-binary @registry-import.zip
+----
+
+.Verification
+* Retrieve the imported version and compare it with `schema.json`:
++
+[source,bash]
+----
+$ curl --fail-with-body \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  "$REGISTRY_URL/apis/registry/v3/groups/import-example/artifacts/my-schema/versions/1.0.0/content"
+----
++
+Check the server log for import warnings if the artifact, version, or content is missing.

@@ -1,0 +1,63 @@
+[id="mcp-registry-api-operations_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= MCP Registry API operations
+
+[role="_abstract"]
+The MCP Registry API provides operations to publish a server definition, read a published version, and list published server versions.
+
+.MCP Registry API operations
+[cols="1,2,3",options="header"]
+|===
+|Operation |Method and path |Behavior
+
+|Publish a server definition
+|`POST /apis/mcp-registry/v0.1/publish`
+|Maps the reverse-DNS name, for example `io.github.example/weather`, to group `io.github.example` and artifact ID `weather`, with type `MCP_SERVER`. Validates the original JSON against the pinned upstream 2025-12-11 server schema and applies the configured {registry} rules.
+
+|Read a server version
+|`GET /apis/mcp-registry/v0.1/servers/\{serverName}/versions/\{version}`
+|Returns one published version. The `serverName` path segment is the URL-encoded server name, for example `io.github.example%2Fweather`.
+
+|List server versions
+|`GET /apis/mcp-registry/v0.1/servers`
+|Returns all published server versions, newest first. Query parameters filter the list and page through it.
+|===
+
+A compatibility rule can protect existing package installation and remote connection choices across versions. Package version and hash upgrades are allowed; removing or changing an existing connection or its configuration is considered backward-incompatible.
+
+.Example read request
+[source,shell]
+----
+curl 'http://localhost:8080/apis/mcp-registry/v0.1/servers/io.github.example%2Fweather/versions/1.0.0'
+----
+
+Single-version responses and list entries separate the server definition from registry-owned metadata:
+
+.Example single-version response
+[source,json]
+----
+{
+  "server": {
+    "name": "io.github.example/weather",
+    "version": "1.0.0",
+    "description": "Weather forecasts"
+  },
+  "_meta": {
+    "io.modelcontextprotocol.registry/official": {
+      "status": "active",
+      "isLatest": true
+    }
+  }
+}
+----
+
+The following query parameters filter the list of server versions:
+
+`version=latest`:: Selects only the latest version of each server.
+`search`:: Matches server names or descriptions.
+`updated_since`:: Accepts an RFC 3339 timestamp and compares it with the modification timestamp of the returned version, including status changes. This incremental listing includes deleted records.
+`include_deleted=true`:: Includes deleted records in reads that exclude them by default.
+
+To page through results, reuse `metadata.nextCursor` with the same filters. Both explicit and default page limits respect `apicurio.mcp-registry.max-page-size`.
+
+// ref-mcp-registry-api-operational-considerations

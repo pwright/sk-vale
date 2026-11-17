@@ -1,0 +1,40 @@
+[id="enabling-registry-content-search_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Enabling content search
+
+[role="_abstract"]
+You can enable the search index on an existing {registry} deployment by configuring an Elasticsearch connection and restarting the application.
+
+.Prerequisites
+* You have installed {registry}.
+* You have an Elasticsearch cluster that the {registry} application can reach. Its version is compatible with the Elasticsearch Java client included in your {registry} release.
+* You have access to the deployment configuration and Elasticsearch credentials, if authentication is enabled.
+
+.Procedure
+. Add the following environment variables to the {registry} application configuration:
++
+[source,bash]
+----
+APICURIO_FEATURES_EXPERIMENTAL_ENABLED=true
+APICURIO_SEARCH_INDEX_ENABLED=true
+QUARKUS_ELASTICSEARCH_HOSTS=elasticsearch:9200
+----
++
+Replace `elasticsearch:9200` with the hostname and port of your Elasticsearch cluster. For multiple hosts, use a comma-separated list.
+. If Elasticsearch requires authentication, configure `QUARKUS_ELASTICSEARCH_USERNAME` and supply `QUARKUS_ELASTICSEARCH_PASSWORD` from your deployment's secret management system.
++
+For an HTTPS connection, configure `QUARKUS_ELASTICSEARCH_PROTOCOL=https` and the certificate trust settings for your Elasticsearch client. Match these settings to the cluster configuration.
+. Restart the {registry} application to apply the configuration.
+
+.Verification
+* Check the application logs for `Elasticsearch search index ENABLED` and any connection or indexing errors.
+* Submit a content or structure search for an existing artifact version after the initial index build. Confirm that the expected version is in the results.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:searching-version-content-api_{context}[Searching version content with the REST API]
+* link:https://quarkus.io/guides/elasticsearch[Quarkus Elasticsearch client configuration]
+* link:https://www.elastic.co/docs/reference/elasticsearch/clients/java[Elasticsearch Java client compatibility]
+
+
+// proc-trying-content-search-compose

@@ -1,0 +1,58 @@
+[id="searching-version-content-api_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Searching version content with the REST API
+
+[role="_abstract"]
+You can use the `content` and `structure` query parameters on `GET /apis/registry/v3/search/versions` to find versions by their content and combine the results with metadata filters.
+
+.Prerequisites
+* You have enabled the search index and indexed artifact versions.
+* You have the {registry} API URL and permission to search versions.
+* You have installed `curl`.
+
+.Procedure
+. Set the API URL for your deployment:
++
+[source,bash]
+----
+export REGISTRY_URL=http://localhost:8080/apis/registry/v3
+----
+. Search for versions whose content includes `customer`:
++
+[source,bash]
+----
+curl --get "$REGISTRY_URL/search/versions" \
+  --data-urlencode 'content=customer'
+----
++
+For a deployment that requires authentication, include the authentication headers that your deployment uses. If the query contains several words, all query terms must match the indexed content.
+. Search for OpenAPI versions that define a schema named `Order`:
++
+[source,bash]
+----
+curl --get "$REGISTRY_URL/search/versions" \
+  --data-urlencode 'structure=openapi:schema:Order'
+----
+. To narrow the results, combine content and structure filters with metadata filters:
++
+[source,bash]
+----
+curl --get "$REGISTRY_URL/search/versions" \
+  --data-urlencode 'content=payment' \
+  --data-urlencode 'structure=schema:Invoice' \
+  --data-urlencode 'artifactType=OPENAPI' \
+  --data-urlencode 'groupId=payments'
+----
++
+The request returns versions that satisfy all of the filters. You can also set `limit` and `offset` to page through the results.
+
+.Verification
+* Check the `versions` array and `count` in the response. An empty `versions` array means that no indexed versions match the filters on the requested page.
+
+.Troubleshooting
+* If the response error message is `Content search requires the search index, which is not enabled.`, the search index feature is not enabled. Enable and configure the index as described in this chapter.
+* If the response error message is `Content search requires the Elasticsearch search index, which is not available.`, the index is enabled but startup indexing has not finished. Allow startup indexing to complete and repeat the search.
+* If a recent change is missing from the results, allow time for the asynchronous index update and repeat the search. Check the application logs if the results remain incomplete.
+
+
+// proc-searching-version-content-console

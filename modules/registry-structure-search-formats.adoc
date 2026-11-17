@@ -1,0 +1,26 @@
+[id="registry-structure-search-formats_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Structure search formats
+
+[role="_abstract"]
+The `structure` filter accepts an exact element identifier or a text query. The format determines how Elasticsearch matches the query against extracted elements.
+
+.Structure filter formats
+[cols="2,3,5",options="header"]
+|===
+|Format |Example |Behavior
+|`type:kind:name`
+|`openapi:schema:Order`
+|Matches the complete element identifier after conversion to lowercase. The artifact type, element kind, and name must match. The name can contain additional colons.
+|`kind:name`
+|`schema:Order`
+|Searches the extracted element text for both `schema` and `Order` across artifact types. This is a text search, not an exact element identifier match.
+|`name`
+|`Order`
+|Searches the extracted element text across artifact types and element kinds.
+|===
+
+Artifact type identifiers in exact queries use the registry type name, such as `json`, `protobuf`, or `agent_card`. For example, `json:property:customerId` matches a JSON Schema property named `customerId`.
+
+
+// ref-registry-searchable-elements

@@ -1,0 +1,25 @@
+[id="draft-version-settings_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Draft version settings
+
+[role="_abstract"]
+You can prepare schema and API changes as draft versions before publishing them. The following server settings control draft editing and draft content access. Both settings default to `false`.
+
+`apicurio.rest.mutability.artifact-version-content.enabled`::
+Set to `true` to update the content of versions in the `DRAFT` state and use the Studio editor in the web console. This setting does not make published versions editable. The equivalent environment variable is `APICURIO_REST_MUTABILITY_ARTIFACT_VERSION_CONTENT_ENABLED`.
+
+`apicurio.rest.draft.production-mode.enabled`::
+Set to `true` to use production-like behavior for drafts: {registry} uses content hashes for newly registered drafts, permits content retrieval by global ID and content ID, and applies content rules when you register a draft. This setting does not publish the draft or enable content editing. The equivalent environment variable is `APICURIO_REST_DRAFT_PRODUCTION_MODE_ENABLED`.
+
+An administrator can change these dynamic settings on the *Settings* tab as *Update artifact version content* and *Draft production mode*. Alternatively, set the environment variables in the server deployment configuration and restart the server. For an Operator deployment, set `spec.app.features.versionMutabilityEnabled: true` to enable draft content editing.
+
+By default, draft registration skips content rules and content retrieval by global ID or content ID is unavailable. You can still retrieve a draft by its group ID, artifact ID, and version. When you finalize a draft, {registry} applies the configured content rules before changing the state to `ENABLED`.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:configuring-settings-using-console_{context}[]
+ifndef::service-registry-downstream[]
+* xref:getting-started/assembly-deploying-registry-operator.adoc#enabling-version-mutability_{context}[Artifact version mutability configuration]
+endif::[]
+
+

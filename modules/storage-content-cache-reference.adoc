@@ -1,0 +1,103 @@
+[id="storage-content-cache-reference_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Storage content cache properties and metrics
+
+[role="_abstract"]
+The storage content cache has three configuration properties, three named caches, and five Micrometer meters for each cache, exposed at `/metrics` on the management port. When `apicurio.storage.content-cache.hot-path.ttl-seconds` is `0`, {registry} does not create the `contentAndTypeById` cache and does not register its meters. The properties are available since {registry} 3.3.3.
+
+.Storage content cache configuration properties
+[.table-expandable,width="100%",cols="4,4,2,5",options="header"]
+|===
+|Property
+|Environment variable
+|Default
+|Description
+
+|`apicurio.storage.content-cache.enabled`
+|`APICURIO_STORAGE_CONTENT_CACHE_ENABLED`
+|`true`
+|Enables the storage content cache. When `false`, {registry} does not create the caches and every content read goes to storage.
+
+|`apicurio.storage.content-cache.max-size`
+|`APICURIO_STORAGE_CONTENT_CACHE_MAX_SIZE`
+|`67108864`
+|Maximum weight, in bytes, of each of the three caches. The limit applies to each cache separately, so the caches can hold up to three times this value in total.
+
+|`apicurio.storage.content-cache.hot-path.ttl-seconds`
+|`APICURIO_STORAGE_CONTENT_CACHE_HOT_PATH_TTL_SECONDS`
+|`30`
+|Number of seconds after which a content-and-type entry expires. Set `0` to disable the content-and-type cache. The other two caches are not affected.
+|===
+
+.Caches and the reads that they serve
+[.table-expandable,width="100%",cols="3,3,4,5",options="header"]
+|===
+|Cache name (`cache` tag)
+|Key
+|Expiry
+|Serves
+
+|`contentById`
+|Content ID
+|None. {registry} evicts entries only when the cache exceeds its size limit.
+|Content and stored reference metadata by content ID, including the REST API `/ids/contentIds/\{contentId}` requests.
+
+|`contentByHash`
+|SHA-256 content hash
+|None. {registry} evicts entries only when the cache exceeds its size limit.
+|Content and references by content hash, including the REST API `/ids/contentHashes/\{contentHash}` requests.
+
+|`contentAndTypeById`
+|Content ID
+|`hot-path.ttl-seconds` after {registry} writes the entry, plus invalidation when you delete a single artifact version.
+|The Confluent-compatible `GET /schemas/ids/\{id}` and `GET /schemas/ids/\{id}/schema` requests when `apicurio.ccompat.legacy-id-mode.enabled` is `false`, which is the default.
+|===
+
+.Storage content cache metrics
+[.table-expandable,width="100%",cols="3,3,3,5",options="header"]
+|===
+|Micrometer meter
+|Prometheus name
+|Tags
+|Description
+
+|`cache.size`
+|`cache_size`
+|`cache`
+|Approximate number of entries currently in the cache.
+
+|`cache.gets`
+|`cache_gets_total`
+|`cache`, `result`
+|Number of lookups that returned a cached value (`result="hit"`) or loaded a new value from storage (`result="miss"`).
+
+|`cache.puts`
+|`cache_puts_total`
+|`cache`
+|Number of loads from storage, including lookups that failed because the content does not exist. A failed load does not add an entry.
+
+|`cache.evictions`
+|`cache_evictions_total`
+|`cache`
+|Number of entries removed by size-based eviction or expiry. The count excludes invalidations after a version delete.
+
+|`cache.eviction.weight`
+|`cache_eviction_weight_total`
+|`cache`
+|Total weight, in bytes, of the evicted entries. The count excludes invalidations after a version delete.
+|===
+
+*Reading the metrics*
+
+* The hit ratio for a cache is `hit / (hit + miss)` from `cache_gets_total`. A high ratio means that most reads avoid a storage round trip.
+* For `contentById` and `contentByHash`, steadily increasing evictions and misses can indicate that the working set exceeds the per-cache limit. Consider increasing `apicurio.storage.content-cache.max-size` if memory allows.
+* For `contentAndTypeById`, TTL expirations also count as evictions and cause misses on subsequent requests. Confirm that the size limit causes the evictions before increasing `max-size`; more capacity does not prevent TTL expiry.
+* When the hit ratio stays high with few evictions, a smaller limit reclaims memory without affecting throughput.
+* When the cache is disabled, or when the TTL is `0` for the `contentAndTypeById` cache, {registry} does not register the corresponding series.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:registry-storage-content-cache_{context}[]
+* xref:configuring-storage-content-cache_{context}[]
+* {registry-config-reference}
+

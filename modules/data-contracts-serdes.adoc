@@ -1,0 +1,58 @@
+[id="data-contracts-serdes_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Kafka SerDes integration
+
+[role="_abstract"]
+Contract rules can be evaluated during normal Kafka serialization and deserialization using the Apicurio Registry SerDes libraries. No code changes are required beyond configuration.
+
+Enable contract rule evaluation by setting these properties on your Kafka producer or consumer:
+
+.SerDes contract rule properties
+[cols="3,1,3", options="header"]
+|===
+|Property |Default |Description
+
+|`apicurio.registry.serde.contract-rules.enabled`
+|`false`
+|Enable contract rule execution during serialize/deserialize
+
+|`apicurio.registry.serde.contract-rules.fail-on-error`
+|`true`
+|When `true`, any failed rule throws an exception, whatever its `onFailure` action. When `false`, violations are logged as warnings (`java.util.logging`) and processing continues
+
+|`apicurio.registry.serde.contract-rules.cache.ttl.seconds`
+|`60`
+|How long the fetched ruleset is cached in the client
+
+|`apicurio.registry.serde.contract-rules.migration.enabled`
+|`false`
+|Enable migration in the deserializer
+
+|`apicurio.registry.serde.contract-rules.migration.target-version`
+|None
+|Target version for deserializer migration
+|===
+
+Contract rule evaluation works as follows:
+
+Rule source:: The SerDes fetch the global, artifact-level, and version-level rulesets of the schema version, merge their domain rules by name (the narrowest scope wins), cache them, and evaluate the rules locally in the client. Empty rulesets are cached too. A ruleset that cannot be fetched, for example because the registry is unreachable or refuses the request, is not cached: with `fail-on-error=true` the record is rejected, and the next record fetches the ruleset again.
+Record conversion:: Records are converted to maps by parsing the JSON output of their `toString()` method.
+Producer (serializer):: Runs `WRITE` rules before serialization.
+Consumer (deserializer):: Runs `READ` rules after deserialization.
+Results:: `TRANSFORM` output and deserializer migration results are not applied to the record. No dead letter queue routing is implemented; with `fail-on-error=false`, violations are only logged.
+
+.Producer with contract rules example
+[source,java]
+----
+Properties props = new Properties();
+props.put(SerdeConfig.REGISTRY_URL, "http://localhost:8080/apis/registry/v3");
+props.put(SerdeConfig.EXPLICIT_ARTIFACT_GROUP_ID, "my-group");
+props.put(SerdeConfig.ARTIFACT_RESOLVER_STRATEGY, TopicRecordIdStrategy.class.getName());
+props.put(SerdeConfig.CONTRACT_RULES_ENABLED, "true");
+props.put(SerdeConfig.CONTRACT_RULES_FAIL_ON_ERROR, "true");
+props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, AvroKafkaSerializer.class.getName());
+// ... other Kafka producer properties
+
+KafkaProducer<String, GenericRecord> producer = new KafkaProducer<>(props);
+----
+

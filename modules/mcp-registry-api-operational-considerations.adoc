@@ -1,0 +1,16 @@
+[id="mcp-registry-api-operational-considerations_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= MCP Registry API mutation behavior and operational considerations
+
+[role="_abstract"]
+The following behaviors apply when you publish, update, delete, or list MCP server versions through the MCP Registry API.
+
+* Draft artifact versions are not published MCP records, and MCP reads exclude them.
+* Version and server-wide status updates persist status messages and update the selected versions atomically. Server-wide updates return `updatedCount` and the updated `servers`.
+* DELETE is a soft deletion: it returns HTTP 200 with status `deleted` and retains content and history. Use `include_deleted=true` to inspect a deleted record, or PATCH its status to restore it. Permanent deletion is only available through the native v3 API, subject to `apicurio.rest.deletion.artifact-version.enabled`; MCP does not bypass that gate.
+* The optional PUT operation returns HTTP 501, as permitted by the upstream API. Publish a new immutable version instead.
+* Input manifests are limited to 1 MiB. Validation uses the bundled schema without fetching the `$schema` URL of the publisher.
+* Filtered lists scan and resolve server versions before pagination. The page-size limit bounds responses and storage batches, not total scanning work or memory. Offset cursors do not provide snapshot consistency across concurrent writes.
+* GitOps and KubernetesOps storage read from imported branch metadata and reject writes with HTTP 501.
+* Registering a server manifest does not contact the server or import its tools.
+* Status messages are descriptive, user-editable version metadata. They are not authorization or approval state; {registry} derives the lifecycle status from the version state.

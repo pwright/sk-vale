@@ -1,0 +1,64 @@
+[id="registering-base64-content-using-rest-api_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Registering base64-encoded content using the REST API
+
+[role="_abstract"]
+You can send UTF-8 schema or API content as base64 in a JSON request to avoid escaping quotation marks and line breaks in the content.
+Set `encoding` to `base64` in the `VersionContent` object.
+{registry} decodes the content before processing it.
+
+.Prerequisites
+* {registry} is running, and you have permission to create artifacts in `my-group`.
+* The `my-group` group exists.
+* You have installed `curl`, `base64`, and `jq`.
+* The `schema.json` file contains an Apache Avro schema.
+* The `REGISTRY_URL` environment variable contains the registry URL, and `ACCESS_TOKEN` contains a valid access token if authentication is enabled.
+
+.Procedure
+. Create the request body from your schema file:
++
+[source,bash]
+----
+$ base64 < schema.json | tr -d '\r\n' > schema.base64
+$ jq -n --rawfile content schema.base64 '{
+    artifactId: "encoded-schema",
+    artifactType: "AVRO",
+    firstVersion: {
+        version: "1.0.0",
+        content: {
+            content: $content,
+            contentType: "application/json",
+            encoding: "base64"
+        }
+    }
+}' > request.json
+----
++
+`contentType` describes the decoded schema, not the base64 text.
+The `encoding` value is case-sensitive.
+Omit `encoding` when sending unencoded content.
+. Register the artifact:
++
+[source,bash]
+----
+$ curl --fail-with-body -X POST \
+  "$REGISTRY_URL/apis/registry/v3/groups/my-group/artifacts" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  --data-binary @request.json
+----
++
+You can also set `encoding` in the `content` object when creating a version of an existing artifact.
+Invalid base64 content returns HTTP `400`.
+
+.Verification
+* Retrieve the version content and confirm that it contains the decoded schema:
++
+[source,bash]
+----
+$ curl --fail-with-body \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  "$REGISTRY_URL/apis/registry/v3/groups/my-group/artifacts/encoded-schema/versions/1.0.0/content"
+----
+
+// proc-managing-artifact-references-using-rest-api

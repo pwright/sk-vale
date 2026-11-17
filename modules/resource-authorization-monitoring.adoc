@@ -1,0 +1,40 @@
+[id="resource-authorization-monitoring_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Per-resource authorization metrics and audit log
+
+[role="_abstract"]
+When OpenTelemetry metrics are enabled, {registry} counts per-resource authorization decisions in a metric. {registry} also logs denied point-access decisions to a dedicated audit logger.
+
+**Metrics**
+
+When OpenTelemetry metrics are enabled, {registry} exports the counter `apicurio.authz.decisions`, with the following attributes:
+
+.Attributes of the `apicurio.authz.decisions` counter
+[cols="2,3",options="header"]
+|===
+|Attribute |Values
+
+|`apicurio.registry.result`
+|`allow` or `deny`
+
+|`apicurio.registry.entity_type`
+|`artifact`, `group`, or `content`
+
+|`apicurio.registry.operation`
+|The lowercased authorization level: `read`, `write`, `admin`, or `adminorowner` where used
+|===
+
+The counter measures recorded ACL decisions, not HTTP requests. A request can check several resources, while administrator/owner bypasses and rejections by earlier role checks need not record any ACL decision. Search permission reporting does not record ACL-decision metrics or denial audit entries because it is not an access attempt.
+
+**Audit log**
+
+{registry} logs denied point-access decisions at `INFO` level to the `io.apicurio.registry.audit.authz` logger:
+
+[source]
+----
+authz.denied user="alice" operation="write" resource_type="artifact" resource="team-b/secret-schema"
+----
+
+To disable these messages, set `quarkus.log.category."io.apicurio.registry.audit.authz".level=OFF`.
+
+// ref-resource-authorization-troubleshooting

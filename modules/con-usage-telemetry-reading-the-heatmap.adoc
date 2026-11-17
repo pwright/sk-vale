@@ -1,0 +1,16 @@
+[id="con-usage-telemetry-reading-the-heatmap_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Reading the consumer heatmap
+
+[role="_abstract"]
+The consumer version heatmap answers which client applications fetch which versions of one artifact.
+
+* Each row is a client application, identified by its `X-Registry-Client-Id`.
+* Each column is a version that at least one client fetched. The number in a cell is how many fetches that client made of that version within the retention period.
+* `versionsBehind` compares the newest version the client fetched with the newest version that any client fetched. A client on the newest version shows `0`.
+* `driftAlert` is `true` when `versionsBehind` is at least `apicurio.usage.drift-alert-threshold` (default 2).
+
+The heatmap lists only versions that were fetched. A newer version that nobody fetched yet does not count towards `versionsBehind`.
+
+Fetch counts are not exact request counts. The server drops a fetch when the same client fetched the same schema less than 60 seconds earlier. The schema is identified by the identifier of the request, so a schema that a client fetches once by `globalId` and once by `contentId` produces two events in that period. The record of recent fetches that implements this is held in the memory of each registry instance, so with several instances behind a load balancer each instance counts separately. While that record holds 10,000 entries, the instance records no new events at all. The record is pruned only during a flush that has buffered events, and a full record buffers none, so by reading the code an instance in that state may not recover until it restarts. A busy deployment can therefore show lower counts than the real traffic, or stop counting.
+
