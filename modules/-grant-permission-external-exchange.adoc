@@ -1,0 +1,41 @@
+[id="_grant_permission_external_exchange_{context}"]
+= Granting permission for the exchange
+
+
+Internal to external token exchange requests will be denied with a 403, Forbidden response until you grant permission for the calling client to exchange tokens with the external identity provider.  To grant permission to the client, you go to the identity provider's configuration page to the *Permissions* tab.
+
+.Identity Provider Permission
+image::exchange-idp-permission-unset.png[Identity Provider Exchange Permission]
+
+.Procedure
+
+. Toggle *Permissions Enabled* to *On*.
++
+.Identity Provider Permission
+image::exchange-idp-permission-set.png[Identity Provider Exchange Permission Set]
++
+The page displays *token-exchange* link.
+
+. Click the link to start defining the permission.
++
+This setup page appears.
++
+.Identity Provider Exchange Permission Setup
+image::exchange-idp-permission-setup.png[Identity Provider Exchange Permission Setup]
+
+. Click *Client details* in the breadcrumbs at the top of the screen.
+
+. Click *Policies* tab to create a client policy.
++
+.Client Policy Creation
+image::exchange-idp-client-policy.png[Client Policy Creation]
+
+. Enter the starting client that is the authenticated client that is requesting a token exchange.
+
+. Return to the identity provider's *token-exchange* permission and add the client policy you just defined.
++
+.Apply Client Policy
+image::exchange-idp-apply-policy.png[Apply Client Policy]
+
+Your client now has permission to invoke.  If you do not do this correctly, you will get a 403 Forbidden response if you try to make an exchange.
+

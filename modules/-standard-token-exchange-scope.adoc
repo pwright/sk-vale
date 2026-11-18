@@ -1,0 +1,115 @@
+[id="_standard-token-exchange-scope_{context}"]
+= Scopes and audiences
+
+
+The `scope` parameter in the token exchange request has the same meaning as other grants. This parameter is optional. When it is omitted, the effective client scopes used in the request are
+the link:{adminguide_link}#_client_scopes[Default client scopes] of the `requester-client`. When this parameter is used, the effective client scopes are the default scopes together with
+the link:{adminguide_link}#_client_scopes[Optional client scopes]
+
+By default, the used client scopes will add the audiences to the `aud` claim of the token based on the used client scopes and client roles as specified in the link:{adminguide_link}#audience-support[Audience documentation].
+
+The `audience` parameter can be used for filtering of audiences, so that the `aud` claim will contain only the audiences specified by the `audience` parameter. Similarly the client roles in the token will
+be filtered and the token will have only the client roles of the clients specified by the `audience` parameter.
+
+In addition, the `audience` parameter can be used to potentially filter client scopes as well. It works in a manner that is similar to link:{adminguide_link}#client-scopes-permissions[Client scope permission for users].
+If the client scope does not contain any client roles (for example, it contains zero roles or it contains only realm roles), no additional filtering occurs for client scopes. However, if the client scope contains any
+client role mappings, it must include some client roles of the clients requested by the `audience` parameter. Composite roles are also included for consideration. If the client scope contains no client
+roles of the clients requested by the `audience`, the client scope will be filtered.
+
+NOTE: The `audience` parameter can be used to filter the audiences that are coming from the used client scopes. However, this parameter will not add more audiences. When the audience parameter is omitted,
+no filtering occurs. As a result, the `audience` parameter is effectively used for "downscoping" the token to make sure that it contains only the requested audiences. However, the `scope` parameter is used
+to add optional client scopes and hence it can be used for "upscoping" and adding more scopes.
+
+NOTE: By default, token exchange can be used to request extra scopes and audiences that are not present in the initial `subject_token`. If, for security reasons, you want to ensure that scopes are limited to the ones already granted to the `subject_token`, the `downscope-assertion-grant-enforcer` policy executor can be applied to the client. This executor enforces that only downscoping is allowed for token exchange. See link:{adminguide_link}#_downscoping[Downscoping] and link:{adminguide_link}#_client_policies[Client Policies] chapters in the {adminguide_name} for more information.
+
+
+**Examples**
+
+
+Here are some examples to better illustrate the behavior for scopes and audiences.
+
+Assume we have the realm with:
+
+* Client `target-client1` with the client role `target-client1-role`
+
+* Client `target-client2` with the client role `target-client2-role`
+
+* Client `target-client3` with the client role `target-client3-role`
+
+* Client scope `default-scope1`. This client scope has role scope mapping for the client role `target-client1/target-client1-role`
+
+* Client scope `optional-scope2`. This client scope has role scope mapping for the client role `target-client2/target-client2-role`
+
+* Client `requester-client`, which has client scope `default-scope1` added as default client scope and scope `optional-scope2` added as an optional client scope
+
+* Authenticated user, who is member of both `target-client1-role` and `target-client2-role`
+
+The settings above means that using scope `default-scope1` will add the audience `target-client1` to the token and using `optional-scope2` will add the audience `target-client2`. This is because of the
+audience resolving described in the link:{adminguide_link}#_audience_resolve[Audience documentation].
+
+
+
+**Example 1**
+
+
+Token exchange request sent with `scope=optional-scope2` and without audience parameter:
+
+There will be no filtering of audience. The scopes and audiences will be resolved as is the case for any other grants as described in the link:{adminguide_link}#_client_scopes[Client scopes] and
+link:{adminguide_link}#_audience_resolve[Audience documentation] sections. The response token will be similar to this (claims not interesting for this example omitted for brevity):
+
+[source,json]
+----
+{
+  "azp": "requester-client",
+  "scope": "default-scope1 optional-scope2",
+  "aud": [ "target-client1", "target-client2" ],
+  "resource_access": {
+	"target-client1": {
+  	  "roles": [ "target-client1-role" ]
+	},
+	"target-client2": {
+  	  "roles": [ "target-client2-role" ]
+	}
+  },
+  ...
+}
+----
+
+
+**Example 2**
+
+
+Token exchange request sent with `scope=optional-scope2` and with `audience=target-client2`
+
+Same like previous example, but `target-client1` audience and client roles filtered due audience parameter was included, but only with this `target-client2` client. The client scope `default-scope1` will be
+also filtered because it contains some client roles but no client roles of the requested audience client `target-client2`. So the token would be as follows:
+
+[source,json]
+----
+{
+  "azp": "requester-client",
+  "scope": "optional-scope2",
+  "aud": [ "target-client2" ],
+  "resource_access": {
+    "target-client2": {
+      "roles": [ "target-client2-role" ]
+    }
+  },
+  ...
+}
+----
+
+
+**Example 3**
+
+
+Token exchange request sent with `scope=optional-scope2` and with `audience=target-client2&audience=target-client3`
+
+The `target-client3` is not part of the token audience as user does not have any roles. So in this case, the request will be rejected as some of the requested audiences are not available.
+
+NOTE: As mentioned in the token exchange specification, it is good practice to downscope the token as much as possible and use only the audiences needed. Ideally use a single audience. This strategy increases the probability
+that request will be allowed.
+
+NOTE: If you have a more complex deployment with many various scopes and audiences, it can be challenging to model it in an appropriate way. Consider using the link:{adminguide_link}#_client_scopes_evaluate[Client scopes evaluate tab]
+to test if the token looks as expected for the given user and for the given set of scopes and audiences.
+

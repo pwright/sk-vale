@@ -1,0 +1,5750 @@
+[id="all-config_{context}"]
+= All configuration
+
+
+
+
+[#category-cache]
+== Cache
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+cache+`# 
+
+[.options-description]#Defines the cache mechanism for high-availability.#
+
+[#option-extended-cache-cache,role="options-extended"]
+--
+[.options-description-extended]#By default in production mode, a `ispn` cache is used to create a cluster between multiple server nodes. By default in development mode, a `local` cache disables clustering and is intended for development and testing purposes.#
+
+
+
+*CLI:* `+--cache+` +
+*Env:* `+KC_CACHE+`
+--
+
+
+
+|
+`+ispn+`, `+local+`
+
+|
+|
+[.options-key]#`+cache-config-file+`# 
+
+[.options-description]#Defines the file from which cache configuration should be loaded from.#
+
+[#option-extended-cache-cache-config-file,role="options-extended"]
+--
+[.options-description-extended]#The configuration file is relative to the `conf/` directory.#
+
+
+
+*CLI:* `+--cache-config-file+` +
+*Env:* `+KC_CACHE_CONFIG_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+cache-config-mutate+`# 
+
+[.options-description]#Determines whether changes to the default cache configurations are allowed.#
+
+[#option-extended-cache-cache-config-mutate,role="options-extended"]
+--
+[.options-description-extended]#This is only recommended for advanced use-cases where the default cache configurations are proven to be problematic. The only supported way to change the default cache configurations is via the other `cache-...` options.#
+
+
+
+*CLI:* `+--cache-config-mutate+` +
+*Env:* `+KC_CACHE_CONFIG_MUTATE+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+cache-embedded-authorization-max-count+`# 
+
+[.options-description]#The maximum number of entries that can be stored in-memory by the authorization cache.#
+
+[#option-extended-cache-cache-embedded-authorization-max-count,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-authorization-max-count+` +
+*Env:* `+KC_CACHE_EMBEDDED_AUTHORIZATION_MAX_COUNT+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-client-sessions-max-count+`# 
+
+[.options-description]#The maximum number of entries that can be stored in-memory by the clientSessions cache.#
+
+[#option-extended-cache-cache-embedded-client-sessions-max-count,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-client-sessions-max-count+` +
+*Env:* `+KC_CACHE_EMBEDDED_CLIENT_SESSIONS_MAX_COUNT+`
+--
+
+Available only when embedded Infinispan clusters configured
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-cluster-name+`# 
+
+[.options-description]#Name of the embedded Infinispan cluster.#
+
+[#option-extended-cache-cache-embedded-cluster-name,role="options-extended"]
+--
+[.options-description-extended]#All nodes that belong to the same Keycloak deployment must share the same value; nodes that belong to different deployments sharing the same database must each use a different value. Defaults to `ISPN` if not set. WARNING: Using distinct cluster names without enabling the stateless feature disables cross-cluster cache invalidation, which leads to stale caches and incorrect behavior. Use only together with `--features=stateless`.#
+
+
+
+*CLI:* `+--cache-embedded-cluster-name+` +
+*Env:* `+KC_CACHE_EMBEDDED_CLUSTER_NAME+`
+--
+
+Available only when Infinispan clustered embedded is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-embedded-crl-max-count+`# 
+
+[.options-description]#The maximum number of entries that can be stored in-memory by the crl cache.#
+
+[#option-extended-cache-cache-embedded-crl-max-count,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-crl-max-count+` +
+*Env:* `+KC_CACHE_EMBEDDED_CRL_MAX_COUNT+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-keys-max-count+`# 
+
+[.options-description]#The maximum number of entries that can be stored in-memory by the keys cache.#
+
+[#option-extended-cache-cache-embedded-keys-max-count,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-keys-max-count+` +
+*Env:* `+KC_CACHE_EMBEDDED_KEYS_MAX_COUNT+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-mtls-enabled+`# 
+
+[.options-description]#Encrypts the network communication between Keycloak servers.#
+
+[#option-extended-cache-cache-embedded-mtls-enabled,role="options-extended"]
+--
+[.options-description-extended]#If no additional parameters about a keystore and truststore are provided, ephemeral key pairs and certificates are created and rotated automatically, which is recommended for standard setups.#
+
+
+
+*CLI:* `+--cache-embedded-mtls-enabled+` +
+*Env:* `+KC_CACHE_EMBEDDED_MTLS_ENABLED+`
+--
+
+Available only when a TCP based cache-stack is used
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+cache-embedded-mtls-key-store-file+`# 
+
+[.options-description]#The Keystore file path.#
+
+[#option-extended-cache-cache-embedded-mtls-key-store-file,role="options-extended"]
+--
+[.options-description-extended]#The Keystore must contain the certificate to use by the TLS protocol. By default, it looks up `cache-mtls-keystore.p12` under conf/ directory.#
+
+
+
+*CLI:* `+--cache-embedded-mtls-key-store-file+` +
+*Env:* `+KC_CACHE_EMBEDDED_MTLS_KEY_STORE_FILE+`
+--
+
+Available only when property 'cache-embedded-mtls-enabled' is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-embedded-mtls-key-store-password+`# 
+
+[.options-description]#The password to access the Keystore.#
+
+[#option-extended-cache-cache-embedded-mtls-key-store-password,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-mtls-key-store-password+` +
+*Env:* `+KC_CACHE_EMBEDDED_MTLS_KEY_STORE_PASSWORD+`
+--
+
+Available only when property 'cache-embedded-mtls-enabled' is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-embedded-mtls-rotation-interval-days+`# 
+
+[.options-description]#Rotation period in days of automatic JGroups MTLS certificates.#
+
+[#option-extended-cache-cache-embedded-mtls-rotation-interval-days,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-mtls-rotation-interval-days+` +
+*Env:* `+KC_CACHE_EMBEDDED_MTLS_ROTATION_INTERVAL_DAYS+`
+--
+
+Available only when property 'cache-embedded-mtls-enabled' is enabled
+
+
+|_Integer_
+
+|
+`+30+`
+
+|
+[.options-key]#`+cache-embedded-mtls-trust-store-file+`# 
+
+[.options-description]#The Truststore file path.#
+
+[#option-extended-cache-cache-embedded-mtls-trust-store-file,role="options-extended"]
+--
+[.options-description-extended]#It should contain the trusted certificates or the Certificate Authority that signed the certificates. By default, it lookup `cache-mtls-truststore.p12` under conf/ directory.#
+
+
+
+*CLI:* `+--cache-embedded-mtls-trust-store-file+` +
+*Env:* `+KC_CACHE_EMBEDDED_MTLS_TRUST_STORE_FILE+`
+--
+
+Available only when property 'cache-embedded-mtls-enabled' is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-embedded-mtls-trust-store-password+`# 
+
+[.options-description]#The password to access the Truststore.#
+
+[#option-extended-cache-cache-embedded-mtls-trust-store-password,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-mtls-trust-store-password+` +
+*Env:* `+KC_CACHE_EMBEDDED_MTLS_TRUST_STORE_PASSWORD+`
+--
+
+Available only when property 'cache-embedded-mtls-enabled' is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-embedded-network-bind-address+`# 
+
+[.options-description]#IP address used by clustering transport.#
+
+[#option-extended-cache-cache-embedded-network-bind-address,role="options-extended"]
+--
+[.options-description-extended]#By default, SITE_LOCAL is used.#
+
+
+
+*CLI:* `+--cache-embedded-network-bind-address+` +
+*Env:* `+KC_CACHE_EMBEDDED_NETWORK_BIND_ADDRESS+`
+--
+
+Available only when Infinispan clustered embedded is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-embedded-network-bind-port+`# 
+
+[.options-description]#The Port the clustering transport will bind to.#
+
+[#option-extended-cache-cache-embedded-network-bind-port,role="options-extended"]
+--
+[.options-description-extended]#By default, port 7800 is used.#
+
+
+
+*CLI:* `+--cache-embedded-network-bind-port+` +
+*Env:* `+KC_CACHE_EMBEDDED_NETWORK_BIND_PORT+`
+--
+
+Available only when Infinispan clustered embedded is enabled
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-network-external-address+`# 
+
+[.options-description]#IP address that other instances in the cluster should use to contact this node.#
+
+[#option-extended-cache-cache-embedded-network-external-address,role="options-extended"]
+--
+[.options-description-extended]#Set only if it is different to cache-embedded-network-bind-address, for example when this instance is behind a firewall.#
+
+
+
+*CLI:* `+--cache-embedded-network-external-address+` +
+*Env:* `+KC_CACHE_EMBEDDED_NETWORK_EXTERNAL_ADDRESS+`
+--
+
+Available only when Infinispan clustered embedded is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-embedded-network-external-port+`# 
+
+[.options-description]#Port that other instances in the cluster should use to contact this node.#
+
+[#option-extended-cache-cache-embedded-network-external-port,role="options-extended"]
+--
+[.options-description-extended]#Set only if it is different to cache-embedded-network-bind-port, for example when this instance is behind a firewall#
+
+
+
+*CLI:* `+--cache-embedded-network-external-port+` +
+*Env:* `+KC_CACHE_EMBEDDED_NETWORK_EXTERNAL_PORT+`
+--
+
+Available only when Infinispan clustered embedded is enabled
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-node-name+`# 
+
+[.options-description]#Name of this node in the embedded cluster.#
+
+[#option-extended-cache-cache-embedded-node-name,role="options-extended"]
+--
+[.options-description-extended]#Used in log messages and management tools to identify this instance. If not set, a name is generated automatically.#
+
+
+
+*CLI:* `+--cache-embedded-node-name+` +
+*Env:* `+KC_CACHE_EMBEDDED_NODE_NAME+`
+--
+
+Available only when Infinispan clustered embedded is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-embedded-offline-client-sessions-max-count+`# 
+
+[.options-description]#The maximum number of entries that can be stored in-memory by the offlineClientSessions cache.#
+
+[#option-extended-cache-cache-embedded-offline-client-sessions-max-count,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-offline-client-sessions-max-count+` +
+*Env:* `+KC_CACHE_EMBEDDED_OFFLINE_CLIENT_SESSIONS_MAX_COUNT+`
+--
+
+Available only when embedded Infinispan clusters configured
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-offline-sessions-max-count+`# 
+
+[.options-description]#The maximum number of entries that can be stored in-memory by the offlineSessions cache.#
+
+[#option-extended-cache-cache-embedded-offline-sessions-max-count,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-offline-sessions-max-count+` +
+*Env:* `+KC_CACHE_EMBEDDED_OFFLINE_SESSIONS_MAX_COUNT+`
+--
+
+Available only when embedded Infinispan clusters configured
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-realms-max-count+`# 
+
+[.options-description]#The maximum number of entries that can be stored in-memory by the realms cache.#
+
+[#option-extended-cache-cache-embedded-realms-max-count,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-realms-max-count+` +
+*Env:* `+KC_CACHE_EMBEDDED_REALMS_MAX_COUNT+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-sessions-max-count+`# 
+
+[.options-description]#The maximum number of entries that can be stored in-memory by the sessions cache.#
+
+[#option-extended-cache-cache-embedded-sessions-max-count,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-sessions-max-count+` +
+*Env:* `+KC_CACHE_EMBEDDED_SESSIONS_MAX_COUNT+`
+--
+
+Available only when embedded Infinispan clusters configured
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-embedded-users-max-count+`# 
+
+[.options-description]#The maximum number of entries that can be stored in-memory by the users cache.#
+
+[#option-extended-cache-cache-embedded-users-max-count,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-embedded-users-max-count+` +
+*Env:* `+KC_CACHE_EMBEDDED_USERS_MAX_COUNT+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+cache-metrics-histograms-enabled+`# 
+
+[.options-description]#Enable histograms for metrics for the embedded caches.#
+
+[#option-extended-cache-cache-metrics-histograms-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-metrics-histograms-enabled+` +
+*Env:* `+KC_CACHE_METRICS_HISTOGRAMS_ENABLED+`
+--
+
+Available only when metrics are enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+cache-remote-backup-sites+`# 
+
+[.options-description]#Configures a list of backup sites names to where the external Infinispan cluster backups the Keycloak data.#
+
+[#option-extended-cache-cache-remote-backup-sites,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-remote-backup-sites+` +
+*Env:* `+KC_CACHE_REMOTE_BACKUP_SITES+`
+--
+
+Available only when remote host is set
+
+
+|_List_
+
+|
+|
+[.options-key]#`+cache-remote-host+`# 
+
+[.options-description]#The hostname of the external Infinispan cluster.#
+
+[#option-extended-cache-cache-remote-host,role="options-extended"]
+--
+[.options-description-extended]#Available only when feature `multi-site` or `clusterless` is set.#
+
+
+
+*CLI:* `+--cache-remote-host+` +
+*Env:* `+KC_CACHE_REMOTE_HOST+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-remote-password+`# 
+
+[.options-description]#The password for the authentication to the external Infinispan cluster.#
+
+[#option-extended-cache-cache-remote-password,role="options-extended"]
+--
+[.options-description-extended]#It is optional if connecting to an unsecure external Infinispan cluster. If the option is specified, `cache-remote-username` is required as well.#
+
+
+
+*CLI:* `+--cache-remote-password+` +
+*Env:* `+KC_CACHE_REMOTE_PASSWORD+`
+--
+
+Available only when remote host is set
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-remote-port+`# 
+
+[.options-description]#The port of the external Infinispan cluster.#
+
+[#option-extended-cache-cache-remote-port,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--cache-remote-port+` +
+*Env:* `+KC_CACHE_REMOTE_PORT+`
+--
+
+Available only when remote host is set
+
+
+|_Integer_
+
+|
+`+11222+`
+
+|
+[.options-key]#`+cache-remote-tls-enabled+`# 
+
+[.options-description]#Enable TLS support to communicate with a secured remote Infinispan server.#
+
+[#option-extended-cache-cache-remote-tls-enabled,role="options-extended"]
+--
+[.options-description-extended]#Recommended to be enabled in production.#
+
+
+
+*CLI:* `+--cache-remote-tls-enabled+` +
+*Env:* `+KC_CACHE_REMOTE_TLS_ENABLED+`
+--
+
+Available only when remote host is set
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+cache-remote-username+`# 
+
+[.options-description]#The username for the authentication to the external Infinispan cluster.#
+
+[#option-extended-cache-cache-remote-username,role="options-extended"]
+--
+[.options-description-extended]#It is optional if connecting to an unsecure external Infinispan cluster. If the option is specified, `cache-remote-password` is required as well.#
+
+
+
+*CLI:* `+--cache-remote-username+` +
+*Env:* `+KC_CACHE_REMOTE_USERNAME+`
+--
+
+Available only when remote host is set
+
+
+|_String_
+
+|
+|
+[.options-key]#`+cache-stack+`# 
+
+[.options-description]#Define the default stack to use for cluster communication and node discovery.#
+
+[#option-extended-cache-cache-stack,role="options-extended"]
+--
+[.options-description-extended]#Defaults to `jdbc-ping` if not set.#
+
+
+
+*CLI:* `+--cache-stack+` +
+*Env:* `+KC_CACHE_STACK+`
+--
+
+Available only when 'cache' type is set to 'ispn'
+
+Use 'jdbc-ping' instead by leaving it unset
+*Deprecated values: `+azure+`, `+ec2+`, `+google+`, `+jdbc-ping-udp+`, `+kubernetes+`, `+tcp+`, `+udp+`*
+
+|
+`+jdbc-ping+`, `+kubernetes+` (deprecated), `+jdbc-ping-udp+` (deprecated), `+tcp+` (deprecated), `+udp+` (deprecated), `+ec2+` (deprecated), `+azure+` (deprecated), `+google+` (deprecated), or any
+
+|
+
+|===
+[#category-config]
+== Config
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+config-keystore+`# 
+
+[.options-description]#Specifies a path to the KeyStore Configuration Source.#
+
+[#option-extended-config-config-keystore,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--config-keystore+` +
+*Env:* `+KC_CONFIG_KEYSTORE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+config-keystore-password+`# 
+
+[.options-description]#Specifies a password to the KeyStore Configuration Source.#
+
+[#option-extended-config-config-keystore-password,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--config-keystore-password+` +
+*Env:* `+KC_CONFIG_KEYSTORE_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+config-keystore-type+`# 
+
+[.options-description]#Specifies a type of the KeyStore Configuration Source.#
+
+[#option-extended-config-config-keystore-type,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--config-keystore-type+` +
+*Env:* `+KC_CONFIG_KEYSTORE_TYPE+`
+--
+
+
+
+|_String_
+
+|
+`+PKCS12+`
+
+
+|===
+[#category-database]
+== Database
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+db+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#The database vendor.#
+
+[#option-extended-database-db,role="options-extended"]
+--
+[.options-description-extended]#In production mode the default value of `dev-file` is deprecated, you should explicitly specify the db instead.#
+
+*Named key:* [.options-wildcard-key]#`+db-kind-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+*CLI:* `+--db+` +
+*Env:* `+KC_DB+`
+--
+
+
+
+|
+`+dev-file+`, `+dev-mem+`, `+mariadb+`, `+mssql+`, `+mysql+`, `+oracle+`, `+postgres+`, `+tidb+`
+
+|
+`+dev-file+`
+
+|
+[.options-key]#`+db-connect-timeout+`# 
+
+[.options-description]#Sets the JDBC driver connection timeout and login timeout.#
+
+[#option-extended-database-db-connect-timeout,role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+*Named key:* [.options-wildcard-key]#`+db-connect-timeout-<datasource>+`# 
+
+*CLI:* `+--db-connect-timeout+` +
+*Env:* `+KC_DB_CONNECT_TIMEOUT+`
+--
+
+
+
+|_String_
+
+|
+`+10s+`
+
+|
+[.options-key]#`+db-debug-jpql+`# 
+
+[.options-description]#Add JPQL information as comments to SQL statements to debug JPA SQL statement generation.#
+
+[#option-extended-database-db-debug-jpql,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-debug-jpql-<datasource>+`# 
+
+*CLI:* `+--db-debug-jpql+` +
+*Env:* `+KC_DB_DEBUG_JPQL+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+db-driver+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#The fully qualified class name of the JDBC driver.#
+
+[#option-extended-database-db-driver,role="options-extended"]
+--
+[.options-description-extended]#If not set, a default driver is set accordingly to the chosen database.#
+
+*Named key:* [.options-wildcard-key]#`+db-driver-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+*CLI:* `+--db-driver+` +
+*Env:* `+KC_DB_DRIVER+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-log-slow-queries-threshold+`# 
+
+[.options-description]#Log SQL statements slower than the configured threshold with logger org.#
+
+[#option-extended-database-db-log-slow-queries-threshold,role="options-extended"]
+--
+[.options-description-extended]#hibernate.SQL_SLOW and log-level info.#
+
+*Named key:* [.options-wildcard-key]#`+db-log-slow-queries-threshold-<datasource>+`# 
+
+*CLI:* `+--db-log-slow-queries-threshold+` +
+*Env:* `+KC_DB_LOG_SLOW_QUERIES_THRESHOLD+`
+--
+
+
+
+|_Integer_
+
+|
+`+10000+`
+
+|
+[.options-key]#`+db-mtls-key-store-file+`# 
+
+[.options-description]#The path to the keystore file containing the client certificate and private key used for mTLS authentication with the database server.#
+
+[#option-extended-database-db-mtls-key-store-file,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-mtls-key-store-file-<datasource>+`# 
+
+*CLI:* `+--db-mtls-key-store-file+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+db-mtls-key-store-password+`# 
+
+[.options-description]#The password to access the keystore file specified in db-mtls-key-store-file.#
+
+[#option-extended-database-db-mtls-key-store-password,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-mtls-key-store-password-<datasource>+`# 
+
+*CLI:* `+--db-mtls-key-store-password+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-mtls-key-store-type+`# 
+
+[.options-description]#The type of the keystore file.#
+
+[#option-extended-database-db-mtls-key-store-type,role="options-extended"]
+--
+[.options-description-extended]#Common values include `JKS` (Java KeyStore) and `PKCS12`. If not specified, it uses the driver's default.#
+
+*Named key:* [.options-wildcard-key]#`+db-mtls-key-store-type-<datasource>+`# 
+
+*CLI:* `+--db-mtls-key-store-type+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_TYPE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-password+`# 
+
+[.options-description]#The password of the database user.#
+
+[#option-extended-database-db-password,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-password-<datasource>+`# 
+
+*CLI:* `+--db-password+` +
+*Env:* `+KC_DB_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-pool-initial-size+`# 
+
+[.options-description]#The initial size of the connection pool.#
+
+[#option-extended-database-db-pool-initial-size,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-pool-initial-size-<datasource>+`# 
+
+*CLI:* `+--db-pool-initial-size+` +
+*Env:* `+KC_DB_POOL_INITIAL_SIZE+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-pool-max-lifetime+`# 
+
+[.options-description]#The maximum time a connection remains in the pool, after which it will be closed upon return and replaced as necessary.#
+
+[#option-extended-database-db-pool-max-lifetime,role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--db-pool-max-lifetime+` +
+*Env:* `+KC_DB_POOL_MAX_LIFETIME+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-pool-max-size+`# 
+
+[.options-description]#The maximum size of the connection pool.#
+
+[#option-extended-database-db-pool-max-size,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-pool-max-size-<datasource>+`# 
+
+*CLI:* `+--db-pool-max-size+` +
+*Env:* `+KC_DB_POOL_MAX_SIZE+`
+--
+
+
+
+|_Integer_
+
+|
+`+100+`
+
+|
+[.options-key]#`+db-pool-min-size+`# 
+
+[.options-description]#The minimal size of the connection pool.#
+
+[#option-extended-database-db-pool-min-size,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-pool-min-size-<datasource>+`# 
+
+*CLI:* `+--db-pool-min-size+` +
+*Env:* `+KC_DB_POOL_MIN_SIZE+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-schema+`# 
+
+[.options-description]#The database schema to be used.#
+
+[#option-extended-database-db-schema,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-schema-<datasource>+`# 
+
+*CLI:* `+--db-schema+` +
+*Env:* `+KC_DB_SCHEMA+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-tls-mode+`# 
+
+[.options-description]#Sets the TLS mode for the database connection.#
+
+[#option-extended-database-db-tls-mode,role="options-extended"]
+--
+[.options-description-extended]#If disabled, it uses the driver's default value. When set to verify-server, it enables encryption and server identity verification. The database server certificate or Certificate Authority (CA) certificate is required.#
+
+*Named key:* [.options-wildcard-key]#`+db-tls-mode-<datasource>+`# 
+
+*CLI:* `+--db-tls-mode+` +
+*Env:* `+KC_DB_TLS_MODE+`
+--
+
+
+
+|
+`+disabled+`, `+verify-server+`
+
+|
+`+disabled+`
+
+|
+[.options-key]#`+db-tls-trust-store-file+`# 
+
+[.options-description]#The path to the truststore file containing the database server certificates or Certificate Authority (CA) certificates used to verify the database server's identity.#
+
+[#option-extended-database-db-tls-trust-store-file,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-tls-trust-store-file-<datasource>+`# 
+
+*CLI:* `+--db-tls-trust-store-file+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+db-tls-trust-store-password+`# 
+
+[.options-description]#The password to access the truststore file specified in db-tls-trust-store-file (if required and supported by the JDBC driver).#
+
+[#option-extended-database-db-tls-trust-store-password,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-tls-trust-store-password-<datasource>+`# 
+
+*CLI:* `+--db-tls-trust-store-password+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-tls-trust-store-type+`# 
+
+[.options-description]#The type of the truststore file.#
+
+[#option-extended-database-db-tls-trust-store-type,role="options-extended"]
+--
+[.options-description-extended]#Common values include `JKS` (Java KeyStore) and `PKCS12`. If not specified, it uses the driver's default.#
+
+*Named key:* [.options-wildcard-key]#`+db-tls-trust-store-type-<datasource>+`# 
+
+*CLI:* `+--db-tls-trust-store-type+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_TYPE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url+`# 
+
+[.options-description]#The full database JDBC URL.#
+
+[#option-extended-database-db-url,role="options-extended"]
+--
+[.options-description-extended]#If not provided, a default URL is set based on the selected database vendor. For instance, if using `postgres`, the default JDBC URL would be `jdbc:postgresql://localhost/keycloak`.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-full-<datasource>+`# 
+
+*CLI:* `+--db-url+` +
+*Env:* `+KC_DB_URL+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-database+`# 
+
+[.options-description]#Sets the database name of the default JDBC URL of the chosen vendor.#
+
+[#option-extended-database-db-url-database,role="options-extended"]
+--
+[.options-description-extended]#If the `db-url` option is set, this option is ignored.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-database-<datasource>+`# 
+
+*CLI:* `+--db-url-database+` +
+*Env:* `+KC_DB_URL_DATABASE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-host+`# 
+
+[.options-description]#Sets the hostname of the default JDBC URL of the chosen vendor.#
+
+[#option-extended-database-db-url-host,role="options-extended"]
+--
+[.options-description-extended]#If the `db-url` option is set, this option is ignored.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-host-<datasource>+`# 
+
+*CLI:* `+--db-url-host+` +
+*Env:* `+KC_DB_URL_HOST+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-port+`# 
+
+[.options-description]#Sets the port of the default JDBC URL of the chosen vendor.#
+
+[#option-extended-database-db-url-port,role="options-extended"]
+--
+[.options-description-extended]#If the `db-url` option is set, this option is ignored.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-port-<datasource>+`# 
+
+*CLI:* `+--db-url-port+` +
+*Env:* `+KC_DB_URL_PORT+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-url-properties+`# 
+
+[.options-description]#Sets the properties of the default JDBC URL of the chosen vendor.#
+
+[#option-extended-database-db-url-properties,role="options-extended"]
+--
+[.options-description-extended]#Make sure to set the properties accordingly to the format expected by the database vendor, as well as appending the right character at the beginning of this property value. If the `db-url` option is set, this option is ignored.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-properties-<datasource>+`# 
+
+*CLI:* `+--db-url-properties+` +
+*Env:* `+KC_DB_URL_PROPERTIES+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-username+`# 
+
+[.options-description]#The username of the database user.#
+
+[#option-extended-database-db-username,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-username-<datasource>+`# 
+
+*CLI:* `+--db-username+` +
+*Env:* `+KC_DB_USERNAME+`
+--
+
+
+
+|_String_
+
+|
+
+|===
+[#category-database_datasources]
+== Database - additional datasources
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+db-connect-timeout-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-connect-timeout-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#Sets the JDBC driver connection timeout and login timeout. May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--db-connect-timeout-<datasource>+` +
+*Env:* `+KC_DB_CONNECT_TIMEOUT_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+`+10s+`
+
+|
+[.options-key]#`+db-debug-jpql-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-debug-jpql-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#Add JPQL information as comments to SQL statements to debug JPA SQL statement generation.#
+
+
+
+*CLI:* `+--db-debug-jpql-<datasource>+` +
+*Env:* `+KC_DB_DEBUG_JPQL_<DATASOURCE>+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+db-driver-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-driver-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The fully qualified class name of the JDBC driver. If not set, a default driver is set accordingly to the chosen database.#
+
+
+
+*CLI:* `+--db-driver-<datasource>+` +
+*Env:* `+KC_DB_DRIVER_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-enabled-<datasource>+`# 
+
+[.options-description]#If the named datasource <datasource> should be enabled at runtime.#
+
+[#option-extended-database_datasources-db-enabled-<datasource>,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--db-enabled-<datasource>+` +
+*Env:* `+KC_DB_ENABLED_<DATASOURCE>+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+db-health-exclude-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If you have enabled health endpoints, but want the given datasource excluded from the health check.#
+
+[#option-extended-database_datasources-db-health-exclude-<datasource>,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--db-health-exclude-<datasource>+` +
+*Env:* `+KC_DB_HEALTH_EXCLUDE_<DATASOURCE>+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+db-kind-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-kind-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The database vendor.#
+
+
+
+*CLI:* `+--db-kind-<datasource>+` +
+*Env:* `+KC_DB_KIND_<DATASOURCE>+`
+--
+
+
+
+|
+`+dev-file+`, `+dev-mem+`, `+mariadb+`, `+mssql+`, `+mysql+`, `+oracle+`, `+postgres+`, `+tidb+`
+
+|
+|
+[.options-key]#`+db-log-slow-queries-threshold-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-log-slow-queries-threshold-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#Log SQL statements slower than the configured threshold with logger org.hibernate.SQL_SLOW and log-level info.#
+
+
+
+*CLI:* `+--db-log-slow-queries-threshold-<datasource>+` +
+*Env:* `+KC_DB_LOG_SLOW_QUERIES_THRESHOLD_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+`+10000+`
+
+|
+[.options-key]#`+db-mtls-key-store-file-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-mtls-key-store-file-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The path to the keystore file containing the client certificate and private key used for mTLS authentication with the database server.#
+
+
+
+*CLI:* `+--db-mtls-key-store-file-<datasource>+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_FILE_<DATASOURCE>+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+db-mtls-key-store-password-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-mtls-key-store-password-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The password to access the keystore file specified in db-mtls-key-store-file.#
+
+
+
+*CLI:* `+--db-mtls-key-store-password-<datasource>+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_PASSWORD_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-mtls-key-store-type-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-mtls-key-store-type-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The type of the keystore file. Common values include `JKS` (Java KeyStore) and `PKCS12`. If not specified, it uses the driver's default.#
+
+
+
+*CLI:* `+--db-mtls-key-store-type-<datasource>+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_TYPE_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-password-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-password-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The password of the database user.#
+
+
+
+*CLI:* `+--db-password-<datasource>+` +
+*Env:* `+KC_DB_PASSWORD_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-pool-initial-size-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-pool-initial-size-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The initial size of the connection pool.#
+
+
+
+*CLI:* `+--db-pool-initial-size-<datasource>+` +
+*Env:* `+KC_DB_POOL_INITIAL_SIZE_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-pool-max-size-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-pool-max-size-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The maximum size of the connection pool.#
+
+
+
+*CLI:* `+--db-pool-max-size-<datasource>+` +
+*Env:* `+KC_DB_POOL_MAX_SIZE_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+`+100+`
+
+|
+[.options-key]#`+db-pool-min-size-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-pool-min-size-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The minimal size of the connection pool.#
+
+
+
+*CLI:* `+--db-pool-min-size-<datasource>+` +
+*Env:* `+KC_DB_POOL_MIN_SIZE_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-schema-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-schema-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The database schema to be used.#
+
+
+
+*CLI:* `+--db-schema-<datasource>+` +
+*Env:* `+KC_DB_SCHEMA_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-tls-mode-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-tls-mode-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#Sets the TLS mode for the database connection. If disabled, it uses the driver's default value. When set to verify-server, it enables encryption and server identity verification. The database server certificate or Certificate Authority (CA) certificate is required.#
+
+
+
+*CLI:* `+--db-tls-mode-<datasource>+` +
+*Env:* `+KC_DB_TLS_MODE_<DATASOURCE>+`
+--
+
+
+
+|
+`+disabled+`, `+verify-server+`
+
+|
+`+disabled+`
+
+|
+[.options-key]#`+db-tls-trust-store-file-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-tls-trust-store-file-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The path to the truststore file containing the database server certificates or Certificate Authority (CA) certificates used to verify the database server's identity.#
+
+
+
+*CLI:* `+--db-tls-trust-store-file-<datasource>+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_FILE_<DATASOURCE>+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+db-tls-trust-store-password-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-tls-trust-store-password-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The password to access the truststore file specified in db-tls-trust-store-file (if required and supported by the JDBC driver).#
+
+
+
+*CLI:* `+--db-tls-trust-store-password-<datasource>+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_PASSWORD_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-tls-trust-store-type-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-tls-trust-store-type-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The type of the truststore file. Common values include `JKS` (Java KeyStore) and `PKCS12`. If not specified, it uses the driver's default.#
+
+
+
+*CLI:* `+--db-tls-trust-store-type-<datasource>+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_TYPE_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-database-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-url-database-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#Sets the database name of the default JDBC URL of the chosen vendor. If the `db-url` option is set, this option is ignored.#
+
+
+
+*CLI:* `+--db-url-database-<datasource>+` +
+*Env:* `+KC_DB_URL_DATABASE_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-full-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-url-full-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The full database JDBC URL. If not provided, a default URL is set based on the selected database vendor. For instance, if using `postgres`, the default JDBC URL would be `jdbc:postgresql://localhost/keycloak`.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-full-<datasource>+`# 
+
+*CLI:* `+--db-url-full-<datasource>+` +
+*Env:* `+KC_DB_URL_FULL_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-host-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-url-host-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#Sets the hostname of the default JDBC URL of the chosen vendor. If the `db-url` option is set, this option is ignored.#
+
+
+
+*CLI:* `+--db-url-host-<datasource>+` +
+*Env:* `+KC_DB_URL_HOST_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-port-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-url-port-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#Sets the port of the default JDBC URL of the chosen vendor. If the `db-url` option is set, this option is ignored.#
+
+
+
+*CLI:* `+--db-url-port-<datasource>+` +
+*Env:* `+KC_DB_URL_PORT_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-url-properties-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-url-properties-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#Sets the properties of the default JDBC URL of the chosen vendor. Make sure to set the properties accordingly to the format expected by the database vendor, as well as appending the right character at the beginning of this property value. If the `db-url` option is set, this option is ignored.#
+
+
+
+*CLI:* `+--db-url-properties-<datasource>+` +
+*Env:* `+KC_DB_URL_PROPERTIES_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-username-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[#option-extended-database_datasources-db-username-<datasource>,role="options-extended"]
+--
+[.options-description-extended]#The username of the database user.#
+
+
+
+*CLI:* `+--db-username-<datasource>+` +
+*Env:* `+KC_DB_USERNAME_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+
+|===
+[#category-transaction]
+== Transaction
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+transaction-default-timeout+`# 
+
+[.options-description]#The default transaction timeout.#
+
+[#option-extended-transaction-transaction-default-timeout,role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--transaction-default-timeout+` +
+*Env:* `+KC_TRANSACTION_DEFAULT_TIMEOUT+`
+--
+
+
+
+|_String_
+
+|
+`+5m+`
+
+|
+[.options-key]#`+transaction-setup-timeout+`# 
+
+[.options-description]#The transaction timeout for database migration/import/export transactions.#
+
+[#option-extended-transaction-transaction-setup-timeout,role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--transaction-setup-timeout+` +
+*Env:* `+KC_TRANSACTION_SETUP_TIMEOUT+`
+--
+
+
+
+|_String_
+
+|
+`+30m+`
+
+|
+[.options-key]#`+transaction-xa-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If set to true, XA datasources will be used.#
+
+[#option-extended-transaction-transaction-xa-enabled,role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+transaction-xa-enabled-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+*CLI:* `+--transaction-xa-enabled+` +
+*Env:* `+KC_TRANSACTION_XA_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+transaction-xa-enabled-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If set to true, XA for <datasource> datasource will be used.#
+
+[#option-extended-transaction-transaction-xa-enabled-<datasource>,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--transaction-xa-enabled-<datasource>+` +
+*Env:* `+KC_TRANSACTION_XA_ENABLED_<DATASOURCE>+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+
+|===
+[#category-feature]
+== Feature
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+feature-<name>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enable/Disable specific feature <feature>.#
+
+[#option-extended-feature-feature-<name>,role="options-extended"]
+--
+[.options-description-extended]#It takes precedence over the `features`, and `features-disabled` options. Possible values are: `enabled`, `disabled`, or specific version (lowercase) that will be enabled (f.e. `v2`)#
+
+
+
+*CLI:* `+--feature-<name>+` +
+*Env:* `+KC_FEATURE_<NAME>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+features+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enables a set of one or more features.#
+
+[#option-extended-feature-features,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--features+` +
+*Env:* `+KC_FEATURES+`
+--
+
+
+
+|
+`+account-api[:v1]+`, `+account[:v3]+`, `+admin-api[:v1]+`, `+admin-fine-grained-authz[:v1,v2]+`, `+admin[:v2]+`, `+authorization[:v1]+`, `+authzen[:v1]+`, `+ciba[:v1]+`, `+cimd[:v1]+`, `+client-admin-api[:v2]+`, `+client-auth-abca[:v1]+`, `+client-auth-federated[:v1]+`, `+client-policies[:v1]+`, `+client-secret-rotation[:v1]+`, `+client-types[:v1]+`, `+clusterless[:v1]+`, `+db-tidb[:v1]+`, `+declarative-ui[:v1]+`, `+device-flow[:v1]+`, `+docker[:v1]+`, `+dpop[:v1]+`, `+fips[:v1]+`, `+hostname[:v2]+`, `+http-client[:v1,v2]+`, `+http-optimized-serializers[:v1]+`, `+identity-assertion-jwt[:v1]+`, `+identity-brokering-api[:v1,v2]+`, `+impersonation[:v1]+`, `+instagram-broker[:v1]+`, `+ipa-tuura-federation[:v1]+`, `+jwt-authorization-grant[:v1]+`, `+kerberos[:v1]+`, `+kubernetes-service-accounts[:v1]+`, `+ldap-metrics[:v1]+`, `+log-mdc[:v1]+`, `+login-failures[:v1,v2]+`, `+login[:v2,v1]+`, `+logout-all-sessions[:v1]+`, `+multi-site[:v1]+`, `+oid4vc-mdoc[:v1]+`, `+oid4vc-vci-preauth-code[:v1]+`, `+oid4vc-vci-rest-credential-offer[:v1]+`, `+oid4vc-vci[:v1]+`, `+oid4vc-vp[:v1]+`, `+openapi[:v1]+`, `+opentelemetry-logs[:v1]+`, `+opentelemetry-metrics[:v1]+`, `+opentelemetry[:v1]+`, `+organization[:v1]+`, `+par[:v1]+`, `+parameterized-scopes[:v1]+`, `+passkeys-conditional-ui-authenticator[:v1]+`, `+passkeys[:v1]+`, `+persistent-user-sessions[:v1]+`, `+preview+`, `+quick-theme[:v1]+`, `+recovery-codes[:v1]+`, `+resource-indicators[:v1]+`, `+rolling-updates[:v1,v2]+`, `+scim-api[:v1]+`, `+scripts[:v1]+`, `+spiffe[:v1]+`, `+ssf[:v1]+`, `+stateless[:v1]+`, `+step-up-authentication-saml[:v1]+`, `+step-up-authentication[:v1]+`, `+token-exchange-delegation[:v1]+`, `+token-exchange-standard[:v2]+`, `+token-exchange[:v1]+`, `+transient-users[:v1]+`, `+twitter-broker[:v1]+`, `+update-email[:v1]+`, `+user-event-metrics[:v1]+`, `+web-authn[:v1]+`, `+workflows[:v1]+`
+
+|
+|
+[.options-key]#`+features-disabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Disables a set of one or more features.#
+
+[#option-extended-feature-features-disabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--features-disabled+` +
+*Env:* `+KC_FEATURES_DISABLED+`
+--
+
+
+
+|
+`+account+`, `+account-api+`, `+admin+`, `+admin-api+`, `+admin-fine-grained-authz+`, `+authorization+`, `+authzen+`, `+ciba+`, `+cimd+`, `+client-admin-api+`, `+client-auth-abca+`, `+client-auth-federated+`, `+client-policies+`, `+client-secret-rotation+`, `+client-types+`, `+clusterless+`, `+db-tidb+`, `+declarative-ui+`, `+device-flow+`, `+docker+`, `+dpop+`, `+fips+`, `+http-client+`, `+http-optimized-serializers+`, `+identity-assertion-jwt+`, `+identity-brokering-api+`, `+impersonation+`, `+instagram-broker+`, `+ipa-tuura-federation+`, `+jwt-authorization-grant+`, `+kerberos+`, `+kubernetes-service-accounts+`, `+ldap-metrics+`, `+log-mdc+`, `+login+`, `+login-failures+`, `+logout-all-sessions+`, `+multi-site+`, `+oid4vc-mdoc+`, `+oid4vc-vci+`, `+oid4vc-vci-preauth-code+`, `+oid4vc-vci-rest-credential-offer+`, `+oid4vc-vp+`, `+openapi+`, `+opentelemetry+`, `+opentelemetry-logs+`, `+opentelemetry-metrics+`, `+organization+`, `+par+`, `+parameterized-scopes+`, `+passkeys+`, `+passkeys-conditional-ui-authenticator+`, `+persistent-user-sessions+`, `+preview+`, `+quick-theme+`, `+recovery-codes+`, `+resource-indicators+`, `+scim-api+`, `+scripts+`, `+spiffe+`, `+ssf+`, `+stateless+`, `+step-up-authentication+`, `+step-up-authentication-saml+`, `+token-exchange+`, `+token-exchange-delegation+`, `+token-exchange-standard+`, `+transient-users+`, `+twitter-broker+`, `+update-email+`, `+user-event-metrics+`, `+web-authn+`, `+workflows+`
+
+|
+
+|===
+[#category-hostname_v2]
+== Hostname v2
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+hostname+`# 
+
+[.options-description]#Address at which is the server exposed.#
+
+[#option-extended-hostname_v2-hostname,role="options-extended"]
+--
+[.options-description-extended]#Can be a full URL, or just a hostname. When only hostname is provided, scheme, port and context path are resolved from the request.#
+
+
+
+*CLI:* `+--hostname+` +
+*Env:* `+KC_HOSTNAME+`
+--
+
+Available only when hostname:v2 feature is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+hostname-admin+`# 
+
+[.options-description]#Address for accessing the administration console.#
+
+[#option-extended-hostname_v2-hostname-admin,role="options-extended"]
+--
+[.options-description-extended]#Use this option if you are exposing the administration console using a reverse proxy on a different address than specified in the `hostname` option.#
+
+
+
+*CLI:* `+--hostname-admin+` +
+*Env:* `+KC_HOSTNAME_ADMIN+`
+--
+
+Available only when hostname:v2 feature is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+hostname-backchannel-dynamic+`# 
+
+[.options-description]#Enables dynamic resolving of backchannel URLs, including hostname, scheme, port and context path.#
+
+[#option-extended-hostname_v2-hostname-backchannel-dynamic,role="options-extended"]
+--
+[.options-description-extended]#Set to true if your application accesses Keycloak via a private network. If set to true, `hostname` option needs to be specified as a full URL.#
+
+
+
+*CLI:* `+--hostname-backchannel-dynamic+` +
+*Env:* `+KC_HOSTNAME_BACKCHANNEL_DYNAMIC+`
+--
+
+Available only when hostname:v2 feature is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+hostname-debug+`# 
+
+[.options-description]#Toggles the hostname debug page that is accessible at /realms/master/hostname-debug.#
+
+[#option-extended-hostname_v2-hostname-debug,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--hostname-debug+` +
+*Env:* `+KC_HOSTNAME_DEBUG+`
+--
+
+Available only when hostname:v2 feature is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+hostname-strict+`# 
+
+[.options-description]#Disables dynamically resolving the hostname from request headers.#
+
+[#option-extended-hostname_v2-hostname-strict,role="options-extended"]
+--
+[.options-description-extended]#Should always be set to true in production, unless your reverse proxy overwrites the Host header. If enabled, the `hostname` option needs to be specified.#
+
+
+
+*CLI:* `+--hostname-strict+` +
+*Env:* `+KC_HOSTNAME_STRICT+`
+--
+
+Available only when hostname:v2 feature is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+
+|===
+[#category-http]
+== HTTP(S)
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+http-accept-non-normalized-paths+`# 
+
+[.options-description]#If the server should accept paths that are not normalized according to RFC3986 or that contain a double slash (`//`) or semicolon (`;`).#
+
+[#option-extended-http-http-accept-non-normalized-paths,role="options-extended"]
+--
+[.options-description-extended]#While accepting those requests might be relevant for legacy applications, it is recommended to disable it to allow for more concise URL filtering.#
+
+
+
+*CLI:* `+--http-accept-non-normalized-paths+` +
+*Env:* `+KC_HTTP_ACCEPT_NON_NORMALIZED_PATHS+`
+--
+
+
+*DEPRECATED.*
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+http-enabled+`# 
+
+[.options-description]#Enables the HTTP listener.#
+
+[#option-extended-http-http-enabled,role="options-extended"]
+--
+[.options-description-extended]#Enabled by default in development mode. Typically not enabled in production unless the server is fronted by a TLS termination proxy.#
+
+
+
+*CLI:* `+--http-enabled+` +
+*Env:* `+KC_HTTP_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+http-host+`# 
+
+[.options-description]#The HTTP Host.#
+
+[#option-extended-http-http-host,role="options-extended"]
+--
+[.options-description-extended]#In prod mode or when running on Windows Subsystem For Linux the default is to bind to all network addresses (0.0.0.0), which means the server may be accessible from other machines on your network. Otherwise defaults to localhost.#
+
+
+
+*CLI:* `+--http-host+` +
+*Env:* `+KC_HTTP_HOST+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+http-max-queued-requests+`# 
+
+[.options-description]#Maximum number of queued HTTP requests.#
+
+[#option-extended-http-http-max-queued-requests,role="options-extended"]
+--
+[.options-description-extended]#Use this to shed load in an overload situation. Excess requests will return a "503 Server not Available" response.#
+
+
+
+*CLI:* `+--http-max-queued-requests+` +
+*Env:* `+KC_HTTP_MAX_QUEUED_REQUESTS+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+http-metrics-histograms-enabled+`# 
+
+[.options-description]#Enables a histogram with default buckets for the duration of HTTP server requests.#
+
+[#option-extended-http-http-metrics-histograms-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--http-metrics-histograms-enabled+` +
+*Env:* `+KC_HTTP_METRICS_HISTOGRAMS_ENABLED+`
+--
+
+Available only when metrics are enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+http-metrics-slos+`# 
+
+[.options-description]#Service level objectives for HTTP server requests.#
+
+[#option-extended-http-http-metrics-slos,role="options-extended"]
+--
+[.options-description-extended]#Use this instead of the default histogram, or use it in combination to add additional buckets. Specify a list of comma-separated values defined in milliseconds. Example with buckets from 5ms to 10s: 5,10,25,50,250,500,1000,2500,5000,10000#
+
+
+
+*CLI:* `+--http-metrics-slos+` +
+*Env:* `+KC_HTTP_METRICS_SLOS+`
+--
+
+Available only when metrics are enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+http-pool-max-threads+`# 
+
+[.options-description]#The maximum number of threads.#
+
+[#option-extended-http-http-pool-max-threads,role="options-extended"]
+--
+[.options-description-extended]#If this is not specified then it will be automatically sized to the greater of 4 * the number of available processors and 50. For example if there are 4 processors the max threads will be 50. If there are 48 processors it will be 192.#
+
+
+
+*CLI:* `+--http-pool-max-threads+` +
+*Env:* `+KC_HTTP_POOL_MAX_THREADS+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+http-port+`# 
+
+[.options-description]#The used HTTP port.#
+
+[#option-extended-http-http-port,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--http-port+` +
+*Env:* `+KC_HTTP_PORT+`
+--
+
+
+
+|_Integer_
+
+|
+`+8080+`
+
+|
+[.options-key]#`+http-relative-path+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Set the path relative to `/` for serving resources.#
+
+[#option-extended-http-http-relative-path,role="options-extended"]
+--
+[.options-description-extended]#The path must start with a `/`.#
+
+
+
+*CLI:* `+--http-relative-path+` +
+*Env:* `+KC_HTTP_RELATIVE_PATH+`
+--
+
+
+
+|_String_
+
+|
+`+/+`
+
+|
+[.options-key]#`+https-certificate-file+`# 
+
+[.options-description]#The file path to a server certificate or certificate chain in PEM format.#
+
+[#option-extended-http-https-certificate-file,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-certificate-file+` +
+*Env:* `+KC_HTTPS_CERTIFICATE_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-certificate-key-file+`# 
+
+[.options-description]#The file path to a private key in PEM format.#
+
+[#option-extended-http-https-certificate-key-file,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-certificate-key-file+` +
+*Env:* `+KC_HTTPS_CERTIFICATE_KEY_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-certificate-key-file-password+`# 
+
+[.options-description]#The password to decrypt an encrypted private key in PEM format (encrypted PKCS#8).#
+
+[#option-extended-http-https-certificate-key-file-password,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-certificate-key-file-password+` +
+*Env:* `+KC_HTTPS_CERTIFICATE_KEY_FILE_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+https-certificates-reload-period+`# 
+
+[.options-description]#Interval on which to reload key store, trust store, and certificate files referenced by https-* options.#
+
+[#option-extended-http-https-certificates-reload-period,role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d]. Must be greater than 30 seconds. Use -1 to disable.#
+
+
+
+*CLI:* `+--https-certificates-reload-period+` +
+*Env:* `+KC_HTTPS_CERTIFICATES_RELOAD_PERIOD+`
+--
+
+
+
+|_String_
+
+|
+`+1h+`
+
+|
+[.options-key]#`+https-cipher-suites+`# 
+
+[.options-description]#The cipher suites to use.#
+
+[#option-extended-http-https-cipher-suites,role="options-extended"]
+--
+[.options-description-extended]#If none is given, a reasonable default is selected.#
+
+
+
+*CLI:* `+--https-cipher-suites+` +
+*Env:* `+KC_HTTPS_CIPHER_SUITES+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+https-client-auth+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Configures the server to require/request client authentication.#
+
+[#option-extended-http-https-client-auth,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-client-auth+` +
+*Env:* `+KC_HTTPS_CLIENT_AUTH+`
+--
+
+
+
+|
+`+none+`, `+request+`, `+required+`
+
+|
+`+none+`
+
+|
+[.options-key]#`+https-key-store-file+`# 
+
+[.options-description]#The key store which holds the certificate information instead of specifying separate files.#
+
+[#option-extended-http-https-key-store-file,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-key-store-file+` +
+*Env:* `+KC_HTTPS_KEY_STORE_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-key-store-password+`# 
+
+[.options-description]#The password of the key store file.#
+
+[#option-extended-http-https-key-store-password,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-key-store-password+` +
+*Env:* `+KC_HTTPS_KEY_STORE_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+`+password+`
+
+|
+[.options-key]#`+https-key-store-type+`# 
+
+[.options-description]#The type of the key store file.#
+
+[#option-extended-http-https-key-store-type,role="options-extended"]
+--
+[.options-description-extended]#If not given, the type is automatically detected based on the file extension. If `fips-mode` is set to `strict` and no value is set, it defaults to `BCFKS`.#
+
+
+
+*CLI:* `+--https-key-store-type+` +
+*Env:* `+KC_HTTPS_KEY_STORE_TYPE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+https-port+`# 
+
+[.options-description]#The used HTTPS port.#
+
+[#option-extended-http-https-port,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-port+` +
+*Env:* `+KC_HTTPS_PORT+`
+--
+
+
+
+|_Integer_
+
+|
+`+8443+`
+
+|
+[.options-key]#`+https-protocols+`# 
+
+[.options-description]#The list of protocols to explicitly enable.#
+
+[#option-extended-http-https-protocols,role="options-extended"]
+--
+[.options-description-extended]#If a value is not supported by the JRE / security configuration, it will be silently ignored.#
+
+
+
+*CLI:* `+--https-protocols+` +
+*Env:* `+KC_HTTPS_PROTOCOLS+`
+--
+
+
+
+|
+`+TLSv1.3+`, `+TLSv1.2+`, or any
+
+|
+`+TLSv1.3,TLSv1.2+`
+
+|
+[.options-key]#`+https-trust-store-file+`# 
+
+[.options-description]#The trust store which holds the certificate information of the certificates to trust.#
+
+[#option-extended-http-https-trust-store-file,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-trust-store-file+` +
+*Env:* `+KC_HTTPS_TRUST_STORE_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-trust-store-password+`# 
+
+[.options-description]#The password of the trust store file.#
+
+[#option-extended-http-https-trust-store-password,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--https-trust-store-password+` +
+*Env:* `+KC_HTTPS_TRUST_STORE_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+https-trust-store-type+`# 
+
+[.options-description]#The type of the trust store file.#
+
+[#option-extended-http-https-trust-store-type,role="options-extended"]
+--
+[.options-description-extended]#If not given, the type is automatically detected based on the file extension. If `fips-mode` is set to `strict` and no value is set, it defaults to `BCFKS`.#
+
+
+
+*CLI:* `+--https-trust-store-type+` +
+*Env:* `+KC_HTTPS_TRUST_STORE_TYPE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+shutdown-delay+`# 
+
+[.options-description]#Length of the pre-shutdown phase during which the server prepares for shutdown.#
+
+[#option-extended-http-shutdown-delay,role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d]. This period allows for loadbalancer reconfiguration and draining of TLS/HTTP keepalive connections.#
+
+
+
+*CLI:* `+--shutdown-delay+` +
+*Env:* `+KC_SHUTDOWN_DELAY+`
+--
+
+
+
+|_String_
+
+|
+`+1s+`
+
+|
+[.options-key]#`+shutdown-timeout+`# 
+
+[.options-description]#The shutdown period waiting for currently running HTTP requests to finish and distributed caches to settle.#
+
+[#option-extended-http-shutdown-timeout,role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--shutdown-timeout+` +
+*Env:* `+KC_SHUTDOWN_TIMEOUT+`
+--
+
+
+
+|_String_
+
+|
+`+10s+`
+
+
+|===
+[#category-http_access_log]
+== HTTP Access log
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+http-access-log-enabled+`# 
+
+[.options-description]#If HTTP access logging is enabled.#
+
+[#option-extended-http_access_log-http-access-log-enabled,role="options-extended"]
+--
+[.options-description-extended]#By default this will log records in console.#
+
+
+
+*CLI:* `+--http-access-log-enabled+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+http-access-log-exclude+`# 
+
+[.options-description]#A regular expression that can be used to exclude some paths from logging.#
+
+[#option-extended-http_access_log-http-access-log-exclude,role="options-extended"]
+--
+[.options-description-extended]#For instance, `/realms/my-realm/.*` will exclude all subsequent endpoints for realm `my-realm` from the log.#
+
+
+
+*CLI:* `+--http-access-log-exclude+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_EXCLUDE+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+http-access-log-file-enabled+`# 
+
+[.options-description]#If HTTP access logging should be done to a separate file.#
+
+[#option-extended-http_access_log-http-access-log-file-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--http-access-log-file-enabled+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_FILE_ENABLED+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+http-access-log-file-name+`# 
+
+[.options-description]#The HTTP access log file base name, which will create a log file name concatenating base and suffix (e.#
+
+[#option-extended-http_access_log-http-access-log-file-name,role="options-extended"]
+--
+[.options-description-extended]#g. `keycloak-http-access.log`). The file is located in the `/data/log` directory of the distribution.#
+
+
+
+*CLI:* `+--http-access-log-file-name+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_FILE_NAME+`
+--
+
+Available only when HTTP Access logging to file is enabled
+
+
+|_String_
+
+|
+`+keycloak-http-access+`
+
+|
+[.options-key]#`+http-access-log-file-rotate+`# 
+
+[.options-description]#If the HTTP Access log file should be rotated daily.#
+
+[#option-extended-http_access_log-http-access-log-file-rotate,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--http-access-log-file-rotate+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_FILE_ROTATE+`
+--
+
+Available only when HTTP Access logging to file is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+http-access-log-file-suffix+`# 
+
+[.options-description]#The HTTP access log file suffix.#
+
+[#option-extended-http_access_log-http-access-log-file-suffix,role="options-extended"]
+--
+[.options-description-extended]#When rotation is enabled, a date-based suffix `.{yyyy-MM-dd}` is added before the specified suffix. If multiple rotations occur on the same day, an incremental index is appended to the date.#
+
+
+
+*CLI:* `+--http-access-log-file-suffix+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_FILE_SUFFIX+`
+--
+
+Available only when HTTP Access logging to file is enabled
+
+
+|_String_
+
+|
+`+.log+`
+
+|
+[.options-key]#`+http-access-log-masked-cookies+`# 
+
+[.options-description]#Set of HTTP Cookie headers whose values must be masked when the `long` pattern or `%{ALL_REQUEST_HEADERS}` format is enabled with the `http-access-log-pattern` option.#
+
+[#option-extended-http_access_log-http-access-log-masked-cookies,role="options-extended"]
+--
+[.options-description-extended]#Selected security sensitive cookies are always masked.#
+
+
+
+*CLI:* `+--http-access-log-masked-cookies+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_MASKED_COOKIES+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|_List_
+
+|
+|
+[.options-key]#`+http-access-log-masked-headers+`# 
+
+[.options-description]#Set of HTTP headers whose values must be masked when the `long` pattern or `%{ALL_REQUEST_HEADERS}` format is enabled with the `http-access-log-pattern` option.#
+
+[#option-extended-http_access_log-http-access-log-masked-headers,role="options-extended"]
+--
+[.options-description-extended]#Selected security sensitive headers are always masked.#
+
+
+
+*CLI:* `+--http-access-log-masked-headers+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_MASKED_HEADERS+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|_List_
+
+|
+|
+[.options-key]#`+http-access-log-pattern+`# 
+
+[.options-description]#The HTTP access log pattern.#
+
+[#option-extended-http_access_log-http-access-log-pattern,role="options-extended"]
+--
+[.options-description-extended]#You can use the available named formats, or use custom format described in Quarkus documentation.#
+
+
+
+*CLI:* `+--http-access-log-pattern+` +
+*Env:* `+KC_HTTP_ACCESS_LOG_PATTERN+`
+--
+
+Available only when HTTP Access log is enabled
+
+
+|
+`+common+`, `+combined+`, `+long+`, or any
+
+|
+`+common+`
+
+
+|===
+[#category-health]
+== Health
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+health-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose health check endpoints.#
+
+[#option-extended-health-health-enabled,role="options-extended"]
+--
+[.options-description-extended]#If enabled, health checks are available at the `/health`, `/health/ready` and `/health/live` endpoints.#
+
+
+
+*CLI:* `+--health-enabled+` +
+*Env:* `+KC_HEALTH_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+
+|===
+[#category-management]
+== Management
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+http-management-health-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If health endpoints should be exposed on the management interface.#
+
+[#option-extended-management-http-management-health-enabled,role="options-extended"]
+--
+[.options-description-extended]#If false, health endpoints will be exposed on the main interface.#
+
+
+
+*CLI:* `+--http-management-health-enabled+` +
+*Env:* `+KC_HTTP_MANAGEMENT_HEALTH_ENABLED+`
+--
+
+Available only when health is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+http-management-host+`# 
+
+[.options-description]#Host of the management interface.#
+
+[#option-extended-management-http-management-host,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--http-management-host+` +
+*Env:* `+KC_HTTP_MANAGEMENT_HOST+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+http-management-port+`# 
+
+[.options-description]#Port of the management interface.#
+
+[#option-extended-management-http-management-port,role="options-extended"]
+--
+[.options-description-extended]#Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--http-management-port+` +
+*Env:* `+KC_HTTP_MANAGEMENT_PORT+`
+--
+
+
+
+|_Integer_
+
+|
+`+9000+`
+
+|
+[.options-key]#`+http-management-relative-path+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Set the path relative to `/` for serving resources from management interface.#
+
+[#option-extended-management-http-management-relative-path,role="options-extended"]
+--
+[.options-description-extended]#The path must start with a `/`. If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--http-management-relative-path+` +
+*Env:* `+KC_HTTP_MANAGEMENT_RELATIVE_PATH+`
+--
+
+
+
+|_String_
+
+|
+`+/+`
+
+|
+[.options-key]#`+http-management-scheme+`# 
+
+[.options-description]#Configures the management interface scheme.#
+
+[#option-extended-management-http-management-scheme,role="options-extended"]
+--
+[.options-description-extended]#If `inherited`, the management interface will inherit the HTTPS settings of the main interface. If `http`, the management interface will be accessible via HTTP - it will not inherit HTTPS settings and cannot be configured for HTTPS.#
+
+
+
+*CLI:* `+--http-management-scheme+` +
+*Env:* `+KC_HTTP_MANAGEMENT_SCHEME+`
+--
+
+
+
+|
+`+http+`, `+inherited+`
+
+|
+`+inherited+`
+
+|
+[.options-key]#`+https-management-certificate-file+`# 
+
+[.options-description]#The file path to a server certificate or certificate chain in PEM format for the management server.#
+
+[#option-extended-management-https-management-certificate-file,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-certificate-file+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_CERTIFICATE_FILE+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-management-certificate-key-file+`# 
+
+[.options-description]#The file path to a private key in PEM format for the management server.#
+
+[#option-extended-management-https-management-certificate-key-file,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-certificate-key-file+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_CERTIFICATE_KEY_FILE+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-management-certificate-key-file-password+`# 
+
+[.options-description]#The password to decrypt an encrypted private key in PEM format for the management server.#
+
+[#option-extended-management-https-management-certificate-key-file-password,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-certificate-key-file-password+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_CERTIFICATE_KEY_FILE_PASSWORD+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_String_
+
+|
+|
+[.options-key]#`+https-management-certificates-reload-period+`# 
+
+[.options-description]#Interval on which to reload key store, trust store, and certificate files referenced by https-management-* options for the management server.#
+
+[#option-extended-management-https-management-certificates-reload-period,role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d]. Must be greater than 30 seconds. Use -1 to disable. If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-certificates-reload-period+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_CERTIFICATES_RELOAD_PERIOD+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_String_
+
+|
+`+1h+`
+
+|
+[.options-key]#`+https-management-cipher-suites+`# 
+
+[.options-description]#The cipher suites to use for the management server.#
+
+[#option-extended-management-https-management-cipher-suites,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-cipher-suites+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_CIPHER_SUITES+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_String_
+
+|
+|
+[.options-key]#`+https-management-client-auth+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Configures the management interface to require/request client authentication.#
+
+[#option-extended-management-https-management-client-auth,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-client-auth+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_CLIENT_AUTH+`
+--
+
+
+
+|
+`+none+`, `+request+`, `+required+`
+
+|
+`+none+`
+
+|
+[.options-key]#`+https-management-key-store-file+`# 
+
+[.options-description]#The key store which holds the certificate information instead of specifying separate files for the management server.#
+
+[#option-extended-management-https-management-key-store-file,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-key-store-file+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_KEY_STORE_FILE+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-management-key-store-password+`# 
+
+[.options-description]#The password of the key store file for the management server.#
+
+[#option-extended-management-https-management-key-store-password,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-key-store-password+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_KEY_STORE_PASSWORD+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_String_
+
+|
+`+password+`
+
+|
+[.options-key]#`+https-management-key-store-type+`# 
+
+[.options-description]#The type of the key store file for the management server.#
+
+[#option-extended-management-https-management-key-store-type,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-key-store-type+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_KEY_STORE_TYPE+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_String_
+
+|
+|
+[.options-key]#`+https-management-protocols+`# 
+
+[.options-description]#The list of protocols to explicitly enable for the management server.#
+
+[#option-extended-management-https-management-protocols,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-protocols+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_PROTOCOLS+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_List_
+
+|
+`+TLSv1.3,TLSv1.2+`
+
+|
+[.options-key]#`+https-management-trust-store-file+`# 
+
+[.options-description]#The trust store which holds the certificate information of the certificates to trust for the management server.#
+
+[#option-extended-management-https-management-trust-store-file,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-trust-store-file+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_TRUST_STORE_FILE+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_File_
+
+|
+|
+[.options-key]#`+https-management-trust-store-password+`# 
+
+[.options-description]#The password of the trust store file for the management server.#
+
+[#option-extended-management-https-management-trust-store-password,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-trust-store-password+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_TRUST_STORE_PASSWORD+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_String_
+
+|
+|
+[.options-key]#`+https-management-trust-store-type+`# 
+
+[.options-description]#The type of the trust store file for the management server.#
+
+[#option-extended-management-https-management-trust-store-type,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from HTTP options. Relevant only when something is exposed on the management interface - see the guide for details.#
+
+
+
+*CLI:* `+--https-management-trust-store-type+` +
+*Env:* `+KC_HTTPS_MANAGEMENT_TRUST_STORE_TYPE+`
+--
+
+Available only when http-management-scheme is inherited
+
+
+|_String_
+
+|
+|
+[.options-key]#`+legacy-observability-interface+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If metrics/health endpoints should be exposed on the main HTTP server (not recommended).#
+
+[#option-extended-management-legacy-observability-interface,role="options-extended"]
+--
+[.options-description-extended]#If set to true, the management interface is disabled.#
+
+
+
+*CLI:* `+--legacy-observability-interface+` +
+*Env:* `+KC_LEGACY_OBSERVABILITY_INTERFACE+`
+--
+
+
+*DEPRECATED.*
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+
+|===
+[#category-metrics]
+== Metrics
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+metrics-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose metrics.#
+
+[#option-extended-metrics-metrics-enabled,role="options-extended"]
+--
+[.options-description-extended]#If enabled, metrics are available at the `/metrics` endpoint.#
+
+
+
+*CLI:* `+--metrics-enabled+` +
+*Env:* `+KC_METRICS_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+
+|===
+[#category-proxy]
+== Proxy
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+proxy-headers+`# 
+
+[.options-description]#The proxy headers that should be accepted by the server.#
+
+[#option-extended-proxy-proxy-headers,role="options-extended"]
+--
+[.options-description-extended]#Misconfiguration might leave the server exposed to security vulnerabilities. Takes precedence over the deprecated proxy option.#
+
+
+
+*CLI:* `+--proxy-headers+` +
+*Env:* `+KC_PROXY_HEADERS+`
+--
+
+
+
+|
+`+forwarded+`, `+xforwarded+`
+
+|
+|
+[.options-key]#`+proxy-protocol-enabled+`# 
+
+[.options-description]#Whether the server should use the HA PROXY protocol when serving requests from behind a proxy.#
+
+[#option-extended-proxy-proxy-protocol-enabled,role="options-extended"]
+--
+[.options-description-extended]#When set to true, the remote address returned will be the one from the actual connecting client. Cannot be enabled when the `proxy-headers` is used.#
+
+
+
+*CLI:* `+--proxy-protocol-enabled+` +
+*Env:* `+KC_PROXY_PROTOCOL_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+proxy-trusted-addresses+`# 
+
+[.options-description]#A comma separated list of trusted proxy addresses.#
+
+[#option-extended-proxy-proxy-trusted-addresses,role="options-extended"]
+--
+[.options-description-extended]#If set, then proxy headers from other addresses will be ignored. By default all addresses are trusted. A trusted proxy address is specified as an IP address (IPv4 or IPv6), hostname, or Classless Inter-Domain Routing (CIDR) notation. IPv6 addresses should use square brackets (e.g. [::1]). An optional port can be specified (e.g. 127.0.0.1:8084). Using hostnames is not recommended as it requires a DNS lookup on every request. Available only when proxy-headers is set.#
+
+
+
+*CLI:* `+--proxy-trusted-addresses+` +
+*Env:* `+KC_PROXY_TRUSTED_ADDRESSES+`
+--
+
+
+
+|_List_
+
+|
+
+|===
+[#category-vault]
+== Vault
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+vault+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enables a vault provider.#
+
+[#option-extended-vault-vault,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--vault+` +
+*Env:* `+KC_VAULT+`
+--
+
+
+
+|
+`+file+`, `+keystore+`
+
+|
+|
+[.options-key]#`+vault-dir+`# 
+
+[.options-description]#If set, secrets can be obtained by reading the content of files within the given directory.#
+
+[#option-extended-vault-vault-dir,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--vault-dir+` +
+*Env:* `+KC_VAULT_DIR+`
+--
+
+
+
+|_Path_
+
+|
+|
+[.options-key]#`+vault-file+`# 
+
+[.options-description]#Path to the keystore file.#
+
+[#option-extended-vault-vault-file,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--vault-file+` +
+*Env:* `+KC_VAULT_FILE+`
+--
+
+
+
+|_Path_
+
+|
+|
+[.options-key]#`+vault-pass+`# 
+
+[.options-description]#Password for the vault keystore.#
+
+[#option-extended-vault-vault-pass,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--vault-pass+` +
+*Env:* `+KC_VAULT_PASS+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+vault-type+`# 
+
+[.options-description]#Specifies the type of the keystore file.#
+
+[#option-extended-vault-vault-type,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--vault-type+` +
+*Env:* `+KC_VAULT_TYPE+`
+--
+
+
+
+|_String_
+
+|
+`+PKCS12+`
+
+
+|===
+[#category-logging]
+== Logging
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+log+`# 
+
+[.options-description]#Enable one or more log handlers in a comma-separated list.#
+
+[#option-extended-logging-log,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log+` +
+*Env:* `+KC_LOG+`
+--
+
+
+
+|
+`+console+`, `+file+`, `+syslog+`
+
+|
+`+console+`
+
+|
+[.options-key]#`+log-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to all handlers.#
+
+[#option-extended-logging-log-async,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-async+` +
+*Env:* `+KC_LOG_ASYNC+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-console-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to console.#
+
+[#option-extended-logging-log-console-async,role="options-extended"]
+--
+[.options-description-extended]#If not set, value from the parent property `log-async` is used.#
+
+
+
+*CLI:* `+--log-console-async+` +
+*Env:* `+KC_LOG_CONSOLE_ASYNC+`
+--
+
+Available only when Console log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-console-async-queue-length+`# 
+
+[.options-description]#The queue length to use before flushing writing when logging to console.#
+
+[#option-extended-logging-log-console-async-queue-length,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-console-async-queue-length+` +
+*Env:* `+KC_LOG_CONSOLE_ASYNC_QUEUE_LENGTH+`
+--
+
+Available only when Console log handler is activated and asynchronous logging is enabled
+
+
+|_Integer_
+
+|
+`+512+`
+
+|
+[.options-key]#`+log-console-color+`# 
+
+[.options-description]#Enable or disable colors when logging to console.#
+
+[#option-extended-logging-log-console-color,role="options-extended"]
+--
+[.options-description-extended]#If this is not present then an attempt will be made to guess if the terminal supports color.#
+
+
+
+*CLI:* `+--log-console-color+` +
+*Env:* `+KC_LOG_CONSOLE_COLOR+`
+--
+
+Available only when Console log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+|
+[.options-key]#`+log-console-format+`# 
+
+[.options-description]#The format of unstructured console log entries.#
+
+[#option-extended-logging-log-console-format,role="options-extended"]
+--
+[.options-description-extended]#If the format has spaces in it, escape the value using "<format>".#
+
+
+
+*CLI:* `+--log-console-format+` +
+*Env:* `+KC_LOG_CONSOLE_FORMAT+`
+--
+
+Available only when Console log handler is activated
+
+
+|_String_
+
+|
+`+%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n+`
+
+|
+[.options-key]#`+log-console-include-mdc+`# 
+
+[.options-description]#Include mdc information in the console log.#
+
+[#option-extended-logging-log-console-include-mdc,role="options-extended"]
+--
+[.options-description-extended]#If the `log-console-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-console-include-mdc+` +
+*Env:* `+KC_LOG_CONSOLE_INCLUDE_MDC+`
+--
+
+Available only when Console log handler and MDC logging are activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-console-include-trace+`# 
+
+[.options-description]#Include tracing information in the console log.#
+
+[#option-extended-logging-log-console-include-trace,role="options-extended"]
+--
+[.options-description-extended]#If the `log-console-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-console-include-trace+` +
+*Env:* `+KC_LOG_CONSOLE_INCLUDE_TRACE+`
+--
+
+Available only when Console log handler and Tracing is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-console-json-format+`# 
+
+[.options-description]#Set the format of the produced JSON.#
+
+[#option-extended-logging-log-console-json-format,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-console-json-format+` +
+*Env:* `+KC_LOG_CONSOLE_JSON_FORMAT+`
+--
+
+Available only when Console log handler is activated and output is set to 'json'
+
+
+|
+`+default+`, `+ecs+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-console-level+`# 
+
+[.options-description]#Set the log level for the console handler.#
+
+[#option-extended-logging-log-console-level,role="options-extended"]
+--
+[.options-description-extended]#It specifies the most verbose log level for logs shown in the output. It respects levels specified in the `log-level` option, which represents the maximal verbosity for the whole logging system. For more information, check the Logging guide.#
+
+
+
+*CLI:* `+--log-console-level+` +
+*Env:* `+KC_LOG_CONSOLE_LEVEL+`
+--
+
+Available only when Console log handler is activated
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+log-console-output+`# 
+
+[.options-description]#Set the log output to JSON or default (plain) unstructured logging.#
+
+[#option-extended-logging-log-console-output,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-console-output+` +
+*Env:* `+KC_LOG_CONSOLE_OUTPUT+`
+--
+
+Available only when Console log handler is activated
+
+
+|
+`+default+`, `+json+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-file+`# 
+
+[.options-description]#Set the log file path and filename.#
+
+[#option-extended-logging-log-file,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file+` +
+*Env:* `+KC_LOG_FILE+`
+--
+
+Available only when File log handler is activated
+
+
+|_File_
+
+|
+`+data/log/keycloak.log+`
+
+|
+[.options-key]#`+log-file-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to file log.#
+
+[#option-extended-logging-log-file-async,role="options-extended"]
+--
+[.options-description-extended]#If not set, value from the parent property `log-async` is used.#
+
+
+
+*CLI:* `+--log-file-async+` +
+*Env:* `+KC_LOG_FILE_ASYNC+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-file-async-queue-length+`# 
+
+[.options-description]#The queue length to use before flushing writing when logging to file log.#
+
+[#option-extended-logging-log-file-async-queue-length,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-async-queue-length+` +
+*Env:* `+KC_LOG_FILE_ASYNC_QUEUE_LENGTH+`
+--
+
+Available only when File log handler is activated and asynchronous logging is enabled
+
+
+|_Integer_
+
+|
+`+512+`
+
+|
+[.options-key]#`+log-file-format+`# 
+
+[.options-description]#Set a format specific to file log entries.#
+
+[#option-extended-logging-log-file-format,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-format+` +
+*Env:* `+KC_LOG_FILE_FORMAT+`
+--
+
+Available only when File log handler is activated
+
+
+|_String_
+
+|
+`+%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n+`
+
+|
+[.options-key]#`+log-file-include-mdc+`# 
+
+[.options-description]#Include MDC information in the file log.#
+
+[#option-extended-logging-log-file-include-mdc,role="options-extended"]
+--
+[.options-description-extended]#If the `log-file-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-file-include-mdc+` +
+*Env:* `+KC_LOG_FILE_INCLUDE_MDC+`
+--
+
+Available only when File log handler and MDC logging are activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-file-include-trace+`# 
+
+[.options-description]#Include tracing information in the file log.#
+
+[#option-extended-logging-log-file-include-trace,role="options-extended"]
+--
+[.options-description-extended]#If the `log-file-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-file-include-trace+` +
+*Env:* `+KC_LOG_FILE_INCLUDE_TRACE+`
+--
+
+Available only when File log handler and Tracing is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-file-json-format+`# 
+
+[.options-description]#Set the format of the produced JSON.#
+
+[#option-extended-logging-log-file-json-format,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-json-format+` +
+*Env:* `+KC_LOG_FILE_JSON_FORMAT+`
+--
+
+Available only when File log handler is activated and output is set to 'json'
+
+
+|
+`+default+`, `+ecs+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-file-level+`# 
+
+[.options-description]#Set the log level for the file handler.#
+
+[#option-extended-logging-log-file-level,role="options-extended"]
+--
+[.options-description-extended]#It specifies the most verbose log level for logs shown in the output. It respects levels specified in the `log-level` option, which represents the maximal verbosity for the whole logging system. For more information, check the Logging guide.#
+
+
+
+*CLI:* `+--log-file-level+` +
+*Env:* `+KC_LOG_FILE_LEVEL+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+log-file-output+`# 
+
+[.options-description]#Set the log output to JSON or default (plain) unstructured logging.#
+
+[#option-extended-logging-log-file-output,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-output+` +
+*Env:* `+KC_LOG_FILE_OUTPUT+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+default+`, `+json+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-file-rotation-enabled+`# 
+
+[.options-description]#Enables log file rotation.#
+
+[#option-extended-logging-log-file-rotation-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-rotation-enabled+` +
+*Env:* `+KC_LOG_FILE_ROTATION_ENABLED+`
+--
+
+Available only when File log handler is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-file-rotation-file-suffix+`# 
+
+[.options-description]#Set the log file handler rotation file suffix.#
+
+[#option-extended-logging-log-file-rotation-file-suffix,role="options-extended"]
+--
+[.options-description-extended]#When used, the file will be rotated based on its suffix. Example: `.yyyy-MM-dd` to rotate daily. Note: If the suffix ends with `.zip` or `.gz`, the rotation file will also be compressed.#
+
+
+
+*CLI:* `+--log-file-rotation-file-suffix+` +
+*Env:* `+KC_LOG_FILE_ROTATION_FILE_SUFFIX+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+log-file-rotation-max-backup-index+`# 
+
+[.options-description]#The maximum number of backup log files to keep.#
+
+[#option-extended-logging-log-file-rotation-max-backup-index,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-rotation-max-backup-index+` +
+*Env:* `+KC_LOG_FILE_ROTATION_MAX_BACKUP_INDEX+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|_Integer_
+
+|
+`+5+`
+
+|
+[.options-key]#`+log-file-rotation-max-file-size+`# 
+
+[.options-description]#The maximum log file size, after which a rotation is executed.#
+
+[#option-extended-logging-log-file-rotation-max-file-size,role="options-extended"]
+--
+[.options-description-extended]#Supports size suffixes (e.g. 10M, 1G).#
+
+
+
+*CLI:* `+--log-file-rotation-max-file-size+` +
+*Env:* `+KC_LOG_FILE_ROTATION_MAX_FILE_SIZE+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|_String_
+
+|
+`+10M+`
+
+|
+[.options-key]#`+log-file-rotation-rotate-on-boot+`# 
+
+[.options-description]#Indicates whether to rotate log files on server start.#
+
+[#option-extended-logging-log-file-rotation-rotate-on-boot,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-file-rotation-rotate-on-boot+` +
+*Env:* `+KC_LOG_FILE_ROTATION_ROTATE_ON_BOOT+`
+--
+
+Available only when File log handler is activated and log file rotation is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-level+`# 
+
+[.options-description]#The log level of the root category or a comma-separated list of individual categories and their levels.#
+
+[#option-extended-logging-log-level,role="options-extended"]
+--
+[.options-description-extended]#For the root category, you don't need to specify a category.#
+
+
+
+*CLI:* `+--log-level+` +
+*Env:* `+KC_LOG_LEVEL+`
+--
+
+
+
+|_List_
+
+|
+`+info+`
+
+|
+[.options-key]#`+log-level-<category>+`# 
+
+[.options-description]#The log level of a category.#
+
+[#option-extended-logging-log-level-<category>,role="options-extended"]
+--
+[.options-description-extended]#Takes precedence over the `log-level` option.#
+
+
+
+*CLI:* `+--log-level-<category>+` +
+*Env:* `+KC_LOG_LEVEL_<CATEGORY>+`
+--
+
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+|
+[.options-key]#`+log-mdc-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Indicates whether to add information about the realm and other information to the mapped diagnostic context.#
+
+[#option-extended-logging-log-mdc-enabled,role="options-extended"]
+--
+[.options-description-extended]#All elements will be prefixed with `kc.`#
+
+
+
+*CLI:* `+--log-mdc-enabled+` +
+*Env:* `+KC_LOG_MDC_ENABLED+`
+--
+
+Available only when log-mdc preview feature is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-mdc-keys+`# 
+
+[.options-description]#Defines which information should be added to the mapped diagnostic context as a comma-separated list.#
+
+[#option-extended-logging-log-mdc-keys,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-mdc-keys+` +
+*Env:* `+KC_LOG_MDC_KEYS+`
+--
+
+Available only when MDC logging is enabled
+
+
+|
+`+realmName+`, `+clientId+`, `+userId+`, `+ipAddress+`, `+org+`, `+sessionId+`, `+authenticationSessionId+`, `+authenticationTabId+`
+
+|
+`+realmName,clientId,org,sessionId,authenticationSessionId,authenticationTabId+`
+
+|
+[.options-key]#`+log-service-environment+`# 
+
+[.options-description]#Set the `service.#
+
+[#option-extended-logging-log-service-environment,role="options-extended"]
+--
+[.options-description-extended]#environment` field in JSON log entries for all log handlers. In ECS format, defaults to the Quarkus profile if not set.#
+
+
+
+*CLI:* `+--log-service-environment+` +
+*Env:* `+KC_LOG_SERVICE_ENVIRONMENT+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+log-service-name+`# 
+
+[.options-description]#Set the `service.#
+
+[#option-extended-logging-log-service-name,role="options-extended"]
+--
+[.options-description-extended]#name` field in JSON log entries for all log handlers.#
+
+
+
+*CLI:* `+--log-service-name+` +
+*Env:* `+KC_LOG_SERVICE_NAME+`
+--
+
+
+
+|_String_
+
+|
+`+keycloak+`
+
+|
+[.options-key]#`+log-syslog-app-name+`# 
+
+[.options-description]#Set the app name used when formatting the message in RFC5424 format.#
+
+[#option-extended-logging-log-syslog-app-name,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-app-name+` +
+*Env:* `+KC_LOG_SYSLOG_APP_NAME+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+`+keycloak+`
+
+|
+[.options-key]#`+log-syslog-async+`# 
+
+[.options-description]#Indicates whether to log asynchronously to Syslog.#
+
+[#option-extended-logging-log-syslog-async,role="options-extended"]
+--
+[.options-description-extended]#If not set, value from the parent property `log-async` is used.#
+
+
+
+*CLI:* `+--log-syslog-async+` +
+*Env:* `+KC_LOG_SYSLOG_ASYNC+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+log-syslog-async-queue-length+`# 
+
+[.options-description]#The queue length to use before flushing writing when logging to Syslog.#
+
+[#option-extended-logging-log-syslog-async-queue-length,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-async-queue-length+` +
+*Env:* `+KC_LOG_SYSLOG_ASYNC_QUEUE_LENGTH+`
+--
+
+Available only when Syslog is activated and asynchronous logging is enabled
+
+
+|_Integer_
+
+|
+`+512+`
+
+|
+[.options-key]#`+log-syslog-counting-framing+`# 
+
+[.options-description]#If `true`, the message being sent is prefixed with the size of the message.#
+
+[#option-extended-logging-log-syslog-counting-framing,role="options-extended"]
+--
+[.options-description-extended]#If `protocol-dependent`, the default value is `true` when `log-syslog-protocol` is `tcp` or `ssl-tcp`, otherwise `false`.#
+
+
+
+*CLI:* `+--log-syslog-counting-framing+` +
+*Env:* `+KC_LOG_SYSLOG_COUNTING_FRAMING+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+true+`, `+false+`, `+protocol-dependent+`
+
+|
+`+protocol-dependent+`
+
+|
+[.options-key]#`+log-syslog-endpoint+`# 
+
+[.options-description]#Set the IP address and port of the Syslog server.#
+
+[#option-extended-logging-log-syslog-endpoint,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-endpoint+` +
+*Env:* `+KC_LOG_SYSLOG_ENDPOINT+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+`+localhost:514+`
+
+|
+[.options-key]#`+log-syslog-format+`# 
+
+[.options-description]#Set a format specific to Syslog entries.#
+
+[#option-extended-logging-log-syslog-format,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-format+` +
+*Env:* `+KC_LOG_SYSLOG_FORMAT+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+`+%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n+`
+
+|
+[.options-key]#`+log-syslog-include-mdc+`# 
+
+[.options-description]#Include MDC information in the Syslog.#
+
+[#option-extended-logging-log-syslog-include-mdc,role="options-extended"]
+--
+[.options-description-extended]#If the `log-syslog-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-syslog-include-mdc+` +
+*Env:* `+KC_LOG_SYSLOG_INCLUDE_MDC+`
+--
+
+Available only when Syslog handler and MDC logging are activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-syslog-include-trace+`# 
+
+[.options-description]#Include tracing information in the Syslog.#
+
+[#option-extended-logging-log-syslog-include-trace,role="options-extended"]
+--
+[.options-description-extended]#If the `log-syslog-format` option is specified, this option has no effect.#
+
+
+
+*CLI:* `+--log-syslog-include-trace+` +
+*Env:* `+KC_LOG_SYSLOG_INCLUDE_TRACE+`
+--
+
+Available only when Syslog handler and Tracing is activated
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+log-syslog-json-format+`# 
+
+[.options-description]#Set the format of the produced JSON.#
+
+[#option-extended-logging-log-syslog-json-format,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-json-format+` +
+*Env:* `+KC_LOG_SYSLOG_JSON_FORMAT+`
+--
+
+Available only when Syslog is activated and output is set to 'json'
+
+
+|
+`+default+`, `+ecs+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-syslog-level+`# 
+
+[.options-description]#Set the log level for the Syslog handler.#
+
+[#option-extended-logging-log-syslog-level,role="options-extended"]
+--
+[.options-description-extended]#It specifies the most verbose log level for logs shown in the output. It respects levels specified in the `log-level` option, which represents the maximal verbosity for the whole logging system. For more information, check the Logging guide.#
+
+
+
+*CLI:* `+--log-syslog-level+` +
+*Env:* `+KC_LOG_SYSLOG_LEVEL+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+log-syslog-max-length+`# 
+
+[.options-description]#Set the maximum length, in bytes, of the message allowed to be sent.#
+
+[#option-extended-logging-log-syslog-max-length,role="options-extended"]
+--
+[.options-description-extended]#The length includes the header and the message. If not set, the default value is 2048 when `log-syslog-type` is rfc5424 (default) and 1024 when `log-syslog-type` is rfc3164.#
+
+
+
+*CLI:* `+--log-syslog-max-length+` +
+*Env:* `+KC_LOG_SYSLOG_MAX_LENGTH+`
+--
+
+Available only when Syslog is activated
+
+
+|_String_
+
+|
+|
+[.options-key]#`+log-syslog-output+`# 
+
+[.options-description]#Set the Syslog output to JSON or default (plain) unstructured logging.#
+
+[#option-extended-logging-log-syslog-output,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-output+` +
+*Env:* `+KC_LOG_SYSLOG_OUTPUT+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+default+`, `+json+`
+
+|
+`+default+`
+
+|
+[.options-key]#`+log-syslog-protocol+`# 
+
+[.options-description]#Set the protocol used to connect to the Syslog server.#
+
+[#option-extended-logging-log-syslog-protocol,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-protocol+` +
+*Env:* `+KC_LOG_SYSLOG_PROTOCOL+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+tcp+`, `+udp+`, `+ssl-tcp+`
+
+|
+`+tcp+`
+
+|
+[.options-key]#`+log-syslog-type+`# 
+
+[.options-description]#Set the Syslog type used to format the sent message.#
+
+[#option-extended-logging-log-syslog-type,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--log-syslog-type+` +
+*Env:* `+KC_LOG_SYSLOG_TYPE+`
+--
+
+Available only when Syslog is activated
+
+
+|
+`+rfc5424+`, `+rfc3164+`
+
+|
+`+rfc5424+`
+
+
+|===
+[#category-telemetry]
+== Telemetry (OpenTelemetry)
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+telemetry-endpoint+`# 
+
+[.options-description]#OpenTelemetry endpoint to connect to.#
+
+[#option-extended-telemetry-telemetry-endpoint,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--telemetry-endpoint+` +
+*Env:* `+KC_TELEMETRY_ENDPOINT+`
+--
+
+Available only when any of available OpenTelemetry components (Logs, Metrics, Traces) is turned on
+
+
+|_String_
+
+|
+`+http://localhost:4317+`
+
+|
+[.options-key]#`+telemetry-header-<header>+`# 
+
+[.options-description]#General OpenTelemetry header that will be part of the exporter request (mainly useful for providing Authorization header).#
+
+[#option-extended-telemetry-telemetry-header-<header>,role="options-extended"]
+--
+[.options-description-extended]#Check the documentation on how to set environment variables for headers containing special characters or custom case-sensitive headers.#
+
+
+
+*CLI:* `+--telemetry-header-<header>+` +
+*Env:* `+KC_TELEMETRY_HEADER_<HEADER>+`
+--
+
+Available only when any of available OpenTelemetry components (Logs, Metrics, Traces) is turned on
+
+
+|_String_
+
+|
+|
+[.options-key]#`+telemetry-logs-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enables exporting logs to a destination handling OpenTelemetry logs.#
+
+[#option-extended-telemetry-telemetry-logs-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--telemetry-logs-enabled+` +
+*Env:* `+KC_TELEMETRY_LOGS_ENABLED+`
+--
+
+Available only when feature 'opentelemetry-logs:v1' is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+telemetry-logs-endpoint+`# 
+
+[.options-description]#OpenTelemetry endpoint to export logs to.#
+
+[#option-extended-telemetry-telemetry-logs-endpoint,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from the `telemetry-endpoint` option.#
+
+
+
+*CLI:* `+--telemetry-logs-endpoint+` +
+*Env:* `+KC_TELEMETRY_LOGS_ENDPOINT+`
+--
+
+Available only when Telemetry Logs functionality ('telemetry-logs-enabled') is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+telemetry-logs-header-<header>+`# 
+
+[.options-description]#OpenTelemetry header that will be part of the log exporter request (mainly useful for providing Authorization header).#
+
+[#option-extended-telemetry-telemetry-logs-header-<header>,role="options-extended"]
+--
+[.options-description-extended]#Check the documentation on how to set environment variables for headers containing special characters or custom case-sensitive headers.#
+
+
+
+*CLI:* `+--telemetry-logs-header-<header>+` +
+*Env:* `+KC_TELEMETRY_LOGS_HEADER_<HEADER>+`
+--
+
+Available only when Telemetry Logs functionality ('telemetry-logs-enabled') is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+telemetry-logs-level+`# 
+
+[.options-description]#The most verbose log level exported to the telemetry endpoint.#
+
+[#option-extended-telemetry-telemetry-logs-level,role="options-extended"]
+--
+[.options-description-extended]#For more information, check the Telemetry guide.#
+
+
+
+*CLI:* `+--telemetry-logs-level+` +
+*Env:* `+KC_TELEMETRY_LOGS_LEVEL+`
+--
+
+Available only when Telemetry Logs functionality ('telemetry-logs-enabled') is enabled
+
+
+|
+`+off+`, `+fatal+`, `+error+`, `+warn+`, `+info+`, `+debug+`, `+trace+`, `+all+`
+
+|
+`+all+`
+
+|
+[.options-key]#`+telemetry-logs-protocol+`# 
+
+[.options-description]#OpenTelemetry protocol used for exporting logs.#
+
+[#option-extended-telemetry-telemetry-logs-protocol,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from the `telemetry-protocol` option.#
+
+
+
+*CLI:* `+--telemetry-logs-protocol+` +
+*Env:* `+KC_TELEMETRY_LOGS_PROTOCOL+`
+--
+
+Available only when Telemetry Logs functionality ('telemetry-logs-enabled') is enabled
+
+
+|
+`+grpc+`, `+http/protobuf+`
+
+|
+|
+[.options-key]#`+telemetry-metrics-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enables exporting metrics to a destination handling OpenTelemetry metrics.#
+
+[#option-extended-telemetry-telemetry-metrics-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--telemetry-metrics-enabled+` +
+*Env:* `+KC_TELEMETRY_METRICS_ENABLED+`
+--
+
+Available only when metrics and feature 'opentelemetry-metrics:v1' are enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+telemetry-metrics-endpoint+`# 
+
+[.options-description]#OpenTelemetry endpoint to connect to for Metrics.#
+
+[#option-extended-telemetry-telemetry-metrics-endpoint,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from the `telemetry-endpoint` option.#
+
+
+
+*CLI:* `+--telemetry-metrics-endpoint+` +
+*Env:* `+KC_TELEMETRY_METRICS_ENDPOINT+`
+--
+
+Available only when metrics ('metrics-enabled') and Telemetry Metrics functionality ('telemetry-metrics-enabled') are enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+telemetry-metrics-header-<header>+`# 
+
+[.options-description]#OpenTelemetry header that will be part of the metrics exporter request (mainly useful for providing Authorization header).#
+
+[#option-extended-telemetry-telemetry-metrics-header-<header>,role="options-extended"]
+--
+[.options-description-extended]#Check the documentation on how to set environment variables for headers containing special characters or custom case-sensitive headers.#
+
+
+
+*CLI:* `+--telemetry-metrics-header-<header>+` +
+*Env:* `+KC_TELEMETRY_METRICS_HEADER_<HEADER>+`
+--
+
+Available only when metrics ('metrics-enabled') and Telemetry Metrics functionality ('telemetry-metrics-enabled') are enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+telemetry-metrics-interval+`# 
+
+[.options-description]#The interval between the start of two metric export attempts to the destination handling OpenTelemetry metrics data.#
+
+[#option-extended-telemetry-telemetry-metrics-interval,role="options-extended"]
+--
+[.options-description-extended]#It accepts simplified format for time units as java.time.Duration (like 5000ms, 30s, 5m, 1h). If the value is only a number, it represents time in seconds.#
+
+
+
+*CLI:* `+--telemetry-metrics-interval+` +
+*Env:* `+KC_TELEMETRY_METRICS_INTERVAL+`
+--
+
+Available only when metrics ('metrics-enabled') and Telemetry Metrics functionality ('telemetry-metrics-enabled') are enabled
+
+
+|_String_
+
+|
+`+60s+`
+
+|
+[.options-key]#`+telemetry-metrics-protocol+`# 
+
+[.options-description]#OpenTelemetry protocol used for the metrics telemetry data.#
+
+[#option-extended-telemetry-telemetry-metrics-protocol,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from the `telemetry-protocol` option.#
+
+
+
+*CLI:* `+--telemetry-metrics-protocol+` +
+*Env:* `+KC_TELEMETRY_METRICS_PROTOCOL+`
+--
+
+Available only when metrics ('metrics-enabled') and Telemetry Metrics functionality ('telemetry-metrics-enabled') are enabled
+
+
+|
+`+grpc+`, `+http/protobuf+`
+
+|
+|
+[.options-key]#`+telemetry-protocol+`# 
+
+[.options-description]#OpenTelemetry protocol used for the communication between server and OpenTelemetry collector.#
+
+[#option-extended-telemetry-telemetry-protocol,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--telemetry-protocol+` +
+*Env:* `+KC_TELEMETRY_PROTOCOL+`
+--
+
+Available only when any of available OpenTelemetry components (Logs, Metrics, Traces) is turned on
+
+
+|
+`+grpc+`, `+http/protobuf+`
+
+|
+`+grpc+`
+
+|
+[.options-key]#`+telemetry-resource-attributes+`# 
+
+[.options-description]#OpenTelemetry resource attributes characterize the telemetry producer.#
+
+[#option-extended-telemetry-telemetry-resource-attributes,role="options-extended"]
+--
+[.options-description-extended]#Values in format `key1=val1,key2=val2`.#
+
+
+
+*CLI:* `+--telemetry-resource-attributes+` +
+*Env:* `+KC_TELEMETRY_RESOURCE_ATTRIBUTES+`
+--
+
+Available only when any of available OpenTelemetry components (Logs, Metrics, Traces) is turned on
+
+
+|_List_
+
+|
+|
+[.options-key]#`+telemetry-service-name+`# 
+
+[.options-description]#OpenTelemetry service name.#
+
+[#option-extended-telemetry-telemetry-service-name,role="options-extended"]
+--
+[.options-description-extended]#Takes precedence over `service.name` defined in the `telemetry-resource-attributes` property.#
+
+
+
+*CLI:* `+--telemetry-service-name+` +
+*Env:* `+KC_TELEMETRY_SERVICE_NAME+`
+--
+
+Available only when any of available OpenTelemetry components (Logs, Metrics, Traces) is turned on
+
+
+|_String_
+
+|
+`+keycloak+`
+
+
+|===
+[#category-tracing]
+== Tracing
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+tracing-compression+`# 
+
+[.options-description]#OpenTelemetry compression method used to compress payloads.#
+
+[#option-extended-tracing-tracing-compression,role="options-extended"]
+--
+[.options-description-extended]#If unset, compression is disabled.#
+
+
+
+*CLI:* `+--tracing-compression+` +
+*Env:* `+KC_TRACING_COMPRESSION+`
+--
+
+Available only when Tracing is enabled
+
+
+|
+`+gzip+`, `+none+`
+
+|
+`+none+`
+
+|
+[.options-key]#`+tracing-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enables the OpenTelemetry tracing.#
+
+[#option-extended-tracing-tracing-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--tracing-enabled+` +
+*Env:* `+KC_TRACING_ENABLED+`
+--
+
+Available only when 'opentelemetry' feature is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+tracing-endpoint+`# 
+
+[.options-description]#OpenTelemetry endpoint to connect to for traces.#
+
+[#option-extended-tracing-tracing-endpoint,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from the `telemetry-endpoint` option.#
+
+
+
+*CLI:* `+--tracing-endpoint+` +
+*Env:* `+KC_TRACING_ENDPOINT+`
+--
+
+Available only when Tracing is enabled
+
+
+|_String_
+
+|
+`+http://localhost:4317+`
+
+|
+[.options-key]#`+tracing-header-<header>+`# 
+
+[.options-description]#OpenTelemetry header that will be part of the exporter request (mainly useful for providing Authorization header).#
+
+[#option-extended-tracing-tracing-header-<header>,role="options-extended"]
+--
+[.options-description-extended]#Check the documentation on how to set environment variables for headers containing special characters or custom case-sensitive headers.#
+
+
+
+*CLI:* `+--tracing-header-<header>+` +
+*Env:* `+KC_TRACING_HEADER_<HEADER>+`
+--
+
+Available only when Tracing is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+tracing-infinispan-enabled+`# 
+
+[.options-description]#Enables the OpenTelemetry tracing for embedded Infinispan.#
+
+[#option-extended-tracing-tracing-infinispan-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--tracing-infinispan-enabled+` +
+*Env:* `+KC_TRACING_INFINISPAN_ENABLED+`
+--
+
+Available only when tracing and embedded Infinispan is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+tracing-jdbc-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enables the OpenTelemetry JDBC tracing.#
+
+[#option-extended-tracing-tracing-jdbc-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--tracing-jdbc-enabled+` +
+*Env:* `+KC_TRACING_JDBC_ENABLED+`
+--
+
+Available only when Tracing is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+tracing-protocol+`# 
+
+[.options-description]#OpenTelemetry protocol used for the telemetry data.#
+
+[#option-extended-tracing-tracing-protocol,role="options-extended"]
+--
+[.options-description-extended]#If not given, the value is inherited from the `telemetry-protocol` option.#
+
+
+
+*CLI:* `+--tracing-protocol+` +
+*Env:* `+KC_TRACING_PROTOCOL+`
+--
+
+Available only when Tracing is enabled
+
+
+|
+`+grpc+`, `+http/protobuf+`
+
+|
+`+grpc+`
+
+|
+[.options-key]#`+tracing-resource-attributes+`# 
+
+[.options-description]#OpenTelemetry resource attributes present in the exported trace to characterize the telemetry producer.#
+
+[#option-extended-tracing-tracing-resource-attributes,role="options-extended"]
+--
+[.options-description-extended]#Values in format `key1=val1,key2=val2`. If not given, the value is inherited from the `telemetry-resource-attributes` option. For more information, check the Tracing guide.#
+
+
+
+*CLI:* `+--tracing-resource-attributes+` +
+*Env:* `+KC_TRACING_RESOURCE_ATTRIBUTES+`
+--
+
+Available only when Tracing is enabled
+
+*DEPRECATED.*
+Resource attributes are not directly related to Tracing and you should use the Telemetry option which takes precedence. Use: `+telemetry-resource-attributes+`.
+
+|_List_
+
+|
+|
+[.options-key]#`+tracing-sampler-ratio+`# 
+
+[.options-description]#OpenTelemetry sampler ratio.#
+
+[#option-extended-tracing-tracing-sampler-ratio,role="options-extended"]
+--
+[.options-description-extended]#Probability that a span will be sampled. Expected double value in interval [0,1].#
+
+
+
+*CLI:* `+--tracing-sampler-ratio+` +
+*Env:* `+KC_TRACING_SAMPLER_RATIO+`
+--
+
+Available only when Tracing is enabled
+
+
+|_Double_
+
+|
+`+1.0+`
+
+|
+[.options-key]#`+tracing-sampler-type+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#OpenTelemetry sampler to use for tracing.#
+
+[#option-extended-tracing-tracing-sampler-type,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--tracing-sampler-type+` +
+*Env:* `+KC_TRACING_SAMPLER_TYPE+`
+--
+
+Available only when Tracing is enabled
+
+
+|
+`+always_on+`, `+always_off+`, `+traceidratio+`, `+parentbased_always_on+`, `+parentbased_always_off+`, `+parentbased_traceidratio+`
+
+|
+`+traceidratio+`
+
+|
+[.options-key]#`+tracing-service-name+`# 
+
+[.options-description]#OpenTelemetry service name.#
+
+[#option-extended-tracing-tracing-service-name,role="options-extended"]
+--
+[.options-description-extended]#Takes precedence over `service.name` defined in the `tracing-resource-attributes` property. If not given, the value is inherited from the `telemetry-service-name` option.#
+
+
+
+*CLI:* `+--tracing-service-name+` +
+*Env:* `+KC_TRACING_SERVICE_NAME+`
+--
+
+Available only when Tracing is enabled
+
+*DEPRECATED.*
+Service name is not directly related to Tracing and you should use the Telemetry option which takes precedence. Use: `+telemetry-service-name+`.
+
+|_String_
+
+|
+`+keycloak+`
+
+
+|===
+[#category-events]
+== Events
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+event-metrics-user-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Create metrics based on user events.#
+
+[#option-extended-events-event-metrics-user-enabled,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--event-metrics-user-enabled+` +
+*Env:* `+KC_EVENT_METRICS_USER_ENABLED+`
+--
+
+Available only when metrics are enabled and feature user-event-metrics is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+event-metrics-user-events+`# 
+
+[.options-description]#Comma-separated list of events to be collected for user event metrics.#
+
+[#option-extended-events-event-metrics-user-events,role="options-extended"]
+--
+[.options-description-extended]#This option can be used to reduce the number of metrics created as by default all user events create a metric.#
+
+
+
+*CLI:* `+--event-metrics-user-events+` +
+*Env:* `+KC_EVENT_METRICS_USER_EVENTS+`
+--
+
+Available only when user event metrics are enabled
+
+Use `remove_credential` instead of `remove_totp`, and `update_credential` instead of `update_totp` and `update_password`.
+*Deprecated values: `+remove_totp+`, `+update_totp+`, `+update_password+`*
+
+|
+`+authreqid_to_token+`, `+client_delete+`, `+client_info+`, `+client_initiated_account_linking+`, `+client_login+`, `+client_register+`, `+client_update+`, `+code_to_token+`, `+custom_required_action+`, `+delete_account+`, `+execute_action_token+`, `+execute_actions+`, `+federated_identity_link+`, `+federated_identity_override_link+`, `+grant_consent+`, `+identity_provider_first_login+`, `+identity_provider_link_account+`, `+identity_provider_login+`, `+identity_provider_post_login+`, `+identity_provider_response+`, `+identity_provider_retrieve_token+`, `+impersonate+`, `+introspect_token+`, `+invalid_signature+`, `+invite_org+`, `+jwt_authorization_grant+`, `+login+`, `+logout+`, `+oauth2_device_auth+`, `+oauth2_device_code_to_token+`, `+oauth2_device_verify_user_code+`, `+oauth2_extension_grant+`, `+permission_token+`, `+pushed_authorization_request+`, `+refresh_token+`, `+register+`, `+register_node+`, `+remove_credential+`, `+remove_federated_identity+`, `+remove_totp+` (deprecated), `+reset_password+`, `+restart_authentication+`, `+revoke_grant+`, `+send_identity_provider_link+`, `+send_reset_password+`, `+send_verify_email+`, `+token_exchange+`, `+unregister_node+`, `+update_consent+`, `+update_credential+`, `+update_email+`, `+update_password+` (deprecated), `+update_profile+`, `+update_totp+` (deprecated), `+user_disabled_by_permanent_lockout+`, `+user_disabled_by_temporary_lockout+`, `+user_info_request+`, `+user_session_deleted+`, `+verifiable_credential_create_offer+`, `+verifiable_credential_nonce_request+`, `+verifiable_credential_offer_request+`, `+verifiable_credential_pre_authorized_grant+`, `+verifiable_credential_request+`, `+verify_email+`, `+verify_profile+`
+
+|
+|
+[.options-key]#`+event-metrics-user-tags+`# 
+
+[.options-description]#Comma-separated list of tags to be collected for user event metrics.#
+
+[#option-extended-events-event-metrics-user-tags,role="options-extended"]
+--
+[.options-description-extended]#By default only `realm` is enabled to avoid a high metrics cardinality.#
+
+
+
+*CLI:* `+--event-metrics-user-tags+` +
+*Env:* `+KC_EVENT_METRICS_USER_TAGS+`
+--
+
+Available only when user event metrics are enabled
+
+
+|
+`+realm+`, `+idp+`, `+clientId+`
+
+|
+`+realm+`
+
+
+|===
+[#category-truststore]
+== Truststore
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+tls-hostname-verifier+`# 
+
+[.options-description]#The TLS hostname verification policy for out-going HTTPS and SMTP requests.#
+
+[#option-extended-truststore-tls-hostname-verifier,role="options-extended"]
+--
+[.options-description-extended]#ANY should not be used in production.#
+
+
+
+*CLI:* `+--tls-hostname-verifier+` +
+*Env:* `+KC_TLS_HOSTNAME_VERIFIER+`
+--
+
+
+STRICT and WILDCARD have been deprecated, use DEFAULT instead.
+*Deprecated values: `+STRICT+`, `+WILDCARD+`*
+
+|
+`+ANY+`, `+WILDCARD+` (deprecated), `+STRICT+` (deprecated), `+DEFAULT+`
+
+|
+`+DEFAULT+`
+
+|
+[.options-key]#`+truststore-kubernetes-enabled+`# 
+
+[.options-description]#If enabled, the server will automatically include the default Kubernetes service account CA certificate from "/var/run/secrets/kubernetes.#
+
+[#option-extended-truststore-truststore-kubernetes-enabled,role="options-extended"]
+--
+[.options-description-extended]#io/serviceaccount/ca.crt" and the OpenShift service CA certificate from "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt" when running in a container environment.#
+
+
+
+*CLI:* `+--truststore-kubernetes-enabled+` +
+*Env:* `+KC_TRUSTSTORE_KUBERNETES_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+truststore-paths+`# 
+
+[.options-description]#List of pkcs12 (p12, pfx, or pkcs12 file extensions), PEM files, or directories containing those files that will be used as a system truststore.#
+
+[#option-extended-truststore-truststore-paths,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--truststore-paths+` +
+*Env:* `+KC_TRUSTSTORE_PATHS+`
+--
+
+
+
+|_List_
+
+|
+
+|===
+[#category-security]
+== Security
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+fips-mode+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Sets the FIPS mode.#
+
+[#option-extended-security-fips-mode,role="options-extended"]
+--
+[.options-description-extended]#If `non-strict` is set, FIPS is enabled but on non-approved mode. For full FIPS compliance, set `strict` to run on approved mode. This option defaults to `disabled` when `fips` feature is disabled, which is by default. This option defaults to `non-strict` when `fips` feature is enabled.#
+
+
+
+*CLI:* `+--fips-mode+` +
+*Env:* `+KC_FIPS_MODE+`
+--
+
+
+
+|
+`+non-strict+`, `+strict+`
+
+|
+`+disabled+`
+
+
+|===
+[#category-export]
+== Export
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+dir+`# 
+
+[.options-description]#Set the path to a directory where files will be created with the exported data.#
+
+[#option-extended-export-dir,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--dir+` +
+*Env:* `+KC_DIR+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+file+`# 
+
+[.options-description]#Set the path to a file that will be created with the exported data.#
+
+[#option-extended-export-file,role="options-extended"]
+--
+[.options-description-extended]#To export more than 50000 users, export to a directory with different files instead.#
+
+
+
+*CLI:* `+--file+` +
+*Env:* `+KC_FILE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+realm+`# 
+
+[.options-description]#Set the name of the realm to export.#
+
+[#option-extended-export-realm,role="options-extended"]
+--
+[.options-description-extended]#If not set, all realms are going to be exported.#
+
+
+
+*CLI:* `+--realm+` +
+*Env:* `+KC_REALM+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+users+`# 
+
+[.options-description]#Set how users should be exported.#
+
+[#option-extended-export-users,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--users+` +
+*Env:* `+KC_USERS+`
+--
+
+
+
+|
+`+skip+`, `+realm_file+`, `+same_file+`, `+different_files+`
+
+|
+`+different_files+`
+
+|
+[.options-key]#`+users-per-file+`# 
+
+[.options-description]#Set the number of users per file.#
+
+[#option-extended-export-users-per-file,role="options-extended"]
+--
+[.options-description-extended]#It is used only if `users` is set to `different_files`.#
+
+
+
+*CLI:* `+--users-per-file+` +
+*Env:* `+KC_USERS_PER_FILE+`
+--
+
+
+
+|_Integer_
+
+|
+`+50+`
+
+
+|===
+[#category-import]
+== Import
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+dir+`# 
+
+[.options-description]#Set the path to a directory where files will be read from.#
+
+[#option-extended-import-dir,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--dir+` +
+*Env:* `+KC_DIR+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+file+`# 
+
+[.options-description]#Set the path to a file that will be read.#
+
+[#option-extended-import-file,role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--file+` +
+*Env:* `+KC_FILE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+override+`# 
+
+[.options-description]#Set if existing data should be overwritten.#
+
+[#option-extended-import-override,role="options-extended"]
+--
+[.options-description-extended]#If set to false, data will be ignored.#
+
+
+
+*CLI:* `+--override+` +
+*Env:* `+KC_OVERRIDE+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+
+|===
+[#category-openapi]
+== OpenAPI configuration
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+openapi-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose OpenAPI Endpoint.#
+
+[#option-extended-openapi-openapi-enabled,role="options-extended"]
+--
+[.options-description-extended]#If enabled, OpenAPI is available at `/openapi`.#
+
+
+
+*CLI:* `+--openapi-enabled+` +
+*Env:* `+KC_OPENAPI_ENABLED+`
+--
+
+Available only when OpenAPI feature is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+openapi-ui-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If the server should expose OpenApi-UI Endpoint.#
+
+[#option-extended-openapi-openapi-ui-enabled,role="options-extended"]
+--
+[.options-description-extended]#If enabled, OpenAPI UI is available at `/openapi/ui`.#
+
+
+
+*CLI:* `+--openapi-ui-enabled+` +
+*Env:* `+KC_OPENAPI_UI_ENABLED+`
+--
+
+Available only when OpenAPI Endpoint is enabled
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+
+|===
+[#category-server]
+== Server configuration
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+server-async-bootstrap+`# 
+
+[.options-description]#If true, endpoints are opened while the bootstrap runs in the background.#
+
+[#option-extended-server-server-async-bootstrap,role="options-extended"]
+--
+[.options-description-extended]#If false, endpoints are opened after bootstrap completes, ensuring the server is ready to handle requests. Async bootstrap is enabled by default when the health endpoints are also enabled, unless this option is explicitly set to false.#
+
+
+
+*CLI:* `+--server-async-bootstrap+` +
+*Env:* `+KC_SERVER_ASYNC_BOOTSTRAP+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+
+|===
+[#category-bootstrap_admin]
+== Bootstrap Admin
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+bootstrap-admin-client-id+`# 
+
+[.options-description]#Client id for the temporary bootstrap admin service account.#
+
+[#option-extended-bootstrap_admin-bootstrap-admin-client-id,role="options-extended"]
+--
+[.options-description-extended]#Used only when the master realm is created. Available only when bootstrap admin client secret is set.#
+
+
+
+*CLI:* `+--bootstrap-admin-client-id+` +
+*Env:* `+KC_BOOTSTRAP_ADMIN_CLIENT_ID+`
+--
+
+
+
+|_String_
+
+|
+`+temp-admin+`
+
+|
+[.options-key]#`+bootstrap-admin-client-secret+`# 
+
+[.options-description]#Client secret for the temporary bootstrap admin service account.#
+
+[#option-extended-bootstrap_admin-bootstrap-admin-client-secret,role="options-extended"]
+--
+[.options-description-extended]#Used only when the master realm is created. Use a non-CLI configuration option for this option if possible.#
+
+
+
+*CLI:* `+--bootstrap-admin-client-secret+` +
+*Env:* `+KC_BOOTSTRAP_ADMIN_CLIENT_SECRET+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+bootstrap-admin-password+`# 
+
+[.options-description]#Temporary bootstrap admin password.#
+
+[#option-extended-bootstrap_admin-bootstrap-admin-password,role="options-extended"]
+--
+[.options-description-extended]#Used only when the master realm is created. Use a non-CLI configuration option for this option if possible.#
+
+
+
+*CLI:* `+--bootstrap-admin-password+` +
+*Env:* `+KC_BOOTSTRAP_ADMIN_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+bootstrap-admin-username+`# 
+
+[.options-description]#Temporary bootstrap admin username.#
+
+[#option-extended-bootstrap_admin-bootstrap-admin-username,role="options-extended"]
+--
+[.options-description-extended]#Used only when the master realm is created. Available only when bootstrap admin password is set.#
+
+
+
+*CLI:* `+--bootstrap-admin-username+` +
+*Env:* `+KC_BOOTSTRAP_ADMIN_USERNAME+`
+--
+
+
+
+|_String_
+
+|
+`+temp-admin+`
+
+
+|===
+

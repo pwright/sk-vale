@@ -1,0 +1,62 @@
+[id="_standard-token-exchange-flow_{context}"]
+= Token exchange flow
+
+
+Consider this typical token exchange flow:
+
+. The user authenticates with the use of the {project_name} SSO to the client application `initial-client`. The token is issued to the `initial-client`.
+. The client `initial-client` may need to use the REST service `requester-client`, which requires authentication. So the `initial-client` sends the access token from step 1 to the `requester-client` with the
+use of the token
+. To serve the request, the `requester-client` may need to call another service `target-client`. However it may be unable to use the token sent to it from `initial-client`. For example:
++
+--
+* The token has insufficient permissions or scopes.
+* The `target-client` is not specified as the token audience; the token was intended to be used to invoke `requester-client`.
+* The token has too many permissions; therefore, the `requester-client` may not want to share it with the `target-client`.
+--
++
+Any of these situations could be the reason to invoke the token exchange. The `requester-client` may need to send the token exchange request to the {project_name} server and use the original token from step 1 as the
+_subject token_ and exchange it for another token _requested token_.
+. The _requested token_ is returned to `requester-client`. This token can now be sent to the `target-client`.
+. The `target-client` can fulfill the request and return the response to the `requester-client`. The `requester-client` can then follow and return the response to the request from step 2.
+
+.Token Exchange Example Flow
+image::token-exchange-example-flow.dio.svg[Token Exchange Example Flow]
+
+Many other use-cases exist for token exchange, but the preceding example is the most typical.
+
+
+**Example token exchange request**
+
+
+The following is an example token exchange request of the client `requester-client` in the realm `test`. Note that `subject_token` is the access token issued to the `initial-client`:
+
+[source,bash]
+----
+POST /realms/test/protocol/openid-connect/token
+Authorization: Basic cmVxdWVzdGVyLWNsaWVudDpwYXNzd29yZA==
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=urn:ietf:params:oauth:grant-type:token-exchange&
+subject_token=$SUBJECT_TOKEN&
+subject_token_type=urn:ietf:params:oauth:token-type:access_token&
+requested_token_type=urn:ietf:params:oauth:token-type:access_token
+----
+
+The example token exchange response may look like this:
+
+[source,json]
+----
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsIn...",
+  "expires_in": 300,
+  "token_type": "Bearer",
+  "issued_token_type": "urn:ietf:params:oauth:token-type:access_token",
+  "session_state": "287f3c57-32b8-4c0f-8b00-8c7db231d701",
+  "scope": "default-scope1",
+  "refresh_expires_in": 0,
+  "not-before-policy": 0
+}
+----
+

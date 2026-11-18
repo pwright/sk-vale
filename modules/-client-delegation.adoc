@@ -1,0 +1,91 @@
+[id="_client-delegation_{context}"]
+= Client delegation
+
+
+Client delegation allows a user (subject) to delegate their token to a client application (actor), such as an AI agent or automated service. The client requests the `delegation:client` scope with the actor client's identifier as a parameter using the link:{adminguide_link}#_parameterized_client_scopes[parameterized scopes] syntax (for example, `delegation:client:actor-app`).
+
+Unlike admin delegation, which is designed for human administrators, client delegation is designed for application-to-application scenarios where a user consents to let a specific client act on their behalf. The actor client does not need any admin roles or access to the Admin REST API.
+
+
+**Prerequisites**
+
+
+The actor client (the application that will act on behalf of the user) must meet the following requirements:
+
+* It must be a *confidential* client.
+* It must have a *service account* enabled.
+* It must have *Standard Token Exchange* enabled.
+
+
+**How it works**
+
+
+. The client requests the `delegation:client` scope with the actor client's `client_id` as a parameter, for example `scope=openid delegation:client:actor-app`.
+. {project_name} validates that the named client exists, is enabled, has service accounts enabled, and that its service account user can be resolved.
+. {project_name} validates that the actor client's service account has the `delegate` permission for the user (subject) through FGAP V2.
+. The user (subject) is presented with a consent screen to approve the delegation.
+. If the user consents and validation passes, the issued token includes the `may_act` claim with the actor's service account user ID as `sub` and the client identifier as `client_id`:
++
+[source,json]
+----
+{
+  "sub": "0fa1e5d4-3c2b-4a19-8765-0123456789ab",
+  "may_act": {
+    "sub": "9b8c7d6e-5f4a-4b2c-9d0e-fedcba987654",
+    "client_id": "actor-app"
+  },
+  "scope": "openid delegation:client:actor-app",
+  ...
+}
+----
++
+The `delegation:client` scope also automatically adds the actor client to the `aud` claim of the subject's token. This is required because the standard token exchange validates that the requester client is present in the subject token's audience.
+
+. The actor client receives the subject's token (containing `may_act`) and performs a token exchange at the token endpoint, as described in <<_performing-the-delegated-exchange,Performing the delegated exchange>>.
+. The resulting delegated token is issued in a transient session (access token only, no refresh token). The token's `aud` claim and scopes are resolved from the actor client's configuration (its client scopes and role mappings), not from the original subject token. This effectively narrows the delegated token to only the audiences and permissions that the actor client is configured for. The token also contains the `act` claim identifying the actor:
++
+[source,json]
+----
+{
+  "sub": "0fa1e5d4-3c2b-4a19-8765-0123456789ab",
+  "act": {
+    "sub": "9b8c7d6e-5f4a-4b2c-9d0e-fedcba987654",
+    "client_id": "actor-app"
+  },
+  ...
+}
+----
+
+The `act` claim allows resource servers to identify both who the data belongs to (the subject, via the `sub` claim) and who is actually making the request (the actor client, via the `act` claim).
+
+
+**Adding additional claims to `may_act`**
+
+
+By default, the `may_act` claim contains the actor's `sub` (service account user ID) and `client_id`. Additional claims can be added by configuring extra mappers on the `delegation:client` client scope in the Admin Console, in the same way as for admin delegation.
+
+For example, to add a custom claim describing the actor:
+
+. Navigate to *Client scopes* -> *delegation:client* -> *Mappers* -> *Add mapper* -> *By configuration* -> *Hardcoded claim*.
+. Set *Token Claim Name* to `may_act.custom_value`.
+. Set *Claim value* to `hello`.
+. Enable the token types where the claim should be included (e.g. access token, ID token).
+
+The resulting token will then include:
+
+[source,json]
+----
+{
+  "may_act": {
+    "sub": "9b8c7d6e-5f4a-4b2c-9d0e-fedcba987654",
+    "client_id": "actor-app",
+    "custom_value": "hello"
+  },
+  ...
+}
+----
+
+NOTE: {project_name} validates only `sub`, `client_id` and `iss` inside `may_act`. Every other claim is copied unchanged into the `act` claim of the delegated token, so it serves to identify and describe the actor for the parties reading the token, never as an input to an authorization decision.
+
+NOTE: A *Hardcoded claim* is the same for every actor client, and no mapper resolves an attribute of the actor client itself. *Parameterized Scope User Property* cannot be reused here, since it treats the scope parameter as a username.
+

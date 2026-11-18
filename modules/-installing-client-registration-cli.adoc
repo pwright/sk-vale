@@ -1,0 +1,26 @@
+[id="_installing_client_registration_cli_{context}"]
+= Installing the Client Registration CLI
+
+
+The Client Registration CLI is packaged inside the {project_name} Server distribution. You can find execution scripts inside the [filename]`bin` directory. The Linux script is called [filename]`kcreg.sh`, and the Windows script is called [filename]`kcreg.bat`.
+
+Add the {project_name} server directory to your [filename]`PATH` when setting up the client for use from any location on the file system.
+
+For example, on:
+
+* Linux:
+[options="npwrap"]
+----
+$ export PATH=$PATH:$KEYCLOAK_HOME/bin
+$ kcreg.sh
+----
+* Windows:
+[options="npwrap"]
+----
+c:\> set PATH=%PATH%;%KEYCLOAK_HOME%\bin
+c:\> kcreg
+----
+
+[filename]`KEYCLOAK_HOME` refers to a directory where the {project_name} Server distribution was unpacked.
+
+

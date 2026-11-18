@@ -1,0 +1,68 @@
+[id="receiver-subject-add-policy_{context}"]
+= receiver-subject-add-policy
+
+A receiver cannot subscribe itself to arbitrary users. The *Receiver subject add policy* on the *Receiver* sub-tab
+decides which `add` requests are honoured:
+
+* `AUTHENTICATED` (default): only users who have an active or offline session that includes the receiver client,
+  or who granted consent to it. Organization subjects are rejected, because they cover every member.
+* `ANY`: any user or organization in the realm. Choose this only for receivers you trust to monitor the whole realm.
+* `NONE`: all receiver-driven `add` requests are rejected. Subjects are managed by administrators only.
+
+Regardless of the policy, a receiver cannot add a subject that an administrator has explicitly ignored, and
+re-adding a subject that is already subscribed always succeeds. A rejected `add` returns `200 OK` like any other
+`add`; with verbose error responses enabled it returns `403 Forbidden`. The policy does not apply to `remove`
+or to subjects managed from the admin console.
+
+Administrators can manage subjects from the *Subjects* sub-tab in the admin console. The sub-tab also exposes
+an *ignore* operation that explicitly excludes a subject (distinct from removing them from the subscription
+list), and a *check* action that surfaces what the gate would decide for a given user without emitting an event.
+
+== Synthetic event emitter
+
+Some security signals do not originate inside {project_name}: an LDAP password change against a federated
+directory, a device-compliance change from an MDM, a fraud signal from a risk engine. The synthetic event emitter
+lets an authorized caller produce an SSF event over REST as if {project_name} had observed it. Receivers see a
+normal signed SET on the wire; they cannot tell whether the signal came from a native event or from a synthetic
+emit.
+
+Two authorized call paths exist:
+
+* *Administrator emit* -- callers with permission to manage the receiver client may emit any registered event
+  type via the *Emit Events* sub-tab in the admin console, or via
+  `+POST /admin/realms/{realm}/ssf/clients/{clientId}/events/emit+`.
+* *Trusted-emitter service account* -- with `ssf.allowEmitEvents=true` and `ssf.emitEventsRole=<role>` set on
+  the receiver, an external system can post events to the same endpoint using its own OAuth service-account
+  credentials, provided the service account holds the configured role.
+
+Stream-internal lifecycle event types (`stream-verification`, `stream-updated`) cannot be emitted, as they are
+reserved to the transmitter so external callers cannot forge transmitter behavior toward a receiver.
+
+== Specifications
+
+The {project_name} SSF Transmitter targets conformance with:
+
+* https://openid.net/specs/openid-sharedsignals-framework-1_0-final.html[OpenID Shared Signals Framework 1.0 (Final)]
+  -- stream / subject management, verification, delivery negotiation, metadata.
+* https://www.rfc-editor.org/rfc/rfc8417[RFC 8417] Security Event Tokens (SETs).
+* https://www.rfc-editor.org/rfc/rfc8935[RFC 8935] SET delivery via HTTP PUSH.
+* https://www.rfc-editor.org/rfc/rfc8936[RFC 8936] SET delivery via HTTP POLL.
+* https://www.rfc-editor.org/rfc/rfc9493[RFC 9493] Subject Identifiers (`iss_sub`, `email`, `opaque`,
+  `complex`).
+* https://openid.net/specs/openid-caep-interoperability-profile-1_0.html[CAEP Interoperability Profile 1.0 (draft)]
+  -- `session-revoked` and `credential-change` event types.
+* https://openid.net/specs/openid-risc-1_0-final.html[RISC 1.0 (Final)]
+  -- `account-disabled`, `account-enabled` and `account-purged` event types.
+  `account-disabled` / `account-enabled` are emitted when an admin toggles a user's enabled
+  state, and when brute-force protection permanently locks an account out
+  (`reason=disabled-by-bruteforce`). `account-purged` is emitted when a user account is
+  deleted, either by an administrator or by the user themselves from the account console.
+  Deletions that do not remove the account -- a partial import under the `OVERWRITE` policy,
+  or the service-account user removed alongside its client -- do not emit it.
++
+NOTE: `account-purged` is currently emitted only for deletions performed through the admin
+API or the account console. Deletions performed by a workflow's delete-user step, or by
+removing an organization that owns managed members, do not yet emit it.
+* Legacy SSE CAEP profile for Apple Business Manager interop (gated behind the `sse-caep-enabled` SPI flag).
+
+

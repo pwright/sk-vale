@@ -1,0 +1,30 @@
+[id="client-registration-cli_{context}"]
+= Automating client registration with the CLI
+
+
+
+
+The Client Registration CLI is a command-line interface (CLI) tool for application developers to configure new clients in a self-service manner when integrating with {project_name}. It is specifically designed to interact with {project_name} Client Registration REST endpoints.
+
+It is necessary to create or obtain a client configuration for any application to be able to use {project_name}. You usually configure a new client for each new application hosted on a unique host name. When an application interacts with {project_name}, the application identifies itself with a client ID so {project_name} can provide a login page, single sign-on (SSO) session management, and other services.
+
+You can configure application clients from a command line with the Client Registration CLI, and you can use it in shell scripts.
+
+To allow a particular user to use `Client Registration CLI`, the {project_name} administrator typically uses the Admin Console to configure a new user with proper roles or to configure a new client and client secret to grant access to the Client Registration REST API.
+
+[WARNING]
+====
+The `kcreg` CLI tool primarily uses the `default` client registration provider, which is deprecated since {project_name} 26.8 and will be removed in a future major release.
+For new integrations, register and manage clients using the Admin REST API or the standards-compliant OpenID Connect dynamic client registration endpoint (`/realms/<realm>/clients-registrations/openid-connect`).
+====
+
+include::../modules/-configuring-a-user-for-client-registration-cli.adoc[leveloffset=+1]
+include::../modules/-configuring-a-client-for-use-with-client-registration-cli.adoc[leveloffset=+1]
+include::../modules/-installing-client-registration-cli.adoc[leveloffset=+1]
+include::../modules/-using-client-registration-cli.adoc[leveloffset=+1]
+include::../modules/-logging-in.adoc[leveloffset=+2]
+include::../modules/-working-with-alternative-configurations.adoc[leveloffset=+2]
+include::../modules/-initial-access-and-registration-access-tokens.adoc[leveloffset=+2]
+include::../modules/-performing-crud-operations.adoc[leveloffset=+2]
+include::../modules/-refreshing-invalid-registration-access-tokens.adoc[leveloffset=+2]
+include::../modules/-troubleshooting-2.adoc[leveloffset=+1]

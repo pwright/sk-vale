@@ -1,0 +1,41 @@
+[id="single-cluster-concepts-memory-and-cpu-sizing_{context}"]
+= Concepts for sizing CPU and memory resources
+
+
+
+
+Use this as a starting point to size a product environment.
+Adjust the values for your environment as needed based on your load tests.
+
+[#single-cluster-performance-recommendations]
+== Performance recommendations
+
+include::../partials/concepts/perf_recommendations.adoc[]
+
+[#single-cluster-measture-running-instance]
+=== Measure the activity of a running {project_name} instance
+
+Sizing of a {project_name} instance depends on the actual and forecasted numbers for password-based user logins, refresh token requests, and client credential grants as described in the previous section.
+
+To retrieve the actual numbers of a running {project_name} instance for these three key inputs, use the metrics {project_name} provides:
+
+* The user event metric `keycloak_user_events_total` for event type `login` includes both password-based logins and cookie-based logins, still it can serve as a first approximate input for this sizing guide.
+* To find out number of password validations performed by {project_name} use the metric `keycloak_credentials_password_hashing_validations_total`.
+The metric also contains tags providing some details about the hashing algorithm used and the outcome of the validation.
+Here is the list of available tags: `realm`, `algorithm`, `hashing_strength`, `outcome`.
+* Use the user event metric `keycloak_user_events_total` for the event types `refresh_token` and `client_login` for refresh token requests and client credential grants respectively.
+
+See the link:{links_observability_event-metrics_url}[{links_observability_event-metrics_name}] and link:{links_observability_metrics-for-troubleshooting-http_url}[{links_observability_metrics-for-troubleshooting-http_name}] {sections} for more information.
+
+These metrics are crucial for tracking daily and weekly fluctuations in user activity loads,
+identifying emerging trends that may indicate the need to resize the system and
+validating sizing calculations.
+By systematically measuring and evaluating these user event metrics,
+you can ensure your system remains appropriately scaled and responsive to changes in user behavior and demand.
+
+[#single-cluster-single-site-calculation]
+=== Calculation example (single cluster)
+
+include::../partials/concepts/perf_single_cluster_calculation.adoc[]
+
+

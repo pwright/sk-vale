@@ -1,0 +1,99 @@
+[id="_theme_resource_attributes_{context}"]
+= Advanced CSS, script, and favicon imports
+
+
+In addition to the space-separated `styles`, `stylesCommon`, `scripts`, and `favicons` properties, you can configure individual resources with HTML attributes using dot notation:
+
+[source,properties]
+----
+styles.file1=css/file1.css
+styles.file1.media=(prefers-color-scheme: light)
+styles.file2=css/file2.css
+styles.file2.media=(prefers-color-scheme: dark)
+
+scripts.analytics=js/analytics.js
+scripts.analytics.integrity=sha384-abc...
+scripts.analytics.defer=true
+scripts.analytics.type=module
+
+favicons.svg=favicon/favicon.svg
+favicons.light=favicon/favicon-light.png
+favicons.light.media=(prefers-color-scheme: light)
+favicons.dark=favicon/favicon-dark.png
+favicons.dark.media=(prefers-color-scheme: dark)
+favicons.ico=favicon/favicon.ico
+----
+
+Each resource is defined with `<type>.<id>=<path>`, where `<id>` is an arbitrary label. Optional attributes are set with `<type>.<id>.<attribute>=<value>`.
+
+Supported attributes:
+
+* styles / stylesCommon: `media`, `integrity`, `crossorigin`
+* scripts: `integrity`, `defer`, `async`, `type`, `crossorigin`, `blocking`
+* favicons: `media`, `type`, `rel`
+
+Favicon MIME types are inferred from the file extension when `type` is not set.
+
+You can combine the legacy space-separated lists with dot-notation entries. Legacy entries are included first, followed by dot-notation entries. To control the order of dot-notation entries, use numeric ids (for example, `styles.1`, `styles.2`) or an explicit order property:
+
+[source,properties]
+----
+styles.order=dark,light
+styles.light=css/light.css
+styles.dark=css/dark.css
+----
+
+NOTE: Resource ids must not contain dots, because dots separate the id from attribute names. The id `order` is reserved for explicit ordering via `<type>.order`.
+
+
+**Adding a script to a theme**
+
+
+You can add one or more scripts to a theme.
+
+.Procedure
+
+. Create a file in the `<THEME TYPE>/resources/js` directory of your theme.
+
+. Add the file to the `scripts` property in `theme.properties`.
++
+For example, to add `script.js` to the `mytheme`, create `themes/mytheme/login/resources/js/script.js` with the following content:
++
+[source,javascript]
+----
+alert('Hello');
+----
++
+Then edit `themes/mytheme/login/theme.properties` and add:
++
+[source]
+----
+scripts=js/script.js
+----
+
+
+**Adding an image to a theme**
+
+
+To make images available to the theme add them to the `<THEME TYPE>/resources/img` directory of your theme. These can be used from within stylesheets or
+directly in HTML templates.
+
+For example to add an image to the `mytheme` copy an image to `themes/mytheme/login/resources/img/image.jpg`.
+
+You can then use this image from within a custom stylesheet with:
+
+[source,css]
+----
+body {
+    background-image: url('../img/image.jpg');
+    background-size: cover;
+}
+----
+
+Or to use directly in HTML templates add the following to a custom HTML template:
+
+[source,html]
+----
+<img src="${url.resourcesPath}/img/image.jpg" alt="My image description">
+----
+

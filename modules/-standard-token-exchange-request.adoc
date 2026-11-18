@@ -1,0 +1,46 @@
+[id="_standard-token-exchange-request_{context}"]
+= Request and response parameters
+
+
+The parameters are aligned with the https://datatracker.ietf.org/doc/html/rfc8693#name-token-exchange-request-and-[Token exchange specification], which are described as follows:
+
+grant_type::
+    _REQUIRED._ The value of the parameter must be `urn:ietf:params:oauth:grant-type:token-exchange`.
+
+subject_token::
+    _REQUIRED._ A security token that represents the identity of the party on behalf of whom the request is being made.
+
+subject_token_type::
+    _REQUIRED._ This parameter is the type of the token passed in the `subject_token` parameter. This must be `urn:ietf:params:oauth:token-type:access_token` when the standard token exchange is being used
+    because {project_name} does not support other types for the standard token exchange.
+
+requested_token_type::
+    _OPTIONAL._ This parameter represents the type of token that the client wants to exchange for. In this version,  only oauth and OpenID Connect token types are supported. The default value for this
+    is `urn:ietf:params:oauth:token-type:access_token`. Another possible value is `urn:ietf:params:oauth:token-type:id_token` if the ID token issued to `requester-client` is requested. The possible value might
+    be also `urn:ietf:params:oauth:token-type:refresh_token`; in this case, you will receive both an access token and refresh token within the response. However, the refresh token is allowed if the `Allow refresh token in Standard Token Exchange` client configuration option is enabled as specified in the <<_standard-token-exchange-details,standard token exchange>> section.
+
+scope::
+   _OPTIONAL._ This parameter represents the space-delimited set of OAuth and OpenID Connect scopes that the client is requesting. You can use link:{adminguide_link}#_client_scopes[Optional client scopes]
+   of the `requester-client`. For more details, see <<_standard-token-exchange-scope,scopes and audiences>>. Omitting this parameter means that only
+   the link:{adminguide_link}#_client_scopes[Default client scopes] are effectively used.
+
+audience::
+  _OPTIONAL._ Audience specifies `client_id` of the client, which is supposed to be used as the token audience. In <<_standard-token-exchange-flow,the example above>>, it could be `target-client`. Multiple
+  values of this parameter are allowed, which means that you want the token to contain multiple audiences to be used by `requester-client` in multiple different services. For example
+  `audience=target-client1&audience=target-client2` can be used in the request. More details in <<_standard-token-exchange-scope,the section about scopes and audiences>>.
+
+A successful response is returned in the JSON format. It contains similar parameters such as the response from other grants. The following are some token exchange specifics of the more notable parameters:
+
+access_token::
+    The requested access token. Note that if request specified `requested_token_type=urn:ietf:params:oauth:token-type:id_token`, this parameter may actually contain the ID token instead of access token.
+    This behavior is per https://datatracker.ietf.org/doc/html/rfc8693#section-2.2.1[the token exchange specification].
+
+refresh_token::
+    The refresh token. It is included just if `requested_token_type=urn:ietf:params:oauth:token-type:refresh_token` is used and the client has enabled issuing refresh tokens from the token exchange
+
+issued_token_type::
+    The issued requested token type. Same value as `requested_token_type` used in the request.
+
+token_type::
+    Usually `Bearer` if issued token type was access token or refresh token. In case of ID token requested, the value is `N_A`
+

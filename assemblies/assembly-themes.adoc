@@ -1,0 +1,51 @@
+[id="themes_{context}"]
+= Working with themes
+
+
+
+
+{project_name} provides theme support for web pages and emails. This allows customizing the look and feel of end-user facing pages so they can be
+integrated with your applications.
+
+image::ui-customization/login-sunrise.png[caption="",title="Login page with sunrise example theme"]
+
+== Theme types
+
+A theme can provide one or more types to customize different aspects of {project_name}. The types available are:
+
+* Account - Account Console
+* Admin - Admin Console
+* Email - Emails
+* Login - Login forms
+* Welcome - Welcome page
+
+== Configuring a theme
+
+All theme types, except welcome, are configured through the Admin Console.
+
+.Procedure
+
+. Log into the Admin Console.
+. Select your realm from the drop-down box in the top left corner.
+. Click *Realm Settings* from the menu.
+. Click the *Themes* tab.
++
+NOTE: To set the theme for the `master` Admin Console you need to set the Admin Console theme for the `master` realm.
++
+. To see the changes to the Admin Console refresh the page.
+
+. Change the welcome theme by using the `spi-theme--welcome-theme` option.
+
+. For example:
++
+[source,bash]
+----
+bin/kc.[sh|bat] start --spi-theme--welcome-theme=custom-theme
+----
+
+include::../modules/-default-themes.adoc[leveloffset=+1]
+include::../modules/-creating-a-theme.adoc[leveloffset=+1]
+include::../modules/-theme-stylesheet.adoc[leveloffset=+2]
+include::../modules/-theme-resource-attributes.adoc[leveloffset=+2]
+include::../modules/-theme-custom-footer.adoc[leveloffset=+2]
+include::../modules/custom-identity-providers-icons.adoc[leveloffset=+2]

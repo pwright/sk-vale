@@ -1,0 +1,55 @@
+[id="keycloak-configuration-haproxy-reencrypt_{context}"]
+= {project_name} configuration
+
+
+With TLS re-encrypt, {project_name} requires the following configuration:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --proxy-headers forwarded --health-enabled true --metrics-enabled true --https-certificate-file=/path/to/certificate --https-certificate-key-file=/path/to/key --https-client-auth=required --https-trust-store-file=/path/to/https-truststore --https-management-client-auth=none
+----
+
+`--proxy-headers forwarded`::
+Restricts the forwarding headers that {project_name} will parse to the standard `Forwarded` header as per https://www.rfc-editor.org/rfc/rfc7239.html[RFC 7239].
+Do not set `--proxy-protocol-enabled` when using TLS re-encrypt. The PROXY protocol is only relevant for TLS passthrough (TCP mode).
+The `--proxy-headers` option and the `--proxy-protocol-enabled` option are mutually exclusive.
+
+`--health-enabled true`::
+Enables the health check endpoints on the management port (`9000`).
+Without this, the `/health/ready` endpoint that HAProxy polls will not be available, and HAProxy will mark all {project_name} instances as down.
+
+`--metrics-enabled true`::
+Enables the metrics endpoints on the management port.
+Enabling metrics also enables an additional status check for the database, so it is recommended to enable metrics.
+
+`--https-certificate-file=/path/to/certificate` and `--https-certificate-key-file=/path/to/key`::
+Configure the certificate and the private key {project_name} will use for HTTPS.
+See the link:{links_server_enabletls_url}[{links_server_enabletls_name}] guide for additional details.
+
+`--https-client-auth=required`::
+Configures {project_name} to require client authentication, for mutual TLS.
+
+`--https-trust-store-file=/path/to/https-truststore`::
+Configures a truststore for client authentication.
+In this case the truststore should contain the public certificate of the HAProxy.
+See the link:{links_server_mutual-tls_url}[{links_server_mutual-tls_name}] guide for additional details.
+
+`--https-management-client-auth=none`::
+Disables the client authentication requirement for the management endpoint.
+
+
+**Enabling client certificate lookups**
+
+
+To enable the client certificate lookups, the following CLI options are required when starting {project_name}:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --spi-x509cert-lookup--provider=haproxy --spi-x509cert-lookup--haproxy--ssl-client-cert=Client-Cert --spi-x509cert-lookup--haproxy--ssl-cert-chain=Client-Cert-Chain --spi-x509cert-lookup--haproxy--certificate-chain-length=2
+----
+
+If the number of intermediate certificates in your certificate chain is longer than the default, you must set the
+`certificate-chain-length` option to an appropriate value. Otherwise, the provider will discard the request.
+
+See link:{links_server_reverseproxy_url}[{links_server_reverseproxy_name}] for more details.
+

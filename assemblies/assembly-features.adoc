@@ -1,0 +1,275 @@
+[id="features_{context}"]
+= Enabling and disabling features
+
+
+
+
+{project_name} has packed some functionality in features, including some disabled features, such as Technology Preview and deprecated features. Other features are enabled by default, but you can disable them if they do not apply to your use of {project_name}.
+
+== Enabling features
+
+Some supported features, and all preview features, are disabled by default.
+You can enable feature either via single option or including it into the list of enabled feature.
+
+=== Single option
+
+You can enable the specific feature `<name>` as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] build --feature-<name>=enabled|disabled|vX
+----
+
+Possible values are `enabled`, `disabled`, or a specific version of the feature that should be enabled.
+For example, to enable `token-exchange`, enter this command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] build --feature-token-exchange=enabled
+----
+
+The single-option mechanism is useful when updating long feature lists is cumbersome or when you want to modify a specific feature without overriding the entire list in a pre-built image.
+
+=== List of enabled features
+
+[source,bash]
+----
+bin/kc.[sh|bat] build --features="<name>[,<name>]"
+----
+
+For example, to enable `docker` and `token-exchange`, enter this command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] build --features="docker,token-exchange"
+----
+
+To enable all preview features, enter this command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] build --features="preview"
+----
+
+=== Versioning
+
+Enabled feature may be versioned, or unversioned.  If you use a versioned feature name, e.g. feature:v1, that exact feature version will be enabled as long as it still exists in the runtime.  If you instead use an unversioned name, e.g. just feature, the selection of the particular supported feature version may change from release to release according to the following precedence:
+
+. The highest default supported version
+. The highest non-default supported version
+. The highest deprecated version
+. The highest preview version
+. The highest experimental version
+
+== Disabling features
+
+To disable a feature that is enabled by default, you can use a single option or a list of disabled features.
+When a feature is disabled, all versions of that feature are disabled.
+
+=== Single option
+
+You can disable the specific feature `<name>` as follows:
+
+[source,bash]
+----
+bin/kc.[sh|bat] build --feature-<name>=disabled
+----
+
+For example, to disable `dpop` and `recovery-codes`, enter this command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] build --feature-dpop=disabled --feature-recovery-codes=disabled
+----
+
+The single-option mechanism is useful when updating long feature lists is cumbersome or when you want to modify a specific feature without overriding the entire list in a pre-built image.
+
+=== List of disabled features
+
+[source,bash]
+----
+bin/kc.[sh|bat] build --features-disabled="<name>[,<name>]"
+----
+
+For example to disable `impersonation`, enter this command:
+
+[source,bash]
+----
+bin/kc.[sh|bat] build --features-disabled="impersonation"
+----
+
+It is not allowed to have a feature in both the `features-disabled` list and the `features` list.
+
+== Supported features
+
+The following list contains supported features that are enabled by default, and can be disabled if not needed.
+
+[cols="30%,70%"]
+|===
+| Feature | Description
+
+| [.features-name]#`account-api:v1`# | [.features-description]#Account Management REST API#
+| [.features-name]#`account:v3`# | [.features-description]#Account Console version 3#
+| [.features-name]#`admin-api:v1`# | [.features-description]#Admin API#
+| [.features-name]#`admin-fine-grained-authz:v2`# | [.features-description]#Fine-Grained Admin Permissions version 2#
+| [.features-name]#`admin:v2`# | [.features-description]#New Admin Console#
+| [.features-name]#`authorization:v1`# | [.features-description]#Authorization Service#
+| [.features-name]#`ciba:v1`# | [.features-description]#OpenID Connect Client Initiated Backchannel Authentication (CIBA)#
+| [.features-name]#`client-auth-federated:v1`# | [.features-description]#Authenticates client based on assertions issued by identity provider#
+| [.features-name]#`client-policies:v1`# | [.features-description]#Client configuration policies#
+| [.features-name]#`client-secret-rotation:v1`# | [.features-description]#Client Secret Rotation#
+| [.features-name]#`device-flow:v1`# | [.features-description]#OAuth 2.0 Device Authorization Grant#
+| [.features-name]#`dpop:v1`# | [.features-description]#OAuth 2.0 Demonstrating Proof-of-Possession at the Application Layer#
+| [.features-name]#`hostname:v2`# | [.features-description]#Hostname Options V2#
+| [.features-name]#`http-client:v1`# | [.features-description]#Apache-based outbound HTTP client#
+| [.features-name]#`identity-brokering-api:v1`# | [.features-description]#Identity Brokering API V1#
+| [.features-name]#`impersonation:v1`# | [.features-description]#Ability for admins to impersonate users#
+| [.features-name]#`jwt-authorization-grant:v1`# | [.features-description]#JWT Profile for Oauth 2.0 Authorization Grant#
+| [.features-name]#`kerberos:v1`# | [.features-description]#Kerberos#
+| [.features-name]#`kubernetes-service-accounts:v1`# | [.features-description]#Kubernetes service accounts trust relationship provider#
+| [.features-name]#`log-mdc:v1`# | [.features-description]#Mapped Diagnostic Context (MDC) information in logs#
+| [.features-name]#`login-failures:v2`# | [.features-description]#Persistent login failures#
+| [.features-name]#`login:v2`# | [.features-description]#New Login Theme#
+| [.features-name]#`opentelemetry:v1`# | [.features-description]#OpenTelemetry support#
+| [.features-name]#`organization:v1`# | [.features-description]#Organization support within realms#
+| [.features-name]#`par:v1`# | [.features-description]#OAuth 2.0 Pushed Authorization Requests (PAR)#
+| [.features-name]#`passkeys:v1`# | [.features-description]#Passkeys#
+| [.features-name]#`persistent-user-sessions:v1`# | [.features-description]#Persistent online user sessions across restarts and upgrades#
+| [.features-name]#`recovery-codes:v1`# | [.features-description]#Recovery codes#
+| [.features-name]#`rolling-updates:v2`# | [.features-description]#Rolling Updates for patch releases#
+| [.features-name]#`scim-api:v1`# | [.features-description]#Exposes a SCIM API for managing realm resources on a per-realm basis#
+| [.features-name]#`step-up-authentication:v1`# | [.features-description]#Step-up Authentication#
+| [.features-name]#`step-up-authentication-saml:v1`# | [.features-description]#Step-up Authentication Saml#
+| [.features-name]#`token-exchange-standard:v2`# | [.features-description]#Standard Token Exchange version 2#
+| [.features-name]#`twitter-broker:v1`# | [.features-description]#Twitter Identity Broker#
+| [.features-name]#`update-email:v1`# | [.features-description]#Update Email Action#
+| [.features-name]#`user-event-metrics:v1`# | [.features-description]#Collect metrics based on user events#
+| [.features-name]#`web-authn:v1`# | [.features-description]#W3C Web Authentication (WebAuthn)#
+| [.features-name]#`workflows:v1`# | [.features-description]#Workflows#
+|===
+
+=== Disabled by default
+
+The following list contains supported features that are disabled by default, and can be enabled if needed.
+
+[cols="30%,70%"]
+|===
+| Feature | Description
+
+| [.features-name]#`docker:v1`# | [.features-description]#Docker Registry protocol#
+| [.features-name]#`fips:v1`# | [.features-description]#FIPS 140-2 mode#
+| [.features-name]#`identity-brokering-api:v2`# | [.features-description]#Identity Brokering API V2#
+| [.features-name]#`stateless:v1`# | [.features-description]#Stateless (stores authentication sessions, action tokens and login failure data in the database, allowing multiple clusters to be connected with just the database)#
+|===
+
+== Preview features
+
+Preview features are disabled by default and are not recommended for use in production.
+These features may change or be removed at a future release.
+
+[cols="30%,70%"]
+|===
+| Feature | Description
+
+| [.features-name]#`client-admin-api:v2`# | [.features-description]#Client Admin API v2#
+| [.features-name]#`http-optimized-serializers:v1`# | [.features-description]#Optimized JSON serializers for better performance of the HTTP layer#
+| [.features-name]#`oid4vc-vci:v1`# | [.features-description]#Support for the OID4VCI protocol as part of OID4VC.#
+| [.features-name]#`opentelemetry-logs:v1`# | [.features-description]#OpenTelemetry Logs support#
+| [.features-name]#`parameterized-scopes:v1`# | [.features-description]#Parameterized OAuth 2.0 client scopes#
+| [.features-name]#`scripts:v1`# | [.features-description]#Write custom authenticators using JavaScript#
+| [.features-name]#`spiffe:v1`# | [.features-description]#SPIFFE trust relationship provider#
+| [.features-name]#`token-exchange:v1`# | [.features-description]#Token Exchange Service#
+| [.features-name]#`token-exchange-delegation:v1`# | [.features-description]#Token Exchange Delegation#
+|===
+
+== Deprecated features
+
+
+The following list contains deprecated features that will be removed in a future release. These features are disabled by default.
+
+[cols="30%,70%"]
+|===
+| Feature | Description
+
+| [.features-name]#`admin-fine-grained-authz:v1`# | [.features-description]#Fine-Grained Admin Permissions#
+| [.features-name]#`instagram-broker:v1`# | [.features-description]#Instagram Identity Broker#
+| [.features-name]#`login-failures:v1`# | [.features-description]#In-memory login failures#
+| [.features-name]#`login:v1`# | [.features-description]#Legacy Login Theme#
+| [.features-name]#`logout-all-sessions:v1`# | [.features-description]#Logout all sessions logs out only regular sessions#
+| [.features-name]#`multi-site:v1`# | [.features-description]#Multi-site support#
+| [.features-name]#`passkeys-conditional-ui-authenticator:v1`# | [.features-description]#Passkeys conditional UI authenticator#
+| [.features-name]#`rolling-updates:v1`# | [.features-description]#Rolling Updates#
+|===
+
+
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+feature-<name>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enable/Disable specific feature <feature>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#It takes precedence over the `features`, and `features-disabled` options. Possible values are: `enabled`, `disabled`, or specific version (lowercase) that will be enabled (f.e. `v2`)#
+
+
+
+*CLI:* `+--feature-<name>+` +
+*Env:* `+KC_FEATURE_<NAME>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+features+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enables a set of one or more features.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--features+` +
+*Env:* `+KC_FEATURES+`
+--
+
+
+
+|
+`+account-api[:v1]+`, `+account[:v3]+`, `+admin-api[:v1]+`, `+admin-fine-grained-authz[:v1,v2]+`, `+admin[:v2]+`, `+authorization[:v1]+`, `+authzen[:v1]+`, `+ciba[:v1]+`, `+cimd[:v1]+`, `+client-admin-api[:v2]+`, `+client-auth-abca[:v1]+`, `+client-auth-federated[:v1]+`, `+client-policies[:v1]+`, `+client-secret-rotation[:v1]+`, `+client-types[:v1]+`, `+clusterless[:v1]+`, `+db-tidb[:v1]+`, `+declarative-ui[:v1]+`, `+device-flow[:v1]+`, `+docker[:v1]+`, `+dpop[:v1]+`, `+fips[:v1]+`, `+hostname[:v2]+`, `+http-client[:v1,v2]+`, `+http-optimized-serializers[:v1]+`, `+identity-assertion-jwt[:v1]+`, `+identity-brokering-api[:v1,v2]+`, `+impersonation[:v1]+`, `+instagram-broker[:v1]+`, `+ipa-tuura-federation[:v1]+`, `+jwt-authorization-grant[:v1]+`, `+kerberos[:v1]+`, `+kubernetes-service-accounts[:v1]+`, `+ldap-metrics[:v1]+`, `+log-mdc[:v1]+`, `+login-failures[:v1,v2]+`, `+login[:v2,v1]+`, `+logout-all-sessions[:v1]+`, `+multi-site[:v1]+`, `+oid4vc-mdoc[:v1]+`, `+oid4vc-vci-preauth-code[:v1]+`, `+oid4vc-vci-rest-credential-offer[:v1]+`, `+oid4vc-vci[:v1]+`, `+oid4vc-vp[:v1]+`, `+openapi[:v1]+`, `+opentelemetry-logs[:v1]+`, `+opentelemetry-metrics[:v1]+`, `+opentelemetry[:v1]+`, `+organization[:v1]+`, `+par[:v1]+`, `+parameterized-scopes[:v1]+`, `+passkeys-conditional-ui-authenticator[:v1]+`, `+passkeys[:v1]+`, `+persistent-user-sessions[:v1]+`, `+preview+`, `+quick-theme[:v1]+`, `+recovery-codes[:v1]+`, `+resource-indicators[:v1]+`, `+rolling-updates[:v1,v2]+`, `+scim-api[:v1]+`, `+scripts[:v1]+`, `+spiffe[:v1]+`, `+ssf[:v1]+`, `+stateless[:v1]+`, `+step-up-authentication-saml[:v1]+`, `+step-up-authentication[:v1]+`, `+token-exchange-delegation[:v1]+`, `+token-exchange-standard[:v2]+`, `+token-exchange[:v1]+`, `+transient-users[:v1]+`, `+twitter-broker[:v1]+`, `+update-email[:v1]+`, `+user-event-metrics[:v1]+`, `+web-authn[:v1]+`, `+workflows[:v1]+`
+
+|
+|
+[.options-key]#`+features-disabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Disables a set of one or more features.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--features-disabled+` +
+*Env:* `+KC_FEATURES_DISABLED+`
+--
+
+
+
+|
+`+account+`, `+account-api+`, `+admin+`, `+admin-api+`, `+admin-fine-grained-authz+`, `+authorization+`, `+authzen+`, `+ciba+`, `+cimd+`, `+client-admin-api+`, `+client-auth-abca+`, `+client-auth-federated+`, `+client-policies+`, `+client-secret-rotation+`, `+client-types+`, `+clusterless+`, `+db-tidb+`, `+declarative-ui+`, `+device-flow+`, `+docker+`, `+dpop+`, `+fips+`, `+http-client+`, `+http-optimized-serializers+`, `+identity-assertion-jwt+`, `+identity-brokering-api+`, `+impersonation+`, `+instagram-broker+`, `+ipa-tuura-federation+`, `+jwt-authorization-grant+`, `+kerberos+`, `+kubernetes-service-accounts+`, `+ldap-metrics+`, `+log-mdc+`, `+login+`, `+login-failures+`, `+logout-all-sessions+`, `+multi-site+`, `+oid4vc-mdoc+`, `+oid4vc-vci+`, `+oid4vc-vci-preauth-code+`, `+oid4vc-vci-rest-credential-offer+`, `+oid4vc-vp+`, `+openapi+`, `+opentelemetry+`, `+opentelemetry-logs+`, `+opentelemetry-metrics+`, `+organization+`, `+par+`, `+parameterized-scopes+`, `+passkeys+`, `+passkeys-conditional-ui-authenticator+`, `+persistent-user-sessions+`, `+preview+`, `+quick-theme+`, `+recovery-codes+`, `+resource-indicators+`, `+scim-api+`, `+scripts+`, `+spiffe+`, `+ssf+`, `+stateless+`, `+step-up-authentication+`, `+step-up-authentication-saml+`, `+token-exchange+`, `+token-exchange-delegation+`, `+token-exchange-standard+`, `+transient-users+`, `+twitter-broker+`, `+update-email+`, `+user-event-metrics+`, `+web-authn+`, `+workflows+`
+
+|
+
+|===

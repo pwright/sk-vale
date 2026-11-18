@@ -1,0 +1,7 @@
+[id="_standard-token-exchange_{context}"]
+= Standard token exchange
+
+
+Standard token exchange in {project_name} implements the https://datatracker.ietf.org/doc/html/rfc8693[Token exchange specification]. It allows client application to exchange an existing {project_name} token created
+for a specific client for a new token issued to the client that triggered the token exchange request. Both clients must be in the same realm.
+

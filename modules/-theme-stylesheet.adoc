@@ -1,0 +1,41 @@
+[id="_theme_stylesheet_{context}"]
+= Add a stylesheet to a theme
+
+
+You can add one or more stylesheets to a theme.
+
+.Procedure
+
+. Create a file in the `<THEME TYPE>/resources/css` directory of your theme.
+
+. Add this file to the `styles` property in `theme.properties`.
++
+For example, to add `styles.css` to the `mytheme`, create `themes/mytheme/login/resources/css/styles.css` with the following content:
++
+[source,css]
+----
+.login-pf body {
+    background: DimGrey none;
+}
+----
+
+. Edit `themes/mytheme/login/theme.properties` and add:
++
+[source]
+----
+styles=css/styles.css
+----
+
+. To see the changes, open the login page for your realm.
++
+You will notice that the only styles being applied are those from your custom stylesheet.
+
+. To include the styles from the parent theme, load the styles from that theme. Edit `themes/mytheme/login/theme.properties` and change `styles` to:
++
+[source]
+----
+styles=css/login.css css/styles.css
+----
++
+NOTE: To override styles from the parent stylesheets, ensure that your stylesheet is listed last.
+
