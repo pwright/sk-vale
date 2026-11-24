@@ -1,0 +1,28 @@
+[id="mcp-viewing-compatible-tools_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Viewing compatible tools in the web console
+
+[role="_abstract"]
+You can see which MCP tools can take the output of a tool version, and why the others cannot or might not, on the *Compatible tools* tab of the version in the {registry} web console.
+
+.Prerequisites
+* MCP tools support is enabled.
+* You are logged in to the {registry} web console, and an `MCP_TOOL` artifact exists.
+
+.Procedure
+. Browse to the artifact, and click a version, as described in xref:getting-started/assembly-managing-registry-artifacts-ui.adoc#browsing-artifacts-using-console_{context}[Viewing artifacts using the {registry} web console].
+
+. Click the *Compatible tools* tab. The tab is available only for versions of `MCP_TOOL` artifacts, and is hidden for disabled versions. A link to the tab of a version that does not have it opens the *Overview* tab instead.
++
+The tab states how many other MCP tools were compared with the version. When older MCP tools were not compared, it also states that only the newest 500 MCP tools were compared. The tab shows a message instead of the list in the following cases:
++
+* *Not compared*, with the reason, when the version cannot be compared, for example because it declares no `outputSchema`.
+* *No other MCP tools were compared with this tool.*, when {registry} has no other MCP tool to compare.
+* *Compatibility information is unavailable for this tool.*, when MCP tools support is disabled or the tool cannot be found.
+
+. Click *Compatible*, *Incompatible*, or *Indeterminate* to list the tools with that verdict. Each button shows how many compared tools have that verdict, and *Compatible* is selected by default. Use the pagination controls to list more than one page of tools. Each row links to the tool, and shows its verdict and details:
++
+* For an incompatible tool, each reason, with the pointer into the `outputSchema` of this version and the pointer into the `inputSchema` of the other tool.
+* For an indeterminate tool, each limitation, with its pointer.
+
+// proc-mcp-importing-tools

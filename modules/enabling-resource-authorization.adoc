@@ -1,0 +1,40 @@
+[id="enabling-resource-authorization_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Enabling per-resource authorization
+
+[role="_abstract"]
+You enable per-resource authorization by pointing {registry} at an access rules file. Protected resource operations then use the rules alongside other enabled checks. Administrator and owner bypasses still apply.
+
+To try per-resource authorization before configuring your own deployment, use the link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/per-resource-authorization[per-resource authorization example] in the {registry} source repository. It runs {registry}, its web console and {keycloak} with Docker Compose, and includes a step-by-step guide that walks through each feature in the REST API and the web console.
+
+.Prerequisites
+* You have enabled authentication in {registry}, for example with OpenID Connect (OIDC), HTTP basic authentication, or proxy header authentication. The authentication check also recognizes Kubernetes and form authentication when configured.
+* You have an access rules file in the Kroxylicious ACL rules format that ends with `otherwise deny;`.
+
+.Procedure
+. Make the access rules file available to {registry}.
++
+In {kubernetes}, store the access rules file in a ConfigMap and mount it as a volume. Mount the ConfigMap as a directory rather than with `subPath`, because `subPath` mounts do not receive ConfigMap updates.
+
+. Set `apicurio.auth.resource-based-authorization.enabled` to `true`, and set `apicurio.auth.resource-based-authorization.rules.path` to the path of the file:
++
+[source,yaml]
+----
+environment:
+  APICURIO_AUTH_RESOURCE_BASED_AUTHORIZATION_ENABLED: "true"
+  APICURIO_AUTH_RESOURCE_BASED_AUTHORIZATION_RULES_PATH: "/opt/apicurio/authz/access.rules"
+----
+
++
+These environment variables configure the feature and file path only; they do not enable authentication. If authentication is disabled, {registry} warns at startup and bypasses authorization even when resource-based authorization is enabled.
+
+. Start or restart {registry}.
++
+{registry} fails to start if the access rules file is missing or not valid.
+
+.Verification
+* Use an authenticated caller whose role permits the operation, who is not an administrator, and who does not own the target. Confirm an allowed read succeeds and a denied read returns `403` with an `authz.denied` entry in `io.apicurio.registry.audit.authz`. If an earlier RBAC or OBAC check rejects the request, there might be no ACL audit entry.
+* Search as the same caller and check both the visible artifact IDs and the filtered count. Use exact or prefix rules for this check.
+* If testing anonymous access, enable anonymous reads and add an explicit `$anonymous` role rule. An anonymous point read denied by the interceptor returns `401`, not `403`.
+
+// ref-resource-authorization-configuration

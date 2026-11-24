@@ -1,0 +1,49 @@
+[id="resource-authorization-troubleshooting_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Common per-resource authorization problems
+
+[role="_abstract"]
+Use the following checks to diagnose unexpected access decisions, startup failures, and access rules changes that do not take effect.
+
+**A user is denied access although a rule matches**
+
+Check the following conditions, in order:
+
+. **RBAC:** if enabled, does the role provider allow the operation? A read-only Registry role alone cannot authorize a write.
+. **Owner-only authorization:** is the caller permitted to write this owned resource? For a group, check `owner-only-authorization.limit-group-access` too.
+. **Operation:** does the operation of the rule cover the request? Changes and deletes require `WRITE`.
+. **Resource type:** operations on a group itself, such as listing its artifacts or creating an artifact in it, need a `Group` rule.
+. **Deny rules:** does a deny rule match? Deny rules take precedence, and denying `WRITE` also denies `READ`.
+. **Referenced and generated artifacts:** dereferencing, or registering content with references, requires `READ` on every referenced artifact; writing an artifact that generates other artifacts requires `WRITE` on them.
+. **Resource name and principal:** artifacts are named `\{groupId}/\{artifactId}`; the default group is `default`. For the Confluent compatibility API, check which group the request addresses. Roles are matched with `Role`, user names with `User`.
+. **Audit log:** the `authz.denied` message shows the exact resource name and operation that {registry} evaluated.
+
+**A user can see more than expected**
+
+Check the following conditions:
+
+* Whether the user is an RBAC administrator, or has a role to which the rules allow every operation.
+* Whether authentication is enabled, admin override applies, or a trusted proxy-header request bypasses local authorization.
+* Whether the user owns the resources. See `apicurio.auth.resource-based-authorization.owner-bypass.enabled`.
+* For unauthenticated callers, what the rules allow the `$anonymous` role.
+* Whether a `READ` deny is expected to hide the resource. A `READ` deny does not block writes; use `*` to hide a resource.
+
+**{registry} does not start**
+
+{registry} fails to start when per-resource authorization is enabled and the access rules file path is not set, the file does not exist, or the file is not a valid rules file, including when it has rules for resource types that {registry} does not enforce. The startup error names the file, and the line and problem of each error.
+
+**Access rules file changes do not take effect**
+
+. Check that `apicurio.auth.resource-based-authorization.rules.reload-enabled` is not `false`.
+. Check the logs for `Access rules reloaded successfully` or for a reload error. If the new file is not valid, the previous rules stay in effect.
+. Check that the file exists, is a regular file, and has a new modification time. Removing it does not clear previously loaded rules.
+. In {kubernetes}, check that the ConfigMap is not mounted with `subPath`.
+. Check every replica's mounted file and reload logs; replicas do not share one in-memory rules instance.
+
+**A resource is readable directly but missing from a list**
+
+Check whether the list requires a group grant in addition to an artifact grant, whether the relevant scope contains a `matching` selector, and whether an indexed query is affected by index freshness or the owned-artifact cap. Also check the ordinary search filters and pagination parameters.
+
+**A permission flag is true but an operation fails**
+
+Check the exact operation's authorization level and any additional checks, including ownership transfer, writes to other artifacts, state, rules, and mutability settings. A permission flag reflects the result when the page was generated, not a guarantee for a later request.

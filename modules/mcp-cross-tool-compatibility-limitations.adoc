@@ -1,0 +1,18 @@
+[id="mcp-cross-tool-compatibility-limitations_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Known limitations of cross-tool compatibility
+
+[role="_abstract"]
+Cross-tool compatibility answers a bounded question. Consider the following limitations when you rely on its results.
+
+Scan window:: The `compatible` and `compatibility` endpoints compare the specified tool with at most the newest `scanLimit` MCP tools, 500, by creation date. As newer tools are registered, an older tool can leave this window and stop appearing in the results, although neither tool changed. The `complete` field of the `compatibility` response is then `false`. A `true` value reports that every other MCP tool was scanned, not that every verdict is conclusive, because `INDETERMINATE` results can remain. The `compatible` endpoint does not report its coverage, so use the `compatibility` endpoint to check it.
+
+Bounded comparison:: The comparison evaluates a bounded projection of each schema: the keywords that <<mcp-cross-tool-compatibility-reference_{context},Cross-tool compatibility reference>> lists, to five levels below the root. It compares the projection as JSON Schema draft-07, in which these keywords mean the same as in every supported dialect. It is not general JSON Schema 2020-12 compatibility support, even for schemas that declare 2020-12. Any other keyword, except an annotation or a `format` in the `outputSchema` of the producer, is reported as a limitation rather than ignored, so a pair whose schemas use one is never reported as `COMPATIBLE`.
+
+Producer `format`:: A `format` in the `outputSchema` of the producer is not evaluated, and is not reported as a limitation, so it does not prevent a `COMPATIBLE` verdict. This is safe because `format` only narrows the strings that the producer emits, and no keyword that the comparison evaluates constrains the contents of a string, so no verdict depends on it. A `format` in the `inputSchema` of the consumer is reported as an `UNSUPPORTED_KEYWORD` limitation, because it might reject values that the comparison accepts.
+
+`$ref`:: A `$ref` is not resolved in either schema, and no referenced schema is fetched. Each `$ref` is reported as an `UNSUPPORTED_KEYWORD` limitation, which covers the schema node that carries it. Keywords next to a `$ref` are ignored in JSON Schema draft-07 and earlier, but apply in 2019-09 and 2020-12, the MCP default, so no mismatch at or below that node decides the verdict in either case.
+
+Unsatisfiable producer:: When a property that the `outputSchema` requires has a subschema that no value satisfies, such as `false`, the producer cannot emit any output, so every consumer accepts all of its outputs. The comparison does not detect this, and can report such a pair as `INCOMPATIBLE`.
+
+// proc-mcp-finding-compatible-tools

@@ -1,0 +1,74 @@
+[id="resource-authorization-use-cases_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Access rules examples for common use cases
+
+[role="_abstract"]
+The following examples show access rules for common deployment patterns. Each example is a complete rules file, or the rules to add before `otherwise deny;`.
+
+For rule fragments, import the used types with `from io.apicurio.authz import Artifact, Group, Role;`, put all denies before all allows, and end the combined file with `otherwise deny;`. The examples describe ACL decisions: enabled RBAC/OBAC may restrict them and administrator/owner bypasses may permit additional access. To use the file as the sole resource-level authority for non-administrators, disable owner bypass. With RBAC enabled, users requiring writes also need an appropriate Registry role.
+
+**Multi-team isolation**
+
+Each team sees and modifies only its own schemas:
+
+[source]
+----
+from io.apicurio.authz import Artifact, Group, Role;
+
+allow Role with name = "team-a-developers" to WRITE Artifact with name like "team-a/*";
+allow Role with name = "team-a-developers" to WRITE Group with name = "team-a";
+allow Role with name = "team-b-developers" to WRITE Artifact with name like "team-b/*";
+allow Role with name = "team-b-developers" to WRITE Group with name = "team-b";
+otherwise deny;
+----
+
+**Shared schemas with selective write access**
+
+All developers can read the `shared` group; only the platform team can change it:
+
+[source]
+----
+allow Role with name = "sr-developer" to READ Artifact with name like "shared/*";
+allow Role with name = "sr-developer" to READ Group with name = "shared";
+allow Role with name = "platform-team" to WRITE Artifact with name like "shared/*";
+allow Role with name = "platform-team" to WRITE Group with name = "shared";
+----
+
+**Read-only service account**
+
+A service account can read every artifact and group but cannot change anything:
+
+[source]
+----
+allow User with name = "monitoring-service" to READ Artifact with name *;
+allow User with name = "monitoring-service" to READ Group with name *;
+----
+
+**CI/CD pipeline with scoped write access**
+
+A pipeline user can write only to the `production` group:
+
+[source]
+----
+allow User with name = "ci-pipeline" to WRITE Artifact with name like "production/*";
+allow User with name = "ci-pipeline" to WRITE Group with name = "production";
+----
+
+**Group access with excluded artifacts**
+
+A contractor can read the `team-a` group, except for artifacts whose ID starts with `internal-`:
+
+[source]
+----
+deny User with name = "contractor" to * Artifact with name like "team-a/internal-*";
+allow User with name = "contractor" to READ Artifact with name like "team-a/*";
+allow User with name = "contractor" to READ Group with name = "team-a";
+----
+
+**Search and regular expressions**
+
+`matching` rules work for direct access, but SQL and Elasticsearch search cannot evaluate them. If a restricted caller's relevant read scope contains a `matching` selector, the rules contribute no search results for that resource type, including resources matched by other exact or prefix allows. Eligible owned resources can still appear through owner bypass; without that bypass, the result is empty. Administrator bypasses are unaffected. Use `=`, `in`, or `like` for resources that must be searchable.
+
+For supported scopes, authorization filtering takes place before pagination. Indexed searches additionally depend on index freshness and the ownership cap described below. Separate queries do not share a policy/data snapshot, so a direct read and a search issued at different times can disagree after an update.
+
+// con-resource-authorization-interactions

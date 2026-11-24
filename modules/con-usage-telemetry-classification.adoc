@@ -1,0 +1,23 @@
+[id="con-usage-telemetry-classification_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= How versions are classified
+
+[role="_abstract"]
+Each schema version is classified by the age of its most recent recorded fetch.
+
+Active:: The last fetch is no older than `apicurio.usage.active-threshold-days` (default 7 days).
+Stale:: The last fetch is older than the active threshold but no older than `apicurio.usage.stale-threshold-days` (default 30 days).
+Dead:: The last fetch is older than the stale threshold, so with the defaults a version whose last recorded fetch is more than 30 days old is Dead.
+
+A version inherits the most recent fetch of any schema that directly references it, but only in the global usage summary counts. The per-artifact metrics, the heatmap and the deprecation readiness list the fetches recorded for that version itself.
+
+IMPORTANT: The classification uses only the active and stale thresholds. `apicurio.usage.dead-threshold-days` is deprecated, has no effect, and will be removed in 4.0.0. It is still accepted, and the registry logs a warning at startup if it is set. The usage summary and the Active, Stale and Dead labels cover only versions that have at least one recorded fetch within the retention period, or that are referenced by a version that has one. A version with no recorded fetch and no such referrer, for example one that was never fetched or whose events were all removed by retention, is not counted in the summary and has no label. A version that was never fetched but is referenced by a fetched version is counted in the summary and takes the classification of its most recent referrer. The per-artifact metrics, heatmap and deprecation readiness never list a version without a recorded fetch of its own.
+
+On KafkaSQL, every usage event is one record in the journal topic, and retention removes database rows but never shrinks the journal. A journal written by an earlier release with telemetry enabled can hold usage records that were skipped until now. The first start of this release applies them all, including events older than the retention period, and the next retention run deletes the expired ones. During a rolling upgrade, nodes that still run the earlier release log an error for every usage record they cannot read.
+
+Events older than `apicurio.usage.retention-days` (default 180 days) are deleted on every aggregation run, which happens hourly by default (`apicurio.usage.aggregation.every`). Setting `apicurio.usage.retention-days` to `0` or less turns the cleanup off, and the events then accumulate without bound. Because events are deleted, a version whose last fetch is older than the retention period drops out of the counts instead of becoming Dead. Keep the retention period longer than the stale threshold, or Dead versions disappear.
+
+A fetch by `contentId` counts for every version that has the same content, in any artifact or group, because the identifier does not say which version was meant. Identical content registered in several artifacts therefore shares its fetches.
+
+Client identifiers are compared with the collation of the database column. On MySQL the default comparison is case-insensitive, so `Payments` and `payments` count as one client; on PostgreSQL they are two clients. SQL Server follows its database collation, which is usually case-insensitive; this was not checked.
+

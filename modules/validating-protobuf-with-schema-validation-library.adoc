@@ -1,0 +1,134 @@
+[id="validating-protobuf-with-schema-validation-library_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Validating Protobuf messages against a Protobuf schema artifact
+
+[role="_abstract"]
+You can validate generated Protobuf messages against a Protobuf schema artifact in {registry} by using the `ProtobufValidator` class. The validator checks that the registered schema defines the message type and that the compiled definition is compatible with it.
+
+This check catches a `.proto` file that has drifted from the registry before you deploy the application.
+
+The examples in this procedure use the following Protobuf schema, registered in the `default` group with the artifact ID `message-proto`, and the `MessageExample` class that `protoc` generates from it:
+
+[source,proto]
+----
+syntax = "proto3";
+package com.example;
+
+message MessageExample {
+  string key = 1;
+  string value = 2;
+}
+----
+
+.Prerequisites
+* {registry} is installed and running in your environment.
+* A Protobuf schema artifact is registered in {registry}, and you know its group ID and artifact ID.
+* You have a Maven project for your Java application that generates Java classes from your `.proto` files.
+
+.Procedure
+. Add the Protobuf validation module to your Maven project:
++
+[source,xml,subs="+quotes,attributes"]
+----
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-schema-validation-protobuf</artifactId>
+    <version>${apicurio-registry.version}</version>
+</dependency>
+----
+
+. Create the validator with the {registry} URL and an artifact reference for the schema:
++
+[source,java]
+----
+import io.apicurio.registry.resolver.config.SchemaResolverConfig;
+import io.apicurio.registry.resolver.strategy.ArtifactReference;
+import io.apicurio.schema.validation.protobuf.ProtobufValidator;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+Map<String, Object> config = new HashMap<>();
+config.put(SchemaResolverConfig.REGISTRY_URL, "http://localhost:8080/apis/registry/v3");
+
+ArtifactReference reference = ArtifactReference.builder()
+        .groupId("default")
+        .artifactId("message-proto")
+        .build();
+
+ProtobufValidator validator = new ProtobufValidator(config, Optional.of(reference));
+----
+
+. Validate a message whose type the registered schema defines:
++
+[source,java]
+----
+import io.apicurio.schema.validation.ValidationResult;
+
+MessageExample payload = MessageExample.newBuilder()
+        .setKey("order-1001")
+        .setValue("Hello world")
+        .build();
+
+ValidationResult result = validator.validateByArtifactReference(payload);
+System.out.println(result);
+----
++
+The output is `ValidationResult [ success ]`.
+
+. Validate a message whose type the registered schema does not define, and read the errors:
++
+[source,java]
+----
+import io.apicurio.schema.validation.ValidationError;
+
+// MessageExample2 is generated from a different .proto file
+MessageExample2 invalidPayload = MessageExample2.newBuilder()
+        .setKey2("order-1002")
+        .setValue2(32)
+        .build();
+
+ValidationResult invalidResult = validator.validateByArtifactReference(invalidPayload);
+if (!invalidResult.success()) {
+    for (ValidationError error : invalidResult.getValidationErrors()) {
+        System.out.println(error.getDescription());
+    }
+}
+----
++
+The output is `Missing message type MessageExample2 in the protobuf schema`. When the message type exists but its compiled definition removes or changes a field that the registered schema defines, for example a field with a different type or number, the result contains one error for each difference. The context of a Protobuf validation error is always an empty string.
+
+. Optional: To choose the schema for each message at run time, wrap the message in a `SchemaValidationRecord` and call `validate`:
++
+[source,java]
+----
+import com.google.protobuf.Message;
+import io.apicurio.schema.validation.SchemaValidationMetadata;
+import io.apicurio.schema.validation.SchemaValidationRecord;
+
+ArtifactReference recordReference = ArtifactReference.builder()
+        .groupId("default")
+        .artifactId("message-proto")
+        .version("1")
+        .build();
+
+ProtobufValidator recordValidator = new ProtobufValidator(config, Optional.empty());
+
+SchemaValidationRecord<Message> record = new SchemaValidationRecord<>(
+        payload, new SchemaValidationMetadata(recordReference));
+
+ValidationResult recordResult = recordValidator.validate(record);
+----
++
+Replace `1` with the registered schema version. The explicit version lets this new validator fetch the schema without a prior fixed-reference lookup.
+
+.Verification
+* Run the application. The `MessageExample` message prints `ValidationResult [ success ]`, and the `MessageExample2` message prints the missing message type error.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:schema-validation-library-reference_{context}[]
+* {managing-registry-artifacts-api}
+
+// ref-schema-validation-library-reference

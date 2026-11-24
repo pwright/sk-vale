@@ -1,0 +1,20 @@
+[id="stopping-agent-registry-quickstart_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Stopping the quick start stack
+
+[role="_abstract"]
+When you finish the quick start, stop the stack with Docker Compose.
+
+.Procedure
+* Stop the stack and keep the catalog:
++
+[source,bash]
+----
+docker compose -f distro/docker-compose/ai-agent-registry/docker-compose.yml down
+----
++
+To also delete the catalog, add the `-v` option. The next `up` loads the demo catalog again.
+endif::[]
+
+ifdef::service-registry-downstream[]
+// proc-registering-an-agent-card

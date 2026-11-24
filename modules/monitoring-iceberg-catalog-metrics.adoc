@@ -1,0 +1,63 @@
+[id="monitoring-iceberg-catalog-metrics_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Collecting Iceberg catalog metrics
+
+[role="_abstract"]
+You can collect Iceberg catalog metrics to monitor namespace, table, and view operations, commit duration, conflicts, and errors.
+
+.Prerequisites
+* The {registry} Iceberg REST Catalog is enabled.
+* You can access the server's management interface, which uses port `9000` by default.
+* You have permission to create and delete an Iceberg namespace for verification.
+
+.Procedure
+. Configure `apicurio.metrics.iceberg.enabled=true` in the server configuration if the setting is currently disabled.
++
+[source,properties]
+----
+apicurio.metrics.iceberg.enabled=true
+----
++
+The default value is `true`.
+The equivalent environment variable is `APICURIO_METRICS_ICEBERG_ENABLED=true`.
+Restart the deployment if you change the setting.
+. Configure your Prometheus-compatible monitoring system to collect the `/metrics` endpoint on the management interface.
++
+For a server running locally with the default management port, the endpoint is `http://localhost:9000/metrics`.
+Metrics for an operation appear after the server records that operation.
+
+.Verification
+. Create a namespace with a unique name to generate a namespace operation metric:
++
+[source,bash]
+----
+curl -X POST "http://localhost:8080/apis/iceberg/v1/default/namespaces" \
+  -H "Content-Type: application/json" \
+  -d '{"namespace":["metrics_check"],"properties":{}}'
+----
++
+Replace the URL, catalog prefix, and namespace with values for your deployment, and supply authentication if required.
+. Retrieve the management metrics:
++
+[source,bash]
+----
+curl --fail "http://localhost:9000/metrics"
+----
++
+Check that `iceberg_namespace_operations_total` includes a sample with `operation="created"` and `result="success"`.
+. Remove the empty verification namespace when you no longer need it:
++
+[source,bash]
+----
+curl -X DELETE "http://localhost:8080/apis/iceberg/v1/default/namespaces/metrics_check"
+----
++
+Namespace deletion requires administrator authorization when authentication is enabled.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:iceberg-catalog-metrics-reference_{context}[Iceberg catalog metrics reference]
+* {registry-config-reference}
+
+
+// ref-iceberg-catalog-metrics-reference

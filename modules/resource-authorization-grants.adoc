@@ -1,0 +1,113 @@
+[id="resource-authorization-grants_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Access rules file format
+
+[role="_abstract"]
+The access rules file lists who can do what as semicolon-terminated rules in the Kroxylicious ACL rules format. Rules can span lines. {registry} validates the file as a whole and rejects it if any rule is not valid.
+
+The following example is a complete access rules file. The file ends with `otherwise deny;`:
+
+[source]
+----
+from io.apicurio.authz import Artifact, Group, Role;
+
+deny User with name = "bob" to * Artifact with name = "team-a/secret-schema";
+allow User with name = "alice" to WRITE Artifact with name like "team-a/*";
+allow User with name = "alice" to WRITE Group with name = "team-a";
+allow Role with name = "sr-developer" to READ Artifact with name like "public/*";
+otherwise deny;
+----
+
+The format is the Kroxylicious ACL rules format, described in https://github.com/kroxylicious/design/blob/main/proposals/009-authorizer.md[Kroxylicious proposal 009]. In {registry}:
+
+* `from io.apicurio.authz import Artifact, Group, Role;` imports the {registry} resource types `Artifact` and `Group`, and the `Role` principal. `User` does not need to be imported.
+* `User with name ...` matches the authenticated user name. `Role with name ...` matches a role of the user, for example a role from the identity provider.
+* `deny` rules must come before `allow` rules, and the file must end with `otherwise deny;`. Lines starting with `//` are comments.
+
+User and role principals are different types: a user named `ops` does not match a role named `ops`. ACL role principals come from the authenticated security identity's roles. RBAC can use a different role source (token, application, header, or Kubernetes), so verify both mappings when using a non-default RBAC role source. With the pinned Kroxylicious 0.25.1 parser, use the `$anonymous` role instead of the proposal's `anonymous User` syntax, and use `//` rather than block comments.
+
+You select names with the following selectors:
+
+.Name selectors
+[cols="1,3",options="header"]
+|===
+|Selector |Matches
+
+|`with name = "x"`
+|exactly `x`
+
+|`with name in {"x", "y"}`
+|any of the listed names
+
+|`with name like "team-a/*"`
+|names starting with `team-a/`. `+*+` is only allowed at the end; `+like "*"+` matches every name.
+
+|`with name *`
+|every name
+
+|`with name matching /regex/`
+|names that fully match the regular expression (RE2 syntax). Resources only. A backslash inside the expression is removed, so `/a\.b/` is the expression `a.b`.
+|===
+
+{registry} validates the file as a whole. A syntax error, an unknown type, principal, or operation, an invalid regular expression, or a rule for a resource type that {registry} does not enforce (such as a Kroxylicious `Topic`) rejects the file: {registry} does not start, or keeps the previous rules on reload.
+
+NOTE: The JSON grants format, its `config.admin_roles` setting, and the `grants.path`/`grants.reload-*` properties belong to superseded development versions. Use ACL rules and `rules.*` properties instead. Allowing a role every operation with `allow Role with name = "ops" to * Artifact with name *;` and the equivalent `Group` rule allows the ACL layer only; it does not bypass enabled RBAC or OBAC. A shared rules format also does not mean an arbitrary mixed-system file can be loaded: {registry} rejects rules for resource types it does not enforce.
+
+**Resource names**
+
+* **Artifacts:** `\{groupId}/\{artifactId}`, for example `team-a/my-schema`. Artifacts in the default group are named `default/\{artifactId}`.
+* **Groups:** the group ID, for example `team-a`. The default group is named `default`.
+
+In artifact names, the characters `%` and `/` in the group ID are written as `%25` and `%2F`, so the first `/` always separates the group from the artifact ID. For example, artifact `x` in group `team-a/sub` is named `team-a%2Fsub/x`, while artifact `sub/x` in group `team-a` is named `team-a/sub/x`. Artifact IDs and group names are not escaped.
+
+{registry} matches names in full. For example, `+like "team-a/*"+` matches every artifact in group `team-a` (but not in group `team-a/sub`), and `+like "team-a/internal-*"+` matches only the artifacts in `team-a` whose ID starts with `internal-`.
+
+Matching is case-sensitive on every storage variant, in direct access and in search results. Some databases, such as MySQL and SQL Server, look up group and artifact IDs case-insensitively, so a request for `TEAM-A/My-Schema` can address the stored artifact `team-a/my-schema`. {registry} authorizes such a request against the stored IDs, so changing the case of an ID never gets around a rule.
+
+**Operations**
+
+`ADMIN` implies `WRITE`, and `WRITE` implies `READ`; `*` means all three. The operation required by each API operation matches its RBAC level: reads require `READ`, and changes, including deletes, require `WRITE`. A few operations require `ADMIN`, such as dropping Iceberg namespaces, tables, and views.
+
+Versions, branches, and comments normally use their artifact's access rules. Ownership transfer has additional checks and is not simply an `ADMIN` operation in core v3. A dry run can relax the role check on supported endpoints but does not universally reduce the required access-rule operation to `READ`.
+
+**Group rules and artifact rules**
+
+* **Group rules** control operations on the group itself: reading group metadata, listing artifacts in it, and creating, updating, or deleting the group.
+* **Artifact rules** control operations on artifacts and their versions, content, comments, and references.
+
+Some operations need both:
+
+* Creating an artifact requires `WRITE` on the group and on the name of the new artifact, so a deny on an artifact name also prevents creating it. This applies to every API that creates artifacts, including registering a new subject with the Confluent compatibility API, publishing a new MCP server, and renaming an Iceberg table.
+* Deleting a group, or all artifacts in a group, requires `WRITE` on the group and on every artifact in it.
+
+Most deployments need both. For example, to give a user full access to `team-a`:
+
+[source]
+----
+allow User with name = "alice" to * Group with name = "team-a";
+allow User with name = "alice" to * Artifact with name like "team-a/*";
+----
+
+These rules allow the ACL layer; enabled RBAC and OBAC can still restrict the user. Group rules do not cascade to artifacts. A group deny does not hide its artifacts from global artifact search. Conversely, listing artifacts within a group requires group read access even if individual artifacts can be read directly.
+
+**Deny rules**
+
+Within ACL evaluation, a matching deny takes precedence over an allow. Deny selectors also apply to search queries. Administrator bypasses and the enabled owner bypass can skip the ACL restriction, including its denies.
+
+[source]
+----
+deny User with name = "alice" to * Artifact with name = "team-a/secret-schema";
+allow User with name = "alice" to WRITE Artifact with name like "team-a/*";
+----
+
+Assuming Alice has no administrator or owner bypass and her enabled RBAC/OBAC checks permit it, she can read and write all artifacts in `team-a` except `team-a/secret-schema`.
+
+A deny rule denies its operations and the operations they imply:
+
+* Denying `*` (or `ADMIN`, which implies the other two) blocks all access, and hides the resource from search results. Use it to hide a resource.
+* Denying `WRITE` also denies `READ`, which `WRITE` implies, but not `ADMIN`: a rule that allows `ADMIN` or `*` still allows `ADMIN` operations. You cannot make a resource read-only with a deny rule; allow only `READ` on it instead.
+* Denying `READ` blocks reads but not writes: `WRITE` implies `READ`, but `READ` does not imply `WRITE`. Use `*` to hide a resource.
+
+These results describe the access rules themselves. To ensure a deny applies to an owner, disable `apicurio.auth.resource-based-authorization.owner-bypass.enabled`. A read-only allow must not overlap another allow granting the same caller write or admin access if the intention is to make the resource read-only.
+
+// ref-resource-authorization-coverage

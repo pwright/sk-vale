@@ -1,0 +1,36 @@
+[id="multitenancy-overview_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Multitenancy overview
+
+[role="_abstract"]
+The {operator} watches for `ApicurioRegistry3` custom resources and creates the following {kubernetes} resources
+for each CR:
+
+.{kubernetes} resources the {operator} creates for each `ApicurioRegistry3` CR
+[cols="1,3", options="header"]
+|===
+| Component
+| Resources created
+
+| *{registry-app}*
+| Deployment, Service, and NetworkPolicy. An Ingress when `spec.app.ingress.host` is set. A PodDisruptionBudget when there is more than one replica, or autoscaling can go above one. A HorizontalPodAutoscaler when autoscaling is enabled.
+
+| *{registry-ui}*
+| Deployment, Service, and NetworkPolicy. An Ingress when `spec.ui.ingress.host` is set. A PodDisruptionBudget when there is more than one replica, or autoscaling can go above one. A HorizontalPodAutoscaler when autoscaling is enabled.
+|===
+
+NetworkPolicies and PodDisruptionBudgets can be disabled per component with `networkPolicy.enabled: false` and `podDisruptionBudget.enabled: false`.
+
+Each CR instance is completely independent. Resources are named using the pattern
+`\{cr-name}-\{component}-\{resource-type}` and labeled with instance-specific selectors to prevent any
+cross-tenant interference.
+
+The multi-instance approach provides the following isolation boundaries:
+
+* *Compute isolation*: Separate Deployments and Pods per tenant
+* *Network isolation*: Separate Services, Ingresses, and NetworkPolicies per tenant
+* *Storage isolation*: Each tenant can use a separate database or Kafka cluster
+* *Authentication isolation*: Each tenant can have its own OIDC provider or realm
+* *Configuration isolation*: Environment variables and settings are per-CR
+
+// ref-multitenancy-deployment-patterns

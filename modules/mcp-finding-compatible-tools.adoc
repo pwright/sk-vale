@@ -1,0 +1,135 @@
+[id="mcp-finding-compatible-tools_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Finding the tools that can take the output of a tool
+
+[role="_abstract"]
+You can find the MCP tools that can take the output of a tool as their input, and see why the other tools cannot, by using the `compatible` and `compatibility` well-known endpoints. In this example, an order tool returns an order, and three other tools might take that order as their input.
+
+.Prerequisites
+* {registry} is installed and running.
+* MCP tools support is enabled (`apicurio.mcp-tools.enabled=true` and `apicurio.features.experimental.enabled=true`).
+
+.Procedure
+. Create the tool that produces the output, with an `outputSchema`:
++
+[source,bash]
+----
+curl -X POST "http://localhost:8080/apis/registry/v3/groups/orders/artifacts" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "artifactId": "get-order",
+    "artifactType": "MCP_TOOL",
+    "firstVersion": {
+      "content": {
+        "contentType": "application/json",
+        "content": "{\"name\": \"get_order\", \"description\": \"Get an order by its ID\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"orderId\": {\"type\": \"string\"}}, \"required\": [\"orderId\"]}, \"outputSchema\": {\"type\": \"object\", \"properties\": {\"orderId\": {\"type\": \"string\"}, \"total\": {\"type\": \"number\"}, \"currency\": {\"type\": \"string\"}}, \"required\": [\"orderId\", \"total\", \"currency\"], \"additionalProperties\": false}}"
+      }
+    }
+  }'
+----
++
+The `outputSchema` sets `additionalProperties` to `false`, so an order contains only the properties that it declares, and the comparison can decide without a `PRODUCER_OBJECT_OPEN` limitation.
+
+. Create the tools that might take an order as their input, in the same way. Use the artifact IDs `send-receipt`, `schedule-delivery`, and `convert-currency`, with the following tool definitions:
++
+.`send-receipt`
+[source,json]
+----
+{
+  "name": "send_receipt",
+  "description": "Email the receipt of an order",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "orderId": {
+        "type": "string"
+      },
+      "total": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "orderId"
+    ]
+  }
+}
+----
++
+.`schedule-delivery`
+[source,json]
+----
+{
+  "name": "schedule_delivery",
+  "description": "Schedule the delivery of an order",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "orderId": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "orderId",
+      "address"
+    ]
+  }
+}
+----
++
+.`convert-currency`
+[source,json]
+----
+{
+  "name": "convert_currency",
+  "description": "Convert an amount to another currency",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "total": {
+        "type": "number"
+      },
+      "currency": {
+        "type": "string",
+        "enum": [
+          "EUR",
+          "USD",
+          "GBP"
+        ]
+      }
+    },
+    "required": [
+      "total",
+      "currency"
+    ]
+  }
+}
+----
+
+. List the tools that can take an order as their input:
++
+[source,bash]
+----
+curl "http://localhost:8080/.well-known/mcp-tools/orders/get-order/compatible"
+----
++
+Only `send-receipt` is returned. It requires only the `orderId`, which every order contains, and it accepts the `currency` that it does not declare, because it does not set `additionalProperties`.
+
+. Find out why the other tools cannot take an order:
++
+[source,bash]
+----
+curl "http://localhost:8080/.well-known/mcp-tools/orders/get-order/compatibility?verdict=INCOMPATIBLE&verdict=INDETERMINATE"
+----
++
+For the full response, see <<mcp-well-known-endpoints_{context},Well-known endpoints>>. It lists the following results:
++
+* `schedule-delivery` is `INCOMPATIBLE` with a `REQUIRED_NOT_GUARANTEED` reason. It requires an `address`, which an order does not contain.
+* `convert-currency` is `INDETERMINATE` with an `UNSUPPORTED_KEYWORD` limitation at `/inputSchema/properties/currency/enum`. The comparison does not evaluate `enum`, so it cannot decide whether every `currency` in an order is one of the listed values.
+
+.Verification
+* Request the `compatibility` endpoint without the `verdict` parameter. The tools that it reports as `COMPATIBLE` are the tools that the `compatible` endpoint returns.
+
+// proc-mcp-viewing-compatible-tools

@@ -1,0 +1,116 @@
+[id="data-contracts-api-examples_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= REST API examples
+
+[role="_abstract"]
+Common `curl` examples for the Data Contracts REST API, including submitting, listing, exporting, and promoting contracts.
+
+.Submitting an ODCS contract
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/contracts \
+  -H 'Content-Type: application/x-yaml' \
+  --data-binary @my-contract.yaml
+----
+
+.Response
+[source,json]
+----
+{
+  "contractId": "orders-contract",
+  "version": "1.0.0",
+  "projection": {
+    "rulesApplied": 2,
+    "labelsApplied": 12,
+    "tagsApplied": 3,
+    "warnings": []
+  }
+}
+----
+
+.Listing contracts
+[source,bash]
+----
+curl "http://localhost:8080/apis/registry/v3/groups/my-group/contracts?limit=10&offset=0"
+----
+
+.Exporting as ODCS
+[source,bash]
+----
+curl http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/export
+----
+
+Rebuilds ODCS v3.1 YAML from the artifact's projected contract labels, rules, and field tags. Field tags are read from the latest version only, and `location` is set to `group/artifact:latestVersion`. Sections that are not projected, such as the title and descriptions, are missing from the export. Returns 404 if the artifact has no `contract.\{contractId}.id` label.
+
+.Promoting a contract
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/promote \
+  -H 'Content-Type: application/json' \
+  -d '{"contractId": "orders-contract", "targetStage": "STAGE"}'
+----
+
+.Getting quality score
+[source,bash]
+----
+curl "http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/quality?contractId=orders-contract"
+----
+
+.Response
+[source,json]
+----
+{"overall": 0.85, "completeness": 0.83, "compliance": 1.0, "stability": 0.67}
+----
+
+The score is informational only. It is weighted as follows:
+
+* Completeness (30%): artifact description, owner team, support contact, classification, SLA availability, and owner domain are set.
+* Compliance (40%): the artifact has domain rules, and a status is set.
+* Stability (30%): status is `STABLE`, the artifact has more than one version, and the contract ID label is set.
+
+.Executing contract rules
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/versions/1/contract/execute \
+  -H 'Content-Type: application/json' \
+  -d '{"mode": "WRITE", "record": {"totalAmount": 100, "status": "active"}}'
+----
+
+.Response (HTTP 200, also when rules fail)
+[source,json]
+----
+{"passed": true, "violations": [], "executedRules": 2, "failedRules": 0}
+----
+
+The endpoint merges global, artifact, and version domain rules by name (the narrowest scope wins). `transformedRecord` is included only if a rule changed the record. Each violation has `ruleName`, `message`, and `action` fields.
+
+.Setting contract metadata directly
+[source,bash]
+----
+curl -X PUT \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/metadata \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "status": "DRAFT",
+    "ownerTeam": "Platform Team",
+    "ownerDomain": "payments",
+    "supportContact": "platform@example.com",
+    "classification": "CONFIDENTIAL",
+    "stage": "DEV"
+  }'
+----
+
+NOTE: This call replaces the descriptive fields: `ownerTeam`, `ownerDomain`, `supportContact`, `classification`, and `compatibilityGroup`. A descriptive field you omit is removed. `status` and `stage` change only when given; omitting them keeps them. Other contract labels, such as the projected `id`, `version`, `sla.*`, and `quality.*`, are kept. A status or stage change that the lifecycle does not allow is rejected (HTTP 409 for the status, HTTP 400 for the stage).
+
+.Transitioning contract status
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/contract/status \
+  -H 'Content-Type: application/json' \
+  -d '{ "status": "STABLE" }'
+----
+

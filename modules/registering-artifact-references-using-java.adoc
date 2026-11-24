@@ -1,0 +1,84 @@
+[id="registering-artifact-references-using-java_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Registering schemas with references from Java
+
+[role="_abstract"]
+The reference detection used by the Maven plug-in `autoRefs` option is also available as a Java library.
+You can use it to register a root schema together with all the schemas it references, in dependency order, from your own application or build tool.
+
+The functionality is split into two artifacts:
+
+* `apicurio-registry-schema-util-references` (package `io.apicurio.registry.content.refs.resolve`) builds a registration plan from a set of schema sources, without contacting {registry}.
+* `apicurio-registry-java-sdk-references` (package `io.apicurio.registry.client.refs`) executes a plan against {registry} by using the Java SDK. It depends on the planning library transitively.
+
+.Prerequisites
+* You have a Java project that uses the {registry} Java SDK.
+
+.Procedure
+. Add the dependencies to your `pom.xml` file.
+The `apicurio-registry-java-sdk-references` artifact excludes the SDK HTTP adapters, so you must also depend on `apicurio-registry-java-sdk` together with an HTTP adapter, for example, the default Vert.x adapter or the JDK adapter (`apicurio-registry-java-sdk-adapter-jdk`):
++
+[source,xml]
+----
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-java-sdk-references</artifactId>
+    <version>${apicurio-registry.version}</version>
+</dependency>
+<dependency>
+    <groupId>io.apicurio</groupId>
+    <artifactId>apicurio-registry-java-sdk</artifactId>
+    <version>${apicurio-registry.version}</version>
+</dependency>
+----
+
+. Collect the schema sources, describe the root artifact, and register it:
++
+[source,java]
+----
+RegistryClient client = ...;
+
+// Index all schema files under one or more directories...
+SchemaSourceSet sources = SchemaSourceSet.fromDirectories(
+        List.of(Path.of("src/main/resources/schemas")), SchemaSourceSet.DEFAULT_FILTER);
+// ...or provide the content in memory
+SchemaSourceSet inMemory = SchemaSourceSet.of(
+        InMemorySchemaSource.of("order.json", orderJson, "application/json"),
+        InMemorySchemaSource.of("common/address.json", addressJson, "application/json"));
+
+RootArtifact root = RootArtifact.of("order.json", "my-group", "Order");
+
+PlanOptions options = PlanOptions.builder()
+        .namingStrategy(DefaultNamingStrategy.INSTANCE) // the default
+        .existingArtifacts(List.of(
+                new ExistingArtifact("https://example.com/money.json", "shared", "Money", "latest")))
+        .build();
+
+// One-liner with default registrar settings
+RegistrationResult result = ReferenceRegistrar.register(client, inMemory, root, options);
+
+// Or configure the registrar explicitly
+RegistrationResult result2 = ReferenceRegistrar.builder(client)
+        .ifExists(IfArtifactExists.FIND_OR_CREATE_VERSION)
+        .build()
+        .execute(ReferenceResolver.plan(List.of(root), sources, options));
+----
++
+`SchemaSourceSet`:: The schemas that references can resolve to. Locations are normalized, relative paths.
+`RootArtifact`:: The schema to register and its coordinates. Referenced schemas are registered as separate artifacts.
+`namingStrategy`:: `DefaultNamingStrategy` (default) registers Avro references in the group of their namespace (or the parent group when there is none) with the simple name as artifact ID, and other references in the parent group with their normalized location as artifact ID. `LegacyNamingStrategy` reproduces the naming used by the Maven plug-in `LEGACY` setting.
+`existingArtifacts`:: Maps reference names to artifacts that already exist in {registry} instead of local sources. A `null` or `latest` version is resolved to the latest version at registration time.
+
+.Behavior
+* Planning fails with `UnresolvedReferencesException`, listing every reference that could not be resolved, and with `ReferenceCycleException` when the references form a cycle.
+* When you call `dryRun(true)` on the builder, requests are sent with the {registry} `dryRun` option, so nothing is persisted. `RegistrationResult.isDryRun()` reports this.
+Because dry-run artifacts are not persisted, an artifact that references another artifact of the same plan cannot be validated: it is not sent, and neither is anything that depends on it.
+Such artifacts are reported through `RegistrationListener.onSkipped()` and `RegistrationResult.skipped()`; `RegistrationResult.registered()` contains only the artifacts that were actually validated.
+References to `existingArtifacts` do not cause an artifact to be skipped.
+In a dry run, a `409 Conflict` response is always reported as a failure; existing draft versions are never updated or promoted.
+* If registering an artifact fails, `ReferenceRegistrar` throws a `RegistrationException`. Use `failed()` to get the artifact that failed, `problem()` to get the {registry} error, and `partialResult()` to get the artifacts that were already registered.
+
+[role="_additional-resources"]
+.Additional resources
+* xref:adding-artifact-references-automatically-using-maven-plugin_{context}[]
+

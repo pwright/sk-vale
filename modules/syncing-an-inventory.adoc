@@ -1,0 +1,66 @@
+[id="syncing-an-inventory_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Syncing a group with an inventory source
+
+[role="_abstract"]
+To sync a group, send a `POST` request to the `agent-inventory-sync` endpoint of the group. The request names the inventory source, and the response reports the result of the sync.
+
+.Prerequisites
+* Inventory sync is enabled.
+* You have write access to the group.
+
+.Procedure
+. Sync the MCP servers of a namespace, and import their tools:
++
+[source,bash]
+----
+curl -X POST http://localhost:8080/apis/registry/v3/groups/inventory/agent-inventory-sync \
+  -H "Content-Type: application/json" \
+  -d '{"source": "KUBERNETES_MCP_SERVERS", "namespace": "team-a", "importTools": true}'
+----
+. Sync the agents of a Google Cloud Agent Registry location, with an access token that has the `agentregistry.read-only` scope:
++
+[source,bash]
+----
+curl -X POST http://localhost:8080/apis/registry/v3/groups/inventory/agent-inventory-sync \
+  -H "Content-Type: application/json" \
+  -d '{
+        "source": "GOOGLE_AGENT_REGISTRY",
+        "location": "projects/my-project/locations/us-central1",
+        "headers": { "Authorization": "Bearer '"$(gcloud auth print-access-token)"'" }
+      }'
+----
++
+The headers are sent to the inventory source only. They are never stored, returned, logged, or audited.
+
+. Read the report. Each item has one of the following statuses:
++
+[%header,cols="1,3"]
+|===
+|Status |Meaning
+
+|`CREATED`
+|A new artifact was created for the item.
+
+|`UPDATED`
+|The item changed, and a new version was added. An item that the source lists again after it was reported `MISSING` is also `UPDATED`, and its latest version is enabled again.
+
+|`UNCHANGED`
+|The latest version already matches the item. A latest version that someone set to `DISABLED` is also left as it is: the sync adds no version to the artifact and does not enable it again.
+
+|`REJECTED`
+|A rule rejected the item, and the causes list the violations. Nothing was stored.
+
+|`MISSING`
+|An earlier sync of the same source and scope created the artifact, but the source no longer lists the item. The latest version is marked `DEPRECATED`. Nothing is deleted.
+
+|`NOT_MANAGED`
+|An artifact with the item's ID exists, and the sync did not create it. It is not changed.
+|===
+
+Add `"dryRun": true` to see the report without writing anything.
+
+.Verification
+* The artifacts carry the labels `apicurio.agent-inventory.source`, `apicurio.agent-inventory.scope`, and `apicurio.agent-inventory.external-id`. A later sync of the same source and scope uses them to find its artifacts. If you change these labels, the sync no longer manages the artifact and reports it as `NOT_MANAGED`.
+
+// con-agent-inventory-scheduling

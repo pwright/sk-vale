@@ -1,0 +1,418 @@
+{
+  "assemblies/assembly-implementing-multitenancy.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        217,
+        272
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:multitenancy-lightweight-group-isolation_{context}[",
+      "Line": 10
+    }
+  ],
+  "modules/agent-discovery-patterns-overview.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        24,
+        167
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-mcp-tool-features.adoc#mcp-finding-compatible-tools_{context}[Finding the tools that can take the output of a tool",
+      "Line": 77
+    }
+  ],
+  "modules/agent-inventory-sources.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        347,
+        427
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-mcp-tool-features.adoc[MCP tool definition features",
+      "Line": 27
+    }
+  ],
+  "modules/ccompat-migration-considerations.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        195
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/confluent-compatibility[Confluent compatibility example]: Confluent clients and tools against {registry}, with self-checks.",
+      "Line": 67
+    }
+  ],
+  "modules/configuring-tls-maven-plugin-examples.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        225
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/tls[TLS example]: the Maven plugin registering and downloading over TLS and mutual TLS, with every trust store and key store format, and with credentials",
+      "Line": 224
+    }
+  ],
+  "modules/connecting-claude-desktop-via-mcp.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        248
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/agent-registry[AI agent registry demo], which runs every agent registry feature with Docker Compose, together with Quarkus LangChain4j agents, and includes a step-by-step guide",
+      "Line": 53
+    }
+  ],
+  "modules/custom-artifact-types-config.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        184
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/custom-artifact-types[Custom artifact types example]: a Java-provider type and a webhook type, with self-checks.",
+      "Line": 119
+    }
+  ],
+  "modules/migrating-registry-data.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        254
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/v2-to-v3-migration[v2 to v3 migration example]: migrates a seeded {registry-v2} server with these scripts and checks that every version keeps its IDs, state, content, and references.",
+      "Line": 82
+    }
+  ],
+  "modules/multitenancy-lightweight-group-isolation.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        5,
+        74
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-configuring-resource-authorization.adoc[",
+      "Line": 38
+    }
+  ],
+  "modules/otel-features.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        150,
+        230
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/otel-tracin",
+      "Line": 24
+    }
+  ],
+  "modules/registering-artifact-references-using-java.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        9
+      ],
+      "Check": "AsciiDocDITA.BlockTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Block titles can only be assigned to examples, figures, and tables in DITA.",
+      "Severity": "warning",
+      "Match": ".Behavior",
+      "Line": 72
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        9
+      ],
+      "Check": "AsciiDocDITA.TaskTitle",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Unsupported titles cannot be mapped to DITA tasks.",
+      "Severity": "warning",
+      "Match": ".Behavior",
+      "Line": 72
+    }
+  ],
+  "modules/registry-cli-reference.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        162
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/registry-clients[Registry clients example]: the CLI and the SDKs running the same scenario",
+      "Line": 184
+    }
+  ],
+  "modules/registry-events-config-reference.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        219
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/registry-events[Registry events example]: consumes and checks the events of a sequence of changes, with PostgreSQL and Debezium, and with KafkaSQL.",
+      "Line": 82
+    }
+  ],
+  "modules/registry-sdk-intro.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        160
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/registry-clients[Registry clients example]: the same scenario with every SDK and the CLI",
+      "Line": 44
+    }
+  ],
+  "modules/resource-authorization-permissions.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        50
+      ],
+      "Check": "AsciiDocDITA.ShortDescription",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Assign [role=\"_abstract\"] to a paragraph to use it as \u003cshortdesc\u003e in DITA.",
+      "Severity": "warning",
+      "Match": "= Caller permissions in v3 search and list results",
+      "Line": 3
+    }
+  ],
+  "modules/schema-references-shared-types.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        139
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:getting-started/assembly-artifact-reference.adoc#registry-artifact-type-reference-support_{context}[Artifact reference support by type",
+      "Line": 23
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        56
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "xref:registry-artifact-type-reference-support_{context}[",
+      "Line": 26
+    }
+  ],
+  "modules/sequential-pipeline-context-chaining.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        300,
+        382
+      ],
+      "Check": "AsciiDocDITA.ConceptLink",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Move all links and cross references to Additional resources.",
+      "Severity": "warning",
+      "Match": "link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/agent-registr",
+      "Line": 21
+    }
+  ],
+  "modules/syncing-an-inventory.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        64
+      ],
+      "Check": "AsciiDocDITA.TaskStep",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than a single list cannot be mapped to DITA steps.",
+      "Severity": "warning",
+      "Match": "Add `\"dryRun\": true` to see the report without writing anything.",
+      "Line": 61
+    }
+  ],
+  "modules/writing-registry-sdk.adoc": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Suggestions": [],
+      "Span": [
+        1,
+        191
+      ],
+      "Check": "AsciiDocDITA.RelatedLinks",
+      "Description": "",
+      "Link": "https://github.com/jhradilek/asciidoctor-dita-vale/blob/main/README.md#warnings",
+      "Message": "Content other than links cannot be mapped to DITA related-links.",
+      "Severity": "warning",
+      "Match": "* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/registry-clients[Registry clients example]: the same scenario with the Java, Go, Python and TypeScript SDKs and the CLI",
+      "Line": 59
+    }
+  ]
+}

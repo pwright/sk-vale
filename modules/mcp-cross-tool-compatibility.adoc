@@ -1,0 +1,30 @@
+[id="mcp-cross-tool-compatibility_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Cross-tool compatibility
+
+[role="_abstract"]
+Cross-tool compatibility tells you whether an MCP tool can take the output of another MCP tool as its input. {registry} compares the `outputSchema` of the tool that produces the output, the producer, with the `inputSchema` of each other MCP tool, the consumer, as if the whole output object were passed to the consumer as its input.
+
+Cross-tool compatibility is a different question from version compatibility. Version compatibility compares successive versions of one tool when you publish a new version, and a `COMPATIBILITY` rule rejects a version that breaks it. Cross-tool compatibility compares two different tools when you ask for it, through the `compatible` and `compatibility` well-known endpoints or the *Compatible tools* tab of the web console, and never rejects or changes any content.
+
+Each comparison has one of the following verdicts:
+
+`COMPATIBLE`:: The comparison proves that the consumer accepts every output that the `outputSchema` of the producer permits.
+`INCOMPATIBLE`:: The producer can emit an output that the consumer rejects. The result lists each mismatch in `reasons`.
+`INDETERMINATE`:: The comparison cannot decide, for example because a schema uses a keyword that the comparison does not evaluate. The result lists what prevented a decision in `limitations`. An indeterminate consumer might accept every output, or might reject some, so it is never treated as compatible.
+
+A consumer is compatible only when all of the following conditions hold:
+
+* Every input that the consumer requires is also required by the `outputSchema`. A property that the producer declares but does not require might be missing from an output.
+* The type of each property in the output, and of everything nested inside it, is accepted by the consumer.
+* Any property that the output can contain, but that the consumer does not declare, is allowed by the `additionalProperties` of the consumer. Such properties are accepted unless the consumer restricts them, for example with `additionalProperties: false`.
+
+`null` is a value like any other. A property that can be `null` is accepted only by a consumer that also accepts `null`, so an output property of type `["string", "null"]` is not accepted where the consumer declares `string`.
+
+An object in the `outputSchema` that declares `properties`, but does not set `additionalProperties`, can emit properties that it does not declare, with any value. When the verdict depends on the producer emitting only the properties that the object declares, the comparison does not assume that it does. It reports a `PRODUCER_OBJECT_OPEN` limitation on that object, and the verdict is never `COMPATIBLE`: it is `INDETERMINATE`, or `INCOMPATIBLE` when another mismatch rules the consumer out. To get a decided verdict, set `additionalProperties` on the objects of the `outputSchema`, for example to `false`.
+
+An `outputSchema` that declares no `type` permits values other than objects, because `properties`, `required`, and `additionalProperties` apply only to objects. A consumer whose `inputSchema` declares a `type` rejects those values, so it is not compatible with such a producer. The same applies to any node nested inside the schema that declares object or array keywords without a `type`.
+
+An output that leaves its structure unconstrained is not accepted by a consumer that constrains it. A node that declares `type: array` without `items` permits elements of any type, and a node that declares `type: object` without `properties` or `additionalProperties` permits properties with any value, so a consumer that constrains the elements or the properties of that node is not compatible. The reverse is compatible: a consumer that leaves them unconstrained accepts an output that constrains them.
+
+// ref-mcp-cross-tool-compatibility-reference

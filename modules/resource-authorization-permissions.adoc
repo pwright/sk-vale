@@ -1,0 +1,30 @@
+[id="resource-authorization-permissions_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Caller permissions in v3 search and list results
+
+With resource-based authorization enabled, each `SearchedArtifact`, `SearchedVersion`, and `SearchedGroup` returned by v3 search and list operations includes a `permissions` object. For example, an item can include:
+
+[source,json]
+----
+{
+  "permissions": {
+    "read": true,
+    "write": false,
+    "admin": false
+  }
+}
+----
+
+The flags describe whether the caller passes authorization at the corresponding level for that resource:
+
+* `read`: read-level access.
+* `write`: write-level access, which core artifact deletes normally require as well as metadata changes.
+* `admin`: admin-level access, for example an Iceberg drop. It does not mean "can transfer ownership" or "can perform every deletion".
+
+This field is included in artifact, group, version, content-based, and contract searches returning these types, and in group, artifact, version, and branch-version lists. It is omitted when resource-based authorization is disabled and is not added to v2 results. A version reports its artifact's permissions, using the artifact owner rather than the version creator. A page is evaluated with at most one access-rules call for permission reporting; empty or bypassed pages need none.
+
+The flags are advisory. They do not replace filtering or authorize a subsequent request. Ownership transfers, rules, state, mutability settings, referenced/generated artifacts, and bulk operations can impose additional checks. For example, `write: true` on a group does not guarantee permission to delete every artifact in it. Policy or ownership can also change after a result is returned. Clients must handle failed operations even when a flag is `true`.
+
+An owning developer with RBAC enabled can receive `read: true`, `write: true`, and `admin: false`. With RBAC disabled, an eligible owner bypass can permit admin-level access too. Do not infer permission flags from a role name alone. The presence of the API field does not by itself imply that a particular UI version uses it to hide actions.
+
+// ref-resource-authorization-use-cases

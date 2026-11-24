@@ -1,0 +1,72 @@
+[id="a2a-configuration_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= A2A configuration properties
+
+[role="_abstract"]
+You can control A2A features by using the following configuration properties.
+
+TIP: To enable all the agent registry discovery features at once (A2A, MCP tools, the MCP Registry API, the AI Catalog, ARD, and the web console's *Agents* tab), set `apicurio.features.experimental.enabled=true` and `apicurio.agents.enabled=true`. A feature's own property, such as `apicurio.a2a.enabled`, still takes precedence, so you can turn a single feature off. Features that connect to other servers, such as importing tools from MCP servers, are not included and must be enabled separately.
+
+.A2A configuration properties
+[cols="2,1,3",options="header"]
+|===
+|Property |Default |Description
+
+|`apicurio.a2a.enabled`
+|Value of `apicurio.agents.enabled`, `false` by default
+|Enable or disable A2A protocol support
+
+|`apicurio.instance.name`
+|`Apicurio Registry`
+|Name of the registry as an A2A agent, and in the AI Catalog
+
+|`apicurio.a2a.agent.name`
+|_Not set_
+|Deprecated since 3.4.0. Use `apicurio.instance.name`, which takes precedence when both are set.
+
+|`apicurio.a2a.agent.description`
+|`API and Schema Registry with A2A Agent support`
+|Description of the registry agent
+
+|`apicurio.a2a.agent.version`
+|_app version_
+|Agent version (defaults to application version)
+
+|`apicurio.a2a.agent.url`
+|_registry base URL_
+|URL reported in the Agent Card `supportedInterfaces` entry. Defaults to the base URL of the registry.
+
+|`apicurio.a2a.agent.provider.organization`
+|`Apicurio`
+|Provider organization name
+
+|`apicurio.a2a.agent.provider.url`
+|`https://www.apicur.io`
+|Provider organization URL
+
+|`apicurio.a2a.agent.capabilities.streaming`
+|`false`
+|Whether streaming is supported
+
+|`apicurio.a2a.agent.capabilities.push-notifications`
+|`false`
+|Whether push notifications are supported
+
+|`apicurio.a2a.agent.protocol-version`
+|_Not set_
+|Deprecated since 3.4.0. The property has no effect. The Agent Card reports A2A protocol version `1.0`, the version that {registry} implements.
+
+|`apicurio.a2a.agent.documentation-url`
+|_not set_
+|URL of the registry agent documentation, reported as `documentationUrl` when set
+
+|`apicurio.a2a.agent.icon-url`
+|_not set_
+|URL of the registry agent icon, reported as `iconUrl` when set
+
+|`apicurio.a2a.agent.auth.api-key.enabled`
+|`false`
+|Advertise API key authentication with the `X-API-Key` header in the Agent Card security schemes
+|===
+
+// ref-a2a-well-known-endpoints

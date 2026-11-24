@@ -1,0 +1,36 @@
+[id="confluent-export-utility-data-mapping_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Confluent Schema Registry export utility data mapping
+
+[role="_abstract"]
+The Confluent Schema Registry export utility reads a Confluent Schema Registry through its REST API and writes the data as a ZIP file in the {registry} import format. Review how the utility maps Confluent Schema Registry data to {registry} before you migrate.
+
+.Confluent Schema Registry data in the export file
+[%header,cols="1,2"]
+|===
+|Confluent Schema Registry data
+|{registry} equivalent
+
+|Subject
+|Artifact in the default group, with the subject name as the artifact ID. The artifact type is `AVRO`, `JSON`, or `PROTOBUF`, matching the Confluent schema type.
+
+|Schema version
+|Artifact version that keeps the Confluent version number, so clients can continue to request the same version numbers through the ccompat API.
+
+|Schema ID
+|Content ID. By default, the ccompat API returns content IDs as schema IDs, so existing clients can continue to resolve the schema IDs that are embedded in serialized messages.
+
+|Schema reference
+|Artifact reference to the referenced subject and version.
+
+|Subject compatibility level
+|`COMPATIBILITY` rule on the artifact, written only for subjects that set their own level.
+
+|Global compatibility level
+|Global `COMPATIBILITY` rule.
+|===
+
+The export file also contains a global `VALIDITY` rule set to `SYNTAX_ONLY`. After the import, {registry} applies this rule to every artifact in the target instance that does not define its own validity rule.
+
+The utility exports only active subjects and versions. It does not export soft-deleted subjects or versions, subject modes, registration timestamps, or the metadata, tags, and rulesets of Confluent Data Contracts.
+

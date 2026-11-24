@@ -1,0 +1,14 @@
+[id="agent-inventory-sync_{context}_{context}"]
+:_mod-docs-content-type: ASSEMBLY
+= Syncing agents and MCP servers from inventory sources
+
+[role="_abstract"]
+{registry} can keep a group in sync with an inventory of agents and MCP servers that it does not host: MCP servers and agent cards deployed in Kubernetes, and agents registered in Google Cloud Agent Registry. Each item becomes an artifact, a changed item gets a new version, and an item that the source no longer lists is marked deprecated. You get one inventory of agents and MCP servers across clusters and platforms, with the rules, versions, and discovery of {registry}.
+
+IMPORTANT: This feature is experimental. It is disabled by default.
+
+// con-agent-inventory-sources
+include::../modules/agent-inventory-sources.adoc[leveloffset=+1]
+include::../modules/enabling-agent-inventory-sync.adoc[leveloffset=+1]
+include::../modules/syncing-an-inventory.adoc[leveloffset=+1]
+include::../modules/agent-inventory-scheduling.adoc[leveloffset=+1]

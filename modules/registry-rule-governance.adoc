@@ -1,0 +1,37 @@
+[id="registry-rule-governance_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Governance rule
+
+[role="_abstract"]
+The `GOVERNANCE` rule checks the data contract metadata of an artifact when you add a version. It does not check the content of the version.
+
+The rule reads the contract metadata from the artifact labels whose keys start with `contract.`, for any artifact type. An artifact that has no such label passes the rule at every level. If an artifact has more than one contract, the rule checks the metadata of only one contract. For more information about data contracts, see
+ifndef::service-registry-downstream[]
+xref:getting-started/assembly-data-contracts.adoc[].
+endif::[]
+ifdef::service-registry-downstream[]
+xref:data-contracts_{context}[].
+endif::[]
+
+{registry} applies the rule when you add a version to an existing artifact or publish a draft version. It does not apply the rule when you create an artifact by using the REST API, the CLI, or the web console.
+
+If the rule rejects a version, each cause in the rule violation response has the key of the checked label as its `context`, for example `contract.orders-contract.owner.team`.
+
+You can configure the rule at the global, group, or artifact level by using the REST API or the CLI. The web console does not show the `GOVERNANCE` rule. The following request sets the rule to `BASIC` for one artifact:
+
+[source,bash]
+----
+curl -X POST \
+  http://localhost:8080/apis/registry/v3/groups/my-group/artifacts/my-artifact/rules \
+  -H 'Content-Type: application/json' \
+  -d '{"ruleType": "GOVERNANCE", "config": "BASIC"}'
+----
+
+The equivalent CLI command is `acr artifact rule create GOVERNANCE --config BASIC --group my-group --artifact my-artifact`.
+
+
+
+// Metadata created by nebel
+// ParentAssemblies: assemblies/getting-started/as_registry-reference.adoc
+
+// ref-registry-rule-maturity-matrix

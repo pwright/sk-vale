@@ -1,0 +1,44 @@
+[id="enabling-agent-inventory-sync_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Enabling inventory sync
+
+[role="_abstract"]
+Before you can sync a group with an inventory source, enable inventory sync in the {registry} configuration.
+
+.Procedure
+. Enable the feature:
++
+[source,properties]
+----
+apicurio.features.experimental.enabled=true
+apicurio.agent-inventory.enabled=true
+----
+. For the Kubernetes sources, list the namespaces that a sync may read:
++
+[source,properties]
+----
+apicurio.agent-inventory.kubernetes.namespaces=team-a,team-b
+----
++
+Give the service account of {registry} permission to list the resources in those namespaces, for example:
++
+[source,yaml]
+----
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: apicurio-agent-inventory
+  namespace: team-a
+rules:
+  - apiGroups: ["mcp.x-k8s.io"]
+    resources: ["mcpservers"]
+    verbs: ["list"]
+  - apiGroups: ["agent.rossoctl.dev"]
+    resources: ["agentcards"]
+    verbs: ["list"]
+----
++
+For clusters that run an older Kagenti operator, set `apicurio.agent-inventory.kubernetes.agent-card.group=agent.kagenti.dev`.
+. To import the tools of MCP servers, also enable the MCP import and allow the hosts of the servers, for example `apicurio.mcp-import.allowed-hosts=*.svc.cluster.local`.
+
+// proc-syncing-an-inventory

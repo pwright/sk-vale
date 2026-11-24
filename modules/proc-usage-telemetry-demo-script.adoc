@@ -1,0 +1,33 @@
+[id="proc-usage-telemetry-demo-script_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Running the usage telemetry example
+
+[role="_abstract"]
+The usage telemetry example starts {registry} with telemetry enabled, plays several client applications fetching schema versions, and checks what the usage endpoints report.
+
+.Prerequisites
+* Docker or Podman with Compose v2, `curl`, and `jq`.
+
+.Procedure
+. Start the example:
++
+[source,bash]
+----
+cd examples/usage-telemetry-demo
+docker compose up -d
+----
+
+. Run the demo script:
++
+[source,bash]
+----
+./demo.sh
+----
+
+.Verification
+* The script ends with `All checks passed.`
+* The web console at `http://localhost:8888` shows the usage badges and the *Usage* tab for the artifacts the script created.
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://github.com/Apicurio/apicurio-registry/tree/main/examples/usage-telemetry-demo[Usage telemetry example]

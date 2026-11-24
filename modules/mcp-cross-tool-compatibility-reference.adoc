@@ -1,0 +1,127 @@
+[id="mcp-cross-tool-compatibility-reference_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Cross-tool compatibility reference
+
+[role="_abstract"]
+The cross-tool comparison evaluates part of each schema, and reports what it found and what it could not evaluate. The following sections describe the evaluated keywords, the reasons and limitations in a result, and the fields of the `compatibility` response.
+
+
+**Evaluated keywords**
+
+
+The comparison evaluates `type`, `properties`, `required`, `additionalProperties`, and an `items` given as a single schema, at every level of each schema. Annotations, such as `title`, `description`, `default`, `examples`, and `$comment`, do not affect the result. Any other keyword, such as `enum`, `minimum`, `oneOf`, or `$ref`, is not evaluated. It is reported as an `UNSUPPORTED_KEYWORD` limitation at its JSON Pointer rather than ignored. The only exceptions are `$schema` on the schema root, which declares the dialect, and a `format` in the `outputSchema` of the producer, as described in <<mcp-cross-tool-compatibility-limitations_{context},Known limitations of cross-tool compatibility>>.
+
+The comparison evaluates these keywords as follows:
+
+* A node that declares `integer` is accepted where the consumer declares `number`, but a node that declares `number` is not accepted where the consumer declares `integer`.
+* A `type` given as an array, which lists several types, is evaluated on every node inside a schema, but not on the schema root. A union of every JSON type accepts any value.
+* A `type` array that lists no types, that lists a name that is not a JSON type, or that lists the same type twice is not valid JSON Schema. It is reported as an `UNSUPPORTED_KEYWORD` limitation rather than repaired.
+* `items` is evaluated as a single schema, including `true` and `false`. An array of schemas is reported as an `UNSUPPORTED_KEYWORD` limitation.
+* Objects and arrays are compared to five levels below the schema root. A `properties`, `items`, or `additionalProperties` that nests deeper is not evaluated, and is reported as a `DEPTH_LIMIT_REACHED` limitation.
+* A schema that does not declare `$schema` is treated as JSON Schema 2020-12, which is the default dialect in the MCP specification. A schema that declares JSON Schema draft-04, draft-06, draft-07, 2019-09, or 2020-12 is compared. A `$schema` that is not a string, or that declares any other dialect, is reported as an `UNSUPPORTED_DIALECT` limitation, and nothing in that schema is compared.
+
+
+**Reasons**
+
+
+An `INCOMPATIBLE` result lists in `reasons` each mismatch that rules the consumer out. Each reason has the following fields:
+
+* `code`: one of the codes in the following table. Later versions of {registry} can add codes.
+* `producerPointer`: a JSON Pointer into the producer tool definition, starting with `/outputSchema`, to the part of the output that the consumer does not accept.
+* `consumerPointer`: a JSON Pointer into the consumer tool definition, starting with `/inputSchema`, to the part of the input that rejects it.
+* `message`: a description of the mismatch.
+
+.Reason codes
+[cols="1,3",options="header"]
+|===
+|Code |Meaning
+
+|`REQUIRED_NOT_GUARANTEED`
+|The consumer requires an input that the producer does not guarantee to emit, because the `outputSchema` does not require it.
+
+|`TYPE_NOT_ACCEPTED`
+|The producer can emit a value of a type that the consumer does not accept.
+
+|`ADDITIONAL_PROPERTY_NOT_ACCEPTED`
+|The producer can emit a property that the `additionalProperties` of the consumer rejects.
+
+|`VALUE_NOT_ACCEPTED`
+|The producer can emit a value that the consumer does not accept, for a reason that no other code describes. The message is the description of the difference that the comparison engine reports.
+|===
+
+
+**Limitations**
+
+
+An `INDETERMINATE` result lists in `limitations` what prevented the comparison from deciding. An `INCOMPATIBLE` result can list limitations too, when a mismatch outside them rules the consumer out. Each limitation has the following fields:
+
+* `code`: one of the codes in the following table. Later versions of {registry} can add codes.
+* `side`: `PRODUCER` when the limitation is in the producer tool definition, or `CONSUMER` when it is in the consumer tool definition.
+* `pointer`: a JSON Pointer into the tool definition on that side, for example `/inputSchema/properties/currency/enum`.
+* `message`: a description of the limitation.
+
+.Limitation codes
+[cols="1,3",options="header"]
+|===
+|Code |Meaning
+
+|`UNSUPPORTED_DIALECT`
+|The schema declares a `$schema` that is not a string, or a dialect that is not supported. Nothing in that schema is compared.
+
+|`UNSUPPORTED_KEYWORD`
+|The schema uses a keyword that the comparison does not evaluate, or gives `type` or `items` in a form that the comparison does not evaluate.
+
+|`PRODUCER_OBJECT_OPEN`
+|The verdict depends on the producer emitting only the properties that an object declares, and that object does not set `additionalProperties`.
+
+|`DEPTH_LIMIT_REACHED`
+|The schema nests objects or arrays more than five levels below its root.
+
+|`COMPARISON_FAILED`
+|A tool definition or a schema could not be read or compared, for example because a tool definition is not valid JSON, or because a tool declares no `inputSchema` object.
+
+|`SOURCE_HAS_NO_OUTPUT_SCHEMA`
+|The specified tool declares no `outputSchema`, so no tool is compared with it. This limitation appears only in the top-level `limitations` field.
+|===
+
+An `UNSUPPORTED_DIALECT`, `UNSUPPORTED_KEYWORD`, or `DEPTH_LIMIT_REACHED` limitation covers the schema node that carries it. A mismatch at or below that node is not reported as a reason, because the part of the schema that was not evaluated could change it. A mismatch elsewhere is still reported, and makes the verdict `INCOMPATIBLE`.
+
+
+**Response fields**
+
+
+The `compatibility` endpoint returns the following fields:
+
+.`McpToolCompatibilityResults` fields
+[cols="1,3",options="header"]
+|===
+|Field |Description
+
+|`candidateTotal`
+|The number of MCP tools in {registry}, including the specified tool.
+
+|`evaluated`
+|The number of tools compared with the specified tool. Each tool is compared at its latest enabled or deprecated version. A tool that has no enabled or deprecated version, or that is deleted during the scan, is skipped.
+
+|`scanLimit`
+|The maximum number of MCP tools that are scanned, the newest by creation date.
+
+|`complete`
+|`true` when every MCP tool other than the specified tool was scanned, and `false` when older MCP tools were not compared because only the newest `scanLimit` tools are scanned. A `true` value reports the coverage of the scan, not that every verdict is conclusive.
+
+|`totals`
+|The number of compared tools with each verdict, in `compatible`, `incompatible`, and `indeterminate`, before the `verdict` filter.
+
+|`count`
+|The number of compared tools that match the `verdict` filter, before pagination.
+
+|`limitations`
+|Why no tool was compared, when the `outputSchema` of the specified tool is absent or cannot be compared, for example `SOURCE_HAS_NO_OUTPUT_SCHEMA`. No scan runs in that case, so `candidateTotal`, `evaluated`, and every count are 0. Otherwise, the field is empty.
+
+|`results`
+|One page of the compared tools that match the `verdict` filter, newest first. Each result has the `tool`, with the same fields as a search result, its `verdict`, and its `reasons` and `limitations`.
+|===
+
+When per-resource authorization is enabled, {registry} scans and counts only the MCP tools that the caller can read, so `candidateTotal`, `evaluated`, `totals`, `count`, and the results of the `compatible` endpoint leave out the other tools. If the read access of a caller to artifacts uses a `matching` rule, search cannot evaluate it, so the access rules contribute no tools to the scan, and only tools that the caller owns can still be compared through the owner bypass. For more information, see the *Search and regular expressions* note in xref:getting-started/assembly-configuring-resource-authorization.adoc#resource-authorization-use-cases_{context}[Access rules examples for common use cases].
+
+// ref-mcp-cross-tool-compatibility-limitations

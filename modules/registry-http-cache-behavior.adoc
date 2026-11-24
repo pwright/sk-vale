@@ -1,0 +1,56 @@
+[id="registry-http-cache-behavior_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= HTTP cache behavior
+
+[role="_abstract"]
+{registry} assigns a cacheability level to supported v3 content responses based on the request, version state, and reference handling.
+
+.HTTP cacheability levels
+[cols="1,1,3",options="header"]
+|===
+|Level
+|Default expiration
+|Typical behavior
+
+|`HIGH`
+|864,000 seconds (10 days)
+|Content identified by an immutable identifier or a specific immutable version can use the longest expiration.
+
+|`MODERATE`
+|30 seconds
+|Requests that use version expressions, such as a branch, or retrieve mutable draft content need a shorter expiration.
+
+|`LOW`
+|10 seconds
+|Responses whose dependencies can change or whose content identity cannot be determined use the shortest expiration.
+
+|`NONE`
+|Not applicable
+|The response does not receive a `Surrogate-Control` caching policy.
+|===
+
+Activation::
+HTTP caching is disabled by default.
+Set `apicurio.http-caching.enabled=true` and keep at least one cacheability expiration greater than zero to activate it.
+Setting an individual expiration to zero or a negative value suppresses the caching policy for that level.
+
+Scope::
+Cache headers apply to supported v3 content operations, including content retrieved by global ID and by group, artifact, and version.
+The server evaluates the request and can reduce its cacheability because of reference handling or version mutability.
+
+Response headers::
+`Surrogate-Control` specifies the proxy expiration policy.
+`ETag` identifies the response representation, and `Vary` identifies request headers that distinguish cached representations.
+These headers do not enable browser caching; the API's `Cache-Control` policy remains `no-cache, no-store`.
+
+Expiration and invalidation::
+Cached responses can remain available until the proxy refreshes or expires them.
+Automatic invalidation of reverse proxy entries is not available.
+Choose shorter expiration times when content changes or access changes must reach clients sooner.
+
+[role="_additional-resources"]
+.Additional resources
+* {registry-config-reference}
+
+
+// proc-configuring-registry-ui

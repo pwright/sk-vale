@@ -1,0 +1,46 @@
+[id="inspecting-reference-graphs-using-rest-api_{context}_{context}"]
+:_mod-docs-content-type: PROCEDURE
+= Inspecting artifact reference graphs using the REST API
+
+[role="_abstract"]
+You can retrieve a reference graph to inspect the dependencies of an artifact version and the versions that depend on it.
+The graph includes indirect references, node and edge counts, and cycle information.
+
+.Prerequisites
+* {registry} is running, and the artifact version exists.
+* You have permission to read the artifact.
+* The `REGISTRY_URL` environment variable contains the registry URL, and `ACCESS_TOKEN` contains a valid access token if authentication is enabled.
+
+.Procedure
+* Request the reference graph for an artifact version:
++
+[source,bash]
+----
+$ curl --fail-with-body \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  "$REGISTRY_URL/apis/registry/v3/groups/my-group/artifacts/Item/versions/1.0.0/references/graph?direction=BOTH&depth=3"
+----
++
+The `direction` parameter accepts the following values:
++
+** `OUTBOUND`: Versions that the requested version references. This is the default.
+** `INBOUND`: Versions that reference the requested version.
+** `BOTH`: References in both directions.
++
+The default `depth` is `3`.
+Use `depth=1` for direct references or `depth=0` for unlimited traversal.
+A larger graph can take longer to retrieve.
+
+.Verification
+* Inspect the response fields:
++
+** `root` identifies the requested artifact version.
+** `nodes` lists artifact versions, including the root, with their group ID, artifact ID, and version.
+** `edges` links `sourceNodeId` to `targetNodeId` and includes the reference `name`.
+** `metadata` contains `totalNodes`, `totalEdges`, `maxDepth`, and `hasCycles`.
++
+The graph reports the references traversed within the requested depth.
+A `hasCycles` value of `false` does not rule out cycles beyond that depth.
+Cycle detection compares artifacts, not versions. A chain that passes through two versions of the same artifact also counts as a cycle.
+
+// proc-exporting-protobuf-using-rest-api

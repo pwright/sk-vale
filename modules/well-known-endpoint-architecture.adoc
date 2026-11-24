@@ -1,0 +1,90 @@
+[id="well-known-endpoint-architecture_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= Well-known endpoint architecture
+
+[role="_abstract"]
+{registry} exposes well-known endpoints for agent discovery, MCP tool discovery, and JSON schema retrieval. Each endpoint serves a specific role in the A2A and MCP ecosystems.
+
+The following table lists the available well-known endpoints.
+
+.Well-known endpoints
+[cols="3,1,4",options="header"]
+|===
+|Path |Method |Description
+
+|`/.well-known/agent.json`
+|GET
+|Returns the agent card for this {registry} instance. Use this endpoint for standard A2A protocol discovery.
+
+|`/.well-known/agent-card.json`
+|GET
+|Returns the agent card for this {registry} instance. This alias exists for compatibility with IBM watsonx Orchestrate, which discovers agents at this path by default. It returns the same response as `/.well-known/agent.json`.
+
+|`/.well-known/agents`
+|GET
+|Searches for registered agent cards by name, skill, capability, input mode, or output mode. Supports pagination with `offset` and `limit` parameters.
+
+|`/.well-known/agents/\{groupId}/\{artifactId}`
+|GET
+|Returns a specific registered agent card by group ID and artifact ID. Accepts an optional `version` query parameter that defaults to the latest version.
+
+|`/.well-known/mcp-tools`
+|GET
+|Searches for registered MCP tool definitions by name or input parameter. Supports pagination with `offset` and `limit` parameters.
+
+|`/.well-known/mcp-tools/\{groupId}/\{artifactId}`
+|GET
+|Returns a specific registered MCP tool definition by group ID and artifact ID. Accepts an optional `version` query parameter that defaults to the latest version.
+
+|`/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatible`
+|GET
+|Returns the registered MCP tool definitions that can receive the structured output of the specified tool as their input. Accepts an optional `version` query parameter and supports pagination with `offset` and `limit` parameters.
+
+|`/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatibility`
+|GET
+|Returns the verdict of comparing the structured output of the specified tool with the input of each registered MCP tool definition, with the reasons and limitations that decide it. Accepts optional `version` and `verdict` query parameters and supports pagination with `offset` and `limit` parameters.
+
+|`/.well-known/schemas/\{type}/\{version}`
+|GET
+|Returns the JSON schema for a specific LLM artifact type. Supported types are `prompt-template`, `model-schema`, and `mcp-tool`, each with version `v1`.
+
+|`/.well-known/ai-catalog.json`
+|GET
+ifndef::service-registry-downstream[]
+|Returns an AI Catalog document (see xref:getting-started/assembly-ai-catalog-ard.adoc[AI Catalog and ARD discovery]) projecting registered `AGENT_CARD` and `MCP_TOOL` artifacts.
+endif::[]
+ifdef::service-registry-downstream[]
+|Returns an AI Catalog document projecting registered `AGENT_CARD` and `MCP_TOOL` artifacts.
+endif::[]
+
+|`/.well-known/ard.json`
+|GET
+|Returns the same document as `/.well-known/ai-catalog.json`, at the path mandated by the ARD (Agentic Resource Discovery) specification.
+|===
+
+The `/.well-known/agent.json` endpoint returns the {registry} instance agent card, which represents the registry itself as an A2A agent. This endpoint requires no authentication.
+
+The `/.well-known/agents` and `/.well-known/agents/\{groupId}/\{artifactId}` endpoints operate on agent cards that you store in {registry} as `AGENT_CARD` artifacts. The search endpoint requires no authentication. When OIDC or basic authentication is enabled, the search endpoint returns only the agent cards that the caller has permission to view, based on the `apicurio.agent.visibility` label. The `/.well-known/agents/\{groupId}/\{artifactId}` endpoint requires read-level authorization.
+
+The `/.well-known/mcp-tools`, `/.well-known/mcp-tools/\{groupId}/\{artifactId}`, `/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatible`, and `/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatibility` endpoints operate on MCP tool definitions that you store in {registry} as `MCP_TOOL` artifacts. These endpoints require read-level authorization and are available only when MCP tools support is enabled. {registry} also serves them under `/apis/registry/v3/well-known/mcp-tools`, which is where the generated SDK clients call them. Unlike `/.well-known/agents`, these endpoints are not filtered by the `apicurio.agent.visibility` label: they return every MCP tool definition the caller is authorized to see.
+ifndef::service-registry-downstream[]
+See xref:getting-started/assembly-mcp-tool-features.adoc#mcp-tool-visibility_{context}[MCP tool visibility] for details.
+endif::[]
+ifdef::service-registry-downstream[]
+See xref:mcp-tool-visibility_{context}[MCP tool visibility] for details.
+endif::[]
+
+The `/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatible` endpoint returns the MCP tools that can take the output of the specified tool as their input, and the `/.well-known/mcp-tools/\{groupId}/\{artifactId}/compatibility` endpoint returns every compared tool with its verdict and the reasons and limitations that decide it. For their parameters, how tools are compared, and the known limitations of the comparison, see xref:getting-started/assembly-mcp-tool-features.adoc#mcp-well-known-endpoints_{context}[Well-known endpoints] and xref:getting-started/assembly-mcp-tool-features.adoc#mcp-cross-tool-compatibility_{context}[Cross-tool compatibility] in the MCP tool features.
+
+The `/.well-known/schemas/\{type}/\{version}` endpoint serves built-in JSON schemas that you can use for IDE autocompletion and validation of `PROMPT_TEMPLATE`, `MODEL_SCHEMA`, and `MCP_TOOL` artifacts. This endpoint requires no authentication.
+
+The `/.well-known/ai-catalog.json` and `/.well-known/ard.json` endpoints require read-level authorization when authentication is enabled. Anonymous clients can read them only if anonymous read access is enabled. {registry} filters agent card entries by the same visibility labels as `/.well-known/agents`, but does not filter MCP tool entries by visibility.
+ifndef::service-registry-downstream[]
+See xref:getting-started/assembly-ai-catalog-ard.adoc[AI Catalog and ARD discovery] for the full ARD search API.
+endif::[]
+
+[role="_additional-resources"]
+.Additional resources
+* xref:getting-started/assembly-a2a-features.adoc[A2A protocol features]
+
+// con-agent-discovery-patterns-overview

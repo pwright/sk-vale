@@ -1,0 +1,166 @@
+[id="data-contracts-api_{context}_{context}"]
+:_mod-docs-content-type: REFERENCE
+= REST API
+
+[role="_abstract"]
+The Data Contracts REST API provides endpoints for managing ODCS contracts, contract metadata, and contract rulesets.
+
+.ODCS contract REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|POST
+|`/groups/\{groupId}/contracts`
+|Submit an ODCS contract YAML. Creates the contract artifact and projects onto referenced schema artifacts.
+
+|GET
+|`/groups/\{groupId}/contracts?limit=&offset=`
+|List ODCS contracts in a group as `[{"contractId": "...", "name": "..."}]` (paginated, default 20, max 500)
+
+|GET
+|`/groups/\{groupId}/contracts/\{contractId}`
+|Retrieve the ODCS contract YAML
+
+|PUT
+|`/groups/\{groupId}/contracts/\{contractId}`
+|Update an ODCS contract (creates a new version and re-projects). Returns 409 if `info.version` already exists.
+
+|DELETE
+|`/groups/\{groupId}/contracts/\{contractId}`
+|Delete the ODCS contract artifact, and remove its projected labels, rules, and field tags from the schema artifacts
+
+|GET
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/export`
+|Export an artifact's projected contract data as ODCS YAML
+|===
+
+.Contract metadata REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/metadata`
+|Get contract metadata for an artifact
+
+|PUT
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/metadata`
+|Replace the descriptive contract metadata fields. Other contract labels are kept; status and stage change only when given, following the lifecycle rules
+|===
+
+.Contract ruleset REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/ruleset`
+|Get the contract ruleset for an artifact
+
+|PUT
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/ruleset`
+|Create or replace the contract ruleset
+
+|DELETE
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/ruleset`
+|Delete the contract ruleset
+|===
+
+Version-level rulesets are also available at `.../versions/\{version}/contract/ruleset` (GET, PUT, DELETE).
+
+.Contract status transition endpoint
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|POST
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/status`
+|Change lifecycle status with transition validation. Body: `{"status": "STABLE"}`. Returns 409 for transitions from `DEPRECATED`
+|===
+
+.Governance REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|POST
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/promote`
+|Promote the contract stage from DEV to STAGE to PROD. Body: `{"contractId": "...", "targetStage": "STAGE"}`. Response: `{"stage": "STAGE"}`
+
+|GET
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/quality?contractId=`
+|Get quality score (overall, completeness, compliance, stability). `contractId` is required (400 without it)
+|===
+
+.Rule execution REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|POST
+|`/groups/\{groupId}/artifacts/\{artifactId}/versions/\{version}/contract/execute`
+|Execute contract rules against a data record. Body: `{"mode": "WRITE", "record": {...}}`. Returns 200 even when rules fail
+
+|POST
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/migrate`
+|Migrate a record between versions. Body: `{"fromVersion": "1", "toVersion": "3", "record": {...}}`
+|===
+
+.Contract audit log REST API endpoint
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/audit?offset=&limit=`
+|Get contract audit log entries for an artifact (default limit 20, max 500)
+|===
+
+.Compatibility group REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/compatibility-group?contractId=`
+|Get the compatibility group for a contract on an artifact. Response: `{"compatibilityGroup": "..."}`
+
+|PUT
+|`/groups/\{groupId}/artifacts/\{artifactId}/contract/compatibility-group`
+|Set the compatibility group label. Body: `{"contractId": "...", "compatibilityGroup": "..."}`. Returns 204
+|===
+
+.Contract search REST API endpoint
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/search/contracts?status=&ownerTeam=&compatibilityGroup=&offset=&limit=&order=&orderby=`
+|Search contracts across the registry
+|===
+
+.Global contract ruleset REST API endpoints
+[cols="1,4,3", options="header"]
+|===
+|Method |Endpoint |Description
+
+|GET
+|`/admin/contracts/ruleset`
+|Get the global contract ruleset (read access)
+
+|PUT
+|`/admin/contracts/ruleset`
+|Set the global contract ruleset (admin role)
+
+|DELETE
+|`/admin/contracts/ruleset`
+|Delete the global contract ruleset (admin role)
+|===
+
+[role="_additional-resources"]
+.Additional resources
+* xref:data-contracts-api-examples_{context}[]
+* xref:data-contracts-rules_{context}[]
+

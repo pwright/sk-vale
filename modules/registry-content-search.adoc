@@ -1,0 +1,15 @@
+[id="registry-content-search_{context}_{context}"]
+:_mod-docs-content-type: CONCEPT
+= Content and structure search
+
+[role="_abstract"]
+Content search matches words in artifact content. Structure search matches elements that {registry} extracts from that content, such as an OpenAPI schema named `Order` or a Protobuf message named `Customer`.
+
+{registry} stores artifact data in its configured storage and maintains a separate search index in Elasticsearch. Elasticsearch does not replace the primary storage. Only searches that include a `content` or `structure` filter use the search index. Searches that use only metadata filters continue to use the primary storage.
+
+The search index contains artifact version content and metadata. Protect access to Elasticsearch with the same care as access to {registry} storage.
+
+Index updates run asynchronously after changes to artifacts. Search results can lag behind writes and deletions. Content and structure searches require an available search index and do not fall back to metadata search when Elasticsearch is unavailable.
+
+
+// proc-enabling-registry-content-search
