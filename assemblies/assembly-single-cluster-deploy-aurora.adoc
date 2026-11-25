@@ -1,0 +1,56 @@
+[id="single-cluster-deploy-aurora_{context}"]
+= Deploying AWS Aurora in multiple availability zones
+
+
+
+
+This topic describes how to deploy an Aurora regional deployment of a PostgreSQL instance across multiple availability zones to tolerate one or more availability zone failures in a given AWS region.
+
+This deployment is intended to be used with the setup described in the link:{links_high-availability_single-cluster-concepts_url}[{links_high-availability_single-cluster-concepts_name}] {section}.
+Use this deployment with the other building blocks outlined in the link:{links_high-availability_single-cluster-building-blocks_url}[{links_high-availability_single-cluster-building-blocks_name}] {section}.
+
+include::../partials/blueprint-disclaimer.adoc[]
+
+[#single-cluster-aurora-architecture]
+== Architecture
+
+Aurora database clusters consist of multiple Aurora database instances, with one instance designated as the primary writer and all others as backup readers.
+To ensure high availability in the event of availability zone failures, Aurora allows database instances to be deployed across multiple zones in a single AWS region.
+In the event of a failure on the availability zone that is hosting the Primary database instance, Aurora automatically heals itself and promotes a reader instance from a non-failed availability zone to be the new writer instance.
+
+.Aurora Multiple Availability Zone Deployment
+image::high-availability/aurora-multi-az.dio.svg[]
+
+See the https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html[AWS Aurora documentation] for more details on the semantics provided by Aurora databases.
+
+This documentation follows AWS best practices and creates a private Aurora database that is not exposed to the Internet.
+To access the database from a ROSA cluster, <<single-cluster-establish-peering-connection-with-rosa-cluster,establish a peering connection between the database and the ROSA cluster>>.
+
+[#single-cluster-aurora-procedure]
+== Procedure
+
+The following procedure contains two sections:
+
+* Creation of an Aurora Multi-AZ database cluster with the name "keycloak-aurora" in eu-west-1.
+* Creation of a peering connection between the ROSA cluster(s) and the Aurora VPC to allow applications deployed on the ROSA clusters to establish connections with the database.
+
+[#single-cluster-aurora-create]
+=== Create Aurora database Cluster
+
+include::../partials/aurora/aurora-multiaz-create-procedure.adoc[]
+
+[#single-cluster-establish-peering-connection-with-rosa-cluster]
+=== Establish Peering Connection with ROSA cluster
+
+include::../partials/aurora/aurora-create-peering-connections.adoc[]
+
+[#single-cluster-aurora-verify]
+== Verify the connection
+
+include::../partials/aurora/aurora-verify-peering-connections.adoc[]
+
+== Next steps
+
+After successful deployment of the Aurora database continue with link:{links_high-availability_single-cluster-deploy-keycloak_url}[{links_high-availability_single-cluster-deploy-keycloak_name}]
+
+

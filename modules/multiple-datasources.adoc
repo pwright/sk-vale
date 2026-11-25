@@ -1,0 +1,1257 @@
+[id="multiple-datasources_{context}"]
+= Configure multiple datasources
+
+
+{project_name} allows you to specify additional datasources in case you need to access another database from your extensions. This is useful when using the main {project_name} datasource is not a viable option for storing custom data, like users.
+
+You can find more details on how to connect to your own users database in the link:{developerguide_userstoragespi_link}[{developerguide_userstoragespi_name}] documentation.
+
+Defining multiple datasources works like defining a single datasource, with one important change - you have to specify a name for each datasource as part of the config option name.
+
+
+**Required configuration**
+
+
+In order to enable an additional datasource, you need to set up 2 things - the JPA `persistence.xml` file and {project_name} configuration.
+The `persistence.xml` file serves to specify persistence units as part of the Jakarta Persistence API standard, and is required for proper configuration propagation to the Hibernate ORM framework.
+When you complete the part with the `persistence.xml` file, you need to set up {project_name} configuration accordingly.
+
+The additional datasource properties might be specified via the standard config sources like CLI, `keycloak.conf`, or environment variables.
+
+The additional datasources can be configured in a similar way as the main datasource.
+This is achieved by using analogous names for config options, which additionally include the name of the additional datasource.
+For example, when the main datasource uses the `db-username`, the additional one would be `db-username-<datasource>`.
+See the Relevant options chapter for the complete list of them.
+
+
+**1. JPA `persistence.xml` file**
+
+
+The `persistence.xml` provides configuration for Jakarta Persistence API (JPA) such as what entities it should manage, the datasource name, JDBC settings, JPA/Hibernate custom settings, and more.
+The file needs to be placed in the `META-INF/persistence.xml` folder of your custom {project_name} extension.
+
+NOTE: Be aware that Quarkus provides the ability to set up the JPA persistence unit via Hibernate ORM properties instead of using the `persistence.xml` file.
+However, the supported way for {project_name} is using the `persistence.xml` file, and if the file is present, the Quarkus properties are ignored.
+
+In {project_name}, most of the configuration is automatic, and you just need to provide fundamental configuration details - the datasource name and transaction type.
+
+{project_name} requires setting the transaction type for the additional datasource to `JTA`.
+You can set the transaction type and datasource name as follows for this minimal `persistence.xml` file:
+
+[source,xml]
+----
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                         xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+                         version="3.0">
+    <persistence-unit name="user-store-pu" transaction-type="JTA">
+        <class>org.your.extension.UserEntity</class>
+        <properties>
+            <property name="jakarta.persistence.jtaDataSource" value="user-store" />
+        </properties>
+    </persistence-unit>
+</persistence>
+----
+
+NOTE: To properly set the datasource name, you should set the `jakarta.persistence.jtaDataSource` property.
+If it is not set, the persistence unit name will be used as the datasource name instead (so `user-store-pu` in this case).
+In the example above, the resulting datasource name is `user-store`. The datasource name can be the same as the persistence unit name.
+
+In order to use your own JPA entities, you need to provide the `<class>` properties that mark JPA entities that will be managed by this persistence unit, directed to a specific datasource.
+In the example above, the `org.your.extension.UserEntity` JPA entity will be managed by the persistence unit `user-store-pu`, directed to the `user-store` datasource.
+
+
+**2. Required properties**
+
+
+Once you have set up your `persistence.xml`, the minimal configuration on the {project_name} side is the setup of the DB kind/vendor for the specified datasource.
+You need to specify the build time option `db-kind-<datasource>`, where the `<datasource>` is the name of your datasource and must be the **same** as specified in the `persistence.xml` file.
+
+Therefore, you can enable the additional datasource `user-store` as follows (`postgres` as an example):
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --db-kind-user-store=postgres
+----
+
+After specifying the db-kind for the datasource, all database-kind–specific defaults (such as the driver and dialect) are automatically applied, just like for the main datasource.
+
+
+**Configuration via environment variables**
+
+If you do not want to configure the datasource via CLI or `keycloak.conf` properties, you can use the environment variables.
+
+You can set the DB kind via environment variables (for the `user-store` datasource) as follows:
+
+[source,bash]
+----
+export KC_DB_KIND_USER_STORE=postgres
+export KC_DB_USERNAME_USER_STORE=my-username
+----
+
+It maps to the `db-kind-user-store` and `db-username-user-store` {project_name} properties due to the default mapping of the `\_` (underscore) to the `-` (dash) for environment variables.
+However, sometimes, the name of the datasource might contain some special characters like `_`, `$` or `.`
+
+In order to have it properly configured via the {project_name} environment variables, you need to explicitly say what the key for the datasource should look like.
+You can use a pair of unique {project_name} environment variables with a special case of the `KCKEY_`.
+
+For instance, for a datasource with the name __user_store$marketing__, you can set environment variables as follows:
+
+[source,bash]
+----
+export KC_USER_STORE_DB_KIND=mariadb
+export KCKEY_USER_STORE_DB_KIND=db-kind-user_store$marketing
+----
+
+You can find more information in the guide link:{links_server_configuration_url}[{links_server_configuration_name}], in subsection _Formats for environment variable keys with special characters_.
+
+
+**Backward compatibility for the `quarkus.properties`**
+
+In the past, we instructed users to use raw Quarkus properties to configure additional datasources in some places.
+However, as using Quarkus properties in the `conf/quarkus.properties` file is considered **unsupported**, it is strongly recommended to use the dedicated additional datasources options as described above.
+
+Before you are able to migrate to the dedicated options, you can still specify the datasource settings via the Quarkus properties as follows:
+
+[source,properties]
+----
+quarkus.datasource.user-store.db-kind=h2
+quarkus.datasource.user-store.username=sa
+quarkus.datasource.user-store.jdbc.url=jdbc:h2:mem:user-store;DB_CLOSE_DELAY=-1
+quarkus.datasource.user-store.jdbc.transactions=xa
+----
+
+WARNING: Use Quarkus properties **without quotation** for the datasource name, as properties with the quoted datasource name clash with the new datasource options mapping.
+Therefore, use `quarkus.datasource.user-store.db-kind=h2`, instead of `quarkus.datasource."user-store".db-kind=h2` to prevent any issues.
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+db+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#The database vendor.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#In production mode the default value of `dev-file` is deprecated, you should explicitly specify the db instead.#
+
+*Named key:* [.options-wildcard-key]#`+db-kind-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+*CLI:* `+--db+` +
+*Env:* `+KC_DB+`
+--
+
+
+
+|
+`+dev-file+`, `+dev-mem+`, `+mariadb+`, `+mssql+`, `+mysql+`, `+oracle+`, `+postgres+`, `+tidb+`
+
+|
+`+dev-file+`
+
+|
+[.options-key]#`+db-connect-timeout+`# 
+
+[.options-description]#Sets the JDBC driver connection timeout and login timeout.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+*Named key:* [.options-wildcard-key]#`+db-connect-timeout-<datasource>+`# 
+
+*CLI:* `+--db-connect-timeout+` +
+*Env:* `+KC_DB_CONNECT_TIMEOUT+`
+--
+
+
+
+|_String_
+
+|
+`+10s+`
+
+|
+[.options-key]#`+db-debug-jpql+`# 
+
+[.options-description]#Add JPQL information as comments to SQL statements to debug JPA SQL statement generation.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-debug-jpql-<datasource>+`# 
+
+*CLI:* `+--db-debug-jpql+` +
+*Env:* `+KC_DB_DEBUG_JPQL+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+db-driver+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#The fully qualified class name of the JDBC driver.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not set, a default driver is set accordingly to the chosen database.#
+
+*Named key:* [.options-wildcard-key]#`+db-driver-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+*CLI:* `+--db-driver+` +
+*Env:* `+KC_DB_DRIVER+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-log-slow-queries-threshold+`# 
+
+[.options-description]#Log SQL statements slower than the configured threshold with logger org.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#hibernate.SQL_SLOW and log-level info.#
+
+*Named key:* [.options-wildcard-key]#`+db-log-slow-queries-threshold-<datasource>+`# 
+
+*CLI:* `+--db-log-slow-queries-threshold+` +
+*Env:* `+KC_DB_LOG_SLOW_QUERIES_THRESHOLD+`
+--
+
+
+
+|_Integer_
+
+|
+`+10000+`
+
+|
+[.options-key]#`+db-mtls-key-store-file+`# 
+
+[.options-description]#The path to the keystore file containing the client certificate and private key used for mTLS authentication with the database server.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-mtls-key-store-file-<datasource>+`# 
+
+*CLI:* `+--db-mtls-key-store-file+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+db-mtls-key-store-password+`# 
+
+[.options-description]#The password to access the keystore file specified in db-mtls-key-store-file.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-mtls-key-store-password-<datasource>+`# 
+
+*CLI:* `+--db-mtls-key-store-password+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-mtls-key-store-type+`# 
+
+[.options-description]#The type of the keystore file.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Common values include `JKS` (Java KeyStore) and `PKCS12`. If not specified, it uses the driver's default.#
+
+*Named key:* [.options-wildcard-key]#`+db-mtls-key-store-type-<datasource>+`# 
+
+*CLI:* `+--db-mtls-key-store-type+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_TYPE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-password+`# 
+
+[.options-description]#The password of the database user.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-password-<datasource>+`# 
+
+*CLI:* `+--db-password+` +
+*Env:* `+KC_DB_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-pool-initial-size+`# 
+
+[.options-description]#The initial size of the connection pool.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-pool-initial-size-<datasource>+`# 
+
+*CLI:* `+--db-pool-initial-size+` +
+*Env:* `+KC_DB_POOL_INITIAL_SIZE+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-pool-max-lifetime+`# 
+
+[.options-description]#The maximum time a connection remains in the pool, after which it will be closed upon return and replaced as necessary.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--db-pool-max-lifetime+` +
+*Env:* `+KC_DB_POOL_MAX_LIFETIME+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-pool-max-size+`# 
+
+[.options-description]#The maximum size of the connection pool.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-pool-max-size-<datasource>+`# 
+
+*CLI:* `+--db-pool-max-size+` +
+*Env:* `+KC_DB_POOL_MAX_SIZE+`
+--
+
+
+
+|_Integer_
+
+|
+`+100+`
+
+|
+[.options-key]#`+db-pool-min-size+`# 
+
+[.options-description]#The minimal size of the connection pool.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-pool-min-size-<datasource>+`# 
+
+*CLI:* `+--db-pool-min-size+` +
+*Env:* `+KC_DB_POOL_MIN_SIZE+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-schema+`# 
+
+[.options-description]#The database schema to be used.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-schema-<datasource>+`# 
+
+*CLI:* `+--db-schema+` +
+*Env:* `+KC_DB_SCHEMA+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-tls-mode+`# 
+
+[.options-description]#Sets the TLS mode for the database connection.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If disabled, it uses the driver's default value. When set to verify-server, it enables encryption and server identity verification. The database server certificate or Certificate Authority (CA) certificate is required.#
+
+*Named key:* [.options-wildcard-key]#`+db-tls-mode-<datasource>+`# 
+
+*CLI:* `+--db-tls-mode+` +
+*Env:* `+KC_DB_TLS_MODE+`
+--
+
+
+
+|
+`+disabled+`, `+verify-server+`
+
+|
+`+disabled+`
+
+|
+[.options-key]#`+db-tls-trust-store-file+`# 
+
+[.options-description]#The path to the truststore file containing the database server certificates or Certificate Authority (CA) certificates used to verify the database server's identity.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-tls-trust-store-file-<datasource>+`# 
+
+*CLI:* `+--db-tls-trust-store-file+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_FILE+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+db-tls-trust-store-password+`# 
+
+[.options-description]#The password to access the truststore file specified in db-tls-trust-store-file (if required and supported by the JDBC driver).#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-tls-trust-store-password-<datasource>+`# 
+
+*CLI:* `+--db-tls-trust-store-password+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_PASSWORD+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-tls-trust-store-type+`# 
+
+[.options-description]#The type of the truststore file.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Common values include `JKS` (Java KeyStore) and `PKCS12`. If not specified, it uses the driver's default.#
+
+*Named key:* [.options-wildcard-key]#`+db-tls-trust-store-type-<datasource>+`# 
+
+*CLI:* `+--db-tls-trust-store-type+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_TYPE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url+`# 
+
+[.options-description]#The full database JDBC URL.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If not provided, a default URL is set based on the selected database vendor. For instance, if using `postgres`, the default JDBC URL would be `jdbc:postgresql://localhost/keycloak`.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-full-<datasource>+`# 
+
+*CLI:* `+--db-url+` +
+*Env:* `+KC_DB_URL+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-database+`# 
+
+[.options-description]#Sets the database name of the default JDBC URL of the chosen vendor.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `db-url` option is set, this option is ignored.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-database-<datasource>+`# 
+
+*CLI:* `+--db-url-database+` +
+*Env:* `+KC_DB_URL_DATABASE+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-host+`# 
+
+[.options-description]#Sets the hostname of the default JDBC URL of the chosen vendor.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `db-url` option is set, this option is ignored.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-host-<datasource>+`# 
+
+*CLI:* `+--db-url-host+` +
+*Env:* `+KC_DB_URL_HOST+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-port+`# 
+
+[.options-description]#Sets the port of the default JDBC URL of the chosen vendor.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If the `db-url` option is set, this option is ignored.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-port-<datasource>+`# 
+
+*CLI:* `+--db-url-port+` +
+*Env:* `+KC_DB_URL_PORT+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-url-properties+`# 
+
+[.options-description]#Sets the properties of the default JDBC URL of the chosen vendor.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Make sure to set the properties accordingly to the format expected by the database vendor, as well as appending the right character at the beginning of this property value. If the `db-url` option is set, this option is ignored.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-properties-<datasource>+`# 
+
+*CLI:* `+--db-url-properties+` +
+*Env:* `+KC_DB_URL_PROPERTIES+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-username+`# 
+
+[.options-description]#The username of the database user.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+db-username-<datasource>+`# 
+
+*CLI:* `+--db-username+` +
+*Env:* `+KC_DB_USERNAME+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+transaction-default-timeout+`# 
+
+[.options-description]#The default transaction timeout.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--transaction-default-timeout+` +
+*Env:* `+KC_TRANSACTION_DEFAULT_TIMEOUT+`
+--
+
+
+
+|_String_
+
+|
+`+5m+`
+
+|
+[.options-key]#`+transaction-setup-timeout+`# 
+
+[.options-description]#The transaction timeout for database migration/import/export transactions.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--transaction-setup-timeout+` +
+*Env:* `+KC_TRANSACTION_SETUP_TIMEOUT+`
+--
+
+
+
+|_String_
+
+|
+`+30m+`
+
+|
+[.options-key]#`+transaction-xa-enabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If set to true, XA datasources will be used.#
+
+[role="options-extended"]
+--
+
+
+*Named key:* [.options-wildcard-key]#`+transaction-xa-enabled-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+*CLI:* `+--transaction-xa-enabled+` +
+*Env:* `+KC_TRANSACTION_XA_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+
+|===
+
+
+**Health checks**
+
+
+Additional datasources are included by default in the readiness health check endpoint. If the additional datasource is not critical to your usage, you may exclude it from
+the health check with `db-health-exclude-<datasource>` set to `true`.
+
+
+**Additional datasources options**
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+db-connect-timeout-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Sets the JDBC driver connection timeout and login timeout. May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--db-connect-timeout-<datasource>+` +
+*Env:* `+KC_DB_CONNECT_TIMEOUT_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+`+10s+`
+
+|
+[.options-key]#`+db-debug-jpql-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Add JPQL information as comments to SQL statements to debug JPA SQL statement generation.#
+
+
+
+*CLI:* `+--db-debug-jpql-<datasource>+` +
+*Env:* `+KC_DB_DEBUG_JPQL_<DATASOURCE>+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+db-driver-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The fully qualified class name of the JDBC driver. If not set, a default driver is set accordingly to the chosen database.#
+
+
+
+*CLI:* `+--db-driver-<datasource>+` +
+*Env:* `+KC_DB_DRIVER_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-enabled-<datasource>+`# 
+
+[.options-description]#If the named datasource <datasource> should be enabled at runtime.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--db-enabled-<datasource>+` +
+*Env:* `+KC_DB_ENABLED_<DATASOURCE>+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+|
+[.options-key]#`+db-health-exclude-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If you have enabled health endpoints, but want the given datasource excluded from the health check.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--db-health-exclude-<datasource>+` +
+*Env:* `+KC_DB_HEALTH_EXCLUDE_<DATASOURCE>+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+db-kind-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The database vendor.#
+
+
+
+*CLI:* `+--db-kind-<datasource>+` +
+*Env:* `+KC_DB_KIND_<DATASOURCE>+`
+--
+
+
+
+|
+`+dev-file+`, `+dev-mem+`, `+mariadb+`, `+mssql+`, `+mysql+`, `+oracle+`, `+postgres+`, `+tidb+`
+
+|
+|
+[.options-key]#`+db-log-slow-queries-threshold-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Log SQL statements slower than the configured threshold with logger org.hibernate.SQL_SLOW and log-level info.#
+
+
+
+*CLI:* `+--db-log-slow-queries-threshold-<datasource>+` +
+*Env:* `+KC_DB_LOG_SLOW_QUERIES_THRESHOLD_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+`+10000+`
+
+|
+[.options-key]#`+db-mtls-key-store-file-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The path to the keystore file containing the client certificate and private key used for mTLS authentication with the database server.#
+
+
+
+*CLI:* `+--db-mtls-key-store-file-<datasource>+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_FILE_<DATASOURCE>+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+db-mtls-key-store-password-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The password to access the keystore file specified in db-mtls-key-store-file.#
+
+
+
+*CLI:* `+--db-mtls-key-store-password-<datasource>+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_PASSWORD_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-mtls-key-store-type-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The type of the keystore file. Common values include `JKS` (Java KeyStore) and `PKCS12`. If not specified, it uses the driver's default.#
+
+
+
+*CLI:* `+--db-mtls-key-store-type-<datasource>+` +
+*Env:* `+KC_DB_MTLS_KEY_STORE_TYPE_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-password-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The password of the database user.#
+
+
+
+*CLI:* `+--db-password-<datasource>+` +
+*Env:* `+KC_DB_PASSWORD_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-pool-initial-size-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The initial size of the connection pool.#
+
+
+
+*CLI:* `+--db-pool-initial-size-<datasource>+` +
+*Env:* `+KC_DB_POOL_INITIAL_SIZE_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-pool-max-size-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The maximum size of the connection pool.#
+
+
+
+*CLI:* `+--db-pool-max-size-<datasource>+` +
+*Env:* `+KC_DB_POOL_MAX_SIZE_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+`+100+`
+
+|
+[.options-key]#`+db-pool-min-size-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The minimal size of the connection pool.#
+
+
+
+*CLI:* `+--db-pool-min-size-<datasource>+` +
+*Env:* `+KC_DB_POOL_MIN_SIZE_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-schema-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The database schema to be used.#
+
+
+
+*CLI:* `+--db-schema-<datasource>+` +
+*Env:* `+KC_DB_SCHEMA_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-tls-mode-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Sets the TLS mode for the database connection. If disabled, it uses the driver's default value. When set to verify-server, it enables encryption and server identity verification. The database server certificate or Certificate Authority (CA) certificate is required.#
+
+
+
+*CLI:* `+--db-tls-mode-<datasource>+` +
+*Env:* `+KC_DB_TLS_MODE_<DATASOURCE>+`
+--
+
+
+
+|
+`+disabled+`, `+verify-server+`
+
+|
+`+disabled+`
+
+|
+[.options-key]#`+db-tls-trust-store-file-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The path to the truststore file containing the database server certificates or Certificate Authority (CA) certificates used to verify the database server's identity.#
+
+
+
+*CLI:* `+--db-tls-trust-store-file-<datasource>+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_FILE_<DATASOURCE>+`
+--
+
+
+
+|_File_
+
+|
+|
+[.options-key]#`+db-tls-trust-store-password-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The password to access the truststore file specified in db-tls-trust-store-file (if required and supported by the JDBC driver).#
+
+
+
+*CLI:* `+--db-tls-trust-store-password-<datasource>+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_PASSWORD_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-tls-trust-store-type-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The type of the truststore file. Common values include `JKS` (Java KeyStore) and `PKCS12`. If not specified, it uses the driver's default.#
+
+
+
+*CLI:* `+--db-tls-trust-store-type-<datasource>+` +
+*Env:* `+KC_DB_TLS_TRUST_STORE_TYPE_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-database-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Sets the database name of the default JDBC URL of the chosen vendor. If the `db-url` option is set, this option is ignored.#
+
+
+
+*CLI:* `+--db-url-database-<datasource>+` +
+*Env:* `+KC_DB_URL_DATABASE_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-full-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The full database JDBC URL. If not provided, a default URL is set based on the selected database vendor. For instance, if using `postgres`, the default JDBC URL would be `jdbc:postgresql://localhost/keycloak`.#
+
+*Named key:* [.options-wildcard-key]#`+db-url-full-<datasource>+`# 
+
+*CLI:* `+--db-url-full-<datasource>+` +
+*Env:* `+KC_DB_URL_FULL_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-host-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Sets the hostname of the default JDBC URL of the chosen vendor. If the `db-url` option is set, this option is ignored.#
+
+
+
+*CLI:* `+--db-url-host-<datasource>+` +
+*Env:* `+KC_DB_URL_HOST_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-url-port-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Sets the port of the default JDBC URL of the chosen vendor. If the `db-url` option is set, this option is ignored.#
+
+
+
+*CLI:* `+--db-url-port-<datasource>+` +
+*Env:* `+KC_DB_URL_PORT_<DATASOURCE>+`
+--
+
+
+
+|_Integer_
+
+|
+|
+[.options-key]#`+db-url-properties-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Sets the properties of the default JDBC URL of the chosen vendor. Make sure to set the properties accordingly to the format expected by the database vendor, as well as appending the right character at the beginning of this property value. If the `db-url` option is set, this option is ignored.#
+
+
+
+*CLI:* `+--db-url-properties-<datasource>+` +
+*Env:* `+KC_DB_URL_PROPERTIES_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+db-username-<datasource>+`# 
+
+[.options-description]#Used for named <datasource>.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The username of the database user.#
+
+
+
+*CLI:* `+--db-username-<datasource>+` +
+*Env:* `+KC_DB_USERNAME_<DATASOURCE>+`
+--
+
+
+
+|_String_
+
+|
+|
+[.options-key]#`+transaction-xa-enabled-<datasource>+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#If set to true, XA for <datasource> datasource will be used.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--transaction-xa-enabled-<datasource>+` +
+*Env:* `+KC_TRANSACTION_XA_ENABLED_<DATASOURCE>+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+true+`
+
+
+|===
+
+

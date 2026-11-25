@@ -1,0 +1,46 @@
+[id="_client_to_client_permission_{context}"]
+= Granting permission for the exchange
+
+
+Clients that want to exchange tokens for a different client need to be authorized in the Admin Console.
+You need to define a `token-exchange` fine grain permission in the target client you want permission to exchange to.
+
+.Target Client Permission
+image::exchange-target-client-permission-unset.png[Target Client Permission]
+
+.Procedure
+
+. Toggle *Permissions Enabled* to *On*.
++
+.Target Client Permission
+image::exchange-target-client-permission-set.png[Target Client Exchange Permission Set]
++
+That page displays a *token-exchange* link.
+
+. Click that link to start defining the permission.
++
+This setup page displays.
++
+.Target Client Exchange Permission Setup
+image::exchange-target-client-permission-setup.png[Target Client Exchange Permission Setup]
+
+. Click *Client details* in the breadcrumbs at the top of the screen.
+. Define a policy for this permission.
+. Click *Authorization* in the breadcrumbs at the top of the screen.
+. Define a policy for this permission.
+. Click the *Policies* tab.
+. Create a *Client* Policy by clicking *Create policy* button.
++
+.Client Policy Creation
+image::exchange-target-client-policy.png[Client Policy Creation]
+
+. Enter in the starting client that is the authenticated client that is requesting a token exchange.
+
+. After you create this policy, go back to the target client's *token-exchange* permission and add the client policy you just defined.
++
+.Apply Client Policy
+image::exchange-target-client-exchange-apply-policy.png[Apply Client Policy]
+
+Your client now has permission to invoke.  If you do not do this correctly, you will get a 403 Forbidden response if you
+try to make an exchange.
+

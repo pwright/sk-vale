@@ -1,0 +1,62 @@
+[id="managed-by_{context}"]
+= Receiver-managed vs. {project_name}-managed streams
+
+
+Every stream is marked at creation time with a *ManagedBy* attribute that records which surface originally
+registered it:
+
+* *RECEIVER* the stream was registered through the receiver-facing `POST /streams` endpoint. The receiver
+  client is the conceptual owner of the configuration; the admin UI flags admin edits as overrides. This is
+  also the implicit value for streams that pre-date the introduction of the marker.
+* *KEYCLOAK* the stream was registered through the admin-facing
+  `+POST /admin/realms/{realm}/ssf/clients/{clientId}/stream+` endpoint, driven by the *Stream* sub-tab in the
+  admin console. The receiver never called the SSF management endpoints; the operator drives the stream lifecycle.
+
+The marker is purely informational. Both modes accept both admin-driven and receiver-driven updates; the
+dispatcher gate does not consider it. The value is set at stream creation and is immutable thereafter, it
+exists so the admin UI can render which surface conceptually owns the configuration and warn operators before
+they overwrite a receiver-managed stream.
+
+This distinction matters in practice for two scenarios:
+
+* *Pre-provisioned integrations*, an operator can configure the receiver's stream completely from the admin UI
+  before the receiver software is even running, and the receiver picks up the existing stream via
+  `GET /streams` once it comes online. These streams are marked `KEYCLOAK`.
+* *Self-service receivers*, a receiver application registers and updates its own stream via the SSF spec
+  endpoints. These streams are marked `RECEIVER`.
+
+== Configuring subjects
+
+Not every {project_name} user event is interesting to every receiver. The transmitter applies a *subject-selection
+gate* before signing and enqueueing a SET: for each stream it decides whether the user that the event is about
+should produce a notification.
+
+The gate combines a transmitter-wide default with per-user and per-organization overrides.
+
+
+**Default subscription policy**
+
+
+The `default_subjects` setting, realm-wide on the transmitter, optionally overridden per receiver, which controls
+the default outcome:
+
+* `ALL`: automatic delivery. Every user in the realm is an implicit subject for every receiver, unless an
+  explicit override says otherwise.
+* `NONE`: opt-in delivery. A user is *not* a subject for any receiver unless explicitly subscribed.
+
+
+**Subject management endpoints**
+
+
+Receivers manage their own subject list via SSF §8.1.3:
+
+[source]
+----
+POST /realms/{realm}/ssf/transmitter/subjects/add
+POST /realms/{realm}/ssf/transmitter/subjects/remove
+----
+
+For privacy, both endpoints respond with their normal success status, `200 OK` for add and `204 No Content` for
+remove, even when the supplied subject does not resolve to an existing user, so they do not act as an existence
+oracle for the realm's user store.
+

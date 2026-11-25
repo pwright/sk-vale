@@ -1,0 +1,323 @@
+[id="graceful-http-shutdown_{context}"]
+= Graceful HTTP shutdown
+
+
+When running {project_name} behind a reverse proxy or load balancer, graceful shutdown ensures that in-flight requests complete successfully during server termination, preventing connection errors for clients.
+
+{project_name} enables graceful HTTP shutdown by default with configurable timeouts.
+
+
+**Understanding shutdown phases**
+
+
+The shutdown process consists of two phases:
+
+*Pre-shutdown delay*:: During this phase, {project_name} signals to load balancers and proxies that it is preparing to shut down.
+The server's readiness endpoint returns a "not ready" status, allowing the load balancer to stop routing new requests to this instance.
+Existing TLS and HTTP keepalive connections are allowed to drain naturally.
+The server continues to process existing requests.
+
+*Shutdown timeout*:: After the pre-shutdown delay, {project_name} waits for in-flight HTTP requests to complete.
+Once the HTTP requests are complete, it uses the remaining time of the shutdown timeout to wait for caches to rebalance to avoid possible data loss.
+Once the timeout expires, the server shuts down regardless.
+
+
+**Default behavior**
+
+
+By default, {project_name} is configured with a 1-second pre-shutdown delay and a 10-second shutdown timeout.
+These defaults work well for most standard deployments where:
+
+* The load balancer reconfigures quickly (within 1 second)
+* Most requests complete within 1 second
+* The reverse proxy uses edge termination or re-encryption (not TLS passthrough)
+
+
+**Configuring shutdown timeouts**
+
+
+Advanced users can adjust the shutdown timeouts using CLI options based on their deployment characteristics.
+
+[source,bash]
+----
+bin/kc.sh start --shutdown-delay=<duration> --shutdown-timeout=<duration>
+----
+
+Available options:
+
+`--shutdown-delay`::
+Length of the pre-shutdown phase during which the server prepares for shutdown.
+This period allows for load balancer reconfiguration and draining of TLS/HTTP keepalive connections.
+Default: `1s`
+
+`--shutdown-timeout`::
+The shutdown period waiting for currently running HTTP requests to finish.
+Default: `10s`
+
+Both values accept duration formats: `1s` (seconds), `500ms` (milliseconds), `2m` (minutes), etc.
+
+
+**When to adjust shutdown timeouts**
+
+
+Consider adjusting these values based on your deployment configuration.
+The following table shows example scenarios:
+
+[%autowidth,cols="2,>1,>1,3a"]
+|===
+|Scenario |Delay |Timeout |Reason
+
+|Load balancer polls readiness probe
+|16s
+|
+|Assumptions:
+
+* A 5s poll interval and a load balancer reconfiguring after two successive failed probes.
+* 1s for reconfiguring the proxy.
+* Proxy using TLS re-encrypt or edge termination.
+
+Calculation:
+
+* Allow three poll cycles for the load balancer to detect shutdown and the extra time for the load balancer to perform the reconfiguration:
++
+`shutdown delay = 3 * 5s + 1s`
+
+|TLS passthrough configuration
+|10‑30s
+|
+|Longer delay allows keepalive connections to drain naturally and receive connection close signals.
+
+|Long-running admin API requests
+|
+|10‑30s
+|Admin operations may take longer than typical user requests.
+
+|Test environments / quick restarts
+|0s
+|500ms
+|Minimize shutdown time when graceful draining is not needed.
+
+|Deployment orchestration reconfigures the proxy and drains connections before Pod termination
+|0s
+|
+|No pre-shutdown delay needed if proxy is already reconfigured
+
+|Combined: TLS passthrough plus polled readiness
+|26‑56s
+|
+|Delays add up: time for load balancer detection + connection draining
+
+|===
+
+
+**Example configurations**
+
+
+For production with TLS passthrough:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --shutdown-delay=30s
+----
+
+For load balancers that poll readiness:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --shutdown-delay=16s
+----
+
+For test environments:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --shutdown-delay=0s --shutdown-timeout=500ms
+----
+
+[NOTE]
+====
+The shutdown delay affects the minimum time required for a complete server restart.
+In Kubernetes environments, ensure your `terminationGracePeriodSeconds` is longer than the sum of `shutdown-delay` and `shutdown-timeout` to prevent forced termination.
+====
+
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+hostname+`# 
+
+[.options-description]#Address at which is the server exposed.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Can be a full URL, or just a hostname. When only hostname is provided, scheme, port and context path are resolved from the request.#
+
+
+
+*CLI:* `+--hostname+` +
+*Env:* `+KC_HOSTNAME+`
+--
+
+Available only when hostname:v2 feature is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+hostname-admin+`# 
+
+[.options-description]#Address for accessing the administration console.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Use this option if you are exposing the administration console using a reverse proxy on a different address than specified in the `hostname` option.#
+
+
+
+*CLI:* `+--hostname-admin+` +
+*Env:* `+KC_HOSTNAME_ADMIN+`
+--
+
+Available only when hostname:v2 feature is enabled
+
+
+|_String_
+
+|
+|
+[.options-key]#`+http-relative-path+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Set the path relative to `/` for serving resources.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#The path must start with a `/`.#
+
+
+
+*CLI:* `+--http-relative-path+` +
+*Env:* `+KC_HTTP_RELATIVE_PATH+`
+--
+
+
+
+|_String_
+
+|
+`+/+`
+
+|
+[.options-key]#`+shutdown-delay+`# 
+
+[.options-description]#Length of the pre-shutdown phase during which the server prepares for shutdown.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d]. This period allows for loadbalancer reconfiguration and draining of TLS/HTTP keepalive connections.#
+
+
+
+*CLI:* `+--shutdown-delay+` +
+*Env:* `+KC_SHUTDOWN_DELAY+`
+--
+
+
+
+|_String_
+
+|
+`+1s+`
+
+|
+[.options-key]#`+shutdown-timeout+`# 
+
+[.options-description]#The shutdown period waiting for currently running HTTP requests to finish and distributed caches to settle.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#May be an ISO 8601 duration value, an integer number of seconds, or an integer followed by one of [ms, h, m, s, d].#
+
+
+
+*CLI:* `+--shutdown-timeout+` +
+*Env:* `+KC_SHUTDOWN_TIMEOUT+`
+--
+
+
+
+|_String_
+
+|
+`+10s+`
+
+|
+[.options-key]#`+proxy-headers+`# 
+
+[.options-description]#The proxy headers that should be accepted by the server.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#Misconfiguration might leave the server exposed to security vulnerabilities. Takes precedence over the deprecated proxy option.#
+
+
+
+*CLI:* `+--proxy-headers+` +
+*Env:* `+KC_PROXY_HEADERS+`
+--
+
+
+
+|
+`+forwarded+`, `+xforwarded+`
+
+|
+|
+[.options-key]#`+proxy-protocol-enabled+`# 
+
+[.options-description]#Whether the server should use the HA PROXY protocol when serving requests from behind a proxy.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#When set to true, the remote address returned will be the one from the actual connecting client. Cannot be enabled when the `proxy-headers` is used.#
+
+
+
+*CLI:* `+--proxy-protocol-enabled+` +
+*Env:* `+KC_PROXY_PROTOCOL_ENABLED+`
+--
+
+
+
+|
+`+true+`, `+false+`
+
+|
+`+false+`
+
+|
+[.options-key]#`+proxy-trusted-addresses+`# 
+
+[.options-description]#A comma separated list of trusted proxy addresses.#
+
+[role="options-extended"]
+--
+[.options-description-extended]#If set, then proxy headers from other addresses will be ignored. By default all addresses are trusted. A trusted proxy address is specified as an IP address (IPv4 or IPv6), hostname, or Classless Inter-Domain Routing (CIDR) notation. IPv6 addresses should use square brackets (e.g. [::1]). An optional port can be specified (e.g. 127.0.0.1:8084). Using hostnames is not recommended as it requires a DNS lookup on every request. Available only when proxy-headers is set.#
+
+
+
+*CLI:* `+--proxy-trusted-addresses+` +
+*Env:* `+KC_PROXY_TRUSTED_ADDRESSES+`
+--
+
+
+
+|_List_
+
+|
+
+|===

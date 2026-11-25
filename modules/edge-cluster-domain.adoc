@@ -1,0 +1,30 @@
+[id="edge_cluster_domain_{context}"]
+= edge_cluster_domain
+
+*Using cluster domain and certificate*
+
+To use cluster domain do not provide a tls secret for the `ingress` and ensure to use cluster domain as `hostname`. Since no certificate is provided to the `ingress` the cluster certificate is used.
+
+[source,yaml]
+----
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: example-kc
+spec:
+  http:
+    httpEnabled: true
+  ingress:
+    enabled: true
+  hostname:
+    hostname: keycloak.<cluster-domain> # <1>
+  proxy:
+    headers: xforwarded # <2>
+  networkPolicy:
+    enabled: true
+    http: ... # <3>
+----
+<1> Must use the cluster domain.
+<2> {check-lb-forwarded-header}
+<3> Restrict access to the ingress controller to avoid spoofing of forwarding headers.
+

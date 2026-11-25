@@ -1,0 +1,22 @@
+[id="_token_revocation_endpoint_{context}"]
+= Token Revocation endpoint
+
+....
+/realms/{realm-name}/protocol/openid-connect/revoke
+....
+
+The token revocation endpoint is used to revoke tokens. Both refresh tokens and access tokens are supported by this endpoint. When revoking a refresh token, the user consent for the corresponding client is also revoked.
+
+For more details on how to invoke on this endpoint, see https://datatracker.ietf.org/doc/html/rfc7009[OAuth 2.0 Token Revocation specification].
+
+
+**Device Authorization endpoint**
+
+....
+/realms/{realm-name}/protocol/openid-connect/auth/device
+....
+
+The device authorization endpoint is used to obtain a device code and a user code. It can be invoked by confidential or public clients.
+
+For more details on how to invoke on this endpoint, see https://datatracker.ietf.org/doc/html/rfc8628[OAuth 2.0 Device Authorization Grant specification].
+

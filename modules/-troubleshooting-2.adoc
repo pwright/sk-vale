@@ -1,0 +1,9 @@
+[id="_troubleshooting_2_{context}"]
+= Troubleshooting
+
+
+* Q: When logging in, I get an error: *Parameter client_assertion_type is missing [invalid_client]*.
++
+A: This error means your client is configured with [filename]`Signed JWT` token credentials, which means you have to use the [command]`--keystore` parameter when logging in.
+
+

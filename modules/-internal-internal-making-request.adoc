@@ -1,0 +1,63 @@
+[id="_internal_internal_making_request_{context}"]
+= Making the request
+
+
+When your client is exchanging an existing token for a token targeting another client, you use the `audience` parameter.
+This parameter must be the client identifier for the target client that you configured in the Admin Console.
+
+[source,bash,subs="attributes+"]
+----
+curl -X POST \
+    -d "client_id=starting-client" \
+    -d "client_secret=the client secret" \
+    --data-urlencode "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" \
+    -d "subject_token=...." \
+    --data-urlencode "requested_token_type=urn:ietf:params:oauth:token-type:refresh_token" \
+    -d "audience=target-client" \
+    http://localhost:8080{kc_realms_path}/myrealm/protocol/openid-connect/token
+----
+
+The `subject_token` parameter must be an access token for the target realm.  If your `requested_token_type` parameter
+is a refresh token type, then the response will contain both an access token, refresh token, and expiration.  Here's
+an example JSON response you get back from this call.
+
+When the `audience` parameter is not set, the value of the parameter defaults to the client making the token exchange request.
+
+Unlike with confidential clients, public clients are not allowed to perform token exchanges using tokens from other clients.
+If you are passing a `subject_token`, the (confidential) client that was issued the token should either match the client making the request or, if issued to a different client,
+the client making the request should be among the audiences set to the token.
+
+If you are explicitly setting a target `audience` (with a client different from the client making the request), you should also make sure that the `token-exchange` scope permission is configured for the client set to the `audience` parameter to allow
+the client making the request to successfully complete the exchange.
+
+[source,json]
+----
+{
+   "access_token" : "....",
+   "refresh_token" : "....",
+   "expires_in" : 3600
+}
+----
+
+
+**Internal token to external token exchange**
+
+
+NOTE: For internal token to external token exchange, it is recommended to use link:{developerguide_link}#_identity-brokering-apis[Identity Brokering APIs] instead. The legacy Token Exchange V1 is deprecated and will be removed in future versions.
+
+You can exchange a realm token for an external token minted by an external identity provider.  This external identity provider
+must be configured within the `Identity Provider` section of the Admin Console.  Currently only OAuth/OpenID Connect based external
+identity providers are supported, this includes all social providers.  {project_name} does not perform a backchannel exchange to the external provider.  So if the account
+is not linked, you will not be able to get the external token.  To be able to obtain an external token one of
+these conditions must be met:
+
+* The user must have logged in with the external identity provider at least once
+* The user must have linked with the external identity provider through the User Account Service
+* The user account was linked through the external identity provider using link:{developerguide_link}[Client Initiated Account Linking] API.
+
+Finally, the external identity provider must have been configured to store tokens, or one of the above actions must
+have been performed with the same user session as the internal token you are exchanging.
+
+If the account is not linked, the exchange response will contain a link you can use to establish it.  This is
+discussed more in the <<_internal_external_making_request, Making the Request>> section.
+

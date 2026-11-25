@@ -1,0 +1,81 @@
+[id="rolling-updates-for-patch-releases_{context}"]
+= Rolling updates for patch releases
+
+
+When upgrading to a newer patch version in the same `+major.minor+` release stream, {project_name} can perform zero-downtime rolling updates.
+
+To check compatibility for patch version upgrades, use the standard check command:
+[source,bash]
+----
+bin/kc.[sh|bat] update-compatibility check --file=/path/to/file.json
+----
+
+Recommended Configuration:
+
+* Enable sticky sessions in your loadbalancer to avoid users bouncing between different versions of {project_name} as this could result in users needing to refresh their Account Console and Admin UI multiple times while the upgrade is progressing.
+
+Supported functionality during rolling updates:
+
+* Users can log in and log out for OpenID Connect clients.
+
+* OpenID Connect clients can perform all operations, for example, refreshing tokens and querying the user info endpoint.
+
+Known limitations:
+
+* If there have been changes to the Account Console or Admin UI in the patch release, and the user opened the Account Console or Admin UI before or during the upgrade, the user might see an error message and be asked to reload the application while navigating in browser during or after the upgrade.
+
+== Further reading
+
+The {project_name} Operator uses the functionality described above to determine if a rolling update is possible. See the link:{links_operator_rolling-updates_url}[{links_operator_rolling-updates_name}] {section} and the `Auto` strategy for more information.
+
+
+== Relevant options
+
+[cols="12a,2,2",role="options"]
+|===
+| |_Type_ or Values |Default
+
+|
+[.options-key]#`+features+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Enables a set of one or more features.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--features+` +
+*Env:* `+KC_FEATURES+`
+--
+
+
+
+|
+`+account-api[:v1]+`, `+account[:v3]+`, `+admin-api[:v1]+`, `+admin-fine-grained-authz[:v1,v2]+`, `+admin[:v2]+`, `+authorization[:v1]+`, `+authzen[:v1]+`, `+ciba[:v1]+`, `+cimd[:v1]+`, `+client-admin-api[:v2]+`, `+client-auth-abca[:v1]+`, `+client-auth-federated[:v1]+`, `+client-policies[:v1]+`, `+client-secret-rotation[:v1]+`, `+client-types[:v1]+`, `+clusterless[:v1]+`, `+db-tidb[:v1]+`, `+declarative-ui[:v1]+`, `+device-flow[:v1]+`, `+docker[:v1]+`, `+dpop[:v1]+`, `+fips[:v1]+`, `+hostname[:v2]+`, `+http-client[:v1,v2]+`, `+http-optimized-serializers[:v1]+`, `+identity-assertion-jwt[:v1]+`, `+identity-brokering-api[:v1,v2]+`, `+impersonation[:v1]+`, `+instagram-broker[:v1]+`, `+ipa-tuura-federation[:v1]+`, `+jwt-authorization-grant[:v1]+`, `+kerberos[:v1]+`, `+kubernetes-service-accounts[:v1]+`, `+ldap-metrics[:v1]+`, `+log-mdc[:v1]+`, `+login-failures[:v1,v2]+`, `+login[:v2,v1]+`, `+logout-all-sessions[:v1]+`, `+multi-site[:v1]+`, `+oid4vc-mdoc[:v1]+`, `+oid4vc-vci-preauth-code[:v1]+`, `+oid4vc-vci-rest-credential-offer[:v1]+`, `+oid4vc-vci[:v1]+`, `+oid4vc-vp[:v1]+`, `+openapi[:v1]+`, `+opentelemetry-logs[:v1]+`, `+opentelemetry-metrics[:v1]+`, `+opentelemetry[:v1]+`, `+organization[:v1]+`, `+par[:v1]+`, `+parameterized-scopes[:v1]+`, `+passkeys-conditional-ui-authenticator[:v1]+`, `+passkeys[:v1]+`, `+persistent-user-sessions[:v1]+`, `+preview+`, `+quick-theme[:v1]+`, `+recovery-codes[:v1]+`, `+resource-indicators[:v1]+`, `+rolling-updates[:v1,v2]+`, `+scim-api[:v1]+`, `+scripts[:v1]+`, `+spiffe[:v1]+`, `+ssf[:v1]+`, `+stateless[:v1]+`, `+step-up-authentication-saml[:v1]+`, `+step-up-authentication[:v1]+`, `+token-exchange-delegation[:v1]+`, `+token-exchange-standard[:v2]+`, `+token-exchange[:v1]+`, `+transient-users[:v1]+`, `+twitter-broker[:v1]+`, `+update-email[:v1]+`, `+user-event-metrics[:v1]+`, `+web-authn[:v1]+`, `+workflows[:v1]+`
+
+|
+|
+[.options-key]#`+features-disabled+`# [.none]#icon:tools[role=options-build]#
+
+[.options-description]#Disables a set of one or more features.#
+
+[role="options-extended"]
+--
+
+
+
+
+*CLI:* `+--features-disabled+` +
+*Env:* `+KC_FEATURES_DISABLED+`
+--
+
+
+
+|
+`+account+`, `+account-api+`, `+admin+`, `+admin-api+`, `+admin-fine-grained-authz+`, `+authorization+`, `+authzen+`, `+ciba+`, `+cimd+`, `+client-admin-api+`, `+client-auth-abca+`, `+client-auth-federated+`, `+client-policies+`, `+client-secret-rotation+`, `+client-types+`, `+clusterless+`, `+db-tidb+`, `+declarative-ui+`, `+device-flow+`, `+docker+`, `+dpop+`, `+fips+`, `+http-client+`, `+http-optimized-serializers+`, `+identity-assertion-jwt+`, `+identity-brokering-api+`, `+impersonation+`, `+instagram-broker+`, `+ipa-tuura-federation+`, `+jwt-authorization-grant+`, `+kerberos+`, `+kubernetes-service-accounts+`, `+ldap-metrics+`, `+log-mdc+`, `+login+`, `+login-failures+`, `+logout-all-sessions+`, `+multi-site+`, `+oid4vc-mdoc+`, `+oid4vc-vci+`, `+oid4vc-vci-preauth-code+`, `+oid4vc-vci-rest-credential-offer+`, `+oid4vc-vp+`, `+openapi+`, `+opentelemetry+`, `+opentelemetry-logs+`, `+opentelemetry-metrics+`, `+organization+`, `+par+`, `+parameterized-scopes+`, `+passkeys+`, `+passkeys-conditional-ui-authenticator+`, `+persistent-user-sessions+`, `+preview+`, `+quick-theme+`, `+recovery-codes+`, `+resource-indicators+`, `+scim-api+`, `+scripts+`, `+spiffe+`, `+ssf+`, `+stateless+`, `+step-up-authentication+`, `+step-up-authentication-saml+`, `+token-exchange+`, `+token-exchange-delegation+`, `+token-exchange-standard+`, `+transient-users+`, `+twitter-broker+`, `+update-email+`, `+user-event-metrics+`, `+web-authn+`, `+workflows+`
+
+|
+
+|===

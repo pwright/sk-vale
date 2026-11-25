@@ -1,0 +1,49 @@
+[id="_internal_external_making_request_{context}"]
+= Making the request
+
+
+When your client is exchanging an existing internal token to an external one, you provide the `requested_issuer` parameter.  The parameter must be the alias of a configured identity provider.
+
+[source,bash,subs="attributes+"]
+----
+curl -X POST \
+    -d "client_id=starting-client" \
+    -d "client_secret=the client secret" \
+    --data-urlencode "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" \
+    -d "subject_token=...." \
+    --data-urlencode "requested_token_type=urn:ietf:params:oauth:token-type:access_token" \
+    -d "requested_issuer=google" \
+    http://localhost:8080{kc_realms_path}/myrealm/protocol/openid-connect/token
+----
+
+The `subject_token` parameter must be an access token for the target realm.  The `requested_token_type` parameter
+must be `urn:ietf:params:oauth:token-type:access_token` or left blank.  No other requested token type is supported
+at this time.  Here's
+an example of a successful JSON response you get back from this call.
+
+[source,json]
+----
+{
+   "access_token" : "....",
+   "expires_in" : 3600
+   "account-link-url" : "https://...."
+}
+----
+
+If the external identity provider is not linked for whatever reason, you will get an HTTP 400 response code with
+this JSON document:
+
+[source,json]
+----
+{
+   "error" : "....",
+   "error_description" : "..."
+   "account-link-url" : "https://...."
+}
+----
+
+The `error` claim will be either `token_expired` or `not_linked`.  The `account-link-url` claim is provided
+so that the client can perform link:{developerguide_link}[Client Initiated Account Linking].  Most, if not all,
+providers require linking through browser OAuth protocol.  With the `account-link-url` just add a `redirect_uri`
+query parameter to it and you can forward browsers to perform the link.
+

@@ -1,0 +1,10 @@
+[id="logging-console_{context}"]
+= Console logging
+
+
+
+
+The console log handler is enabled by default, providing unstructured log messages for the console.
+As shown in the following section, the more specific console handler configuration takes effect only when the console logging is enabled. Console logging is enabled by default.
+
+include::../modules/console-log-format.adoc[leveloffset=+1]

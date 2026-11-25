@@ -1,0 +1,24 @@
+[id="keycloak-configuration-haproxy-passthrough_{context}"]
+= {project_name} configuration
+
+
+With TLS passthrough, {project_name} requires the following configuration:
+
+[source,bash]
+----
+bin/kc.[sh|bat] start --proxy-protocol-enabled true --health-enabled true --metrics-enabled true
+----
+
+`--proxy-protocol-enabled true`::
+Enables the PROXY protocol so that {project_name} can read the real client IP address from the PROXY protocol header added by HAProxy.
+Do not set `--proxy-headers` when using TLS passthrough because HAProxy cannot inject HTTP headers into the encrypted traffic.
+The `--proxy-protocol-enabled` option and the `--proxy-headers` option are mutually exclusive.
+
+`--health-enabled true`::
+Enables the health check endpoints on the management port (`9000`).
+Without this, the `/health/ready` endpoint that HAProxy polls will not be available, and HAProxy will mark all {project_name} instances as down.
+
+`--metrics-enabled true`::
+Enables the metrics endpoints on the management port.
+Enabling metrics also enables an additional status check for the database, so it is recommended to enable metrics.
+

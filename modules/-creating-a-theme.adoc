@@ -1,0 +1,116 @@
+[id="_creating-a-theme_{context}"]
+= Creating a theme
+
+
+A theme consists of:
+
+* HTML templates (https://freemarker.apache.org/[Freemarker Templates])
+* Images
+* Message bundles
+* Stylesheets
+* Scripts
+* Theme properties
+
+Unless you plan to replace every single page you should extend another theme. Most likely you will want to extend some existing theme. Alternatively, if you intend to provide your own implementation of the admin or account console,
+consider extending the `base` theme. The `base` theme consists of a message bundle and therefore such implementation needs to start from scratch, including implementation of the main `index.ftl` Freemarker template, but it can leverage existing translations from the message bundle.
+
+When extending a theme you can override individual resources (templates, stylesheets, etc.). If you decide to override HTML templates bear in mind that you may
+need to update your custom template when upgrading to a new release.
+
+While creating a theme it's a good idea to disable caching as this makes it possible to edit theme resources directly from the `themes` directory without
+restarting {project_name}.
+
+.Procedure
+
+. Run Keycloak with the following options:
++
+[source,bash]
+----
+bin/kc.[sh|bat] start --spi-theme--static-max-age=-1 --spi-theme--cache-themes=false --spi-theme--cache-templates=false
+----
+
+. Create a directory in the `themes` directory.
++
+The name of the directory becomes the name of the theme. For example to
+create a theme called `mytheme` create the directory `themes/mytheme`.
+
+. Inside the theme directory, create a directory for each of the types your theme is going to provide.
++
+For example, to add the login type to the `mytheme` theme, create the directory `themes/mytheme/login`.
+
+. For each type create a file `theme.properties` which allows setting some configuration for the theme.
++
+For example, to configure the theme `themes/mytheme/login` to extend the `base` theme and import some common resources, create the file `themes/mytheme/login/theme.properties` with following contents:
++
+[source]
+----
+parent=base
+import=common/keycloak
+----
++
+You have now created a theme with support for the login type.
+
+. Log into the Admin Console to check out your new theme
+. Select your realm
+. Click *Realm Settings* from the menu.
+. Click on the *Themes* tab.
+. For *Login Theme* select *mytheme* and click *Save*.
+. Open the login page for the realm.
++
+You can do this either by logging in through your application or by opening the Account Console (`/realms/{realm-name}/account`).
+
+. To see the effect of changing the parent theme, set `parent=keycloak` in `theme.properties` and refresh the login page.
+
+[NOTE]
+====
+Be sure to re-enable caching in production as it will significantly impact performance.
+====
+[NOTE]
+====
+If you want to manually delete the content of the themes cache, you can do so by deleting the `data/tmp/kc-gzip-cache` directory of the server distribution.
+It can be useful for instance if you redeployed custom providers or custom themes without disabling themes caching in the previous server executions.
+====
+
+
+**Theme properties**
+
+
+Theme properties are set in the file `<THEME TYPE>/theme.properties` in the theme directory.
+
+* parent - Parent theme to extend
+* import - Import resources from another theme
+* abstract - Boolean that, when present and `true`, marks the theme is only used as base for other extensions and is not displayed to be selected in the admin console on the realm themes page. Examples of this are the `base` themes described on this guide.
+* common - Override the common resource path. The default value is `common/keycloak` when not specified. This value would be used as value of suffix of `${url.resourcesCommonPath}` and `${url.resourcesCommonUrl}`, which are used typically in freemarker templates. `${url.resourcesCommonPath}` returns only the path, while `${url.resourcesCommonUrl}` returns the full URL including scheme and host, which is required for email templates.
+* styles - Space-separated list of styles to include
+* stylesCommon - Space-separated list of common styles to include
+* scripts - Space-separated list of scripts to include
+* favicons - Space-separated list of favicons to include, or dot-notation entries (see below)
+* locales - Comma-separated list of supported locales
+* contentHashPattern - Regex pattern of a file path in the theme where files have a content hash as part of their file name.
+A content hash is usually an abbreviated hash of the file's contents.
+The hash will change when the contents of the file have changed, and is usually created using the bundling process of the JavaScript application bundling.
+
+There are a list of properties that can be used to change the css class used for certain element types. For a list of these properties look at the theme.properties
+file in the corresponding type of the keycloak theme (`themes/keycloak/<THEME TYPE>/theme.properties`).
+
+You can also add your own custom properties and use them from custom templates.
+
+When doing so, you can substitute system properties or environment variables by using these formats:
+
+* `${some.system.property}` - for system properties
+* `${env.ENV_VAR}` - for environment variables.
+
+A default value can also be provided in case the system property or the environment variable is not found with `${foo\:defaultValue}`.
+
+NOTE: If no default value is provided and there's no corresponding system property or environment variable, then nothing is replaced and you end up with the format in your template.
+
+Here's an example of what is possible:
+
+[source,properties]
+----
+javaVersion=${java.version}
+
+unixHome=${env.HOME:Unix home not found}
+windowsHome=${env.HOMEPATH:Windows home not found}
+----
+

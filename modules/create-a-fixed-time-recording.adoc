@@ -1,0 +1,81 @@
+[id="create-a-fixed-time-recording_{context}"]
+= Create a fixed-time recording
+
+
+A fixed-time recording can be created by executing the `JFR.start` command with the `duration` parameter. After the requested interval elapses, the recording will be stopped and its data automatically dumped into a file.
+
+[source]
+----
+jcmd QuarkusEntryPoint JFR.start \
+  duration=2m \ #<1>
+  settings=profile \ #<2>
+  filename=recording.jfr #<3>
+----
+<1> Intended duration of the recording. A 2-minute recording is usually sufficient for diagnosing most performance issues.
+<2> Name of a JFR configuration file. For fixed-time recordings, we recommend `profile`, which has an overhead of about 2%. With the `profile` configuration, expect roughly 1-5 MB per minute under load.
+<3> The `filename` parameter is optional. If not provided, the name will be generated automatically based on PID and timestamp. If an absolute path is not provided, the file will be created in the current working directory of the target application.
+
+Use the `JFR.check` command shortly after to verify that the recording was started:
+[source]
+----
+jcmd QuarkusEntryPoint JFR.check
+----
+
+Example output:
+[source]
+----
+896224:
+Recording 1: name=1 duration=2m (running)
+----
+
+== View a recording
+
+Once the recording is dumped into a file, it can be viewed and manipulated using the standard `jfr` tool.
+
+Analyzing {project_name}'s behavior based on the recording is outside of scope for this guide.
+
+To print the content of a recording in a human-readable form, use the `jfr print` command:
+[source]
+----
+jfr print recording.jfr
+----
+
+To get a general overview of the content, use the `jfr summary` command:
+[source]
+----
+jfr summary recording.jfr
+----
+
+Example output:
+[source]
+----
+
+ Version: 2.1
+ Chunks: 1
+ Start: YYYY-MM-DD HH:mm:ss (UTC)
+ Duration: 120 s
+
+ Event Type                              Count  Size (bytes)
+=============================================================
+ jdk.NativeMethodSample                   5919         82597
+ jdk.ModuleExport                         2134         27601
+ jdk.ThreadPark                           2082         73000
+ jdk.JavaMonitorWait                       781         22715
+ jdk.BooleanFlag                           494         16124
+ jdk.ActiveSetting                         376         10893
+ jdk.Checkpoint                            168        136675
+ jdk.ModuleRequire                         160          1920
+ jdk.LongFlag                              137          4674
+ jdk.ThreadAllocationStatistics            122          1604
+ jdk.CPULoad                               120          2520
+ jdk.ClassLoadingStatistics                120          1560
+ jdk.CompilerStatistics                    120          3840
+ jdk.ExceptionStatistics                   120          1440
+ jdk.JavaThreadStatistics                  120          1560
+ ...
+----
+
+To display aggregated content of the recording in a tabular form, use the `jfr view` command.
+
+
+
